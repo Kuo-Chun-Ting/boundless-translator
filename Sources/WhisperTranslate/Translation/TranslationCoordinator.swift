@@ -9,14 +9,55 @@ final class TranslationCoordinator: ObservableObject {
     func submit(
         _ selectedText: SelectedText,
         sourceLanguageIdentifier: String,
-        targetLanguageIdentifier: String
+        targetLanguageIdentifier: String,
+        sourceLanguageWasDetected: Bool = false
     ) {
         request = TranslationRequest(
             text: selectedText.value,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: targetLanguageIdentifier
+            targetLanguageIdentifier: targetLanguageIdentifier,
+            sourceLanguageWasDetected: sourceLanguageWasDetected
         )
         status = .translating
+    }
+
+    func updateSourceLanguage(_ languageIdentifier: String) {
+        guard let request else {
+            return
+        }
+
+        resubmit(
+            request,
+            sourceLanguageIdentifier: languageIdentifier,
+            targetLanguageIdentifier: request.targetLanguageIdentifier,
+            sourceLanguageWasDetected: false
+        )
+    }
+
+    func updateTargetLanguage(_ languageIdentifier: String) {
+        guard let request else {
+            return
+        }
+
+        resubmit(
+            request,
+            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
+            targetLanguageIdentifier: languageIdentifier,
+            sourceLanguageWasDetected: request.sourceLanguageWasDetected
+        )
+    }
+
+    func retry() {
+        guard let request else {
+            return
+        }
+
+        resubmit(
+            request,
+            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
+            targetLanguageIdentifier: request.targetLanguageIdentifier,
+            sourceLanguageWasDetected: request.sourceLanguageWasDetected
+        )
     }
 
     func translate(using runner: any TranslationRunning) async {
@@ -52,5 +93,20 @@ final class TranslationCoordinator: ObservableObject {
         case .failure(let failure):
             status = .failed(failure)
         }
+    }
+
+    private func resubmit(
+        _ request: TranslationRequest,
+        sourceLanguageIdentifier: String,
+        targetLanguageIdentifier: String,
+        sourceLanguageWasDetected: Bool
+    ) {
+        self.request = TranslationRequest(
+            text: request.text,
+            sourceLanguageIdentifier: sourceLanguageIdentifier,
+            targetLanguageIdentifier: targetLanguageIdentifier,
+            sourceLanguageWasDetected: sourceLanguageWasDetected
+        )
+        status = .translating
     }
 }

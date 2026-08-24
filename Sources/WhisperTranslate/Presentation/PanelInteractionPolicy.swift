@@ -17,4 +17,13 @@ struct PanelInteractionPolicy {
             false
         }
     }
+
+    func shouldDismissForCancelOperation(isPinned: Bool) -> Bool {
+        switch kind {
+        case .translation:
+            !isPinned
+        case .error, .sourceLanguageSelection:
+            true
+        }
+    }
 }

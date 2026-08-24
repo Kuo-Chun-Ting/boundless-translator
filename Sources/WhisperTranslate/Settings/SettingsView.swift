@@ -7,36 +7,46 @@ struct SettingsView: View {
     @State private var supportedLanguages: [Locale.Language] = []
 
     var body: some View {
-        Form {
-            Section("Languages") {
-                Picker("From", selection: $settings.sourceLanguageIdentifier) {
-                    Text("Detect Automatically")
-                        .tag(nil as String?)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                Image(systemName: WhisperTranslateBrand.systemImageName)
+                    .font(.system(size: 30, weight: .medium))
+                    .foregroundStyle(Color.accentColor)
+                    .frame(width: 34, height: 34)
+                    .accessibilityHidden(true)
 
-                    ForEach(sourceLanguageOptions) { option in
-                        Text(languageName(for: option.language))
-                            .tag(Optional(option.id))
-                    }
-                }
-                .pickerStyle(.menu)
-
-                Picker("To", selection: $settings.targetLanguageIdentifier) {
-                    ForEach(targetLanguageOptions) { option in
-                        Text(languageName(for: option.language))
-                            .tag(option.id)
-                    }
-                }
-                .pickerStyle(.menu)
+                Text("Translation")
+                    .font(.headline)
             }
+            .padding(.horizontal, 20)
 
-            Section {
-                Text("Automatic detection asks you to choose a source language when confidence is low.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+            Form {
+                Section {
+                    Picker("From", selection: $settings.sourceLanguageIdentifier) {
+                        Text("Detect Automatically")
+                            .tag(nil as String?)
+
+                        ForEach(sourceLanguageOptions) { option in
+                            Text(languageName(for: option.language))
+                                .tag(Optional(option.id))
+                        }
+                    }
+                    .pickerStyle(.menu)
+
+                    Picker("To", selection: $settings.targetLanguageIdentifier) {
+                        ForEach(targetLanguageOptions) { option in
+                            Text(languageName(for: option.language))
+                                .tag(option.id)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
             }
+            .formStyle(.grouped)
+            .scrollDisabled(true)
         }
-        .formStyle(.grouped)
-        .frame(width: 430, height: 220)
+        .padding(.top, 18)
+        .frame(width: 430, height: 190)
         .task {
             let availableLanguages = await LanguageAvailability().supportedLanguages
             settings.validateSourceLanguage(

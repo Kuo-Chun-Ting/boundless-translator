@@ -6,13 +6,20 @@ struct WhisperTranslateApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
-        MenuBarExtra("Whisper Translate", systemImage: "character.book.closed") {
+        MenuBarExtra(
+            "Whisper Translate",
+            systemImage: WhisperTranslateBrand.systemImageName
+        ) {
             MenuBarView {
                 appDelegate.controller.showPreferences()
             }
         }
         .menuBarExtraStyle(.menu)
     }
+}
+
+enum WhisperTranslateBrand {
+    static let systemImageName = "w.square.fill"
 }
 
 private struct MenuBarView: View {

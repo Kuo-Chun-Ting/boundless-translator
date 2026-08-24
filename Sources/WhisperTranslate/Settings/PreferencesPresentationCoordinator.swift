@@ -1,10 +1,15 @@
 @MainActor
 struct PreferencesPresentationCoordinator {
     func present(
-        activateApplication: () -> Void,
-        showWindow: () -> Void
+        deferPresentation: (@escaping @MainActor () -> Void) -> Void,
+        activateApplication: @escaping @MainActor () -> Void,
+        showWindow: @escaping @MainActor () -> Void,
+        forceWindowToFront: @escaping @MainActor () -> Void
     ) {
-        activateApplication()
-        showWindow()
+        deferPresentation {
+            activateApplication()
+            showWindow()
+            forceWindowToFront()
+        }
     }
 }

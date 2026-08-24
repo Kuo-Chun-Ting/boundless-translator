@@ -2,6 +2,8 @@ import AppKit
 
 @MainActor
 final class TranslationPanel: NSPanel {
+    var cancelOperationHandler: ((Any?) -> Void)?
+
     init(contentSize: CGSize = CGSize(width: 420, height: 260)) {
         super.init(
             contentRect: CGRect(origin: .zero, size: contentSize),
@@ -20,7 +22,37 @@ final class TranslationPanel: NSPanel {
         true
     }
 
+    func configureChrome(for kind: TranslationPanelKind) {
+        switch kind {
+        case .translation:
+            styleMask = [
+                .titled,
+                .closable,
+                .miniaturizable,
+                .resizable,
+                .fullSizeContentView,
+                .nonactivatingPanel,
+            ]
+        case .error, .sourceLanguageSelection:
+            styleMask = [
+                .titled,
+                .closable,
+                .fullSizeContentView,
+                .nonactivatingPanel,
+            ]
+        }
+        isOpaque = true
+        backgroundColor = .windowBackgroundColor
+        titleVisibility = .hidden
+        titlebarAppearsTransparent = true
+        hasShadow = true
+    }
+
     override func cancelOperation(_ sender: Any?) {
-        orderOut(sender)
+        if let cancelOperationHandler {
+            cancelOperationHandler(sender)
+        } else {
+            orderOut(sender)
+        }
     }
 }

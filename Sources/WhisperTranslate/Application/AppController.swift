@@ -48,15 +48,18 @@ final class AppController {
 
     func translate(
         _ selectedText: SelectedText,
-        sourceLanguageIdentifier: String
+        sourceLanguageIdentifier: String,
+        sourceLanguageWasDetected: Bool = false
     ) {
         coordinator.submit(
             selectedText,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: settings.targetLanguageIdentifier
+            targetLanguageIdentifier: settings.targetLanguageIdentifier,
+            sourceLanguageWasDetected: sourceLanguageWasDetected
         )
         panelController.show(
             coordinator: coordinator,
+            supportedLanguages: supportedLanguages,
             pointerLocation: NSEvent.mouseLocation
         )
     }
@@ -90,6 +93,7 @@ final class AppController {
     }
 
     private func resolveSourceLanguage(for selectedText: SelectedText) async {
+        let supportedLanguages = await loadSupportedLanguages()
         let resolution = sourceLanguageResolver.resolve(
             text: selectedText.value,
             configuredSource: settings.sourceLanguageIdentifier
@@ -99,10 +103,10 @@ final class AppController {
         case .resolved(let languageIdentifier):
             translate(
                 selectedText,
-                sourceLanguageIdentifier: languageIdentifier
+                sourceLanguageIdentifier: languageIdentifier,
+                sourceLanguageWasDetected: settings.sourceLanguageIdentifier == nil
             )
         case .needsSelection(let suggestedLanguageIdentifier):
-            let supportedLanguages = await loadSupportedLanguages()
             guard let selection = SourceLanguageSelection.make(
                 supportedLanguages: supportedLanguages,
                 suggestedLanguageIdentifier: suggestedLanguageIdentifier

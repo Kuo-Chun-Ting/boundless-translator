@@ -3,14 +3,17 @@ import SwiftUI
 
 @MainActor
 final class TranslationPanelController: NSObject, NSWindowDelegate {
-    private let panelSize = CGSize(width: 420, height: 260)
+    private let auxiliaryPanelSize = CGSize(width: 420, height: 260)
+    private let translationLayout = TranslationPanelLayout()
     private let positioner = PanelPositioner(pointerOffset: 12)
     private let panelState = TranslationPanelState()
     private let panel: TranslationPanel
     private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
+    private var presentedKind = TranslationPanelKind.translation
+    private var presentedPointerLocation = CGPoint.zero
 
     override init() {
-        panel = TranslationPanel(contentSize: panelSize)
+        panel = TranslationPanel(contentSize: auxiliaryPanelSize)
         super.init()
         panel.delegate = self
         panel.isFloatingPanel = true
@@ -18,22 +21,33 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
         panel.isReleasedWhenClosed = false
-        panel.titleVisibility = .hidden
-        panel.titlebarAppearsTransparent = true
-        panel.backgroundColor = .windowBackgroundColor
+        panel.cancelOperationHandler = { [weak self] sender in
+            self?.dismissForCancelOperation(sender)
+        }
     }
 
     func show(
         coordinator: TranslationCoordinator,
+        supportedLanguages: [Locale.Language],
         pointerLocation: CGPoint
     ) {
+        let initialSize = translationLayout.metrics(
+            sourceText: coordinator.request?.text ?? "",
+            status: coordinator.status
+        ).size
         present(
             TranslationPanelView(
                 coordinator: coordinator,
-                panelState: panelState
+                panelState: panelState,
+                supportedLanguages: supportedLanguages,
+                layout: translationLayout,
+                onPreferredSizeChange: { [weak self] size in
+                    self?.resizeTranslationPanel(to: size)
+                }
             ),
             kind: .translation,
-            pointerLocation: pointerLocation
+            pointerLocation: pointerLocation,
+            panelSize: initialSize
         )
     }
 
@@ -41,7 +55,8 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         present(
             SelectionErrorView(message: message),
             kind: .error,
-            pointerLocation: pointerLocation
+            pointerLocation: pointerLocation,
+            panelSize: auxiliaryPanelSize
         )
     }
 
@@ -63,20 +78,47 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
                 onSelect: onSelect
             ),
             kind: .sourceLanguageSelection,
-            pointerLocation: pointerLocation
+            pointerLocation: pointerLocation,
+            panelSize: auxiliaryPanelSize
         )
     }
 
     private func present<Content: View>(
         _ content: Content,
         kind: TranslationPanelKind,
-        pointerLocation: CGPoint
+        pointerLocation: CGPoint,
+        panelSize: CGSize
     ) {
         panelState.reset()
         interactionPolicy = PanelInteractionPolicy(kind: kind)
+        presentedKind = kind
+        presentedPointerLocation = pointerLocation
         panel.contentView = NSHostingView(rootView: content)
         panel.setContentSize(panelSize)
+        configureWindowControls(for: kind)
 
+        positionPanel(size: panelSize, pointerLocation: pointerLocation)
+
+        panel.orderFrontRegardless()
+        panel.makeKey()
+    }
+
+    private func resizeTranslationPanel(to size: CGSize) {
+        guard case .translation = presentedKind else {
+            return
+        }
+        guard panel.contentLayoutRect.size != size else {
+            return
+        }
+
+        panel.setContentSize(size)
+        positionPanel(
+            size: size,
+            pointerLocation: presentedPointerLocation
+        )
+    }
+
+    private func positionPanel(size: CGSize, pointerLocation: CGPoint) {
         let screen = NSScreen.screens.first {
             $0.frame.contains(pointerLocation)
         } ?? NSScreen.main
@@ -84,14 +126,36 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             panel.setFrameOrigin(
                 positioner.origin(
                     pointer: pointerLocation,
-                    panelSize: panelSize,
+                    panelSize: size,
                     visibleFrame: visibleFrame
                 )
             )
         }
+    }
 
-        panel.orderFrontRegardless()
-        panel.makeKey()
+    private func configureWindowControls(for kind: TranslationPanelKind) {
+        panel.configureChrome(for: kind)
+
+        switch kind {
+        case .translation:
+            panel.standardWindowButton(.closeButton)?.isHidden = false
+            panel.standardWindowButton(.miniaturizeButton)?.isHidden = false
+            panel.standardWindowButton(.zoomButton)?.isHidden = false
+        case .error, .sourceLanguageSelection:
+            panel.standardWindowButton(.closeButton)?.isHidden = false
+            panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            panel.standardWindowButton(.zoomButton)?.isHidden = true
+        }
+    }
+
+    private func dismissForCancelOperation(_ sender: Any?) {
+        guard interactionPolicy.shouldDismissForCancelOperation(
+            isPinned: panelState.isPinned
+        ) else {
+            return
+        }
+
+        panel.orderOut(sender)
     }
 
     func windowDidResignKey(_ notification: Notification) {

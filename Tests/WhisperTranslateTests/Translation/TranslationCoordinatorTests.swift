@@ -33,6 +33,78 @@ func test_submit_when_selected_text_is_valid_then_status_is_translating() throws
 }
 
 @Test @MainActor
+func test_updateSourceLanguage_when_requestExists_then_resubmitsWithExplicitSource() throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant",
+        sourceLanguageWasDetected: true
+    )
+    let previousRequestID = coordinator.request?.id
+
+    // Act
+    coordinator.updateSourceLanguage("ja")
+
+    // Assert
+    #expect(coordinator.request?.id != previousRequestID)
+    #expect(coordinator.request?.text == "Hello")
+    #expect(coordinator.request?.sourceLanguageIdentifier == "ja")
+    #expect(coordinator.request?.targetLanguageIdentifier == "zh-Hant")
+    #expect(coordinator.request?.sourceLanguageWasDetected == false)
+    #expect(coordinator.status == .translating)
+}
+
+@Test @MainActor
+func test_updateTargetLanguage_when_requestExists_then_preservesDetectedSource() throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant",
+        sourceLanguageWasDetected: true
+    )
+    let previousRequestID = coordinator.request?.id
+
+    // Act
+    coordinator.updateTargetLanguage("ja")
+
+    // Assert
+    #expect(coordinator.request?.id != previousRequestID)
+    #expect(coordinator.request?.text == "Hello")
+    #expect(coordinator.request?.sourceLanguageIdentifier == "en")
+    #expect(coordinator.request?.targetLanguageIdentifier == "ja")
+    #expect(coordinator.request?.sourceLanguageWasDetected == true)
+    #expect(coordinator.status == .translating)
+}
+
+@Test @MainActor
+func test_retry_when_requestExists_then_resubmitsSameTranslation() throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant",
+        sourceLanguageWasDetected: true
+    )
+    let previousRequestID = coordinator.request?.id
+
+    // Act
+    coordinator.retry()
+
+    // Assert
+    #expect(coordinator.request?.id != previousRequestID)
+    #expect(coordinator.request?.text == "Hello")
+    #expect(coordinator.request?.sourceLanguageIdentifier == "en")
+    #expect(coordinator.request?.targetLanguageIdentifier == "zh-Hant")
+    #expect(coordinator.request?.sourceLanguageWasDetected == true)
+    #expect(coordinator.status == .translating)
+}
+
+@Test @MainActor
 func test_translate_when_runner_succeeds_then_publishes_output() async throws {
     // Arrange
     let output = TranslationOutput(

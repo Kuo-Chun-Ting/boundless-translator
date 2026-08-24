@@ -7,7 +7,7 @@ final class PreferencesWindowController: NSWindowController {
 
     init(settings: TranslationSettings) {
         let window = NSWindow(
-            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 220)),
+            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 190)),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
@@ -26,12 +26,21 @@ final class PreferencesWindowController: NSWindowController {
 
     func present() {
         presentationCoordinator.present(
+            deferPresentation: { presentation in
+                Task { @MainActor in
+                    await Task.yield()
+                    presentation()
+                }
+            },
             activateApplication: {
                 NSApplication.shared.activate()
             },
             showWindow: { [weak self] in
                 self?.showWindow(nil)
+            },
+            forceWindowToFront: { [weak self] in
                 self?.window?.makeKeyAndOrderFront(nil)
+                self?.window?.orderFrontRegardless()
             }
         )
     }
