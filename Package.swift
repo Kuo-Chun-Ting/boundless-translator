@@ -3,18 +3,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "WhisperTranslate",
+    name: "BoundlessTranslator",
     platforms: [
         .macOS(.v15)
     ],
     products: [
-        .executable(name: "WhisperTranslate", targets: ["WhisperTranslate"])
+        .executable(name: "BoundlessTranslator", targets: ["BoundlessTranslator"])
     ],
     targets: [
-        .executableTarget(name: "WhisperTranslate"),
+        .executableTarget(name: "BoundlessTranslator"),
         .testTarget(
-            name: "WhisperTranslateTests",
-            dependencies: ["WhisperTranslate"]
+            name: "BoundlessTranslatorTests",
+            dependencies: ["BoundlessTranslator"]
         )
     ]
 )

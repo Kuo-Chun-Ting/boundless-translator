@@ -4,15 +4,16 @@ set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h}"
 readonly BUILD_ROOT="${PROJECT_ROOT}/Build"
-readonly APP_PATH="${BUILD_ROOT}/Whisper Translate.app"
+readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
 readonly DEVELOPER_PATH="/Applications/Xcode.app/Contents/Developer"
-readonly SIGNING_IDENTITY="${WHISPER_TRANSLATE_SIGNING_IDENTITY:-Whisper Translate Local Development}"
-readonly TEMP_ROOT="$(mktemp -d /private/tmp/whisper-translate-build.XXXXXX)"
+readonly SIGNING_IDENTITY="${BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY:-D94FA01C46E10F95D2E20D403C187C470926858C}"
+readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build.XXXXXX)"
 readonly SCRATCH_PATH="${TEMP_ROOT}/spm"
-readonly STAGED_APP_PATH="${TEMP_ROOT}/Whisper Translate.app"
+readonly STAGED_APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
 readonly CONTENTS_PATH="${STAGED_APP_PATH}/Contents"
 readonly MACOS_PATH="${CONTENTS_PATH}/MacOS"
-readonly PREVIOUS_APP_PATH="${TEMP_ROOT}/Previous Whisper Translate.app"
+readonly RESOURCES_PATH="${CONTENTS_PATH}/Resources"
+readonly PREVIOUS_APP_PATH="${TEMP_ROOT}/Previous Boundless Translator.app"
 readonly PUBLISH_LOCK="${BUILD_ROOT}/.publish-lock"
 publish_lock_acquired=false
 
@@ -24,7 +25,7 @@ function clean_up {
 }
 trap clean_up EXIT
 
-mkdir -p "${MACOS_PATH}"
+mkdir -p "${MACOS_PATH}" "${RESOURCES_PATH}"
 
 CLANG_MODULE_CACHE_PATH="${TEMP_ROOT}/clang-cache" \
 SWIFTPM_MODULECACHE_OVERRIDE="${TEMP_ROOT}/module-cache" \
@@ -38,8 +39,9 @@ swift build \
     --config-path "${TEMP_ROOT}/config" \
     --security-path "${TEMP_ROOT}/security"
 
-cp "${SCRATCH_PATH}/release/WhisperTranslate" "${MACOS_PATH}/WhisperTranslate"
+cp "${SCRATCH_PATH}/release/BoundlessTranslator" "${MACOS_PATH}/BoundlessTranslator"
 cp "${PROJECT_ROOT}/Resources/Info.plist" "${CONTENTS_PATH}/Info.plist"
+cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
 
 plutil -lint "${CONTENTS_PATH}/Info.plist"
 codesign \
@@ -50,7 +52,7 @@ codesign \
 
 mkdir -p "${BUILD_ROOT}"
 if ! mkdir "${PUBLISH_LOCK}" 2>/dev/null; then
-    print -u2 "Another build is publishing Whisper Translate."
+    print -u2 "Another build is publishing Boundless Translator."
     exit 1
 fi
 publish_lock_acquired=true

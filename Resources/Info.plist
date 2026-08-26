@@ -5,15 +5,17 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Whisper Translate</string>
+    <string>Boundless Translator</string>
     <key>CFBundleExecutable</key>
-    <string>WhisperTranslate</string>
+    <string>BoundlessTranslator</string>
     <key>CFBundleIdentifier</key>
-    <string>com.lillard.WhisperTranslate</string>
+    <string>com.lillard.BoundlessTranslator</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon.icns</string>
     <key>CFBundleName</key>
-    <string>WhisperTranslate</string>
+    <string>Boundless Translator</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
