@@ -76,10 +76,19 @@ Build the release app with a code-signing identity available in your Keychain:
 BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY="Your Signing Identity" Scripts/build_app.sh
 ```
 
-The app is created at:
+The app is created at `Build/Boundless Translator.app`.
 
-```text
-Build/Boundless Translator.app
+Generate and select the current app icon:
+
+```bash
+Scripts/generate_brand_icons.swift .
+Scripts/replace_app_icon.sh Design/BoundlessTranslator-Ghost-AppIcon-Transparent.icns
+```
+
+Build and deploy the app to `/Applications`:
+
+```bash
+BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY="Your Signing Identity" Scripts/build_and_deploy_app.sh
 ```
 
 ## Current Limitations

@@ -75,7 +75,7 @@ func test_menuBarIconImage_when_renderingSharedAppIcon_then_hasStatusItemSize() 
     let menuBarIconImage = AppBrand.menuBarIconImage
 
     // Assert
-    #expect(menuBarIconImage.size == NSSize(width: 18, height: 18))
+    #expect(menuBarIconImage.size == NSSize(width: 24, height: 24))
     #expect(!menuBarIconImage.isTemplate)
 }
 

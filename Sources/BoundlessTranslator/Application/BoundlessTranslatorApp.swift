@@ -31,7 +31,7 @@ enum AppBrand {
 
     @MainActor
     static var menuBarIconImage: NSImage {
-        let size = NSSize(width: 18, height: 18)
+        let size = NSSize(width: 24, height: 24)
         let sourceImage = iconImage
         let image = NSImage(size: size, flipped: false) { rect in
             sourceImage.draw(in: rect)

@@ -1,118 +1,197 @@
 #!/usr/bin/swift
 
-import AppKit
 import Foundation
 
 private enum IconError: Error {
-    case bitmapCreationFailed
-    case pngEncodingFailed
+    case sourceImageMissing(URL)
+    case commandFailed(String)
 }
 
-private let projectRoot = URL(fileURLWithPath: CommandLine.arguments.dropFirst().first ?? FileManager.default.currentDirectoryPath)
-private let resourcesDirectory = projectRoot.appending(path: "Resources", directoryHint: .isDirectory)
+private struct IconVariant {
+    let sourceName: String
+    let outputName: String
+}
 
-private func renderPNG(
-    pixelSize: Int,
-    draw: (_ size: CGFloat) -> Void
-) throws -> Data {
-    guard let bitmap = NSBitmapImageRep(
-        bitmapDataPlanes: nil,
-        pixelsWide: pixelSize,
-        pixelsHigh: pixelSize,
-        bitsPerSample: 8,
-        samplesPerPixel: 4,
-        hasAlpha: true,
-        isPlanar: false,
-        colorSpaceName: .deviceRGB,
-        bitmapFormat: [],
-        bytesPerRow: 0,
-        bitsPerPixel: 0
-    ) else {
-        throw IconError.bitmapCreationFailed
+private struct IconFile {
+    let name: String
+    let pixels: Int
+    let pointSize: String
+    let scale: String
+}
+
+private let projectRoot = URL(
+    fileURLWithPath: CommandLine.arguments.dropFirst().first
+        ?? FileManager.default.currentDirectoryPath
+)
+private let designDirectory = projectRoot.appending(path: "Design", directoryHint: .isDirectory)
+private let iconVariants = [
+    IconVariant(
+        sourceName: "BoundlessTranslator-Ghost-AppIcon-Transparent-1024.png",
+        outputName: "BoundlessTranslator-Ghost-AppIcon-Transparent.icns"
+    )
+]
+private let iconFiles = [
+    IconFile(name: "icon_16x16.png", pixels: 16, pointSize: "16x16", scale: "1x"),
+    IconFile(name: "icon_16x16@2x.png", pixels: 32, pointSize: "16x16", scale: "2x"),
+    IconFile(name: "icon_32x32.png", pixels: 32, pointSize: "32x32", scale: "1x"),
+    IconFile(name: "icon_32x32@2x.png", pixels: 64, pointSize: "32x32", scale: "2x"),
+    IconFile(name: "icon_128x128.png", pixels: 128, pointSize: "128x128", scale: "1x"),
+    IconFile(name: "icon_128x128@2x.png", pixels: 256, pointSize: "128x128", scale: "2x"),
+    IconFile(name: "icon_256x256.png", pixels: 256, pointSize: "256x256", scale: "1x"),
+    IconFile(name: "icon_256x256@2x.png", pixels: 512, pointSize: "256x256", scale: "2x"),
+    IconFile(name: "icon_512x512.png", pixels: 512, pointSize: "512x512", scale: "1x"),
+    IconFile(name: "icon_512x512@2x.png", pixels: 1024, pointSize: "512x512", scale: "2x")
+]
+
+private func createAppIcons() throws {
+    for variant in iconVariants {
+        try createAppIcon(variant)
+    }
+}
+
+private func createAppIcon(_ variant: IconVariant) throws {
+    let sourceURL = designDirectory.appending(path: variant.sourceName)
+    guard FileManager.default.fileExists(atPath: sourceURL.path) else {
+        throw IconError.sourceImageMissing(sourceURL)
     }
 
-    NSGraphicsContext.saveGraphicsState()
-    NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
-    NSColor.clear.setFill()
-    NSRect(x: 0, y: 0, width: pixelSize, height: pixelSize).fill()
-    draw(CGFloat(pixelSize))
-    NSGraphicsContext.restoreGraphicsState()
+    let temporaryDirectory = URL(fileURLWithPath: "/private/tmp", isDirectory: true)
+        .appending(path: "BoundlessTranslator-AppIcon-\(UUID().uuidString)", directoryHint: .isDirectory)
+    let catalogURL = temporaryDirectory.appending(path: "Assets.xcassets", directoryHint: .isDirectory)
+    let iconsetURL = catalogURL.appending(path: "AppIcon.appiconset", directoryHint: .isDirectory)
+    let outputDirectory = temporaryDirectory.appending(path: "Output", directoryHint: .isDirectory)
+    try FileManager.default.createDirectory(at: iconsetURL, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: temporaryDirectory) }
 
-    guard let data = bitmap.representation(using: .png, properties: [:]) else {
-        throw IconError.pngEncodingFailed
+    try writeManifest(to: iconsetURL)
+    for iconFile in iconFiles {
+        try resize(sourceURL, to: iconFile, in: iconsetURL)
     }
-    return data
+    try package(catalogURL, in: outputDirectory)
+    try writeCombinedIcon(
+        compiledIconURL: outputDirectory.appending(path: "AppIcon.icns"),
+        iconsetURL: iconsetURL,
+        outputURL: designDirectory.appending(path: variant.outputName)
+    )
 }
 
-private func drawTranslatorMark(in rect: NSRect, color: NSColor, lineWidth: CGFloat) {
-    let mark = NSBezierPath()
-    mark.lineWidth = lineWidth
-    mark.lineCapStyle = .round
-    mark.lineJoinStyle = .round
-
-    let crossbarY = rect.minY + (rect.height * 0.68)
-    mark.move(to: NSPoint(x: rect.minX + (rect.width * 0.24), y: crossbarY))
-    mark.line(to: NSPoint(x: rect.maxX - (rect.width * 0.24), y: crossbarY))
-    mark.move(to: NSPoint(x: rect.midX, y: crossbarY))
-    mark.line(to: NSPoint(x: rect.midX, y: rect.minY + (rect.height * 0.25)))
-
-    color.setStroke()
-    mark.stroke()
-}
-
-private func drawAppIcon(size: CGFloat) {
-    let scale = size / 1024
-    let iconRect = NSRect(x: 72 * scale, y: 72 * scale, width: 880 * scale, height: 880 * scale)
-    let background = NSBezierPath(roundedRect: iconRect, xRadius: 210 * scale, yRadius: 210 * scale)
-    let gradient = NSGradient(colors: [
-        NSColor(red: 0.16, green: 0.55, blue: 0.98, alpha: 1),
-        NSColor(red: 0.08, green: 0.32, blue: 0.86, alpha: 1)
-    ])
-    gradient?.draw(in: background, angle: -90)
-
-    let highlightRect = NSRect(x: iconRect.minX, y: iconRect.midY, width: iconRect.width, height: iconRect.height / 2)
-    NSGraphicsContext.saveGraphicsState()
-    background.addClip()
-    NSGradient(colors: [NSColor.white.withAlphaComponent(0.18), NSColor.clear])?
-        .draw(in: highlightRect, angle: -90)
-    NSGraphicsContext.restoreGraphicsState()
-
-    let markRect = iconRect.insetBy(dx: 150 * scale, dy: 150 * scale)
-    drawTranslatorMark(in: markRect, color: .white, lineWidth: 92 * scale)
-}
-
-private func createAppIcon() throws {
-    let variants: [(type: String, pixels: Int)] = [
-        ("icp4", 16),
-        ("ic11", 32),
-        ("icp5", 32),
-        ("ic12", 64),
-        ("ic07", 128),
-        ("ic13", 256),
-        ("ic08", 256),
-        ("ic14", 512),
-        ("ic09", 512),
-        ("ic10", 1024)
+private func writeManifest(to iconsetURL: URL) throws {
+    let images = iconFiles.map { iconFile in
+        [
+            "filename": iconFile.name,
+            "idiom": "mac",
+            "scale": iconFile.scale,
+            "size": iconFile.pointSize
+        ]
+    }
+    let manifest: [String: Any] = [
+        "images": images,
+        "info": ["author": "xcode", "version": 1]
     ]
+    let data = try JSONSerialization.data(withJSONObject: manifest, options: [.prettyPrinted, .sortedKeys])
+    try data.write(to: iconsetURL.appending(path: "Contents.json"), options: .atomic)
+}
 
-    var body = Data()
-    for variant in variants {
-        let png = try renderPNG(pixelSize: variant.pixels, draw: drawAppIcon)
-        body.append(contentsOf: variant.type.utf8)
-        body.appendBigEndian(UInt32(png.count + 8))
-        body.append(png)
+private func resize(_ sourceURL: URL, to iconFile: IconFile, in iconsetURL: URL) throws {
+    let outputURL = iconsetURL.appending(path: iconFile.name)
+    try run(
+        "/usr/bin/sips",
+        arguments: [
+            "-z", String(iconFile.pixels), String(iconFile.pixels),
+            sourceURL.path,
+            "--out", outputURL.path
+        ]
+    )
+}
+
+private func package(_ catalogURL: URL, in outputDirectory: URL) throws {
+    let partialInfoURL = outputDirectory.appending(path: "PartialInfo.plist")
+    try run(
+        "/usr/bin/xcrun",
+        arguments: [
+            "actool",
+            "--compile", outputDirectory.path,
+            "--platform", "macosx",
+            "--minimum-deployment-target", "15.0",
+            "--app-icon", "AppIcon",
+            "--output-partial-info-plist", partialInfoURL.path,
+            catalogURL.path
+        ]
+    )
+}
+
+private func writeCombinedIcon(compiledIconURL: URL, iconsetURL: URL, outputURL: URL) throws {
+    let compiledIcon = try Data(contentsOf: compiledIconURL)
+    var body = compiledIcon.chunks(matching: ["ic04", "ic07", "ic11", "ic13"])
+    let additionalChunks = [
+        ("ic12", "icon_32x32@2x.png"),
+        ("ic08", "icon_256x256.png"),
+        ("ic14", "icon_256x256@2x.png"),
+        ("ic09", "icon_512x512.png"),
+        ("ic10", "icon_512x512@2x.png")
+    ]
+    for chunk in additionalChunks {
+        body.appendIconChunk(
+            type: chunk.0,
+            image: try Data(contentsOf: iconsetURL.appending(path: chunk.1))
+        )
     }
 
     var icon = Data("icns".utf8)
     icon.appendBigEndian(UInt32(body.count + 8))
     icon.append(body)
-    try icon.write(to: resourcesDirectory.appending(path: "AppIcon.icns"), options: .atomic)
+    try icon.write(to: outputURL, options: .atomic)
 }
 
-try FileManager.default.createDirectory(at: resourcesDirectory, withIntermediateDirectories: true)
-try createAppIcon()
+private func run(_ executable: String, arguments: [String]) throws {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: executable)
+    process.arguments = arguments
+    process.standardOutput = FileHandle.nullDevice
+    process.environment = ProcessInfo.processInfo.environment.merging(
+        ["DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer"],
+        uniquingKeysWith: { _, newValue in newValue }
+    )
+    try process.run()
+    process.waitUntilExit()
+
+    guard process.terminationStatus == 0 else {
+        throw IconError.commandFailed(executable)
+    }
+}
+
+try FileManager.default.createDirectory(at: designDirectory, withIntermediateDirectories: true)
+try createAppIcons()
 
 private extension Data {
+    func chunks(matching expectedTypes: Set<String>) -> Data {
+        var result = Data()
+        var offset = 8
+        while offset + 8 <= count {
+            let type = String(data: self[offset..<(offset + 4)], encoding: .ascii) ?? ""
+            let chunkSize = Int(bigEndianUInt32(at: offset + 4))
+            guard chunkSize >= 8, offset + chunkSize <= count else { break }
+            if expectedTypes.contains(type) {
+                result.append(self[offset..<(offset + chunkSize)])
+            }
+            offset += chunkSize
+        }
+        return result
+    }
+
+    func bigEndianUInt32(at offset: Int) -> UInt32 {
+        self[offset..<(offset + 4)].reduce(UInt32(0)) { value, byte in
+            (value << 8) | UInt32(byte)
+        }
+    }
+
+    mutating func appendIconChunk(type: String, image: Data) {
+        append(contentsOf: type.utf8)
+        appendBigEndian(UInt32(image.count + 8))
+        append(image)
+    }
+
     mutating func appendBigEndian(_ value: UInt32) {
         var bigEndianValue = value.bigEndian
         Swift.withUnsafeBytes(of: &bigEndianValue) { bytes in

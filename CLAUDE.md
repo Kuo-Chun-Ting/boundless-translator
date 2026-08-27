@@ -15,7 +15,7 @@
    - `otool -L`，確認需要的系統 framework 已連結
 5. 任一檢查失敗時，先修正並重新完成全部驗證，不得部署。
 
-本機建置預設使用 Keychain 裡 SHA-1 為 `D94FA01C46E10F95D2E20D403C187C470926858C` 的本機開發憑證。需要切換簽章身分時，以 `BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY` 指定；變數只存憑證名稱或 SHA-1，不得存放或提交私鑰。
+本機建置預設使用 Keychain 裡 SHA-1 為 `2A650F82E97048C85359EC506D920C5BF684CAEE` 的本機開發憑證。需要切換簽章身分時，以 `BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY` 指定；變數只存憑證名稱或 SHA-1，不得存放或提交私鑰。
 
 ## 部署
 
