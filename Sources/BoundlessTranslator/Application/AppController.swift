@@ -58,6 +58,7 @@ final class AppController {
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
         panelController.show(
+            selectedText: selectedText,
             coordinator: coordinator,
             supportedLanguages: supportedLanguages,
             pointerLocation: NSEvent.mouseLocation

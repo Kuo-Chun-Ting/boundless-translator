@@ -33,6 +33,7 @@ final class TranslationPanel: NSPanel {
                 .fullSizeContentView,
                 .nonactivatingPanel,
             ]
+            toolbar?.isVisible = true
         case .error, .sourceLanguageSelection:
             styleMask = [
                 .titled,
@@ -40,11 +41,14 @@ final class TranslationPanel: NSPanel {
                 .fullSizeContentView,
                 .nonactivatingPanel,
             ]
+            toolbar?.isVisible = false
         }
         isOpaque = true
         backgroundColor = .windowBackgroundColor
+        toolbarStyle = .unifiedCompact
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
+        titlebarSeparatorStyle = .none
         hasShadow = true
     }
 

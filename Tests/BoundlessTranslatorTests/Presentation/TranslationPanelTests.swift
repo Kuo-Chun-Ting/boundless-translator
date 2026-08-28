@@ -1,3 +1,4 @@
+import AppKit
 import Testing
 @testable import BoundlessTranslator
 
@@ -33,6 +34,8 @@ func test_cancelOperation_when_handlerIsConfigured_thenForwardsRequest() {
 func test_configureChrome_when_translation_is_presented_then_keeps_resizable_native_title_bar() {
     // Arrange
     let panel = TranslationPanel()
+    let toolbar = NSToolbar(identifier: "TranslationPanelTests")
+    panel.toolbar = toolbar
 
     // Act
     panel.configureChrome(for: .translation)
@@ -44,12 +47,17 @@ func test_configureChrome_when_translation_is_presented_then_keeps_resizable_nat
     #expect(panel.styleMask.contains(.resizable))
     #expect(panel.isOpaque)
     #expect(panel.backgroundColor == .windowBackgroundColor)
+    #expect(toolbar.isVisible)
+    #expect(panel.toolbarStyle == .unifiedCompact)
+    #expect(panel.titlebarSeparatorStyle == .none)
 }
 
 @Test @MainActor
 func test_configureChrome_when_auxiliary_content_follows_translation_then_restores_title_bar() {
     // Arrange
     let panel = TranslationPanel()
+    let toolbar = NSToolbar(identifier: "TranslationPanelTests")
+    panel.toolbar = toolbar
     panel.configureChrome(for: .translation)
 
     // Act
@@ -60,4 +68,55 @@ func test_configureChrome_when_auxiliary_content_follows_translation_then_restor
     #expect(panel.styleMask.contains(.closable))
     #expect(panel.isOpaque)
     #expect(panel.backgroundColor == .windowBackgroundColor)
+    #expect(!toolbar.isVisible)
+}
+
+@Test @MainActor
+func test_modeControl_when_dictionary_segment_is_selected_then_forwards_dictionary_mode() throws {
+    // Arrange
+    let state = TranslationPanelState()
+    var selectedModes: [TranslationPanelMode] = []
+    let controller = TranslationPanelToolbarController(
+        panelState: state,
+        onSelectMode: { selectedModes.append($0) }
+    )
+    let item = try #require(
+        controller.toolbar(
+            controller.toolbar,
+            itemForItemIdentifier: .translationMode,
+            willBeInsertedIntoToolbar: true
+        )
+    )
+    let control = try #require(item.view as? NSSegmentedControl)
+
+    // Act
+    control.selectedSegment = TranslationPanelMode.dictionary.rawValue
+    control.sendAction(control.action, to: control.target)
+
+    // Assert
+    #expect(selectedModes == [.dictionary])
+}
+
+@Test @MainActor
+func test_pinItem_when_activated_then_toggles_panel_pin_state() throws {
+    // Arrange
+    let state = TranslationPanelState()
+    let controller = TranslationPanelToolbarController(
+        panelState: state,
+        onSelectMode: { _ in }
+    )
+    let item = try #require(
+        controller.toolbar(
+            controller.toolbar,
+            itemForItemIdentifier: .pinPanel,
+            willBeInsertedIntoToolbar: true
+        )
+    )
+    let button = try #require(item.view as? NSButton)
+
+    // Act
+    button.performClick(nil)
+
+    // Assert
+    #expect(state.isPinned)
 }

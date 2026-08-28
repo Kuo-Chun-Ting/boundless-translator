@@ -6,16 +6,36 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let auxiliaryPanelSize = CGSize(width: 420, height: 260)
     private let translationLayout = TranslationPanelLayout()
     private let positioner = PanelPositioner(pointerOffset: 12)
-    private let panelState = TranslationPanelState()
+    private let panelState: TranslationPanelState
+    private let dictionaryCoordinator: DictionaryLookupCoordinator
     private let panel: TranslationPanel
+    private lazy var workflowCoordinator = PanelWorkflowCoordinator(
+        translation: PanelTranslationWorkflow(panelState: panelState),
+        dictionary: PanelDictionaryWorkflow(
+            panelState: panelState,
+            coordinator: dictionaryCoordinator
+        )
+    )
+    private lazy var toolbarController = TranslationPanelToolbarController(
+        panelState: panelState,
+        onSelectMode: { [weak self] mode in
+            self?.selectMode(mode)
+        }
+    )
     private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationPanelKind.translation
     private var presentedPointerLocation = CGPoint.zero
+    private var selectedText: SelectedText?
 
-    override init() {
+    init(
+        dictionaryService: any DictionaryLookupServicing = DictionaryServicesLookupService()
+    ) {
+        panelState = TranslationPanelState()
+        dictionaryCoordinator = DictionaryLookupCoordinator(service: dictionaryService)
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
         super.init()
         panel.delegate = self
+        panel.toolbar = toolbarController.toolbar
         panel.isFloatingPanel = true
         panel.level = .floating
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -27,10 +47,13 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     }
 
     func show(
+        selectedText: SelectedText,
         coordinator: TranslationCoordinator,
         supportedLanguages: [Locale.Language],
         pointerLocation: CGPoint
     ) {
+        self.selectedText = selectedText
+        dictionaryCoordinator.reset()
         let initialSize = translationLayout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status
@@ -90,6 +113,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         panelSize: CGSize
     ) {
         panelState.reset()
+        toolbarController.synchronize()
         interactionPolicy = PanelInteractionPolicy(kind: kind)
         presentedKind = kind
         presentedPointerLocation = pointerLocation
@@ -148,6 +172,14 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         }
     }
 
+    private func selectMode(_ mode: TranslationPanelMode) {
+        guard let selectedText else {
+            return
+        }
+
+        workflowCoordinator.select(mode, text: selectedText)
+    }
+
     private func dismissForCancelOperation(_ sender: Any?) {
         guard interactionPolicy.shouldDismissForCancelOperation(
             isPinned: panelState.isPinned
@@ -166,5 +198,37 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         }
 
         panel.orderOut(nil)
+    }
+}
+
+@MainActor
+private final class PanelTranslationWorkflow: TranslationWorkflowing {
+    private let panelState: TranslationPanelState
+
+    init(panelState: TranslationPanelState) {
+        self.panelState = panelState
+    }
+
+    func translate() {
+        panelState.select(.translate)
+    }
+}
+
+@MainActor
+private final class PanelDictionaryWorkflow: DictionaryWorkflowing {
+    private let panelState: TranslationPanelState
+    private let coordinator: DictionaryLookupCoordinator
+
+    init(
+        panelState: TranslationPanelState,
+        coordinator: DictionaryLookupCoordinator
+    ) {
+        self.panelState = panelState
+        self.coordinator = coordinator
+    }
+
+    func lookUp(_ selectedText: SelectedText) {
+        panelState.select(.dictionary)
+        coordinator.lookUp(selectedText)
     }
 }
