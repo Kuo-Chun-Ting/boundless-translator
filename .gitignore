@@ -3,3 +3,4 @@
 Build/
 .swiftpm/xcode/package.xcworkspace/xcuserdata/
 *.xcuserstate
+.worktrees/
