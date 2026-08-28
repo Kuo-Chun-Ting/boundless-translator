@@ -3,6 +3,7 @@ import SwiftUI
 
 struct TranslationPanelView: View {
     @ObservedObject var coordinator: TranslationCoordinator
+    @ObservedObject var dictionaryCoordinator: DictionaryLookupCoordinator
     @ObservedObject var panelState: TranslationPanelState
 
     let supportedLanguages: [Locale.Language]
@@ -11,12 +12,14 @@ struct TranslationPanelView: View {
 
     init(
         coordinator: TranslationCoordinator,
+        dictionaryCoordinator: DictionaryLookupCoordinator,
         panelState: TranslationPanelState,
         supportedLanguages: [Locale.Language],
         layout: TranslationPanelLayout = TranslationPanelLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
         self.coordinator = coordinator
+        self.dictionaryCoordinator = dictionaryCoordinator
         self.panelState = panelState
         self.supportedLanguages = supportedLanguages
         self.layout = layout
@@ -24,26 +27,13 @@ struct TranslationPanelView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            TranslationPanelToolbar(
-                panelState: panelState
-            )
-            Divider()
-            TranslationLanguageBar(
-                coordinator: coordinator,
-                supportedLanguages: supportedLanguages
-            )
-            Divider()
-            HStack(spacing: 0) {
-                sourceContent
-                Divider()
-                targetContent
+        Group {
+            switch panelState.mode {
+            case .translate:
+                translationContent
+            case .dictionary:
+                DictionaryPanelView(status: dictionaryCoordinator.status)
             }
-            .frame(
-                maxWidth: .infinity,
-                maxHeight: .infinity,
-                alignment: .topLeading
-            )
         }
         .frame(
             minWidth: metrics.size.width,
@@ -53,7 +43,6 @@ struct TranslationPanelView: View {
             alignment: .topLeading
         )
         .background(Color(nsColor: .windowBackgroundColor))
-        .ignoresSafeArea(.container, edges: .top)
         .onChange(of: metrics.size, initial: true) { _, newSize in
             onPreferredSizeChange(newSize)
         }
@@ -66,6 +55,39 @@ struct TranslationPanelView: View {
                 .id(request.id)
             }
         }
+    }
+
+    private var translationContent: some View {
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                languageMenu(role: .source)
+                Divider()
+                sourceContent
+            }
+            Divider()
+            VStack(spacing: 0) {
+                languageMenu(role: .target)
+                Divider()
+                targetContent
+            }
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity,
+            alignment: .topLeading
+        )
+    }
+
+    private func languageMenu(
+        role: TranslationLanguageRole
+    ) -> some View {
+        TranslationLanguageMenu(
+            coordinator: coordinator,
+            supportedLanguages: supportedLanguages,
+            role: role
+        )
+        .padding(.horizontal, 14)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
     }
 
     private var sourceContent: some View {
@@ -119,10 +141,15 @@ struct TranslationPanelView: View {
     }
 
     private var metrics: TranslationPanelMetrics {
-        layout.metrics(
-            sourceText: coordinator.request?.text ?? "",
-            status: coordinator.status
-        )
+        switch panelState.mode {
+        case .translate:
+            layout.metrics(
+                sourceText: coordinator.request?.text ?? "",
+                status: coordinator.status
+            )
+        case .dictionary:
+            layout.dictionaryMetrics(status: dictionaryCoordinator.status)
+        }
     }
 }
 

@@ -19,6 +19,41 @@ func test_metrics_when_translation_is_short_then_uses_compact_size() {
 
     // Assert
     #expect(metrics.size == CGSize(width: 560, height: 180))
+    #expect(metrics.contentHeight == 128)
+}
+
+@Test
+func test_dictionaryMetrics_when_definition_is_short_then_uses_compact_size() {
+    // Arrange
+    let layout = TranslationPanelLayout()
+    let status = DictionaryLookupStatus.found(
+        DictionaryDefinition(term: "train", text: "A railway vehicle.")
+    )
+
+    // Act
+    let metrics = layout.dictionaryMetrics(status: status)
+
+    // Assert
+    #expect(metrics.size == CGSize(width: 560, height: 180))
+}
+
+@Test
+func test_dictionaryMetrics_when_definition_exceeds_available_space_then_caps_height() {
+    // Arrange
+    let layout = TranslationPanelLayout()
+    let status = DictionaryLookupStatus.found(
+        DictionaryDefinition(
+            term: "train",
+            text: String(repeating: "A long dictionary definition. ", count: 300)
+        )
+    )
+
+    // Act
+    let metrics = layout.dictionaryMetrics(status: status)
+
+    // Assert
+    #expect(metrics.size.height == 440)
+    #expect(metrics.contentHeight < metrics.idealContentHeight)
 }
 
 @Test

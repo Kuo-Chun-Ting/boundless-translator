@@ -10,18 +10,18 @@ struct TranslationPanelLayout {
     private let panelWidth: CGFloat
     private let compactHeight: CGFloat
     private let maximumHeight: CGFloat
-    private let nonContentHeight: CGFloat
+    private let translationHeaderHeight: CGFloat
 
     init(
         panelWidth: CGFloat = 560,
         compactHeight: CGFloat = 180,
         maximumHeight: CGFloat = 440,
-        nonContentHeight: CGFloat = 116
+        translationHeaderHeight: CGFloat = 52
     ) {
         self.panelWidth = panelWidth
         self.compactHeight = compactHeight
         self.maximumHeight = maximumHeight
-        self.nonContentHeight = nonContentHeight
+        self.translationHeaderHeight = translationHeaderHeight
     }
 
     func metrics(
@@ -32,6 +32,25 @@ struct TranslationPanelLayout {
             measuredHeight(for: sourceText),
             resultHeight(for: status)
         )
+        return makeMetrics(
+            idealContentHeight: idealContentHeight,
+            nonContentHeight: translationHeaderHeight
+        )
+    }
+
+    func dictionaryMetrics(
+        status: DictionaryLookupStatus
+    ) -> TranslationPanelMetrics {
+        makeMetrics(
+            idealContentHeight: dictionaryHeight(for: status),
+            nonContentHeight: 0
+        )
+    }
+
+    private func makeMetrics(
+        idealContentHeight: CGFloat,
+        nonContentHeight: CGFloat
+    ) -> TranslationPanelMetrics {
         let desiredHeight = nonContentHeight + idealContentHeight
         let panelHeight = min(
             max(desiredHeight, compactHeight),
@@ -49,6 +68,29 @@ struct TranslationPanelLayout {
         )
     }
 
+    private func dictionaryHeight(
+        for status: DictionaryLookupStatus
+    ) -> CGFloat {
+        switch status {
+        case .idle:
+            return compactHeight
+        case .notFound:
+            return 120
+        case .found(let definition):
+            let contentWidth = panelWidth - 40
+            let termHeight = measuredHeight(
+                for: definition.term,
+                width: contentWidth,
+                font: .systemFont(ofSize: 20, weight: .semibold)
+            )
+            let definitionHeight = measuredHeight(
+                for: definition.text,
+                width: contentWidth
+            )
+            return termHeight + definitionHeight + 52
+        }
+    }
+
     private func resultHeight(for status: TranslationStatus) -> CGFloat {
         switch status {
         case .idle:
@@ -64,16 +106,24 @@ struct TranslationPanelLayout {
 
     private func measuredHeight(for text: String) -> CGFloat {
         let contentWidth = (panelWidth - 1) / 2 - 28
+        return measuredHeight(for: text, width: contentWidth)
+    }
+
+    private func measuredHeight(
+        for text: String,
+        width: CGFloat,
+        font: NSFont = .systemFont(ofSize: NSFont.systemFontSize)
+    ) -> CGFloat {
         let bounds = (text as NSString).boundingRect(
             with: CGSize(
-                width: contentWidth,
+                width: width,
                 height: CGFloat.greatestFiniteMagnitude
             ),
             options: [.usesLineFragmentOrigin, .usesFontLeading],
             attributes: [
-                .font: NSFont.systemFont(ofSize: NSFont.systemFontSize)
+                .font: font
             ]
         )
-        return max(ceil(bounds.height), NSFont.systemFontSize)
+        return max(ceil(bounds.height), font.pointSize)
     }
 }

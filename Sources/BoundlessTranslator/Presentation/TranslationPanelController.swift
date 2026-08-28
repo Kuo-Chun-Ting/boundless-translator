@@ -61,6 +61,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         present(
             TranslationPanelView(
                 coordinator: coordinator,
+                dictionaryCoordinator: dictionaryCoordinator,
                 panelState: panelState,
                 supportedLanguages: supportedLanguages,
                 layout: translationLayout,
