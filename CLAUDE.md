@@ -1,5 +1,11 @@
 # 專案工作流程
 
+## App icon
+
+- 修改來源 PNG 後，執行 `Scripts/generate_brand_icons.swift .` 產生 ICNS。
+- 切換 App icon 時，執行 `Scripts/replace_app_icon.sh <icns-path>` 覆蓋 `Resources/AppIcon.icns`。
+- 修改或替換 App icon 後，完成下列驗證與部署流程。
+
 ## 驗證
 
 修改 App 程式、資源、設定或建置流程後，依序完成以下檢查：
@@ -19,7 +25,9 @@
 
 ## 部署
 
-完成驗證後，必須把本次建立的 App 部署到 `/Applications/Boundless Translator.app`：
+完成驗證後，執行 `Scripts/deploy_app.sh`。不得以手動複製或 `Scripts/build_and_deploy_app.sh` 取代正式驗證與部署流程。
+
+`Scripts/deploy_app.sh` 必須符合以下要求：
 
 1. 使用 `pgrep -x BoundlessTranslator` 檢查已安裝的 App 是否仍在執行。
 2. 如果正在執行，只終止名稱完全相符的 `BoundlessTranslator` 程序，並等待 `pgrep -x BoundlessTranslator` 確認程序已停止；不得使用模糊程序名稱終止其他 App。

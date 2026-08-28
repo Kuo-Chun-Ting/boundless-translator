@@ -62,7 +62,7 @@ Use the language menus in the result window to retry that translation with a dif
 
 ## Development
 
-Clone the repository and run the test suite:
+Clone the repository and run the tests:
 
 ```bash
 git clone https://github.com/Kuo-Chun-Ting/boundless-translator.git
@@ -70,26 +70,37 @@ cd boundless-translator
 swift test
 ```
 
-Build the release app with a code-signing identity available in your Keychain:
+### App icon
 
-```bash
-BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY="Your Signing Identity" Scripts/build_app.sh
-```
-
-The app is created at `Build/Boundless Translator.app`.
-
-Generate and select the current app icon:
+Regenerate the ICNS after changing its source PNG, then select the icon used by the app:
 
 ```bash
 Scripts/generate_brand_icons.swift .
 Scripts/replace_app_icon.sh Design/BoundlessTranslator-Ghost-AppIcon-Transparent.icns
 ```
 
-Build and deploy the app to `/Applications`:
+### Build and deploy
+
+Build the release app, verify it, then deploy it to `/Applications`:
 
 ```bash
-BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY="Your Signing Identity" Scripts/build_and_deploy_app.sh
+Scripts/build_app.sh
+Scripts/deploy_app.sh
 ```
+
+Use the combined script when intermediate verification is unnecessary:
+
+```bash
+Scripts/build_and_deploy_app.sh
+```
+
+To override the default Keychain signing identity:
+
+```bash
+BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY="Your Signing Identity" Scripts/build_app.sh
+```
+
+The release app is created at `Build/Boundless Translator.app`.
 
 ## Current Limitations
 
