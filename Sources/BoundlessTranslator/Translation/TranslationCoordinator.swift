@@ -79,22 +79,6 @@ final class TranslationCoordinator: ObservableObject {
         }
     }
 
-    func complete(
-        _ result: Result<TranslationOutput, TranslationFailure>,
-        requestID: UUID
-    ) {
-        guard request?.id == requestID else {
-            return
-        }
-
-        switch result {
-        case .success(let output):
-            status = .translated(output)
-        case .failure(let failure):
-            status = .failed(failure)
-        }
-    }
-
     private func resubmit(
         _ request: TranslationRequest,
         sourceLanguageIdentifier: String,

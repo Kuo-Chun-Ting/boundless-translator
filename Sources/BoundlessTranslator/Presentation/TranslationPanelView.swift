@@ -61,9 +61,7 @@ struct TranslationPanelView: View {
             if let request = coordinator.request {
                 TranslationTaskHost(
                     request: request,
-                    onComplete: { result, requestID in
-                        coordinator.complete(result, requestID: requestID)
-                    }
+                    coordinator: coordinator
                 )
                 .id(request.id)
             }
@@ -130,22 +128,16 @@ struct TranslationPanelView: View {
 
 private struct TranslationTaskHost: View {
     let request: TranslationRequest
-    let onComplete: @MainActor (
-        Result<TranslationOutput, TranslationFailure>,
-        UUID
-    ) -> Void
+    let coordinator: TranslationCoordinator
 
     @State private var configuration: TranslationSession.Configuration?
 
     init(
         request: TranslationRequest,
-        onComplete: @escaping @MainActor (
-            Result<TranslationOutput, TranslationFailure>,
-            UUID
-        ) -> Void
+        coordinator: TranslationCoordinator
     ) {
         self.request = request
-        self.onComplete = onComplete
+        self.coordinator = coordinator
         _configuration = State(
             initialValue: TranslationConfigurationFactory.make(for: request)
         )
@@ -155,20 +147,9 @@ private struct TranslationTaskHost: View {
         Color.clear
             .frame(width: 0, height: 0)
             .translationTask(configuration) { session in
-                do {
-                    let response = try await session.translate(request.text)
-                    let output = TranslationOutput(
-                        translatedText: response.targetText,
-                        sourceLanguageIdentifier: response.sourceLanguage.minimalIdentifier,
-                        targetLanguageIdentifier: response.targetLanguage.minimalIdentifier
-                    )
-                    onComplete(.success(output), request.id)
-                } catch {
-                    onComplete(
-                        .failure(TranslationFailure(error: error)),
-                        request.id
-                    )
-                }
+                await coordinator.translate(
+                    using: AppleTranslationRunner(session: session)
+                )
             }
     }
 }
