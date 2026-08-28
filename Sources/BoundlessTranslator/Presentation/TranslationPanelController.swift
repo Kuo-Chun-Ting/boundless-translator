@@ -24,7 +24,6 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     )
     private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationPanelKind.translation
-    private var presentedPointerLocation = CGPoint.zero
     private var selectedText: SelectedText?
 
     init(
@@ -117,7 +116,6 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         toolbarController.synchronize()
         interactionPolicy = PanelInteractionPolicy(kind: kind)
         presentedKind = kind
-        presentedPointerLocation = pointerLocation
         panel.contentView = NSHostingView(rootView: content)
         panel.setContentSize(panelSize)
         configureWindowControls(for: kind)
@@ -136,10 +134,25 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             return
         }
 
+        let currentFrame = panel.frame
         panel.setContentSize(size)
-        positionPanel(
-            size: size,
-            pointerLocation: presentedPointerLocation
+        preservePanelPosition(from: currentFrame)
+    }
+
+    private func preservePanelPosition(from currentFrame: CGRect) {
+        guard let visibleFrame = (panel.screen ?? NSScreen.main)?.visibleFrame else {
+            panel.setFrameTopLeftPoint(
+                CGPoint(x: currentFrame.minX, y: currentFrame.maxY)
+            )
+            return
+        }
+
+        panel.setFrameOrigin(
+            positioner.resizedOrigin(
+                currentFrame: currentFrame,
+                newPanelSize: panel.frame.size,
+                visibleFrame: visibleFrame
+            )
         )
     }
 

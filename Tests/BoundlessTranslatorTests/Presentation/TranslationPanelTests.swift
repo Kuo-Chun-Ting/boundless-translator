@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 import Testing
 @testable import BoundlessTranslator
 
@@ -119,4 +120,45 @@ func test_pinItem_when_activated_then_toggles_panel_pin_state() throws {
 
     // Assert
     #expect(state.isPinned)
+}
+
+@Test @MainActor
+func test_fittingSize_when_translation_is_compact_then_matches_layout_height() throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("train"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let dictionaryCoordinator = DictionaryLookupCoordinator(
+        service: DictionaryLookupServiceStub()
+    )
+    let panelState = TranslationPanelState()
+    let layout = TranslationPanelLayout()
+    let metrics = layout.metrics(
+        sourceText: "train",
+        status: coordinator.status
+    )
+    let hostingView = NSHostingView(
+        rootView: TranslationPanelView(
+            coordinator: coordinator,
+            dictionaryCoordinator: dictionaryCoordinator,
+            panelState: panelState,
+            supportedLanguages: [],
+            layout: layout
+        )
+    )
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+
+    // Assert
+    #expect(abs(hostingView.fittingSize.height - metrics.size.height) < 0.5)
+}
+
+private struct DictionaryLookupServiceStub: DictionaryLookupServicing {
+    func lookUp(_ term: String) -> String? {
+        nil
+    }
 }

@@ -175,6 +175,7 @@ private struct TranslationTaskHost: View {
             .frame(width: 0, height: 0)
             .translationTask(configuration) { session in
                 await coordinator.translate(
+                    request,
                     using: AppleTranslationRunner(session: session)
                 )
             }

@@ -60,8 +60,11 @@ final class TranslationCoordinator: ObservableObject {
         )
     }
 
-    func translate(using runner: any TranslationRunning) async {
-        guard let request else {
+    func translate(
+        _ request: TranslationRequest,
+        using runner: any TranslationRunning
+    ) async {
+        guard self.request?.id == request.id else {
             return
         }
 

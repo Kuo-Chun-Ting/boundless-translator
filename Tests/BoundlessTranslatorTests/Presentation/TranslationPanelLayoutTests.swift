@@ -19,7 +19,7 @@ func test_metrics_when_translation_is_short_then_uses_compact_size() {
 
     // Assert
     #expect(metrics.size == CGSize(width: 560, height: 180))
-    #expect(metrics.contentHeight == 128)
+    #expect(metrics.contentHeight == 107)
 }
 
 @Test

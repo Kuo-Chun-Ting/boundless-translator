@@ -86,3 +86,21 @@ func test_origin_when_panel_exceeds_top_edge_then_clamps_vertically() {
     // Assert
     #expect(origin.y == 470)
 }
+
+@Test
+func test_resizedOrigin_when_panel_grows_after_being_moved_then_preserves_top_left() {
+    // Arrange
+    let positioner = PanelPositioner(pointerOffset: 12)
+    let currentFrame = CGRect(x: 260, y: 240, width: 560, height: 220)
+    let visibleFrame = CGRect(x: 0, y: 0, width: 1_200, height: 900)
+
+    // Act
+    let origin = positioner.resizedOrigin(
+        currentFrame: currentFrame,
+        newPanelSize: CGSize(width: 560, height: 340),
+        visibleFrame: visibleFrame
+    )
+
+    // Assert
+    #expect(origin == CGPoint(x: 260, y: 120))
+}

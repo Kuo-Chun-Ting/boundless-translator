@@ -118,10 +118,11 @@ func test_translate_when_runner_succeeds_then_publishes_output() async throws {
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
+    let request = try #require(coordinator.request)
     let stub_runner = ImmediateTranslationRunner(result: .success(output))
 
     // Act
-    await coordinator.translate(using: stub_runner)
+    await coordinator.translate(request, using: stub_runner)
 
     // Assert
     #expect(coordinator.status == .translated(output))
@@ -136,12 +137,13 @@ func test_translate_when_runner_fails_then_publishes_error() async throws {
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
+    let request = try #require(coordinator.request)
     let stub_runner = ImmediateTranslationRunner(
         result: .failure(TranslationTestError.unavailable)
     )
 
     // Act
-    await coordinator.translate(using: stub_runner)
+    await coordinator.translate(request, using: stub_runner)
 
     // Assert
     #expect(
@@ -165,10 +167,11 @@ func test_translate_when_called_then_forwards_current_request_to_runner() async 
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
+    let request = try #require(coordinator.request)
     let mock_runner = TranslationRunnerMock(output: output)
 
     // Act
-    await coordinator.translate(using: mock_runner)
+    await coordinator.translate(request, using: mock_runner)
 
     // Assert
     #expect(mock_runner.receivedRequest == coordinator.request)
@@ -184,8 +187,9 @@ func test_translate_when_older_request_finishes_then_keeps_newer_result() async 
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
+    let firstRequest = try #require(coordinator.request)
     let firstTask = Task { @MainActor in
-        await coordinator.translate(using: suspended_runner)
+        await coordinator.translate(firstRequest, using: suspended_runner)
     }
     await suspended_runner.waitUntilRequestArrives()
 
@@ -200,7 +204,8 @@ func test_translate_when_older_request_finishes_then_keeps_newer_result() async 
         targetLanguageIdentifier: "ja"
     )
     let second_runner = ImmediateTranslationRunner(result: .success(secondOutput))
-    await coordinator.translate(using: second_runner)
+    let secondRequest = try #require(coordinator.request)
+    await coordinator.translate(secondRequest, using: second_runner)
 
     // Act
     let firstOutput = TranslationOutput(
@@ -213,6 +218,37 @@ func test_translate_when_older_request_finishes_then_keeps_newer_result() async 
 
     // Assert
     #expect(coordinator.status == .translated(secondOutput))
+}
+
+@Test @MainActor
+func test_translate_when_stale_host_starts_after_resubmission_then_ignores_stale_result() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("First"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let staleRequest = try #require(coordinator.request)
+    coordinator.submit(
+        try SelectedText("Second"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "ja"
+    )
+    let output = TranslationOutput(
+        translatedText: "第一個",
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let mock_runner = TranslationRunnerMock(output: output)
+
+    // Act
+    await coordinator.translate(staleRequest, using: mock_runner)
+
+    // Assert
+    #expect(mock_runner.receivedRequest == nil)
+    #expect(coordinator.request?.text == "Second")
+    #expect(coordinator.status == .translating)
 }
 
 private struct ImmediateTranslationRunner: TranslationRunning {

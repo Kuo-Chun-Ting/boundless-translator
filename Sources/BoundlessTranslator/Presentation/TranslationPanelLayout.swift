@@ -10,18 +10,18 @@ struct TranslationPanelLayout {
     private let panelWidth: CGFloat
     private let compactHeight: CGFloat
     private let maximumHeight: CGFloat
-    private let translationHeaderHeight: CGFloat
+    private let translationNonContentHeight: CGFloat
 
     init(
         panelWidth: CGFloat = 560,
         compactHeight: CGFloat = 180,
         maximumHeight: CGFloat = 440,
-        translationHeaderHeight: CGFloat = 52
+        translationNonContentHeight: CGFloat = 73
     ) {
         self.panelWidth = panelWidth
         self.compactHeight = compactHeight
         self.maximumHeight = maximumHeight
-        self.translationHeaderHeight = translationHeaderHeight
+        self.translationNonContentHeight = translationNonContentHeight
     }
 
     func metrics(
@@ -34,7 +34,7 @@ struct TranslationPanelLayout {
         )
         return makeMetrics(
             idealContentHeight: idealContentHeight,
-            nonContentHeight: translationHeaderHeight
+            nonContentHeight: translationNonContentHeight
         )
     }
 
