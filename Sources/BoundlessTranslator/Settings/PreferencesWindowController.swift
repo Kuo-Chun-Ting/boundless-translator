@@ -4,8 +4,15 @@ import SwiftUI
 @MainActor
 final class PreferencesWindowController: NSWindowController {
     private let presentationCoordinator = PreferencesPresentationCoordinator()
+    private let activeScreenVisibleFrame: @MainActor () -> CGRect?
 
-    init(settings: TranslationSettings) {
+    init(
+        settings: TranslationSettings,
+        activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil
+    ) {
+        self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
+            NSScreen.main?.visibleFrame
+        }
         let window = NSWindow(
             contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 190)),
             styleMask: [.titled, .closable, .miniaturizable],
@@ -13,9 +20,9 @@ final class PreferencesWindowController: NSWindowController {
             defer: false
         )
         window.title = "Preferences"
+        window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(rootView: SettingsView(settings: settings))
-        window.center()
         super.init(window: window)
     }
 
@@ -25,6 +32,7 @@ final class PreferencesWindowController: NSWindowController {
     }
 
     func present() {
+        centerWindowOnActiveScreen()
         presentationCoordinator.present(
             deferPresentation: { presentation in
                 Task { @MainActor in
@@ -42,6 +50,19 @@ final class PreferencesWindowController: NSWindowController {
                 self?.window?.makeKeyAndOrderFront(nil)
                 self?.window?.orderFrontRegardless()
             }
+        )
+    }
+
+    private func centerWindowOnActiveScreen() {
+        guard let window, let visibleFrame = activeScreenVisibleFrame() else {
+            return
+        }
+
+        window.setFrameOrigin(
+            CGPoint(
+                x: visibleFrame.midX - window.frame.width / 2,
+                y: visibleFrame.midY - window.frame.height / 2
+            )
         )
     }
 }
