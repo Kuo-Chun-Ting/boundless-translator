@@ -90,6 +90,16 @@ Scripts/deploy_app.sh
 
 The release app is created at `Build/Boundless Translator.app`.
 
+Package the latest release app as a compressed disk image:
+
+```bash
+brew install create-dmg
+Scripts/package_dmg.sh
+```
+
+The disk image is created at `Build/Boundless Translator.dmg`. It contains the App and an `Applications` shortcut for drag-to-install distribution. The first styled build may ask for permission to let `osascript` control Finder. Packaging preserves the App's existing signature; it does not sign or notarize the App.
+
+
 ## Current Limitations
 
 - Selected-text access depends on what the active app exposes through macOS Accessibility or its response to the Copy command.
