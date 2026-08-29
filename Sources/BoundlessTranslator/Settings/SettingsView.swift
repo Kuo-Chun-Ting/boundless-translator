@@ -5,6 +5,7 @@ struct SettingsView: View {
     @ObservedObject var settings: TranslationSettings
 
     @State private var supportedLanguages: [Locale.Language] = []
+    private let languageNames = LanguageDisplayNameFormatter()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -28,7 +29,7 @@ struct SettingsView: View {
                             .tag(nil as String?)
 
                         ForEach(sourceLanguageOptions) { option in
-                            Text(languageName(for: option.language))
+                            Text(languageNames.name(for: option))
                                 .tag(Optional(option.id))
                         }
                     }
@@ -36,7 +37,7 @@ struct SettingsView: View {
 
                     Picker("To", selection: $settings.targetLanguageIdentifier) {
                         ForEach(targetLanguageOptions) { option in
-                            Text(languageName(for: option.language))
+                            Text(languageNames.name(for: option))
                                 .tag(option.id)
                         }
                     }
@@ -58,8 +59,10 @@ struct SettingsView: View {
             )
             supportedLanguages = availableLanguages
                 .sorted {
-                    languageName(for: $0)
-                        .localizedStandardCompare(languageName(for: $1)) == .orderedAscending
+                    languageNames.name(for: $0.minimalIdentifier)
+                        .localizedStandardCompare(
+                            languageNames.name(for: $1.minimalIdentifier)
+                        ) == .orderedAscending
                 }
         }
     }
@@ -82,10 +85,5 @@ struct SettingsView: View {
             supportedLanguages: supportedLanguages,
             selectedIdentifier: settings.targetLanguageIdentifier
         )
-    }
-
-    private func languageName(for language: Locale.Language) -> String {
-        Locale.current.localizedString(forIdentifier: language.minimalIdentifier)
-            ?? language.minimalIdentifier
     }
 }

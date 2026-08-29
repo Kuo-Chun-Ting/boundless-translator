@@ -8,6 +8,7 @@ final class AppController {
 
     private let coordinator = TranslationCoordinator()
     private let panelController = TranslationPanelController()
+    private let languageNames = LanguageDisplayNameFormatter()
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings
     )
@@ -58,7 +59,6 @@ final class AppController {
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
         panelController.show(
-            selectedText: selectedText,
             coordinator: coordinator,
             supportedLanguages: supportedLanguages,
             pointerLocation: NSEvent.mouseLocation
@@ -139,14 +139,11 @@ final class AppController {
 
         let availableLanguages = await LanguageAvailability().supportedLanguages
         supportedLanguages = availableLanguages.sorted {
-            languageName(for: $0)
-                .localizedStandardCompare(languageName(for: $1)) == .orderedAscending
+            languageNames.name(for: $0.minimalIdentifier)
+                .localizedStandardCompare(
+                    languageNames.name(for: $1.minimalIdentifier)
+                ) == .orderedAscending
         }
         return supportedLanguages
-    }
-
-    private func languageName(for language: Locale.Language) -> String {
-        Locale.current.localizedString(forIdentifier: language.minimalIdentifier)
-            ?? language.minimalIdentifier
     }
 }

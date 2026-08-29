@@ -1,10 +1,10 @@
 import Foundation
 
 struct TranslationLanguagePairFormatter {
-    private let locale: Locale
+    private let languageNames: LanguageDisplayNameFormatter
 
     init(locale: Locale = Locale(identifier: "en_US")) {
-        self.locale = locale
+        languageNames = LanguageDisplayNameFormatter(locale: locale)
     }
 
     func sourceDescription(
@@ -16,19 +16,6 @@ struct TranslationLanguagePairFormatter {
     }
 
     func languageName(for identifier: String) -> String {
-        guard let localizedName = locale.localizedString(forIdentifier: identifier) else {
-            return identifier
-        }
-
-        let parts = localizedName.split(
-            separator: ",",
-            maxSplits: 1,
-            omittingEmptySubsequences: true
-        )
-        guard parts.count == 2 else {
-            return localizedName
-        }
-
-        return "\(parts[1].trimmingCharacters(in: .whitespaces)) \(parts[0])"
+        languageNames.name(for: identifier)
     }
 }

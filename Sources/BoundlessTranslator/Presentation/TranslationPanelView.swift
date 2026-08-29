@@ -3,8 +3,6 @@ import SwiftUI
 
 struct TranslationPanelView: View {
     @ObservedObject var coordinator: TranslationCoordinator
-    @ObservedObject var dictionaryCoordinator: DictionaryLookupCoordinator
-    @ObservedObject var panelState: TranslationPanelState
 
     let supportedLanguages: [Locale.Language]
     let layout: TranslationPanelLayout
@@ -12,29 +10,18 @@ struct TranslationPanelView: View {
 
     init(
         coordinator: TranslationCoordinator,
-        dictionaryCoordinator: DictionaryLookupCoordinator,
-        panelState: TranslationPanelState,
         supportedLanguages: [Locale.Language],
         layout: TranslationPanelLayout = TranslationPanelLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
         self.coordinator = coordinator
-        self.dictionaryCoordinator = dictionaryCoordinator
-        self.panelState = panelState
         self.supportedLanguages = supportedLanguages
         self.layout = layout
         self.onPreferredSizeChange = onPreferredSizeChange
     }
 
     var body: some View {
-        Group {
-            switch panelState.mode {
-            case .translate:
-                translationContent
-            case .dictionary:
-                DictionaryPanelView(status: dictionaryCoordinator.status)
-            }
-        }
+        translationContent
         .frame(
             minWidth: metrics.size.width,
             maxWidth: .infinity,
@@ -58,19 +45,22 @@ struct TranslationPanelView: View {
     }
 
     private var translationContent: some View {
-        HStack(spacing: 0) {
-            VStack(spacing: 0) {
+        VStack(spacing: TranslationPanelStyle.contentSpacing) {
+            HStack(spacing: TranslationPanelStyle.columnSpacing) {
                 languageMenu(role: .source)
-                Divider()
-                sourceContent
-            }
-            Divider()
-            VStack(spacing: 0) {
                 languageMenu(role: .target)
-                Divider()
+            }
+
+            HStack(
+                alignment: .top,
+                spacing: TranslationPanelStyle.columnSpacing
+            ) {
+                sourceContent
                 targetContent
             }
         }
+        .padding(.horizontal, TranslationPanelStyle.horizontalPadding)
+        .padding(.bottom, TranslationPanelStyle.bottomPadding)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
@@ -86,27 +76,37 @@ struct TranslationPanelView: View {
             supportedLanguages: supportedLanguages,
             role: role
         )
-        .padding(.horizontal, 14)
-        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .frame(width: TranslationPanelStyle.languageMenuWidth)
+        .frame(
+            maxWidth: .infinity,
+            minHeight: TranslationPanelStyle.languageRowHeight,
+            alignment: .leading
+        )
     }
 
     private var sourceContent: some View {
-        ScrollView {
-            Text(coordinator.request?.text ?? "")
-                .foregroundStyle(.secondary)
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-        }
-        .columnFrame(height: metrics.contentHeight)
+        SelectableSourceTextView(text: coordinator.request?.text ?? "")
+            .frame(
+                maxWidth: .infinity,
+                minHeight: cardSurfaceHeight,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
+            .translationCardSurface()
+    }
+
+    private var targetContent: some View {
+        targetBody
+            .columnFrame(height: metrics.contentHeight)
+            .translationCardSurface()
     }
 
     @ViewBuilder
-    private var targetContent: some View {
+    private var targetBody: some View {
         switch coordinator.status {
         case .idle:
             Text("Select text and press Command-Shift-T to translate it.")
                 .foregroundStyle(.secondary)
-                .columnFrame(height: metrics.contentHeight)
         case .translating:
             HStack(spacing: 10) {
                 ProgressView()
@@ -114,15 +114,8 @@ struct TranslationPanelView: View {
                 Text("Translating…")
                     .foregroundStyle(.secondary)
             }
-            .columnFrame(height: metrics.contentHeight)
         case .translated(let output):
-            ScrollView {
-                Text(output.translatedText)
-                    .font(.body)
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .columnFrame(height: metrics.contentHeight)
+            SelectableTranslationTextView(text: output.translatedText)
         case .failed(let failure):
             VStack(alignment: .leading, spacing: 8) {
                 Label("Translation failed", systemImage: "exclamationmark.triangle")
@@ -136,20 +129,19 @@ struct TranslationPanelView: View {
                     }
                 }
             }
-            .columnFrame(height: metrics.contentHeight)
         }
     }
 
+    private var cardSurfaceHeight: CGFloat {
+        metrics.contentHeight
+            + TranslationPanelStyle.cardContentPadding * 2
+    }
+
     private var metrics: TranslationPanelMetrics {
-        switch panelState.mode {
-        case .translate:
-            layout.metrics(
-                sourceText: coordinator.request?.text ?? "",
-                status: coordinator.status
-            )
-        case .dictionary:
-            layout.dictionaryMetrics(status: dictionaryCoordinator.status)
-        }
+        layout.metrics(
+            sourceText: coordinator.request?.text ?? "",
+            status: coordinator.status
+        )
     }
 }
 
@@ -190,6 +182,20 @@ private extension View {
             maxHeight: .infinity,
             alignment: .topLeading
         )
-        .padding(14)
+        .padding(TranslationPanelStyle.cardContentPadding)
+    }
+
+    func translationCardSurface() -> some View {
+        background(TranslationCardSurface())
+    }
+}
+
+private struct TranslationCardSurface: View {
+    var body: some View {
+        RoundedRectangle(
+            cornerRadius: TranslationPanelStyle.cardCornerRadius,
+            style: .continuous
+        )
+        .fill(Color(nsColor: TranslationPanelStyle.cardBackgroundColor))
     }
 }

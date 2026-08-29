@@ -14,47 +14,49 @@ struct TranslationLanguageMenu: View {
     private let formatter = TranslationLanguagePairFormatter(locale: .current)
 
     var body: some View {
-        Menu {
+        Picker(accessibilityLabel, selection: selection) {
             ForEach(options) { option in
-                languageButton(option)
+                Text(optionTitle(option))
+                    .tag(option.id)
             }
-        } label: {
-            LanguageMenuLabel(title: title, badge: badge)
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
+        .labelsHidden()
+        .pickerStyle(.menu)
         .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityLabel(accessibilityLabel)
         .accessibilityValue(accessibilityValue)
     }
 
-    @ViewBuilder
-    private func languageButton(_ option: LanguageOption) -> some View {
-        Button {
-            select(option)
-        } label: {
-            if option.id == selectedIdentifier {
-                Label(
-                    formatter.languageName(for: option.id),
-                    systemImage: "checkmark"
-                )
-            } else {
-                Text(formatter.languageName(for: option.id))
+    private var selection: Binding<String> {
+        Binding(
+            get: { selectedIdentifier ?? "" },
+            set: { identifier in
+                select(identifier)
             }
-        }
+        )
     }
 
-    private func select(_ option: LanguageOption) {
-        guard option.id != selectedIdentifier else {
+    private func select(_ identifier: String) {
+        guard identifier != selectedIdentifier else {
             return
         }
 
         switch role {
         case .source:
-            coordinator.updateSourceLanguage(option.id)
+            coordinator.updateSourceLanguage(identifier)
         case .target:
-            coordinator.updateTargetLanguage(option.id)
+            coordinator.updateTargetLanguage(identifier)
         }
+    }
+
+    private func optionTitle(_ option: LanguageOption) -> String {
+        let languageName = formatter.languageName(for: option.id)
+        guard option.id == selectedIdentifier, badge != nil else {
+            return languageName
+        }
+
+        return "\(languageName) (Auto)"
     }
 
     private var request: TranslationRequest? {
@@ -117,30 +119,5 @@ struct TranslationLanguageMenu: View {
                 for: request.targetLanguageIdentifier
             )
         }
-    }
-}
-
-private struct LanguageMenuLabel: View {
-    let title: String
-    let badge: String?
-
-    var body: some View {
-        HStack(spacing: 6) {
-            Text(title)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            if let badge {
-                Text(badge)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-            Image(systemName: "chevron.down")
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.secondary)
-        }
-        .font(.callout.weight(.medium))
-        .foregroundStyle(.primary)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
     }
 }

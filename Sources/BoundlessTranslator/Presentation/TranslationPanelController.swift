@@ -7,30 +7,16 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let translationLayout = TranslationPanelLayout()
     private let positioner = PanelPositioner(pointerOffset: 12)
     private let panelState: TranslationPanelState
-    private let dictionaryCoordinator: DictionaryLookupCoordinator
     private let panel: TranslationPanel
-    private lazy var workflowCoordinator = PanelWorkflowCoordinator(
-        translation: PanelTranslationWorkflow(panelState: panelState),
-        dictionary: PanelDictionaryWorkflow(
-            panelState: panelState,
-            coordinator: dictionaryCoordinator
-        )
-    )
     private lazy var toolbarController = TranslationPanelToolbarController(
-        panelState: panelState,
-        onSelectMode: { [weak self] mode in
-            self?.selectMode(mode)
-        }
+        panelState: panelState
     )
     private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationPanelKind.translation
-    private var selectedText: SelectedText?
+    private var mouseDownMonitor: MouseDownMonitor?
 
-    init(
-        dictionaryService: any DictionaryLookupServicing = DictionaryServicesLookupService()
-    ) {
+    override init() {
         panelState = TranslationPanelState()
-        dictionaryCoordinator = DictionaryLookupCoordinator(service: dictionaryService)
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
         super.init()
         panel.delegate = self
@@ -43,16 +29,14 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         panel.cancelOperationHandler = { [weak self] sender in
             self?.dismissForCancelOperation(sender)
         }
+        configureDismissalTriggers()
     }
 
     func show(
-        selectedText: SelectedText,
         coordinator: TranslationCoordinator,
         supportedLanguages: [Locale.Language],
         pointerLocation: CGPoint
     ) {
-        self.selectedText = selectedText
-        dictionaryCoordinator.reset()
         let initialSize = translationLayout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status
@@ -60,8 +44,6 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         present(
             TranslationPanelView(
                 coordinator: coordinator,
-                dictionaryCoordinator: dictionaryCoordinator,
-                panelState: panelState,
                 supportedLanguages: supportedLanguages,
                 layout: translationLayout,
                 onPreferredSizeChange: { [weak self] size in
@@ -186,14 +168,6 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         }
     }
 
-    private func selectMode(_ mode: TranslationPanelMode) {
-        guard let selectedText else {
-            return
-        }
-
-        workflowCoordinator.select(mode, text: selectedText)
-    }
-
     private func dismissForCancelOperation(_ sender: Any?) {
         guard interactionPolicy.shouldDismissForCancelOperation(
             isPinned: panelState.isPinned
@@ -204,7 +178,21 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         panel.orderOut(sender)
     }
 
-    func windowDidResignKey(_ notification: Notification) {
+    private func configureDismissalTriggers() {
+        mouseDownMonitor = MouseDownMonitor { [weak self] screenLocation in
+            Task { @MainActor [weak self] in
+                self?.dismissForMouseDown(at: screenLocation)
+            }
+        }
+    }
+
+    func dismissForMouseDown(at screenLocation: CGPoint) {
+        guard panel.isVisible else {
+            return
+        }
+        guard !panel.frame.contains(screenLocation) else {
+            return
+        }
         guard interactionPolicy.shouldDismissForOutsideClick(
             isPinned: panelState.isPinned
         ) else {
@@ -215,34 +203,30 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     }
 }
 
-@MainActor
-private final class PanelTranslationWorkflow: TranslationWorkflowing {
-    private let panelState: TranslationPanelState
+private final class MouseDownMonitor {
+    private let globalToken: Any?
+    private let localToken: Any?
 
-    init(panelState: TranslationPanelState) {
-        self.panelState = panelState
+    init(onMouseDown: @escaping (CGPoint) -> Void) {
+        globalToken = NSEvent.addGlobalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+        ) { _ in
+            onMouseDown(NSEvent.mouseLocation)
+        }
+        localToken = NSEvent.addLocalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+        ) { event in
+            onMouseDown(NSEvent.mouseLocation)
+            return event
+        }
     }
 
-    func translate() {
-        panelState.select(.translate)
-    }
-}
-
-@MainActor
-private final class PanelDictionaryWorkflow: DictionaryWorkflowing {
-    private let panelState: TranslationPanelState
-    private let coordinator: DictionaryLookupCoordinator
-
-    init(
-        panelState: TranslationPanelState,
-        coordinator: DictionaryLookupCoordinator
-    ) {
-        self.panelState = panelState
-        self.coordinator = coordinator
-    }
-
-    func lookUp(_ selectedText: SelectedText) {
-        panelState.select(.dictionary)
-        coordinator.lookUp(selectedText)
+    deinit {
+        if let globalToken {
+            NSEvent.removeMonitor(globalToken)
+        }
+        if let localToken {
+            NSEvent.removeMonitor(localToken)
+        }
     }
 }

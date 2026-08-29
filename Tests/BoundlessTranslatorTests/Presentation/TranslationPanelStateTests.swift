@@ -11,40 +11,6 @@ func test_isPinned_when_state_is_created_then_is_false() {
 }
 
 @Test @MainActor
-func test_mode_when_state_is_created_then_is_translate() {
-    // Arrange / Act
-    let state = TranslationPanelState()
-
-    // Assert
-    #expect(state.mode == .translate)
-}
-
-@Test @MainActor
-func test_select_when_dictionary_is_selected_then_updates_mode() {
-    // Arrange
-    let state = TranslationPanelState()
-
-    // Act
-    state.select(.dictionary)
-
-    // Assert
-    #expect(state.mode == .dictionary)
-}
-
-@Test @MainActor
-func test_select_when_panel_is_pinned_then_preserves_pin_state() {
-    // Arrange
-    let state = TranslationPanelState()
-    state.togglePin()
-
-    // Act
-    state.select(.dictionary)
-
-    // Assert
-    #expect(state.isPinned)
-}
-
-@Test @MainActor
 func test_togglePin_when_state_is_unpinned_then_pinsPanel() {
     // Arrange
     let state = TranslationPanelState()
@@ -67,17 +33,4 @@ func test_reset_when_state_is_pinned_then_unpinsPanel() {
 
     // Assert
     #expect(!state.isPinned)
-}
-
-@Test @MainActor
-func test_reset_when_dictionary_is_selected_then_returns_to_translate() {
-    // Arrange
-    let state = TranslationPanelState()
-    state.select(.dictionary)
-
-    // Act
-    state.reset()
-
-    // Assert
-    #expect(state.mode == .translate)
 }

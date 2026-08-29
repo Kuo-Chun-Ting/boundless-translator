@@ -14,9 +14,9 @@ struct TranslationPanelLayout {
 
     init(
         panelWidth: CGFloat = 560,
-        compactHeight: CGFloat = 180,
+        compactHeight: CGFloat = 211,
         maximumHeight: CGFloat = 440,
-        translationNonContentHeight: CGFloat = 73
+        translationNonContentHeight: CGFloat = TranslationPanelStyle.nonContentHeight
     ) {
         self.panelWidth = panelWidth
         self.compactHeight = compactHeight
@@ -35,15 +35,6 @@ struct TranslationPanelLayout {
         return makeMetrics(
             idealContentHeight: idealContentHeight,
             nonContentHeight: translationNonContentHeight
-        )
-    }
-
-    func dictionaryMetrics(
-        status: DictionaryLookupStatus
-    ) -> TranslationPanelMetrics {
-        makeMetrics(
-            idealContentHeight: dictionaryHeight(for: status),
-            nonContentHeight: 0
         )
     }
 
@@ -68,29 +59,6 @@ struct TranslationPanelLayout {
         )
     }
 
-    private func dictionaryHeight(
-        for status: DictionaryLookupStatus
-    ) -> CGFloat {
-        switch status {
-        case .idle:
-            return compactHeight
-        case .notFound:
-            return 120
-        case .found(let definition):
-            let contentWidth = panelWidth - 40
-            let termHeight = measuredHeight(
-                for: definition.term,
-                width: contentWidth,
-                font: .systemFont(ofSize: 20, weight: .semibold)
-            )
-            let definitionHeight = measuredHeight(
-                for: definition.text,
-                width: contentWidth
-            )
-            return termHeight + definitionHeight + 52
-        }
-    }
-
     private func resultHeight(for status: TranslationStatus) -> CGFloat {
         switch status {
         case .idle:
@@ -105,7 +73,11 @@ struct TranslationPanelLayout {
     }
 
     private func measuredHeight(for text: String) -> CGFloat {
-        let contentWidth = (panelWidth - 1) / 2 - 28
+        let availableWidth = panelWidth
+            - TranslationPanelStyle.horizontalPadding * 2
+            - TranslationPanelStyle.columnSpacing
+        let contentWidth = availableWidth / 2
+            - TranslationPanelStyle.cardContentPadding * 2
         return measuredHeight(for: text, width: contentWidth)
     }
 

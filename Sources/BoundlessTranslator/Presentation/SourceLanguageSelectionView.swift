@@ -7,6 +7,7 @@ struct SourceLanguageSelectionView: View {
     let onSelect: @MainActor (String) -> Void
 
     @State private var selectedLanguageIdentifier: String
+    private let languageNames = LanguageDisplayNameFormatter()
 
     init(
         selectedText: SelectedText,
@@ -68,7 +69,7 @@ struct SourceLanguageSelectionView: View {
             HStack {
                 Picker("From", selection: $selectedLanguageIdentifier) {
                     ForEach(languageOptions) { option in
-                        Text(languageName(for: option.language))
+                        Text(languageNames.name(for: option))
                             .tag(option.id)
                     }
                 }
@@ -101,10 +102,5 @@ struct SourceLanguageSelectionView: View {
             supportedLanguages: supportedLanguages,
             selectedIdentifier: selectedLanguageIdentifier
         )
-    }
-
-    private func languageName(for language: Locale.Language) -> String {
-        Locale.current.localizedString(forIdentifier: language.minimalIdentifier)
-            ?? language.minimalIdentifier
     }
 }

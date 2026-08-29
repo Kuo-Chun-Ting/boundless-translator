@@ -2,12 +2,28 @@ import AppKit
 @preconcurrency import Combine
 
 extension NSToolbarItem.Identifier {
-    static let translationMode = NSToolbarItem.Identifier(
-        "com.boundlesstranslator.toolbar.translation-mode"
-    )
     static let pinPanel = NSToolbarItem.Identifier(
         "com.boundlesstranslator.toolbar.pin-panel"
     )
+}
+
+enum PinButtonTint {
+    case secondary
+    case accent
+}
+
+struct PinButtonPresentation {
+    let label: String
+    let symbolName: String
+    let clockwiseRotationDegrees: CGFloat
+    let tint: PinButtonTint
+
+    init(isPinned: Bool) {
+        label = isPinned ? "Unpin Window" : "Pin Window"
+        symbolName = isPinned ? "pin.fill" : "pin"
+        clockwiseRotationDegrees = isPinned ? 0 : 45
+        tint = isPinned ? .accent : .secondary
+    }
 }
 
 @MainActor
@@ -15,48 +31,34 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
     let toolbar = NSToolbar(identifier: "BoundlessTranslatorPanelToolbar")
 
     private let panelState: TranslationPanelState
-    private let onSelectMode: @MainActor (TranslationPanelMode) -> Void
-    private let modeControl = NSSegmentedControl(
-        labels: ["Translate", "Dictionary"],
-        trackingMode: .selectOne,
-        target: nil,
-        action: nil
-    )
     private let pinButton = NSButton()
-    private let modeItem = NSToolbarItem(itemIdentifier: .translationMode)
     private let pinItem = NSToolbarItem(itemIdentifier: .pinPanel)
     private var cancellables: Set<AnyCancellable> = []
 
-    init(
-        panelState: TranslationPanelState,
-        onSelectMode: @escaping @MainActor (TranslationPanelMode) -> Void
-    ) {
+    init(panelState: TranslationPanelState) {
         self.panelState = panelState
-        self.onSelectMode = onSelectMode
         super.init()
 
         configureToolbar()
-        configureModeItem()
         configurePinItem()
         observePanelState()
         synchronize()
     }
 
     func synchronize() {
-        updateModeControl(panelState.mode)
         updatePinButton(isPinned: panelState.isPinned)
     }
 
     func toolbarAllowedItemIdentifiers(
         _ toolbar: NSToolbar
     ) -> [NSToolbarItem.Identifier] {
-        [.translationMode, .flexibleSpace, .pinPanel]
+        [.flexibleSpace, .pinPanel]
     }
 
     func toolbarDefaultItemIdentifiers(
         _ toolbar: NSToolbar
     ) -> [NSToolbarItem.Identifier] {
-        [.flexibleSpace, .translationMode, .flexibleSpace, .pinPanel]
+        [.flexibleSpace, .pinPanel]
     }
 
     func toolbar(
@@ -65,8 +67,6 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
         willBeInsertedIntoToolbar flag: Bool
     ) -> NSToolbarItem? {
         switch itemIdentifier {
-        case .translationMode:
-            modeItem
         case .pinPanel:
             pinItem
         default:
@@ -79,27 +79,14 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
         toolbar.displayMode = .iconOnly
         toolbar.allowsUserCustomization = false
         toolbar.autosavesConfiguration = false
-        toolbar.centeredItemIdentifier = .translationMode
-    }
-
-    private func configureModeItem() {
-        modeControl.segmentStyle = .automatic
-        modeControl.controlSize = .small
-        modeControl.target = self
-        modeControl.action = #selector(selectMode(_:))
-        modeControl.toolTip = "Choose Translate or Dictionary"
-        modeControl.setAccessibilityLabel("Result Mode")
-
-        modeItem.label = "Result Mode"
-        modeItem.paletteLabel = "Result Mode"
-        modeItem.view = modeControl
-        modeItem.visibilityPriority = .high
     }
 
     private func configurePinItem() {
         pinButton.bezelStyle = .toolbar
         pinButton.isBordered = false
+        pinButton.frame.size = CGSize(width: 28, height: 28)
         pinButton.imagePosition = .imageOnly
+        pinButton.imageScaling = .scaleProportionallyDown
         pinButton.target = self
         pinButton.action = #selector(togglePin(_:))
 
@@ -110,14 +97,6 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
     }
 
     private func observePanelState() {
-        panelState.$mode
-            .sink { [weak self] mode in
-                Task { @MainActor [weak self] in
-                    self?.updateModeControl(mode)
-                }
-            }
-            .store(in: &cancellables)
-
         panelState.$isPinned
             .sink { [weak self] isPinned in
                 Task { @MainActor [weak self] in
@@ -128,36 +107,72 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
     }
 
     @objc
-    private func selectMode(_ sender: NSSegmentedControl) {
-        guard let mode = TranslationPanelMode(rawValue: sender.selectedSegment) else {
-            return
-        }
-
-        onSelectMode(mode)
-        synchronize()
-    }
-
-    @objc
     private func togglePin(_ sender: Any?) {
         panelState.togglePin()
         synchronize()
     }
 
-    private func updateModeControl(_ mode: TranslationPanelMode) {
-        modeControl.selectedSegment = mode.rawValue
+    private func updatePinButton(isPinned: Bool) {
+        let presentation = PinButtonPresentation(isPinned: isPinned)
+
+        pinButton.image = makePinImage(for: presentation)
+        pinButton.contentTintColor = color(for: presentation.tint)
+        pinButton.toolTip = presentation.label
+        pinButton.setAccessibilityLabel(presentation.label)
+        pinItem.label = presentation.label
     }
 
-    private func updatePinButton(isPinned: Bool) {
-        let label = isPinned ? "Unpin Window" : "Pin Window"
-        let symbolName = isPinned ? "pin.fill" : "pin"
+    private func makePinImage(
+        for presentation: PinButtonPresentation
+    ) -> NSImage? {
+        guard let image = NSImage(
+            systemSymbolName: presentation.symbolName,
+            accessibilityDescription: presentation.label
+        ) else {
+            return nil
+        }
 
-        pinButton.image = NSImage(
-            systemSymbolName: symbolName,
-            accessibilityDescription: label
+        return image.rotatedClockwise(
+            byDegrees: presentation.clockwiseRotationDegrees
         )
-        pinButton.contentTintColor = isPinned ? .controlAccentColor : .secondaryLabelColor
-        pinButton.toolTip = label
-        pinButton.setAccessibilityLabel(label)
-        pinItem.label = label
+    }
+
+    private func color(for tint: PinButtonTint) -> NSColor {
+        switch tint {
+        case .secondary:
+            .secondaryLabelColor
+        case .accent:
+            .controlAccentColor
+        }
+    }
+}
+
+private extension NSImage {
+    func rotatedClockwise(byDegrees degrees: CGFloat) -> NSImage {
+        guard degrees != 0 else {
+            return self
+        }
+
+        let radians = degrees * .pi / 180
+        let rotatedWidth = abs(size.width * cos(radians))
+            + abs(size.height * sin(radians))
+        let rotatedHeight = abs(size.width * sin(radians))
+            + abs(size.height * cos(radians))
+        let sourceSize = size
+        let rotatedSize = CGSize(width: rotatedWidth, height: rotatedHeight)
+        let rotatedImage = NSImage(size: rotatedSize, flipped: false) { rect in
+            let transform = NSAffineTransform()
+            transform.translateX(by: rect.midX, yBy: rect.midY)
+            transform.rotate(byDegrees: -degrees)
+            transform.translateX(
+                by: -sourceSize.width / 2,
+                yBy: -sourceSize.height / 2
+            )
+            transform.concat()
+            self.draw(in: CGRect(origin: .zero, size: sourceSize))
+            return true
+        }
+        rotatedImage.isTemplate = isTemplate
+        return rotatedImage
     }
 }

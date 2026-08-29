@@ -5,6 +5,8 @@ set -euo pipefail
 readonly PROJECT_ROOT="${0:A:h:h}"
 readonly BUILD_APP="${PROJECT_ROOT}/Build/Boundless Translator.app"
 readonly INSTALLED_APP="/Applications/Boundless Translator.app"
+readonly APP_VERIFIER="${PROJECT_ROOT}/Scripts/verify_app.sh"
+readonly DEPLOYMENT_RESTORER="${PROJECT_ROOT}/Scripts/restore_deployment.sh"
 readonly PROCESS_NAME="BoundlessTranslator"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-deploy.XXXXXX)"
 readonly STAGED_APP="${TEMP_ROOT}/Boundless Translator.app"
@@ -17,17 +19,24 @@ deployment_complete=false
 
 function restore_if_needed {
     readonly exit_status="$?"
+    local cleanup_allowed=true
 
     if [[ "${deployment_complete}" != true ]]; then
-        if [[ "${new_app_installed}" == true && -e "${INSTALLED_APP}" ]]; then
-            mv "${INSTALLED_APP}" "${FAILED_APP}" 2>/dev/null || true
-        fi
-        if [[ "${previous_app_staged}" == true && -e "${BACKUP_APP}" ]]; then
-            mv "${BACKUP_APP}" "${INSTALLED_APP}" 2>/dev/null || true
+        if ! zsh "${DEPLOYMENT_RESTORER}" \
+            "${INSTALLED_APP}" \
+            "${BACKUP_APP}" \
+            "${FAILED_APP}" \
+            "${previous_app_staged}" \
+            "${new_app_installed}"; then
+            print -u2 "Deployment rollback failed. Recovery files preserved in ${TEMP_ROOT}."
+            cleanup_allowed=false
         fi
     fi
 
-    rm -rf "${TEMP_ROOT}"
+    if [[ "${cleanup_allowed}" == true ]]; then
+        rm -rf "${TEMP_ROOT}"
+    fi
+
     return "${exit_status}"
 }
 trap restore_if_needed EXIT
@@ -35,8 +44,7 @@ trap restore_if_needed EXIT
 function verify_app {
     local app_path="$1"
 
-    codesign --verify --deep --strict --verbose=2 "${app_path}"
-    plutil -lint "${app_path}/Contents/Info.plist"
+    zsh "${APP_VERIFIER}" "${app_path}"
 }
 
 function stop_running_app {

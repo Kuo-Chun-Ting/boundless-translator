@@ -4,6 +4,7 @@ import AppKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let controller = AppController()
 
+    private let applicationOpenCoordinator = ApplicationOpenCoordinator()
     private var shortcutMonitor: GlobalShortcutMonitor?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -18,6 +19,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self.shortcutMonitor = shortcutMonitor
         } catch {
             controller.showError(error.localizedDescription)
+        }
+
+        applicationOpenCoordinator.handleInitialLaunch {
+            controller.showPreferences()
+        }
+    }
+
+    func applicationShouldHandleReopen(
+        _ sender: NSApplication,
+        hasVisibleWindows flag: Bool
+    ) -> Bool {
+        applicationOpenCoordinator.handleReopen {
+            controller.showPreferences()
         }
     }
 }
