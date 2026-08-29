@@ -14,7 +14,7 @@ final class PreferencesWindowController: NSWindowController {
             NSScreen.main?.visibleFrame
         }
         let window = NSWindow(
-            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 190)),
+            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 340)),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false

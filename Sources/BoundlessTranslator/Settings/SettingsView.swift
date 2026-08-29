@@ -43,12 +43,19 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
                 }
+
+                Section("How to Use") {
+                    Text("Select text in any app and press ⌘⇧T to translate.")
+                    Text("Select text in the translation result and click 📖 to look it up.")
+                    Text("Click the pin to keep the translation window open.")
+                }
+                .foregroundStyle(.secondary)
             }
             .formStyle(.grouped)
             .scrollDisabled(true)
         }
         .padding(.top, 18)
-        .frame(width: 430, height: 190)
+        .frame(width: 430, height: 340)
         .task {
             let availableLanguages = await LanguageAvailability().supportedLanguages
             settings.validateSourceLanguage(
