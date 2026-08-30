@@ -1,10 +1,9 @@
 import SwiftUI
-@preconcurrency import Translation
 
 struct TranslationPreferencesView: View {
     @ObservedObject var settings: TranslationSettings
+    @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
 
-    @State private var supportedLanguages: [Locale.Language] = []
     private let languageNames = LanguageDisplayNameFormatter()
 
     var body: some View {
@@ -29,39 +28,27 @@ struct TranslationPreferencesView: View {
             .pickerStyle(.menu)
         }
         .task {
-            await loadSupportedLanguages()
+            _ = await supportedLanguageCatalog.load()
         }
     }
 
     private var sourceLanguageOptions: [LanguageOption] {
         guard let sourceLanguageIdentifier = settings.sourceLanguageIdentifier else {
-            return supportedLanguages.map {
+            return supportedLanguageCatalog.languages.map {
                 LanguageOption(id: $0.minimalIdentifier, language: $0)
             }
         }
 
         return LanguageOption.make(
-            supportedLanguages: supportedLanguages,
+            supportedLanguages: supportedLanguageCatalog.languages,
             selectedIdentifier: sourceLanguageIdentifier
         )
     }
 
     private var targetLanguageOptions: [LanguageOption] {
         LanguageOption.make(
-            supportedLanguages: supportedLanguages,
+            supportedLanguages: supportedLanguageCatalog.languages,
             selectedIdentifier: settings.targetLanguageIdentifier
         )
-    }
-
-    private func loadSupportedLanguages() async {
-        let availableLanguages = await LanguageAvailability().supportedLanguages
-        settings.validateSourceLanguage(supportedLanguages: availableLanguages)
-        settings.validateTargetLanguage(supportedLanguages: availableLanguages)
-        supportedLanguages = availableLanguages.sorted {
-            languageNames.name(for: $0.minimalIdentifier)
-                .localizedStandardCompare(
-                    languageNames.name(for: $1.minimalIdentifier)
-                ) == .orderedAscending
-        }
     }
 }

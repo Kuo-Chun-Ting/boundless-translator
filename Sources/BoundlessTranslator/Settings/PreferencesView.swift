@@ -3,13 +3,17 @@ import SwiftUI
 struct PreferencesView: View {
     @ObservedObject var settings: TranslationSettings
     @ObservedObject var shortcutController: GlobalShortcutController
+    @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             header
 
             Form {
-                TranslationPreferencesView(settings: settings)
+                TranslationPreferencesView(
+                    settings: settings,
+                    supportedLanguageCatalog: supportedLanguageCatalog
+                )
                 ShortcutPreferencesView(controller: shortcutController)
                 HowToUsePreferencesView(
                     shortcut: shortcutController.definition

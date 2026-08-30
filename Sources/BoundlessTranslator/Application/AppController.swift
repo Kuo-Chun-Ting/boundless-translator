@@ -1,24 +1,22 @@
 import AppKit
-@preconcurrency import Translation
 
 @MainActor
 final class AppController {
     let settings = TranslationSettings()
-    let launchAtLoginController = LaunchAtLoginController()
 
     private let coordinator = TranslationCoordinator()
     private let panelController = TranslationPanelController()
-    private let languageNames = LanguageDisplayNameFormatter()
+    private let supportedLanguageCatalog = SupportedLanguageCatalog()
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
         self?.translateCurrentSelection()
     }
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
-        shortcutController: shortcutController
+        shortcutController: shortcutController,
+        supportedLanguageCatalog: supportedLanguageCatalog
     )
     private let selectedTextReader: any SelectedTextReading
     private let sourceLanguageResolver: SourceLanguageResolver
-    private var supportedLanguages: [Locale.Language] = []
     private var selectionTask: Task<Void, Never>?
 
     init(
@@ -43,7 +41,7 @@ final class AppController {
         }
 
         Task {
-            let supportedLanguages = await loadSupportedLanguages()
+            let supportedLanguages = await supportedLanguageCatalog.load()
             settings.validateSourceLanguage(
                 supportedLanguages: supportedLanguages
             )
@@ -70,7 +68,7 @@ final class AppController {
         )
         panelController.show(
             coordinator: coordinator,
-            supportedLanguages: supportedLanguages,
+            supportedLanguages: supportedLanguageCatalog.languages,
             pointerLocation: NSEvent.mouseLocation
         )
     }
@@ -104,7 +102,7 @@ final class AppController {
     }
 
     private func resolveSourceLanguage(for selectedText: SelectedText) async {
-        let supportedLanguages = await loadSupportedLanguages()
+        let supportedLanguages = await supportedLanguageCatalog.load()
         let resolution = sourceLanguageResolver.resolve(
             text: selectedText.value,
             configuredSource: settings.sourceLanguageIdentifier
@@ -142,18 +140,4 @@ final class AppController {
         }
     }
 
-    private func loadSupportedLanguages() async -> [Locale.Language] {
-        guard supportedLanguages.isEmpty else {
-            return supportedLanguages
-        }
-
-        let availableLanguages = await LanguageAvailability().supportedLanguages
-        supportedLanguages = availableLanguages.sorted {
-            languageNames.name(for: $0.minimalIdentifier)
-                .localizedStandardCompare(
-                    languageNames.name(for: $1.minimalIdentifier)
-                ) == .orderedAscending
-        }
-        return supportedLanguages
-    }
 }

@@ -3,7 +3,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_body_when_preferencesAreRendered_then_showsUsageGuidance() throws {
+func test_preferencesView_when_rendered_then_shows_usage_guidance() throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),

@@ -9,6 +9,7 @@ final class PreferencesWindowController: NSWindowController {
     init(
         settings: TranslationSettings,
         shortcutController: GlobalShortcutController,
+        supportedLanguageCatalog: SupportedLanguageCatalog = SupportedLanguageCatalog(),
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil
     ) {
         self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
@@ -26,7 +27,8 @@ final class PreferencesWindowController: NSWindowController {
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
-                shortcutController: shortcutController
+                shortcutController: shortcutController,
+                supportedLanguageCatalog: supportedLanguageCatalog
             )
         )
         super.init(window: window)
