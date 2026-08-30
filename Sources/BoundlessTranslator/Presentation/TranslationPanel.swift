@@ -1,5 +1,11 @@
 import AppKit
 
+extension Notification.Name {
+    static let translationPanelFirstResponderDidChange = Notification.Name(
+        "TranslationPanelFirstResponderDidChange"
+    )
+}
+
 @MainActor
 final class TranslationPanel: NSPanel {
     var cancelOperationHandler: ((Any?) -> Void)?
@@ -11,6 +17,7 @@ final class TranslationPanel: NSPanel {
             backing: .buffered,
             defer: false
         )
+        acceptsMouseMovedEvents = true
     }
 
     @available(*, unavailable)
@@ -20,6 +27,39 @@ final class TranslationPanel: NSPanel {
 
     override var canBecomeKey: Bool {
         true
+    }
+
+    override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
+        let didChangeFirstResponder = super.makeFirstResponder(responder)
+        if didChangeFirstResponder {
+            NotificationCenter.default.post(
+                name: .translationPanelFirstResponderDidChange,
+                object: self
+            )
+        }
+        return didChangeFirstResponder
+    }
+
+    override func sendEvent(_ event: NSEvent) {
+        super.sendEvent(event)
+
+        guard eventCanChangeCursor(event) else {
+            return
+        }
+        let hitView = contentView?.hitTest(event.locationInWindow)
+        guard hitView is PointingHandButton else {
+            return
+        }
+        NSCursor.pointingHand.set()
+    }
+
+    private func eventCanChangeCursor(_ event: NSEvent) -> Bool {
+        switch event.type {
+        case .cursorUpdate, .mouseEntered, .mouseMoved:
+            true
+        default:
+            false
+        }
     }
 
     func configureChrome(for kind: TranslationPanelKind) {

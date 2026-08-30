@@ -32,6 +32,7 @@ struct LookupActionPositioner {
 
     func origin(
         selectionRect: CGRect,
+        previousLineRect: CGRect? = nil,
         buttonSize: CGSize,
         bounds: CGRect
     ) -> CGPoint {
@@ -44,7 +45,9 @@ struct LookupActionPositioner {
             bounds.minY + horizontalMargin,
             bounds.maxY - buttonSize.height - horizontalMargin
         )
-        let preferredY = selectionRect.maxY + verticalGap
+        let preferredY = previousLineRect.map {
+            $0.midY - buttonSize.height / 2
+        } ?? selectionRect.maxY + verticalGap
 
         return CGPoint(
             x: min(max(preferredX, bounds.minX + horizontalMargin), maximumX),
@@ -54,16 +57,20 @@ struct LookupActionPositioner {
 }
 
 @MainActor
+final class PointingHandButton: NSButton {}
+
+@MainActor
 final class SourceTextLookupView: NSView, NSTextViewDelegate {
     private let dictionaryPresenter: any DictionaryDefinitionPresenting
     private let lookupActionPositioner = LookupActionPositioner(
         horizontalMargin: 4,
-        verticalGap: 4
+        verticalGap: 2
     )
     private let scrollView = OverflowAwareScrollView()
     private let textView = NSTextView()
-    private let lookupButton = NSButton()
+    private let lookupButton = PointingHandButton()
     private var lookupSelection: DictionaryLookupSelection?
+    private var isSourceTextActive = false
     private weak var lookupOverlayView: NSView?
 
     var isLookupActionVisible: Bool {
@@ -95,11 +102,24 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
 
+        NotificationCenter.default.removeObserver(
+            self,
+            name: .translationPanelFirstResponderDidChange,
+            object: nil
+        )
+
         guard window != nil else {
             lookupButton.removeFromSuperview()
             lookupOverlayView = nil
             return
         }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(translationPanelFirstResponderDidChange(_:)),
+            name: .translationPanelFirstResponderDidChange,
+            object: window
+        )
 
         attachLookupButtonIfNeeded()
         positionLookupButton()
@@ -121,6 +141,7 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     }
 
     func updateSelection(_ selectedRange: NSRange) {
+        isSourceTextActive = true
         lookupSelection = DictionaryLookupSelection.make(
             text: textView.string,
             selectedRange: selectedRange
@@ -180,7 +201,7 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         textView.isSelectable = true
         textView.isRichText = false
         textView.drawsBackground = false
-        textView.font = .systemFont(ofSize: NSFont.systemFontSize)
+        textView.font = TranslationPanelStyle.contentFont
         textView.textColor = .labelColor
         textView.textContainerInset = .zero
         textView.isHorizontallyResizable = false
@@ -219,12 +240,22 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     }
 
     private func positionLookupButton() {
+        guard isSourceTextActive else {
+            lookupButton.isHidden = true
+            return
+        }
+
         guard
             let lookupSelection,
-            !lookupButton.isHidden,
             let window,
             let overlayView = lookupOverlayView
         else {
+            return
+        }
+
+        let selectionIsVisible = isSelectionVisible(lookupSelection.range)
+        lookupButton.isHidden = !selectionIsVisible
+        guard selectionIsVisible else {
             return
         }
 
@@ -245,6 +276,9 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         )
         let origin = lookupActionPositioner.origin(
             selectionRect: selectionRect,
+            previousLineRect: previousVisualLineScreenRect(
+                for: lookupSelection.range
+            ),
             buttonSize: buttonSize,
             bounds: actionBounds
         )
@@ -252,6 +286,94 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         let buttonScreenRect = NSRect(origin: origin, size: buttonSize)
         let buttonWindowRect = window.convertFromScreen(buttonScreenRect)
         lookupButton.frame = overlayView.convert(buttonWindowRect, from: nil)
+    }
+
+    private func previousVisualLineScreenRect(
+        for selectedRange: NSRange
+    ) -> NSRect? {
+        guard
+            let layoutManager = textView.layoutManager,
+            let textContainer = textView.textContainer,
+            let window
+        else {
+            return nil
+        }
+
+        layoutManager.ensureLayout(for: textContainer)
+        let selectedGlyphRange = layoutManager.glyphRange(
+            forCharacterRange: selectedRange,
+            actualCharacterRange: nil
+        )
+        var selectedLineGlyphRange = NSRange()
+        layoutManager.lineFragmentRect(
+            forGlyphAt: selectedGlyphRange.location,
+            effectiveRange: &selectedLineGlyphRange
+        )
+        guard selectedLineGlyphRange.location > 0 else {
+            return nil
+        }
+
+        let previousLineRect = layoutManager.lineFragmentUsedRect(
+            forGlyphAt: selectedLineGlyphRange.location - 1,
+            effectiveRange: nil
+        ).offsetBy(
+            dx: textView.textContainerOrigin.x,
+            dy: textView.textContainerOrigin.y
+        )
+        let previousLineWindowRect = textView.convert(
+            previousLineRect,
+            to: nil
+        )
+        return window.convertToScreen(previousLineWindowRect)
+    }
+
+    private func updateSourceTextActivity(_ isActive: Bool) {
+        isSourceTextActive = isActive
+        guard isActive else {
+            lookupButton.isHidden = true
+            return
+        }
+
+        lookupButton.isHidden = lookupSelection == nil
+        attachLookupButtonIfNeeded()
+        positionLookupButton()
+    }
+
+    @objc
+    private func translationPanelFirstResponderDidChange(
+        _ notification: Notification
+    ) {
+        let sourceIsActive = window?.firstResponder === textView
+        updateSourceTextActivity(sourceIsActive)
+    }
+
+    private func isSelectionVisible(_ selectedRange: NSRange) -> Bool {
+        guard
+            let layoutManager = textView.layoutManager,
+            let textContainer = textView.textContainer
+        else {
+            return false
+        }
+
+        layoutManager.ensureLayout(for: textContainer)
+        let glyphRange = layoutManager.glyphRange(
+            forCharacterRange: selectedRange,
+            actualCharacterRange: nil
+        )
+        let selectionRect = layoutManager.boundingRect(
+            forGlyphRange: glyphRange,
+            in: textContainer
+        ).offsetBy(
+            dx: textView.textContainerOrigin.x,
+            dy: textView.textContainerOrigin.y
+        )
+        let selectionRectInClipView = textView.convert(
+            selectionRect,
+            to: scrollView.contentView
+        )
+        return selectionRectInClipView.intersects(
+            scrollView.contentView.bounds
+        )
     }
 
     private func attachLookupButtonIfNeeded() {

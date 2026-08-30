@@ -8,6 +8,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let positioner = PanelPositioner(pointerOffset: 12)
     private let panelState: TranslationPanelState
     private let panel: TranslationPanel
+    private let applicationNotificationCenter: NotificationCenter
     private lazy var toolbarController = TranslationPanelToolbarController(
         panelState: panelState
     )
@@ -15,9 +16,16 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private var presentedKind = TranslationPanelKind.translation
     private var mouseDownMonitor: MouseDownMonitor?
 
-    override init() {
+    override convenience init() {
+        self.init(
+            applicationNotificationCenter: NSWorkspace.shared.notificationCenter
+        )
+    }
+
+    init(applicationNotificationCenter: NotificationCenter) {
         panelState = TranslationPanelState()
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
+        self.applicationNotificationCenter = applicationNotificationCenter
         super.init()
         panel.delegate = self
         panel.toolbar = toolbarController.toolbar
@@ -30,6 +38,10 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             self?.dismissForCancelOperation(sender)
         }
         configureDismissalTriggers()
+    }
+
+    deinit {
+        applicationNotificationCenter.removeObserver(self)
     }
 
     func show(
@@ -98,7 +110,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         toolbarController.synchronize()
         interactionPolicy = PanelInteractionPolicy(kind: kind)
         presentedKind = kind
-        panel.contentView = NSHostingView(rootView: content)
+        panel.contentView = TranslationPanelContentView(rootView: content)
         panel.setContentSize(panelSize)
         configureWindowControls(for: kind)
 
@@ -179,6 +191,12 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     }
 
     private func configureDismissalTriggers() {
+        applicationNotificationCenter.addObserver(
+            self,
+            selector: #selector(applicationDidActivate(_:)),
+            name: NSWorkspace.didActivateApplicationNotification,
+            object: nil
+        )
         mouseDownMonitor = MouseDownMonitor { [weak self] screenLocation in
             Task { @MainActor [weak self] in
                 self?.dismissForMouseDown(at: screenLocation)
@@ -200,6 +218,35 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         }
 
         panel.orderOut(nil)
+    }
+
+    func dismissForApplicationActivation(processIdentifier: pid_t) {
+        guard processIdentifier != ProcessInfo.processInfo.processIdentifier else {
+            return
+        }
+        guard panel.isVisible else {
+            return
+        }
+        guard interactionPolicy.shouldDismissForOutsideClick(
+            isPinned: panelState.isPinned
+        ) else {
+            return
+        }
+
+        panel.orderOut(nil)
+    }
+
+    @objc
+    private func applicationDidActivate(_ notification: Notification) {
+        guard let application = notification.userInfo?[
+            NSWorkspace.applicationUserInfoKey
+        ] as? NSRunningApplication else {
+            return
+        }
+
+        dismissForApplicationActivation(
+            processIdentifier: application.processIdentifier
+        )
     }
 }
 

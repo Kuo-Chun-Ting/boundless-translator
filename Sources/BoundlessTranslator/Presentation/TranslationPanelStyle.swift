@@ -1,6 +1,20 @@
 import AppKit
 
 enum TranslationPanelStyle {
+    static var contentFont: NSFont {
+        let systemFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
+        guard
+            let descriptor = systemFont.fontDescriptor.withDesign(.serif),
+            let serifFont = NSFont(
+                descriptor: descriptor,
+                size: NSFont.systemFontSize
+            )
+        else {
+            return systemFont
+        }
+        return serifFont
+    }
+
     static let horizontalPadding: CGFloat = 14
     static let bottomPadding: CGFloat = 14
     static let columnSpacing: CGFloat = 12

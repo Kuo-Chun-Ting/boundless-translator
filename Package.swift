@@ -13,8 +13,14 @@ let package = Package(
     targets: [
         .executableTarget(name: "BoundlessTranslator"),
         .testTarget(
-            name: "BoundlessTranslatorTests",
-            dependencies: ["BoundlessTranslator"]
+            name: "BoundlessTranslatorUnitTests",
+            dependencies: ["BoundlessTranslator"],
+            path: "Tests/Unit"
+        ),
+        .testTarget(
+            name: "BoundlessTranslatorComponentTests",
+            dependencies: ["BoundlessTranslator"],
+            path: "Tests/Component"
         )
     ]
 )

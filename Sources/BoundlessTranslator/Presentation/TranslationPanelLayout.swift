@@ -49,7 +49,7 @@ struct TranslationPanelLayout {
         )
         let contentHeight = max(
             panelHeight - nonContentHeight,
-            NSFont.systemFontSize
+            TranslationPanelStyle.contentFont.pointSize
         )
 
         return TranslationPanelMetrics(
@@ -64,7 +64,7 @@ struct TranslationPanelLayout {
         case .idle:
             measuredHeight(for: "Select text and press Command-Shift-T to translate it.")
         case .translating:
-            NSFont.systemFontSize
+            TranslationPanelStyle.contentFont.pointSize
         case .translated(let output):
             measuredHeight(for: output.translatedText)
         case .failed(let failure):
@@ -84,7 +84,7 @@ struct TranslationPanelLayout {
     private func measuredHeight(
         for text: String,
         width: CGFloat,
-        font: NSFont = .systemFont(ofSize: NSFont.systemFontSize)
+        font: NSFont = TranslationPanelStyle.contentFont
     ) -> CGFloat {
         let bounds = (text as NSString).boundingRect(
             with: CGSize(

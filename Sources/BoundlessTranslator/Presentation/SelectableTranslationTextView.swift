@@ -31,7 +31,7 @@ struct SelectableTranslationTextView: NSViewRepresentable {
         textView.isSelectable = true
         textView.isRichText = false
         textView.drawsBackground = false
-        textView.font = .systemFont(ofSize: NSFont.systemFontSize)
+        textView.font = TranslationPanelStyle.contentFont
         textView.textColor = .labelColor
         textView.textContainerInset = .zero
         textView.isHorizontallyResizable = false

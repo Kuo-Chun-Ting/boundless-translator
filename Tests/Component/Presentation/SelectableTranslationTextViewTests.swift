@@ -4,6 +4,35 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
+func test_makeNSView_when_configuring_translated_text_then_uses_system_serif_font() throws {
+    // Arrange
+    let expectedDescriptor = try #require(
+        NSFont.systemFont(ofSize: NSFont.systemFontSize)
+            .fontDescriptor
+            .withDesign(.serif)
+    )
+    let expectedFont = try #require(
+        NSFont(
+            descriptor: expectedDescriptor,
+            size: NSFont.systemFontSize
+        )
+    )
+    let hostingView = NSHostingView(
+        rootView: SelectableTranslationTextView(text: "Translated text")
+    )
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+    let scrollView = try #require(
+        descendants(of: NSScrollView.self, in: hostingView).first
+    )
+    let textView = try #require(scrollView.documentView as? NSTextView)
+
+    // Assert
+    #expect(textView.font?.fontName == expectedFont.fontName)
+}
+
+@Test @MainActor
 func test_makeNSView_when_contentExceedsViewport_then_textCanScrollVertically() throws {
     // Arrange
     let text = Array(repeating: "A long translated line", count: 40)
