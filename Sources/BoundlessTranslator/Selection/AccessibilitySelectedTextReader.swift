@@ -10,7 +10,7 @@ enum SelectedTextReadError: LocalizedError {
         case .accessibilityPermissionRequired:
             "Allow \(AppBrand.displayName) in System Settings > Privacy & Security > Accessibility."
         case .noSelection:
-            "No selected text was found. Select text and press Command-Shift-T again."
+            "No selected text was found. Select text and use the translation shortcut again."
         case .copyFailed:
             "The selected text could not be copied from this app."
         }

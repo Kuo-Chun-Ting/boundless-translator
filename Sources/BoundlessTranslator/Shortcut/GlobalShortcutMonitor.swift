@@ -10,24 +10,30 @@ enum GlobalShortcutError: LocalizedError {
         case .eventHandlerInstallationFailed(let status):
             "The global shortcut event handler could not be installed (\(status))."
         case .registrationFailed(let status):
-            "Command-Shift-T could not be registered (\(status)). It may be used by another app."
+            "The keyboard shortcut could not be registered (\(status)). It may be used by another app."
         }
     }
 }
 
 @MainActor
-final class GlobalShortcutMonitor {
+protocol GlobalShortcutMonitoring: AnyObject {
+    func start() throws
+    func stop()
+}
+
+@MainActor
+final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
     private static let hotKeySignature: OSType = 0x5754_524E
 
     private let definition: GlobalShortcutDefinition
-    private let handler: () -> Void
+    private let handler: @MainActor () -> Void
 
     private var eventHandlerReference: EventHandlerRef?
     private var hotKeyReference: EventHotKeyRef?
 
     init(
         definition: GlobalShortcutDefinition = .commandShiftT,
-        handler: @escaping () -> Void
+        handler: @escaping @MainActor () -> Void
     ) {
         self.definition = definition
         self.handler = handler

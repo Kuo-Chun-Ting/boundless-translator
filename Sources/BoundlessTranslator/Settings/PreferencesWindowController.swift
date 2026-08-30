@@ -8,13 +8,14 @@ final class PreferencesWindowController: NSWindowController {
 
     init(
         settings: TranslationSettings,
+        shortcutController: GlobalShortcutController,
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil
     ) {
         self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
             NSScreen.main?.visibleFrame
         }
         let window = NSWindow(
-            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 340)),
+            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 440)),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
@@ -22,7 +23,12 @@ final class PreferencesWindowController: NSWindowController {
         window.title = "Preferences"
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(rootView: SettingsView(settings: settings))
+        window.contentView = NSHostingView(
+            rootView: PreferencesView(
+                settings: settings,
+                shortcutController: shortcutController
+            )
+        )
         super.init(window: window)
     }
 

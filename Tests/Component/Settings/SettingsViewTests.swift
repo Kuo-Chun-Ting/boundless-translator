@@ -5,7 +5,10 @@ import Testing
 @Test @MainActor
 func test_body_when_preferencesAreRendered_then_showsUsageGuidance() throws {
     // Arrange
-    let controller = PreferencesWindowController(settings: TranslationSettings())
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(),
+        shortcutController: makeTestShortcutController()
+    )
     let contentView = try #require(controller.window?.contentView)
     contentView.appearance = NSAppearance(named: .darkAqua)
 

@@ -5,7 +5,10 @@ import Testing
 @Test @MainActor
 func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() throws {
     // Arrange & Act
-    let controller = PreferencesWindowController(settings: TranslationSettings())
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(),
+        shortcutController: makeTestShortcutController()
+    )
     let window = try #require(controller.window)
 
     // Assert
@@ -18,6 +21,7 @@ func test_present_when_activeScreenChanges_then_centersWindowOnActiveScreen() as
     let stub_visibleFrame = CGRect(x: 10_000, y: 4_000, width: 1_200, height: 800)
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
+        shortcutController: makeTestShortcutController(),
         activeScreenVisibleFrame: { stub_visibleFrame }
     )
     let window = try #require(controller.window)

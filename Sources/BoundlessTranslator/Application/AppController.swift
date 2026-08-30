@@ -9,8 +9,12 @@ final class AppController {
     private let coordinator = TranslationCoordinator()
     private let panelController = TranslationPanelController()
     private let languageNames = LanguageDisplayNameFormatter()
+    private lazy var shortcutController = GlobalShortcutController { [weak self] in
+        self?.translateCurrentSelection()
+    }
     private lazy var preferencesWindowController = PreferencesWindowController(
-        settings: settings
+        settings: settings,
+        shortcutController: shortcutController
     )
     private let selectedTextReader: any SelectedTextReading
     private let sourceLanguageResolver: SourceLanguageResolver
@@ -32,6 +36,12 @@ final class AppController {
     }
 
     func prepare() {
+        do {
+            try shortcutController.start()
+        } catch {
+            showError(error.localizedDescription)
+        }
+
         Task {
             let supportedLanguages = await loadSupportedLanguages()
             settings.validateSourceLanguage(

@@ -62,7 +62,7 @@ struct TranslationPanelLayout {
     private func resultHeight(for status: TranslationStatus) -> CGFloat {
         switch status {
         case .idle:
-            measuredHeight(for: "Select text and press Command-Shift-T to translate it.")
+            measuredHeight(for: "Select text and use the translation shortcut to translate it.")
         case .translating:
             TranslationPanelStyle.contentFont.pointSize
         case .translated(let output):

@@ -14,7 +14,7 @@ struct SelectionErrorView: View {
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
             Spacer(minLength: 0)
-            Text("Shortcut: Command-Shift-T")
+            Text("Use the shortcut configured in Preferences.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

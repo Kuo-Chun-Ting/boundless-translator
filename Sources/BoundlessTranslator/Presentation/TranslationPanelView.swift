@@ -105,7 +105,7 @@ struct TranslationPanelView: View {
     private var targetBody: some View {
         switch coordinator.status {
         case .idle:
-            Text("Select text and press Command-Shift-T to translate it.")
+            Text("Select text and use the translation shortcut to translate it.")
                 .foregroundStyle(.secondary)
         case .translating:
             HStack(spacing: 10) {
