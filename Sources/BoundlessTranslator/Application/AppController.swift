@@ -8,7 +8,7 @@ final class AppController {
     private let panelController = TranslationPanelController()
     private let supportedLanguageCatalog = SupportedLanguageCatalog()
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
-        self?.translateCurrentSelection()
+        self?.handleShortcut()
     }
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
@@ -16,6 +16,8 @@ final class AppController {
         supportedLanguageCatalog: supportedLanguageCatalog
     )
     private let selectedTextReader: any SelectedTextReading
+    private let clipboardImageReader: any ClipboardImageReading
+    private let imageWorkspaceController: any ImageWorkspaceControlling
     private let sourceLanguageResolver: SourceLanguageResolver
     private var selectionTask: Task<Void, Never>?
 
@@ -24,12 +26,21 @@ final class AppController {
             primaryReader: AccessibilitySelectedTextReader(),
             fallbackReader: ClipboardSelectedTextReader()
         ),
+        clipboardImageReader: any ClipboardImageReading = PasteboardClipboardImageReader(),
+        imageWorkspaceController: any ImageWorkspaceControlling = ImageWorkspaceWindowController(),
         sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
             minimumConfidence: 0.60,
             languageIdentifier: NaturalLanguageIdentifier()
         )
     ) {
-        self.selectedTextReader = selectedTextReader
+        self.clipboardImageReader = clipboardImageReader
+        self.imageWorkspaceController = imageWorkspaceController
+        self.selectedTextReader = SelectedTextResolver(
+            primaryReader: ImageWorkspaceSelectionReader(
+                provider: imageWorkspaceController
+            ),
+            fallbackReader: selectedTextReader
+        )
         self.sourceLanguageResolver = sourceLanguageResolver
     }
 
@@ -73,7 +84,7 @@ final class AppController {
         )
     }
 
-    func translateCurrentSelection() {
+    func handleShortcut() {
         guard selectionTask == nil else {
             return
         }
@@ -82,16 +93,31 @@ final class AppController {
             defer {
                 selectionTask = nil
             }
-            do {
-                let selectedText = try await selectedTextReader.readSelectedText()
+
+            switch await resolveShortcutAction() {
+            case .translate(let selectedText):
                 await resolveSourceLanguage(for: selectedText)
-            } catch {
-                panelController.showError(
-                    message: error.localizedDescription,
+            case .openImage(let image):
+                imageWorkspaceController.present(
+                    image: image,
                     pointerLocation: NSEvent.mouseLocation
                 )
+            case .none:
+                return
             }
         }
+    }
+
+    func resolveShortcutAction() async -> ShortcutAction {
+        if let selectedText = try? await selectedTextReader.readSelectedText() {
+            return .translate(selectedText)
+        }
+
+        if let image = clipboardImageReader.readImage() {
+            return .openImage(image)
+        }
+
+        return .none
     }
 
     func showError(_ message: String) {
@@ -140,4 +166,10 @@ final class AppController {
         }
     }
 
+}
+
+enum ShortcutAction {
+    case translate(SelectedText)
+    case openImage(NSImage)
+    case none
 }

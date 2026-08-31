@@ -13,26 +13,26 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
 
     // Act
     contentView.layoutSubtreeIfNeeded()
-    let recorder = try #require(
-        findView(
+    let recorders = findViews(
             in: contentView,
             accessibilityIdentifier: "shortcutRecorder"
-        ) as? NSButton
-    )
+        ).compactMap { $0 as? NSButton }
+    let recorder = try #require(recorders.first)
 
     // Assert
+    #expect(recorders.count == 1)
     #expect(recorder.title == "⇧⌘T")
 }
 
 @MainActor
-private func findView(
+private func findViews(
     in view: NSView,
     accessibilityIdentifier: String
-) -> NSView? {
-    if view.accessibilityIdentifier() == accessibilityIdentifier {
-        return view
+) -> [NSView] {
+    let current = view.accessibilityIdentifier() == accessibilityIdentifier
+        ? [view]
+        : []
+    return current + view.subviews.flatMap {
+        findViews(in: $0, accessibilityIdentifier: accessibilityIdentifier)
     }
-    return view.subviews.lazy.compactMap {
-        findView(in: $0, accessibilityIdentifier: accessibilityIdentifier)
-    }.first
 }

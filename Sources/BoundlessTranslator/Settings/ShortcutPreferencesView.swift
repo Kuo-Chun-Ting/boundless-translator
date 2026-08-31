@@ -5,7 +5,7 @@ struct ShortcutPreferencesView: View {
 
     var body: some View {
         Section("Keyboard Shortcut") {
-            LabeledContent("Translate Selection") {
+            LabeledContent("Translate") {
                 ShortcutRecorderControl(
                     definition: controller.definition,
                     onRecordingStarted: controller.beginRecording,
