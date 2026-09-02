@@ -3,6 +3,7 @@ import SwiftUI
 
 struct TranslationPanelView: View {
     @ObservedObject var coordinator: TranslationCoordinator
+    @ObservedObject var speechController: TranslationSpeechController
 
     let supportedLanguages: [Locale.Language]
     let layout: TranslationPanelLayout
@@ -10,11 +11,13 @@ struct TranslationPanelView: View {
 
     init(
         coordinator: TranslationCoordinator,
+        speechController: TranslationSpeechController,
         supportedLanguages: [Locale.Language],
         layout: TranslationPanelLayout = TranslationPanelLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
         self.coordinator = coordinator
+        self.speechController = speechController
         self.supportedLanguages = supportedLanguages
         self.layout = layout
         self.onPreferredSizeChange = onPreferredSizeChange
@@ -30,6 +33,9 @@ struct TranslationPanelView: View {
             alignment: .topLeading
         )
         .background(Color(nsColor: .windowBackgroundColor))
+        .onChange(of: coordinator.request?.id) {
+            speechController.stopPlayback()
+        }
         .onChange(of: metrics.size, initial: true) { _, newSize in
             onPreferredSizeChange(newSize)
         }
@@ -47,8 +53,8 @@ struct TranslationPanelView: View {
     private var translationContent: some View {
         VStack(spacing: TranslationPanelStyle.contentSpacing) {
             HStack(spacing: TranslationPanelStyle.columnSpacing) {
-                languageMenu(role: .source)
-                languageMenu(role: .target)
+                languageControls(role: .source)
+                languageControls(role: .target)
             }
 
             HStack(
@@ -68,20 +74,57 @@ struct TranslationPanelView: View {
         )
     }
 
-    private func languageMenu(
+    private func languageControls(
         role: TranslationLanguageRole
     ) -> some View {
-        TranslationLanguageMenu(
-            coordinator: coordinator,
-            supportedLanguages: supportedLanguages,
-            role: role
-        )
-        .frame(width: TranslationPanelStyle.languageMenuWidth)
+        HStack(spacing: TranslationPanelStyle.speechControlSpacing) {
+            TranslationLanguageMenu(
+                coordinator: coordinator,
+                supportedLanguages: supportedLanguages,
+                role: role
+            )
+            .frame(width: TranslationPanelStyle.languageMenuWidth)
+
+            let speechContent = speechContent(for: role)
+            TranslationSpeechButton(
+                controller: speechController,
+                role: role == .source ? .source : .target,
+                text: speechContent.text,
+                languageIdentifier: speechContent.languageIdentifier
+            )
+            .frame(
+                width: TranslationPanelStyle.speechControlSize,
+                height: TranslationPanelStyle.languageRowHeight
+            )
+        }
         .frame(
             maxWidth: .infinity,
             minHeight: TranslationPanelStyle.languageRowHeight,
             alignment: .leading
         )
+    }
+
+    private func speechContent(
+        for role: TranslationLanguageRole
+    ) -> (text: String, languageIdentifier: String) {
+        switch role {
+        case .source:
+            guard let request = coordinator.request else {
+                return ("", "")
+            }
+            let languageIdentifier: String
+            if case .translated(let output) = coordinator.status {
+                languageIdentifier = output.sourceLanguageIdentifier
+            } else {
+                languageIdentifier = request.sourceLanguageIdentifier
+            }
+            return (request.text, languageIdentifier)
+        case .target:
+            guard case .translated(let output) = coordinator.status else {
+                return ("", "")
+            }
+            return (output.translatedText, output.targetLanguageIdentifier)
+        }
     }
 
     private var sourceContent: some View {

@@ -138,6 +138,9 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
             coordinator: coordinator,
+            speechController: TranslationSpeechController(
+                player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
+            ),
             supportedLanguages: [],
             layout: layout
         )
@@ -167,6 +170,9 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
             coordinator: coordinator,
+            speechController: TranslationSpeechController(
+                player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
+            ),
             supportedLanguages: [],
             layout: layout
         )
@@ -314,6 +320,233 @@ func test_body_when_translation_is_available_then_exposes_two_selectable_text_vi
     #expect(selectableTextViews.allSatisfy { !$0.isEditable })
 }
 
+@Test @MainActor
+func test_sourceSpeechButton_when_clicked_then_readsSourceText() throws {
+    // Arrange
+    let speechPlayer = PanelSpeechPlayerMock(
+        supportedLanguageIdentifiers: ["en"]
+    )
+    let speechController = TranslationSpeechController(player: speechPlayer)
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Read this"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let hostingView = makeTranslationHostingView(
+        coordinator: coordinator,
+        speechController: speechController
+    )
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "sourceSpeechButton"
+        ) as? NSButton
+    )
+
+    // Act
+    button.performClick(nil)
+
+    // Assert
+    #expect(
+        speechPlayer.playRequests == [
+            .init(text: "Read this", languageIdentifier: "en")
+        ]
+    )
+}
+
+@Test @MainActor
+func test_translationSpeechButton_when_idle_then_usesSpeakerWaveTwoFillSymbol() throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Read this"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let hostingView = makeTranslationHostingView(coordinator: coordinator)
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "sourceSpeechButton"
+        ) as? NSButton
+    )
+
+    // Assert
+    #expect(
+        button.image?.tiffRepresentation
+            == NSImage(
+                systemSymbolName: "speaker.wave.2.fill",
+                accessibilityDescription: "Read Source Text Aloud"
+            )?.tiffRepresentation
+    )
+}
+
+@Test @MainActor
+func test_translationSpeechButton_when_playing_then_usesStopFillSymbol() throws {
+    // Arrange
+    let speechController = TranslationSpeechController(
+        player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: ["en"])
+    )
+    speechController.togglePlayback(
+        role: .source,
+        text: "Read this",
+        languageIdentifier: "en"
+    )
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Read this"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let hostingView = makeTranslationHostingView(
+        coordinator: coordinator,
+        speechController: speechController
+    )
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "sourceSpeechButton"
+        ) as? NSButton
+    )
+
+    // Assert
+    #expect(
+        button.image?.tiffRepresentation
+            == NSImage(
+                systemSymbolName: "stop.fill",
+                accessibilityDescription: "Stop Reading Source Text"
+            )?.tiffRepresentation
+    )
+}
+
+@Test @MainActor
+func test_targetSpeechButton_when_translationIsAvailable_then_readsTranslatedText() async throws {
+    // Arrange
+    let speechPlayer = PanelSpeechPlayerMock(
+        supportedLanguageIdentifiers: ["zh-Hant"]
+    )
+    let speechController = TranslationSpeechController(player: speechPlayer)
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let request = try #require(coordinator.request)
+    await coordinator.translate(
+        request,
+        using: PanelTranslationRunner(
+            output: TranslationOutput(
+                translatedText: "你好",
+                sourceLanguageIdentifier: "en",
+                targetLanguageIdentifier: "zh-Hant"
+            )
+        )
+    )
+    let hostingView = makeTranslationHostingView(
+        coordinator: coordinator,
+        speechController: speechController
+    )
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "targetSpeechButton"
+        ) as? NSButton
+    )
+
+    // Act
+    button.performClick(nil)
+
+    // Assert
+    #expect(
+        speechPlayer.playRequests == [
+            .init(text: "你好", languageIdentifier: "zh-Hant")
+        ]
+    )
+}
+
+@Test @MainActor
+func test_targetSpeechButton_when_translationIsUnavailable_then_keepsHiddenSlot() throws {
+    // Arrange
+    let speechController = TranslationSpeechController(
+        player: PanelSpeechPlayerMock(
+            supportedLanguageIdentifiers: ["en", "zh-Hant"]
+        )
+    )
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let hostingView = makeTranslationHostingView(
+        coordinator: coordinator,
+        speechController: speechController
+    )
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "targetSpeechButton"
+        ) as? NSButton
+    )
+
+    // Assert
+    #expect(button.isHidden)
+    #expect(button.frame.width > 0)
+}
+
+@Test @MainActor
+func test_languageControls_when_panelWidens_then_speechButtonsKeepFixedMenuGap() throws {
+    // Arrange
+    let speechPlayer = PanelSpeechPlayerMock(
+        supportedLanguageIdentifiers: ["en", "zh-Hant"]
+    )
+    let speechController = TranslationSpeechController(player: speechPlayer)
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let hostingView = makeTranslationHostingView(
+        coordinator: coordinator,
+        speechController: speechController
+    )
+    hostingView.frame.size.width = 900
+
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+    let button = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "sourceSpeechButton"
+        )
+    )
+    let buttonFrame = button.convert(button.bounds, to: hostingView)
+
+    // Assert
+    #expect(
+        abs(
+            buttonFrame.minX
+                - TranslationPanelStyle.horizontalPadding
+                - TranslationPanelStyle.languageMenuWidth
+                - TranslationPanelStyle.speechControlSpacing
+        ) < 4
+    )
+}
+
 @MainActor
 private func descendants<ViewType: NSView>(
     of type: ViewType.Type,
@@ -327,7 +560,12 @@ private func descendants<ViewType: NSView>(
 
 @MainActor
 private func makeTranslationHostingView(
-    coordinator: TranslationCoordinator
+    coordinator: TranslationCoordinator,
+    speechController: TranslationSpeechController = TranslationSpeechController(
+        player: PanelSpeechPlayerMock(
+            supportedLanguageIdentifiers: ["en", "zh-Hant"]
+        )
+    )
 ) -> NSHostingView<TranslationPanelView> {
     let layout = TranslationPanelLayout()
     let metrics = layout.metrics(
@@ -337,6 +575,7 @@ private func makeTranslationHostingView(
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
             coordinator: coordinator,
+            speechController: speechController,
             supportedLanguages: [],
             layout: layout
         )
@@ -344,6 +583,19 @@ private func makeTranslationHostingView(
     hostingView.frame = NSRect(origin: .zero, size: metrics.size)
     hostingView.appearance = NSAppearance(named: .darkAqua)
     return hostingView
+}
+
+@MainActor
+private func view(
+    in rootView: NSView,
+    accessibilityIdentifier: String
+) -> NSView? {
+    if rootView.accessibilityIdentifier() == accessibilityIdentifier {
+        return rootView
+    }
+    return rootView.subviews.lazy.compactMap {
+        view(in: $0, accessibilityIdentifier: accessibilityIdentifier)
+    }.first
 }
 
 @MainActor
@@ -433,4 +685,35 @@ private struct PanelTranslationRunner: TranslationRunning {
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
         output
     }
+}
+
+@MainActor
+private final class PanelSpeechPlayerMock: SpeechPlaying {
+    struct Request: Equatable {
+        let text: String
+        let languageIdentifier: String
+    }
+
+    private let supportedLanguageIdentifiers: Set<String>
+    private(set) var playRequests: [Request] = []
+
+    init(supportedLanguageIdentifiers: Set<String>) {
+        self.supportedLanguageIdentifiers = supportedLanguageIdentifiers
+    }
+
+    func supports(languageIdentifier: String) -> Bool {
+        supportedLanguageIdentifiers.contains(languageIdentifier)
+    }
+
+    func play(
+        text: String,
+        languageIdentifier: String,
+        completion: @escaping @MainActor () -> Void
+    ) {
+        playRequests.append(
+            Request(text: text, languageIdentifier: languageIdentifier)
+        )
+    }
+
+    func stop() {}
 }

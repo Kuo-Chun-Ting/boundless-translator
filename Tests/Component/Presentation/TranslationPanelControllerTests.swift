@@ -101,6 +101,24 @@ func test_dismissForMouseDown_when_pointIsOutsidePanel_then_closesUnpinnedPanel(
 }
 
 @Test @MainActor
+func test_dismissForMouseDown_when_translationCloses_then_stopsSpeech() throws {
+    // Arrange
+    let speechPlayer = PanelControllerSpeechPlayerMock()
+    let fixture = try makeTranslationPanelFixture(speechPlayer: speechPlayer)
+    let stopCountAfterPresentation = speechPlayer.stopCallCount
+    let pointOutsidePanel = CGPoint(
+        x: fixture.panel.frame.maxX + 100,
+        y: fixture.panel.frame.maxY + 100
+    )
+
+    // Act
+    fixture.controller.dismissForMouseDown(at: pointOutsidePanel)
+
+    // Assert
+    #expect(speechPlayer.stopCallCount == stopCountAfterPresentation + 1)
+}
+
+@Test @MainActor
 func test_dismissForMouseDown_when_pointIsOutsidePanelAndTranslationIsPinned_then_keepsPanelVisible() throws {
     // Arrange
     let fixture = try makeTranslationPanelFixture()
@@ -244,7 +262,8 @@ private func pinPanel(_ panel: TranslationPanel) throws {
 
 @MainActor
 private func makeTranslationPanelFixture(
-    sourceText: String = "Hello"
+    sourceText: String = "Hello",
+    speechPlayer: any SpeechPlaying = PanelControllerSpeechPlayerMock()
 ) throws -> TranslationPanelTestFixture {
     let application = NSApplication.shared
     let applicationNotificationCenter = NotificationCenter()
@@ -260,7 +279,8 @@ private func makeTranslationPanelFixture(
         targetLanguageIdentifier: "zh-Hant"
     )
     let controller = TranslationPanelController(
-        applicationNotificationCenter: applicationNotificationCenter
+        applicationNotificationCenter: applicationNotificationCenter,
+        speechPlayer: speechPlayer
     )
     controller.show(
         coordinator: coordinator,
@@ -281,6 +301,25 @@ private func makeTranslationPanelFixture(
         controller: controller,
         panel: panel
     )
+}
+
+@MainActor
+private final class PanelControllerSpeechPlayerMock: SpeechPlaying {
+    private(set) var stopCallCount = 0
+
+    func supports(languageIdentifier: String) -> Bool {
+        true
+    }
+
+    func play(
+        text: String,
+        languageIdentifier: String,
+        completion: @escaping @MainActor () -> Void
+    ) {}
+
+    func stop() {
+        stopCallCount += 1
+    }
 }
 
 @MainActor

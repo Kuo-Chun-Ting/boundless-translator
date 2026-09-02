@@ -8,6 +8,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let positioner = PanelPositioner(pointerOffset: 12)
     private let panelState: TranslationPanelState
     private let panel: TranslationPanel
+    private let speechController: TranslationSpeechController
     private let applicationNotificationCenter: NotificationCenter
     private lazy var toolbarController = TranslationPanelToolbarController(
         panelState: panelState
@@ -22,9 +23,13 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         )
     }
 
-    init(applicationNotificationCenter: NotificationCenter) {
+    init(
+        applicationNotificationCenter: NotificationCenter,
+        speechPlayer: any SpeechPlaying = AppleSpeechPlayer()
+    ) {
         panelState = TranslationPanelState()
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
+        speechController = TranslationSpeechController(player: speechPlayer)
         self.applicationNotificationCenter = applicationNotificationCenter
         super.init()
         panel.delegate = self
@@ -56,6 +61,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         present(
             TranslationPanelView(
                 coordinator: coordinator,
+                speechController: speechController,
                 supportedLanguages: supportedLanguages,
                 layout: translationLayout,
                 onPreferredSizeChange: { [weak self] size in
@@ -90,7 +96,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
                 selection: selection,
                 supportedLanguages: supportedLanguages,
                 onCancel: { [weak self] in
-                    self?.panel.orderOut(nil)
+                    self?.dismiss(nil)
                 },
                 onSelect: onSelect
             ),
@@ -106,6 +112,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         pointerLocation: CGPoint,
         panelSize: CGSize
     ) {
+        speechController.stopPlayback()
         panelState.reset()
         toolbarController.synchronize()
         interactionPolicy = PanelInteractionPolicy(kind: kind)
@@ -187,7 +194,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             return
         }
 
-        panel.orderOut(sender)
+        dismiss(sender)
     }
 
     private func configureDismissalTriggers() {
@@ -217,7 +224,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             return
         }
 
-        panel.orderOut(nil)
+        dismiss(nil)
     }
 
     func dismissForApplicationActivation(processIdentifier: pid_t) {
@@ -233,7 +240,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             return
         }
 
-        panel.orderOut(nil)
+        dismiss(nil)
     }
 
     @objc
@@ -247,6 +254,15 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         dismissForApplicationActivation(
             processIdentifier: application.processIdentifier
         )
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        speechController.stopPlayback()
+    }
+
+    private func dismiss(_ sender: Any?) {
+        speechController.stopPlayback()
+        panel.orderOut(sender)
     }
 }
 

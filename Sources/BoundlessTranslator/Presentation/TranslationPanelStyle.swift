@@ -21,6 +21,8 @@ enum TranslationPanelStyle {
     static let languageRowHeight: CGFloat = 26
     static let contentSpacing: CGFloat = 10
     static let languageMenuWidth: CGFloat = 210
+    static let speechControlSpacing: CGFloat = 8
+    static let speechControlSize: CGFloat = 26
     static let cardContentPadding: CGFloat = 14
     static let cardCornerRadius: CGFloat = 12
     static let cardBackgroundColor = NSColor(

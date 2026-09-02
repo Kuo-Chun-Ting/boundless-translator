@@ -26,6 +26,7 @@ struct TranslationLanguageMenu: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityLabel(accessibilityLabel)
         .accessibilityValue(accessibilityValue)
+        .accessibilityIdentifier(accessibilityIdentifier)
     }
 
     private var selection: Binding<String> {
@@ -119,5 +120,9 @@ struct TranslationLanguageMenu: View {
                 for: request.targetLanguageIdentifier
             )
         }
+    }
+
+    private var accessibilityIdentifier: String {
+        role == .source ? "sourceLanguageMenu" : "targetLanguageMenu"
     }
 }
