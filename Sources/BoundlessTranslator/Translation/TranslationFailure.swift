@@ -28,22 +28,25 @@ enum TranslationFailure: Error, Equatable, Sendable {
         }
     }
 
-    var message: String {
+    func message(localization: AppLocalization) -> String {
         switch self {
         case .unsupportedSourceLanguage:
-            "The language of the selected text is not supported."
+            localization.string("translationFailure.unsupportedSource")
         case .unsupportedTargetLanguage:
-            "The selected target language is not supported. Choose another language in Settings."
+            localization.string("translationFailure.unsupportedTarget")
         case .unsupportedLanguagePairing:
-            "The text may already be in the target language, or this language pair is not supported."
+            localization.string("translationFailure.unsupportedPair")
         case .unableToIdentifyLanguage:
-            "The language of the selected text could not be detected."
+            localization.string("translationFailure.unidentifiedSource")
         case .nothingToTranslate:
-            "The selection does not contain text that can be translated."
+            localization.string("translationFailure.emptyInput")
         case .languageNotInstalled:
-            "The required language is not installed. Try again and allow macOS to download it."
+            localization.string("translationFailure.missingLanguagePack")
         case .unexpected(let description):
-            "\(description) Try again."
+            localization.string(
+                "translationFailure.unknown",
+                arguments: description
+            )
         }
     }
 

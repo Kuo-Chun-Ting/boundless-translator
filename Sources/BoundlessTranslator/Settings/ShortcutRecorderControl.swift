@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ShortcutRecorderControl: NSViewRepresentable {
     let definition: GlobalShortcutDefinition
+    let localization: AppLocalization
     let onRecordingStarted: () -> Void
     let onRecordingCancelled: () -> Void
     let onShortcutRecorded: (GlobalShortcutDefinition) -> Void
@@ -10,6 +11,7 @@ struct ShortcutRecorderControl: NSViewRepresentable {
     func makeNSView(context: Context) -> ShortcutRecorderButton {
         ShortcutRecorderButton(
             definition: definition,
+            localization: localization,
             onRecordingStarted: onRecordingStarted,
             onRecordingCancelled: onRecordingCancelled,
             onShortcutRecorded: onShortcutRecorded
@@ -23,6 +25,7 @@ struct ShortcutRecorderControl: NSViewRepresentable {
         button.onShortcutRecorded = onShortcutRecorded
         button.onRecordingStarted = onRecordingStarted
         button.onRecordingCancelled = onRecordingCancelled
+        button.updateLocalization(localization)
         button.updateDefinition(definition)
     }
 }
@@ -35,14 +38,17 @@ final class ShortcutRecorderButton: NSButton {
     var onShortcutRecorded: (GlobalShortcutDefinition) -> Void
 
     private var definition: GlobalShortcutDefinition
+    private var localization: AppLocalization
 
     init(
         definition: GlobalShortcutDefinition,
+        localization: AppLocalization,
         onRecordingStarted: @escaping () -> Void = {},
         onRecordingCancelled: @escaping () -> Void = {},
         onShortcutRecorded: @escaping (GlobalShortcutDefinition) -> Void
     ) {
         self.definition = definition
+        self.localization = localization
         self.onRecordingStarted = onRecordingStarted
         self.onRecordingCancelled = onRecordingCancelled
         self.onShortcutRecorded = onShortcutRecorded
@@ -65,7 +71,7 @@ final class ShortcutRecorderButton: NSButton {
             return
         }
         isRecording = true
-        title = "Type Shortcut"
+        title = localization.string("shortcut.recording")
         window?.makeFirstResponder(self)
         onRecordingStarted()
     }
@@ -76,6 +82,11 @@ final class ShortcutRecorderButton: NSButton {
             return
         }
         showDefinition()
+    }
+
+    func updateLocalization(_ localization: AppLocalization) {
+        self.localization = localization
+        configureLocalizedText()
     }
 
     override func keyDown(with event: NSEvent) {
@@ -115,7 +126,7 @@ final class ShortcutRecorderButton: NSButton {
         translatesAutoresizingMaskIntoConstraints = false
         widthAnchor.constraint(greaterThanOrEqualToConstant: 104).isActive = true
         setAccessibilityIdentifier("shortcutRecorder")
-        toolTip = "Click, then type a new keyboard shortcut."
+        configureLocalizedText()
     }
 
     @objc private func handleClick() {
@@ -157,7 +168,18 @@ final class ShortcutRecorderButton: NSButton {
 
     private func showDefinition() {
         title = definition.displayName
-        setAccessibilityLabel("Keyboard shortcut")
+        setAccessibilityLabel(
+            localization.string("shortcut.accessibilityLabel")
+        )
         setAccessibilityValue(definition.displayName)
+    }
+
+    private func configureLocalizedText() {
+        toolTip = localization.string("shortcut.tooltip")
+        if isRecording {
+            title = localization.string("shortcut.recording")
+        } else {
+            showDefinition()
+        }
     }
 }

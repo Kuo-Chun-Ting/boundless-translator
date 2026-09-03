@@ -10,13 +10,19 @@ struct TranslationLanguageMenu: View {
 
     let supportedLanguages: [Locale.Language]
     let role: TranslationLanguageRole
+    let localization: AppLocalization
 
-    private let formatter = TranslationLanguagePairFormatter(locale: .current)
+    private var formatter: TranslationLanguagePairFormatter {
+        TranslationLanguagePairFormatter(
+            locale: Locale(identifier: localization.languageIdentifier),
+            localization: localization
+        )
+    }
 
     var body: some View {
         Picker(accessibilityLabel, selection: selection) {
             ForEach(options) { option in
-                Text(optionTitle(option))
+                Text(verbatim: optionTitle(option))
                     .tag(option.id)
             }
         }
@@ -57,7 +63,10 @@ struct TranslationLanguageMenu: View {
             return languageName
         }
 
-        return "\(languageName) (Auto)"
+        return localization.string(
+            "panel.language.autoName",
+            arguments: languageName
+        )
     }
 
     private var request: TranslationRequest? {
@@ -86,7 +95,11 @@ struct TranslationLanguageMenu: View {
 
     private var title: String {
         guard let selectedIdentifier else {
-            return role == .source ? "Source" : "Target"
+            return localization.string(
+                role == .source
+                    ? "panel.language.source"
+                    : "panel.language.target"
+            )
         }
 
         return formatter.languageName(for: selectedIdentifier)
@@ -97,11 +110,15 @@ struct TranslationLanguageMenu: View {
             return nil
         }
 
-        return "Auto"
+        return localization.string("panel.language.auto")
     }
 
     private var accessibilityLabel: String {
-        role == .source ? "Source Language" : "Target Language"
+        localization.string(
+            role == .source
+                ? "panel.language.sourceAccessibility"
+                : "panel.language.targetAccessibility"
+        )
     }
 
     private var accessibilityValue: String {

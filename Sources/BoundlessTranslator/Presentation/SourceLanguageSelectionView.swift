@@ -3,21 +3,26 @@ import SwiftUI
 struct SourceLanguageSelectionView: View {
     let selectedText: SelectedText
     let supportedLanguages: [Locale.Language]
+    @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     let onCancel: @MainActor () -> Void
     let onSelect: @MainActor (String) -> Void
 
     @State private var selectedLanguageIdentifier: String
-    private let languageNames = LanguageDisplayNameFormatter()
+    private var languageNames: LanguageDisplayNameFormatter {
+        LanguageDisplayNameFormatter(locale: interfaceLanguageSettings.locale)
+    }
 
     init(
         selectedText: SelectedText,
         selection: SourceLanguageSelection,
         supportedLanguages: [Locale.Language],
+        interfaceLanguageSettings: InterfaceLanguageSettings,
         onCancel: @escaping @MainActor () -> Void,
         onSelect: @escaping @MainActor (String) -> Void
     ) {
         self.selectedText = selectedText
         self.supportedLanguages = supportedLanguages
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         self.onCancel = onCancel
         self.onSelect = onSelect
         _selectedLanguageIdentifier = State(
@@ -35,6 +40,7 @@ struct SourceLanguageSelectionView: View {
         }
         .padding(18)
         .frame(minWidth: 420, minHeight: 260, alignment: .topLeading)
+        .interfaceLanguage(interfaceLanguageSettings)
     }
 
     private var header: some View {
@@ -48,7 +54,7 @@ struct SourceLanguageSelectionView: View {
 
     private var originalText: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("Original")
+            Text(verbatim: localization.string("sourceSelection.original"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Text(selectedText.value)
@@ -60,16 +66,19 @@ struct SourceLanguageSelectionView: View {
 
     private var languageSelection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Choose Source Language")
+            Text(verbatim: localization.string("sourceSelection.title"))
                 .font(.headline)
-            Text("This text could not be identified confidently.")
+            Text(verbatim: localization.string("sourceSelection.message"))
                 .font(.callout)
                 .foregroundStyle(.secondary)
 
             HStack {
-                Picker("From", selection: $selectedLanguageIdentifier) {
+                Picker(
+                    localization.string("translation.from"),
+                    selection: $selectedLanguageIdentifier
+                ) {
                     ForEach(languageOptions) { option in
-                        Text(languageNames.name(for: option))
+                        Text(verbatim: languageNames.name(for: option))
                             .tag(option.id)
                     }
                 }
@@ -77,12 +86,12 @@ struct SourceLanguageSelectionView: View {
 
                 Spacer()
 
-                Button("Cancel") {
+                Button(localization.string("common.cancel")) {
                     onCancel()
                 }
                 .keyboardShortcut(.cancelAction)
 
-                Button("Translate") {
+                Button(localization.string("common.translate")) {
                     onSelect(selectedLanguageIdentifier)
                 }
                 .keyboardShortcut(.defaultAction)
@@ -101,6 +110,12 @@ struct SourceLanguageSelectionView: View {
         return LanguageOption.make(
             supportedLanguages: supportedLanguages,
             selectedIdentifier: selectedLanguageIdentifier
+        )
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
         )
     }
 }

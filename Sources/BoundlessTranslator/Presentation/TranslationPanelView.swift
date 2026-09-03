@@ -4,6 +4,7 @@ import SwiftUI
 struct TranslationPanelView: View {
     @ObservedObject var coordinator: TranslationCoordinator
     @ObservedObject var speechController: TranslationSpeechController
+    @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
 
     let supportedLanguages: [Locale.Language]
     let layout: TranslationPanelLayout
@@ -12,12 +13,14 @@ struct TranslationPanelView: View {
     init(
         coordinator: TranslationCoordinator,
         speechController: TranslationSpeechController,
+        interfaceLanguageSettings: InterfaceLanguageSettings,
         supportedLanguages: [Locale.Language],
         layout: TranslationPanelLayout = TranslationPanelLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
         self.coordinator = coordinator
         self.speechController = speechController
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         self.supportedLanguages = supportedLanguages
         self.layout = layout
         self.onPreferredSizeChange = onPreferredSizeChange
@@ -48,6 +51,7 @@ struct TranslationPanelView: View {
                 .id(request.id)
             }
         }
+        .interfaceLanguage(interfaceLanguageSettings)
     }
 
     private var translationContent: some View {
@@ -81,7 +85,8 @@ struct TranslationPanelView: View {
             TranslationLanguageMenu(
                 coordinator: coordinator,
                 supportedLanguages: supportedLanguages,
-                role: role
+                role: role,
+                localization: localization
             )
             .frame(width: TranslationPanelStyle.languageMenuWidth)
 
@@ -90,7 +95,8 @@ struct TranslationPanelView: View {
                 controller: speechController,
                 role: role == .source ? .source : .target,
                 text: speechContent.text,
-                languageIdentifier: speechContent.languageIdentifier
+                languageIdentifier: speechContent.languageIdentifier,
+                localization: localization
             )
             .frame(
                 width: TranslationPanelStyle.speechControlSize,
@@ -128,7 +134,10 @@ struct TranslationPanelView: View {
     }
 
     private var sourceContent: some View {
-        SelectableSourceTextView(text: coordinator.request?.text ?? "")
+        SelectableSourceTextView(
+            text: coordinator.request?.text ?? "",
+            localization: localization
+        )
             .frame(
                 maxWidth: .infinity,
                 minHeight: cardSurfaceHeight,
@@ -148,26 +157,29 @@ struct TranslationPanelView: View {
     private var targetBody: some View {
         switch coordinator.status {
         case .idle:
-            Text("Select text and use the translation shortcut to translate it.")
+            Text(verbatim: localization.string("panel.idle"))
                 .foregroundStyle(.secondary)
         case .translating:
             HStack(spacing: 10) {
                 ProgressView()
                     .controlSize(.small)
-                Text("Translating…")
+                Text(verbatim: localization.string("panel.translating"))
                     .foregroundStyle(.secondary)
             }
         case .translated(let output):
             SelectableTranslationTextView(text: output.translatedText)
         case .failed(let failure):
             VStack(alignment: .leading, spacing: 8) {
-                Label("Translation failed", systemImage: "exclamationmark.triangle")
+                Label(
+                    localization.string("panel.failureTitle"),
+                    systemImage: "exclamationmark.triangle"
+                )
                     .foregroundStyle(.red)
-                Text(failure.message)
+                Text(verbatim: failure.message(localization: localization))
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
                 if failure.canRetry {
-                    Button("Try Again") {
+                    Button(localization.string("panel.tryAgain")) {
                         coordinator.retry()
                     }
                 }
@@ -183,7 +195,14 @@ struct TranslationPanelView: View {
     private var metrics: TranslationPanelMetrics {
         layout.metrics(
             sourceText: coordinator.request?.text ?? "",
-            status: coordinator.status
+            status: coordinator.status,
+            localization: localization
+        )
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
         )
     }
 }

@@ -1,13 +1,17 @@
 import AppKit
+import Combine
 import SwiftUI
 
 @MainActor
 final class PreferencesWindowController: NSWindowController {
     private let presentationCoordinator = PreferencesPresentationCoordinator()
+    private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let activeScreenVisibleFrame: @MainActor () -> CGRect?
+    private var languageCancellable: AnyCancellable?
 
     init(
         settings: TranslationSettings,
+        interfaceLanguageSettings: InterfaceLanguageSettings,
         shortcutController: GlobalShortcutController,
         supportedLanguageCatalog: SupportedLanguageCatalog = SupportedLanguageCatalog(),
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
@@ -15,27 +19,39 @@ final class PreferencesWindowController: NSWindowController {
             NSApplication.shared.terminate(nil)
         }
     ) {
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
             NSScreen.main?.visibleFrame
         }
         let window = NSWindow(
-            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 350)),
+            contentRect: CGRect(
+                origin: .zero,
+                size: PreferencesWindowStyle.contentSize
+            ),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
         )
-        window.title = "Boundless Translator Settings"
+        window.backgroundColor = .underPageBackgroundColor
+        window.titlebarAppearsTransparent = true
+        window.titlebarSeparatorStyle = .none
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
+                interfaceLanguageSettings: interfaceLanguageSettings,
                 shortcutController: shortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication
             )
         )
         super.init(window: window)
+        updateWindowTitle(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
+        languageCancellable = interfaceLanguageSettings.$languageIdentifier
+            .sink { [weak self] languageIdentifier in
+                self?.updateWindowTitle(languageIdentifier: languageIdentifier)
+            }
     }
 
     @available(*, unavailable)
@@ -76,5 +92,13 @@ final class PreferencesWindowController: NSWindowController {
                 y: visibleFrame.midY - window.frame.height / 2
             )
         )
+    }
+
+    private func updateWindowTitle(languageIdentifier: String?) {
+        let resolvedIdentifier = interfaceLanguageSettings
+            .resolvedLanguageIdentifier(for: languageIdentifier)
+        window?.title = AppLocalization(
+            languageIdentifier: resolvedIdentifier
+        ).string("preferences.windowTitle")
     }
 }

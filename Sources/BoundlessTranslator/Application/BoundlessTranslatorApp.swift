@@ -7,9 +7,13 @@ struct BoundlessTranslatorApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MenuBarView {
-                appDelegate.controller.showPreferences()
-            }
+            MenuBarView(
+                interfaceLanguageSettings: appDelegate.controller
+                    .interfaceLanguageSettings,
+                onShowPreferences: {
+                    appDelegate.controller.showPreferences()
+                }
+            )
         } label: {
             Image(nsImage: AppBrand.menuBarIconImage)
                 .renderingMode(AppBrand.menuBarIconRenderingMode)
@@ -43,19 +47,34 @@ enum AppBrand {
 }
 
 private struct MenuBarView: View {
+    @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     let onShowPreferences: @MainActor () -> Void
 
     var body: some View {
-        Button("Preferences…") {
-            onShowPreferences()
-        }
-        .keyboardShortcut(",", modifiers: .command)
+        Group {
+            Button(action: onShowPreferences) {
+                Text(verbatim: localization.string("menu.preferences"))
+            }
+            .keyboardShortcut(",", modifiers: .command)
 
-        Divider()
+            Divider()
 
-        Button("Quit \(AppBrand.displayName)") {
-            NSApplication.shared.terminate(nil)
+            Button(action: { NSApplication.shared.terminate(nil) }) {
+                Text(
+                    verbatim: localization.string(
+                        "menu.quitApplication",
+                        arguments: AppBrand.displayName
+                    )
+                )
+            }
+            .keyboardShortcut("q")
         }
-        .keyboardShortcut("q")
+        .interfaceLanguage(interfaceLanguageSettings)
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+        )
     }
 }

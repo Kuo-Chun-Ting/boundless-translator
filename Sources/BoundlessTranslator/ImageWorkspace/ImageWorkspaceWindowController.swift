@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 
 @MainActor
 protocol ImageWorkspaceContent: AnyObject {
@@ -39,29 +40,25 @@ final class ImageWorkspaceWindowController: NSWindowController,
     private let content: any ImageWorkspaceContent
     private let visibleFrameForPointer: VisibleFrameProvider
     private let activateApplication: @MainActor () -> Void
-
-    convenience init() {
-        self.init(
-            content: LiveTextImageView(),
-            visibleFrameForPointer: { pointerLocation in
-                NSScreen.screens.first {
-                    $0.frame.contains(pointerLocation)
-                }?.visibleFrame ?? NSScreen.main?.visibleFrame
-            },
-            activateApplication: {
-                NSApplication.shared.activate()
-            }
-        )
-    }
+    private let interfaceLanguageSettings: InterfaceLanguageSettings
+    private var languageCancellable: AnyCancellable?
 
     init(
-        content: any ImageWorkspaceContent,
-        visibleFrameForPointer: @escaping VisibleFrameProvider,
-        activateApplication: @escaping @MainActor () -> Void
+        content: any ImageWorkspaceContent = LiveTextImageView(),
+        visibleFrameForPointer: @escaping VisibleFrameProvider = { pointerLocation in
+            NSScreen.screens.first {
+                $0.frame.contains(pointerLocation)
+            }?.visibleFrame ?? NSScreen.main?.visibleFrame
+        },
+        activateApplication: @escaping @MainActor () -> Void = {
+            NSApplication.shared.activate()
+        },
+        interfaceLanguageSettings: InterfaceLanguageSettings
     ) {
         self.content = content
         self.visibleFrameForPointer = visibleFrameForPointer
         self.activateApplication = activateApplication
+        self.interfaceLanguageSettings = interfaceLanguageSettings
 
         let window = NSWindow(
             contentRect: CGRect(
@@ -72,7 +69,6 @@ final class ImageWorkspaceWindowController: NSWindowController,
             backing: .buffered,
             defer: false
         )
-        window.title = "Clipboard Image"
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
@@ -81,6 +77,11 @@ final class ImageWorkspaceWindowController: NSWindowController,
 
         super.init(window: window)
         window.delegate = self
+        updateWindowTitle(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
+        languageCancellable = interfaceLanguageSettings.$languageIdentifier
+            .sink { [weak self] languageIdentifier in
+                self?.updateWindowTitle(languageIdentifier: languageIdentifier)
+            }
     }
 
     @available(*, unavailable)
@@ -122,6 +123,14 @@ final class ImageWorkspaceWindowController: NSWindowController,
                 y: visibleFrame.midY - window.frame.height / 2
             )
         )
+    }
+
+    private func updateWindowTitle(languageIdentifier: String?) {
+        let resolvedIdentifier = interfaceLanguageSettings
+            .resolvedLanguageIdentifier(for: languageIdentifier)
+        window?.title = AppLocalization(
+            languageIdentifier: resolvedIdentifier
+        ).string("imageWorkspace.windowTitle")
     }
 
     private static func aspectFitSize(

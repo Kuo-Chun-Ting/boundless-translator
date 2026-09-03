@@ -3,34 +3,43 @@ import SwiftUI
 struct TranslationPreferencesView: View {
     @ObservedObject var settings: TranslationSettings
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
+    let localization: AppLocalization
 
-    private let languageNames = LanguageDisplayNameFormatter()
+    private var languageNames: LanguageDisplayNameFormatter {
+        LanguageDisplayNameFormatter(
+            locale: Locale(identifier: localization.languageIdentifier)
+        )
+    }
 
     var body: some View {
         Section {
-            Picker("From", selection: $settings.sourceLanguageIdentifier) {
-                Text("Detect Automatically")
+            Picker(
+                localization.string("preferences.translateFrom"),
+                selection: $settings.sourceLanguageIdentifier
+            ) {
+                Text(verbatim: localization.string("translation.detectAutomatically"))
                     .tag(nil as String?)
 
                 ForEach(sourceLanguageOptions) { option in
-                    Text(languageNames.name(for: option))
+                    Text(verbatim: languageNames.name(for: option))
                         .tag(Optional(option.id))
                 }
             }
             .pickerStyle(.menu)
 
-            Picker("To", selection: $settings.targetLanguageIdentifier) {
+            Picker(
+                localization.string("preferences.translateTo"),
+                selection: $settings.targetLanguageIdentifier
+            ) {
                 ForEach(targetLanguageOptions) { option in
-                    Text(languageNames.name(for: option))
+                    Text(verbatim: languageNames.name(for: option))
                         .tag(option.id)
                 }
             }
             .pickerStyle(.menu)
-        } header: {
-            Text("Translation")
-                .font(.headline)
-                .foregroundStyle(.primary)
+
         }
+        .listRowBackground(Color(nsColor: .controlBackgroundColor))
         .task {
             _ = await supportedLanguageCatalog.load()
         }

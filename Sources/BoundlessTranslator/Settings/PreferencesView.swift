@@ -1,7 +1,14 @@
 import SwiftUI
 
+enum PreferencesWindowStyle {
+    static let contentSize = CGSize(width: 430, height: 280)
+    static let backgroundColor = Color(nsColor: .underPageBackgroundColor)
+    static let cardBackgroundColor = Color(nsColor: .controlBackgroundColor)
+}
+
 struct PreferencesView: View {
     @ObservedObject var settings: TranslationSettings
+    @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     @ObservedObject var shortcutController: GlobalShortcutController
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
@@ -11,29 +18,59 @@ struct PreferencesView: View {
             Form {
                 TranslationPreferencesView(
                     settings: settings,
-                    supportedLanguageCatalog: supportedLanguageCatalog
+                    supportedLanguageCatalog: supportedLanguageCatalog,
+                    localization: localization
                 )
-                ShortcutPreferencesView(controller: shortcutController)
-                UsagePreferencesView(
-                    shortcut: shortcutController.definition
-                )
+
+                Section {
+                    ShortcutPreferencesView(
+                        controller: shortcutController,
+                        localization: localization
+                    )
+                    InterfaceLanguagePreferencesView(
+                        settings: interfaceLanguageSettings
+                    )
+                }
+                .listRowBackground(PreferencesWindowStyle.cardBackgroundColor)
             }
             .formStyle(.grouped)
-
-            Divider()
+            .scrollContentBackground(.hidden)
 
             HStack {
-                Spacer()
                 PreferencesActionButton(
-                    style: .standard(title: "Quit"),
+                    style: .standard(
+                        title: localization.string(
+                            "menu.quitApplication",
+                            arguments: AppBrand.displayName
+                        )
+                    ),
                     accessibilityIdentifier: "quitButton",
                     action: quitApplication
                 )
                 .fixedSize()
+
+                Spacer()
+
+                UsagePreferencesView(
+                    shortcut: shortcutController.definition,
+                    localization: localization
+                )
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 12)
+            .padding(.top, 4)
+            .padding(.bottom, 16)
         }
-        .frame(width: 430, height: 350)
+        .background(PreferencesWindowStyle.backgroundColor)
+        .frame(
+            width: PreferencesWindowStyle.contentSize.width,
+            height: PreferencesWindowStyle.contentSize.height
+        )
+        .interfaceLanguage(interfaceLanguageSettings)
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+        )
     }
 }

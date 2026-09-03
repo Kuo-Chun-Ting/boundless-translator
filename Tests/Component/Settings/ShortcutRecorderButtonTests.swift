@@ -8,6 +8,7 @@ func test_keyDown_when_validShortcutIsRecorded_then_reportsShortcutAndEndsRecord
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
         definition: .commandShiftT,
+        localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
     let event = try #require(
@@ -39,6 +40,7 @@ func test_keyDown_when_escapeIsPressed_then_cancelsWithoutChangingShortcut() thr
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
         definition: .commandShiftT,
+        localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
     let event = try #require(
@@ -64,6 +66,7 @@ func test_keyDown_when_shortcutHasOnlyShiftModifier_then_keepsRecording() throws
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
         definition: .commandShiftT,
+        localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
     let event = try #require(
@@ -90,6 +93,7 @@ func test_recording_when_startedAndCancelled_then_reportsBothStateChanges() thro
     var recordingCancelled = false
     let button = ShortcutRecorderButton(
         definition: .commandShiftT,
+        localization: testEnglishLocalization,
         onRecordingStarted: { recordingStarted = true },
         onRecordingCancelled: { recordingCancelled = true },
         onShortcutRecorded: { _ in }

@@ -2,9 +2,14 @@ import Foundation
 
 struct TranslationLanguagePairFormatter {
     private let languageNames: LanguageDisplayNameFormatter
+    private let localization: AppLocalization
 
-    init(locale: Locale = Locale(identifier: "en_US")) {
+    init(
+        locale: Locale = Locale(identifier: "en_US"),
+        localization: AppLocalization
+    ) {
         languageNames = LanguageDisplayNameFormatter(locale: locale)
+        self.localization = localization
     }
 
     func sourceDescription(
@@ -12,7 +17,12 @@ struct TranslationLanguagePairFormatter {
         wasDetected: Bool
     ) -> String {
         let sourceName = languageName(for: languageIdentifier)
-        return wasDetected ? "\(sourceName) (Detected)" : sourceName
+        return wasDetected
+            ? localization.string(
+                "panel.language.detectedName",
+                arguments: sourceName
+            )
+            : sourceName
     }
 
     func languageName(for identifier: String) -> String {

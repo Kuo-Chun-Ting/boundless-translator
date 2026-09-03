@@ -7,6 +7,21 @@ struct TranslationSpeechButton: NSViewRepresentable {
     let role: TranslationSpeechRole
     let text: String
     let languageIdentifier: String
+    let localization: AppLocalization
+
+    init(
+        controller: TranslationSpeechController,
+        role: TranslationSpeechRole,
+        text: String,
+        languageIdentifier: String,
+        localization: AppLocalization
+    ) {
+        self.controller = controller
+        self.role = role
+        self.text = text
+        self.languageIdentifier = languageIdentifier
+        self.localization = localization
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -72,12 +87,16 @@ struct TranslationSpeechButton: NSViewRepresentable {
 
     private func accessibilityLabel(isPlaying: Bool) -> String {
         if isPlaying {
-            return role == .source
-                ? "Stop Reading Source Text"
-                : "Stop Reading Translation"
+            return localization.string(
+                role == .source
+                    ? "speech.stopSource"
+                    : "speech.stopTranslation"
+            )
         }
-        return role == .source
-            ? "Read Source Text Aloud"
-            : "Read Translation Aloud"
+        return localization.string(
+            role == .source
+                ? "speech.readSource"
+                : "speech.readTranslation"
+        )
     }
 }

@@ -2,12 +2,14 @@ import SwiftUI
 
 struct ShortcutPreferencesView: View {
     @ObservedObject var controller: GlobalShortcutController
+    let localization: AppLocalization
 
     var body: some View {
-        Section {
-            LabeledContent("Translate") {
+        Group {
+            LabeledContent(localization.string("shortcut.section")) {
                 ShortcutRecorderControl(
                     definition: controller.definition,
+                    localization: localization,
                     onRecordingStarted: controller.beginRecording,
                     onRecordingCancelled: controller.cancelRecording,
                     onShortcutRecorded: controller.updateShortcut
@@ -15,15 +17,13 @@ struct ShortcutPreferencesView: View {
                 .fixedSize()
             }
 
-            if let errorMessage = controller.errorMessage {
-                Text(errorMessage)
+            if let errorMessage = controller.failureMessage(
+                localization: localization
+            ) {
+                Text(verbatim: errorMessage)
                     .font(.caption)
                     .foregroundStyle(.red)
             }
-        } header: {
-            Text("Keyboard Shortcut")
-                .font(.headline)
-                .foregroundStyle(.primary)
         }
     }
 }

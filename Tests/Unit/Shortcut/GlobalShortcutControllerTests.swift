@@ -48,7 +48,7 @@ func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_
 
     // Assert
     #expect(controller.definition == candidate)
-    #expect(controller.errorMessage == nil)
+    #expect(controller.failureMessage(localization: englishLocalization) == nil)
     #expect(restoredController.definition == candidate)
     #expect(mock_factory.definitions == [.commandShiftT, candidate])
 }
@@ -78,7 +78,10 @@ func test_updateShortcut_when_registration_fails_then_restores_previous_shortcut
 
     // Assert
     #expect(controller.definition == .commandShiftT)
-    #expect(controller.errorMessage == "The shortcut is already in use.")
+    #expect(
+        controller.failureMessage(localization: englishLocalization)
+            == "The shortcut is already in use."
+    )
     #expect(mock_factory.definitions == [.commandShiftT, candidate, .commandShiftT])
 }
 
@@ -102,7 +105,20 @@ func test_cancelRecording_when_shortcutWasActive_then_reactivatesCurrentShortcut
     // Assert
     #expect(mock_factory.stopCount == 1)
     #expect(mock_factory.definitions == [.commandShiftT, .commandShiftT])
-    #expect(controller.errorMessage == nil)
+    #expect(controller.failureMessage(localization: englishLocalization) == nil)
+}
+
+@Test
+func test_message_when_registrationFailsAndLanguageIsTraditionalChinese_then_localizesMessage() {
+    // Arrange
+    let error = GlobalShortcutError.registrationFailed(-9876)
+    let localization = AppLocalization(languageIdentifier: "zh-Hant")
+
+    // Act
+    let message = error.message(localization: localization)
+
+    // Assert
+    #expect(message == "無法註冊鍵盤快速鍵（-9876）。其他 App 可能正在使用此快速鍵。")
 }
 
 @MainActor
@@ -157,6 +173,8 @@ private enum MockShortcutError: LocalizedError {
         "The shortcut is already in use."
     }
 }
+
+private let englishLocalization = AppLocalization(languageIdentifier: "en")
 
 private struct ShortcutDefaultsFixture {
     let suiteName: String

@@ -8,7 +8,8 @@ func test_attach_when_container_changes_then_moves_single_action_button() throws
     let target = LookupActionTarget()
     let overlay = LookupActionOverlay(
         target: target,
-        action: #selector(LookupActionTarget.performLookup(_:))
+        action: #selector(LookupActionTarget.performLookup(_:)),
+        localization: testEnglishLocalization
     )
     let firstContainer = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: 100))
     let secondContainer = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: 100))
@@ -28,7 +29,8 @@ func test_attach_when_container_is_removed_then_detaches_action_button() {
     let target = LookupActionTarget()
     let overlay = LookupActionOverlay(
         target: target,
-        action: #selector(LookupActionTarget.performLookup(_:))
+        action: #selector(LookupActionTarget.performLookup(_:)),
+        localization: testEnglishLocalization
     )
     let container = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: 100))
     overlay.attach(to: container)

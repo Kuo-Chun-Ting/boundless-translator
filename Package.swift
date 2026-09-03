@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "BoundlessTranslator",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v15)
     ],
@@ -11,7 +12,10 @@ let package = Package(
         .executable(name: "BoundlessTranslator", targets: ["BoundlessTranslator"])
     ],
     targets: [
-        .executableTarget(name: "BoundlessTranslator"),
+        .executableTarget(
+            name: "BoundlessTranslator",
+            resources: [.process("Resources")]
+        ),
         .testTarget(
             name: "BoundlessTranslatorUnitTests",
             dependencies: ["BoundlessTranslator"],

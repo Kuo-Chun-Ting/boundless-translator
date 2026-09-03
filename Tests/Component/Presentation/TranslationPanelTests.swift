@@ -76,7 +76,10 @@ func test_configureChrome_when_auxiliary_content_follows_translation_then_restor
 func test_pinItem_when_action_is_sent_then_toggles_panel_pin_state() throws {
     // Arrange
     let state = TranslationPanelState()
-    let controller = TranslationPanelToolbarController(panelState: state)
+    let controller = TranslationPanelToolbarController(
+        panelState: state,
+        interfaceLanguageSettings: makeTestInterfaceLanguageSettings()
+    )
     let item = try #require(
         controller.toolbar(
             controller.toolbar,
@@ -102,7 +105,10 @@ func test_pinItem_when_action_is_sent_then_toggles_panel_pin_state() throws {
 @Test
 func test_init_when_panelIsUnpinned_then_usesDiagonalOutlinePin() {
     // Arrange & Act
-    let presentation = PinButtonPresentation(isPinned: false)
+    let presentation = PinButtonPresentation(
+        isPinned: false,
+        localization: testEnglishLocalization
+    )
 
     // Assert
     #expect(presentation.symbolName == "pin")
@@ -113,7 +119,10 @@ func test_init_when_panelIsUnpinned_then_usesDiagonalOutlinePin() {
 @Test
 func test_init_when_panelIsPinned_then_usesUprightFilledPin() {
     // Arrange & Act
-    let presentation = PinButtonPresentation(isPinned: true)
+    let presentation = PinButtonPresentation(
+        isPinned: true,
+        localization: testEnglishLocalization
+    )
 
     // Assert
     #expect(presentation.symbolName == "pin.fill")
@@ -133,7 +142,8 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
     let layout = TranslationPanelLayout()
     let metrics = layout.metrics(
         sourceText: "train",
-        status: coordinator.status
+        status: coordinator.status,
+        localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
@@ -141,6 +151,7 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
             speechController: TranslationSpeechController(
                 player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
             ),
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
             layout: layout
         )
@@ -165,7 +176,8 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
     let layout = TranslationPanelLayout()
     let metrics = layout.metrics(
         sourceText: "coding",
-        status: coordinator.status
+        status: coordinator.status,
+        localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
@@ -173,6 +185,7 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
             speechController: TranslationSpeechController(
                 player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
             ),
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
             layout: layout
         )
@@ -570,12 +583,14 @@ private func makeTranslationHostingView(
     let layout = TranslationPanelLayout()
     let metrics = layout.metrics(
         sourceText: coordinator.request?.text ?? "",
-        status: coordinator.status
+        status: coordinator.status,
+        localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
         rootView: TranslationPanelView(
             coordinator: coordinator,
             speechController: speechController,
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
             layout: layout
         )

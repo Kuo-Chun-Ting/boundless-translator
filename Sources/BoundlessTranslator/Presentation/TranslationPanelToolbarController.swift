@@ -18,8 +18,11 @@ struct PinButtonPresentation {
     let clockwiseRotationDegrees: CGFloat
     let tint: PinButtonTint
 
-    init(isPinned: Bool) {
-        label = isPinned ? "Unpin Window" : "Pin Window"
+    init(
+        isPinned: Bool,
+        localization: AppLocalization
+    ) {
+        label = localization.string(isPinned ? "panel.unpin" : "panel.pin")
         symbolName = isPinned ? "pin.fill" : "pin"
         clockwiseRotationDegrees = isPinned ? 0 : 45
         tint = isPinned ? .accent : .secondary
@@ -31,17 +34,23 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
     let toolbar = NSToolbar(identifier: "BoundlessTranslatorPanelToolbar")
 
     private let panelState: TranslationPanelState
+    private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let pinButton = NSButton()
     private let pinItem = NSToolbarItem(itemIdentifier: .pinPanel)
     private var cancellables: Set<AnyCancellable> = []
 
-    init(panelState: TranslationPanelState) {
+    init(
+        panelState: TranslationPanelState,
+        interfaceLanguageSettings: InterfaceLanguageSettings
+    ) {
         self.panelState = panelState
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         super.init()
 
         configureToolbar()
         configurePinItem()
         observePanelState()
+        observeInterfaceLanguage()
         synchronize()
     }
 
@@ -90,8 +99,9 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
         pinButton.target = self
         pinButton.action = #selector(togglePin(_:))
 
-        pinItem.label = "Pin Window"
-        pinItem.paletteLabel = "Pin Window"
+        let label = localization.string("panel.pin")
+        pinItem.label = label
+        pinItem.paletteLabel = label
         pinItem.view = pinButton
         pinItem.visibilityPriority = .high
     }
@@ -106,6 +116,24 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
             .store(in: &cancellables)
     }
 
+    private func observeInterfaceLanguage() {
+        interfaceLanguageSettings.$languageIdentifier
+            .sink { [weak self] languageIdentifier in
+                guard let self else {
+                    return
+                }
+                let resolvedIdentifier = interfaceLanguageSettings
+                    .resolvedLanguageIdentifier(for: languageIdentifier)
+                updatePinButton(
+                    isPinned: panelState.isPinned,
+                    localization: AppLocalization(
+                        languageIdentifier: resolvedIdentifier
+                    )
+                )
+            }
+            .store(in: &cancellables)
+    }
+
     @objc
     private func togglePin(_ sender: Any?) {
         panelState.togglePin()
@@ -113,13 +141,30 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
     }
 
     private func updatePinButton(isPinned: Bool) {
-        let presentation = PinButtonPresentation(isPinned: isPinned)
+        updatePinButton(isPinned: isPinned, localization: localization)
+    }
+
+    private func updatePinButton(
+        isPinned: Bool,
+        localization: AppLocalization
+    ) {
+        let presentation = PinButtonPresentation(
+            isPinned: isPinned,
+            localization: localization
+        )
 
         pinButton.image = makePinImage(for: presentation)
         pinButton.contentTintColor = color(for: presentation.tint)
         pinButton.toolTip = presentation.label
         pinButton.setAccessibilityLabel(presentation.label)
         pinItem.label = presentation.label
+        pinItem.paletteLabel = presentation.label
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+        )
     }
 
     private func makePinImage(

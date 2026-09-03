@@ -8,6 +8,7 @@ func test_preferencesView_when_rendered_then_shows_usage_help_button() throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
+        interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -25,7 +26,7 @@ func test_preferencesView_when_rendered_then_shows_usage_help_button() throws {
 }
 
 @Test @MainActor
-func test_usageGuideItems_when_created_then_describes_every_current_feature() {
+func test_usageGuideItems_when_created_then_describes_every_current_feature() throws {
     // Arrange
     let expectedIdentifiers = [
         "translateText",
@@ -33,6 +34,7 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() {
         "lookUp",
         "listen",
         "pinWindow",
+        "languageSupport",
     ]
     let expectedTitles = [
         "Translate Text",
@@ -40,6 +42,7 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() {
         "Look Up",
         "Listen",
         "Pin Window",
+        "Language Support",
     ]
     let expectedIcons: [UsageGuideIcon] = [
         .systemSymbol(name: "text.cursor", clockwiseRotationDegrees: 0),
@@ -47,10 +50,14 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() {
         .text("📖"),
         .systemSymbol(name: "speaker.wave.2.fill", clockwiseRotationDegrees: 0),
         .systemSymbol(name: "pin", clockwiseRotationDegrees: 45),
+        .systemSymbol(name: "globe", clockwiseRotationDegrees: 0),
     ]
 
     // Act
-    let items = UsageGuideItem.make(shortcut: .commandShiftT)
+    let items = UsageGuideItem.make(
+        shortcut: .commandShiftT,
+        localization: testEnglishLocalization
+    )
 
     // Assert
     #expect(items.map(\.id) == expectedIdentifiers)
@@ -62,13 +69,23 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() {
         items[2].description
             == "Select text in the translation panel, then click the book."
     )
+    let languageSupport = try #require(
+        items.first { $0.id == "languageSupport" }
+    )
+    #expect(
+        languageSupport.description
+            == "Interface language support matches macOS. macOS determines which languages can be translated between."
+    )
 }
 
 @Test @MainActor
 func test_usageGuideView_when_rendered_then_uses_readableWidth() {
     // Arrange
     let hostingView = NSHostingView(
-        rootView: UsageGuideView(shortcut: .commandShiftT)
+        rootView: UsageGuideView(
+            shortcut: .commandShiftT,
+            localization: testEnglishLocalization
+        )
     )
 
     // Act

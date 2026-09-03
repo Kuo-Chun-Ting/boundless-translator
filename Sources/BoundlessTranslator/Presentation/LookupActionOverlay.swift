@@ -46,8 +46,19 @@ final class LookupActionOverlay {
         !button.isHidden
     }
 
-    init(target: AnyObject, action: Selector) {
+    init(
+        target: AnyObject,
+        action: Selector,
+        localization: AppLocalization
+    ) {
         configureButton(target: target, action: action)
+        updateLocalization(localization)
+    }
+
+    func updateLocalization(_ localization: AppLocalization) {
+        let label = localization.string("lookup.action")
+        button.toolTip = label
+        button.setAccessibilityLabel(label)
     }
 
     func attach(to containerView: NSView?) {
@@ -105,7 +116,6 @@ final class LookupActionOverlay {
     }
 
     private func configureButton(target: AnyObject, action: Selector) {
-        let label = "Look Up in Dictionary"
         button.title = "📖"
         button.image = nil
         button.font = NSFont(name: "Apple Color Emoji", size: 16)
@@ -113,8 +123,6 @@ final class LookupActionOverlay {
         button.controlSize = .small
         button.target = target
         button.action = action
-        button.toolTip = label
-        button.setAccessibilityLabel(label)
         button.isHidden = true
     }
 

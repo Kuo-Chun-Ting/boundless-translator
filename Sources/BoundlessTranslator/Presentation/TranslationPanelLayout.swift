@@ -26,11 +26,12 @@ struct TranslationPanelLayout {
 
     func metrics(
         sourceText: String,
-        status: TranslationStatus
+        status: TranslationStatus,
+        localization: AppLocalization
     ) -> TranslationPanelMetrics {
         let idealContentHeight = max(
             measuredHeight(for: sourceText),
-            resultHeight(for: status)
+            resultHeight(for: status, localization: localization)
         )
         return makeMetrics(
             idealContentHeight: idealContentHeight,
@@ -59,16 +60,19 @@ struct TranslationPanelLayout {
         )
     }
 
-    private func resultHeight(for status: TranslationStatus) -> CGFloat {
+    private func resultHeight(
+        for status: TranslationStatus,
+        localization: AppLocalization
+    ) -> CGFloat {
         switch status {
         case .idle:
-            measuredHeight(for: "Select text and use the translation shortcut to translate it.")
+            measuredHeight(for: localization.string("panel.idle"))
         case .translating:
             TranslationPanelStyle.contentFont.pointSize
         case .translated(let output):
             measuredHeight(for: output.translatedText)
         case .failed(let failure):
-            measuredHeight(for: failure.message) + 52
+            measuredHeight(for: failure.message(localization: localization)) + 52
         }
     }
 

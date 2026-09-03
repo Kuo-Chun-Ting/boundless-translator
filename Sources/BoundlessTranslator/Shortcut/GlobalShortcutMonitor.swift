@@ -13,6 +13,21 @@ enum GlobalShortcutError: LocalizedError {
             "The keyboard shortcut could not be registered (\(status)). It may be used by another app."
         }
     }
+
+    func message(localization: AppLocalization) -> String {
+        switch self {
+        case .eventHandlerInstallationFailed(let status):
+            localization.string(
+                "shortcutError.installation",
+                arguments: String(status)
+            )
+        case .registrationFailed(let status):
+            localization.string(
+                "shortcutError.registration",
+                arguments: String(status)
+            )
+        }
+    }
 }
 
 @MainActor

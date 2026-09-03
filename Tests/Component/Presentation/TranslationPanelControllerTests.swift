@@ -243,6 +243,35 @@ func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCurs
     fixture.panel.orderOut(nil)
 }
 
+@Test @MainActor
+func test_languageIdentifier_when_changed_then_updatesOpenTranslationPanelToolbar() throws {
+    // Arrange
+    let suiteName = "TranslationPanelLanguageTests.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defaults.removePersistentDomain(forName: suiteName)
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+    let interfaceLanguageSettings = InterfaceLanguageSettings(
+        defaults: defaults,
+        preferredLanguageIdentifiers: { ["en"] }
+    )
+    let fixture = try makeTranslationPanelFixture(
+        interfaceLanguageSettings: interfaceLanguageSettings
+    )
+    let pinButton = try #require(
+        fixture.panel.toolbar?.items.first {
+            $0.itemIdentifier == .pinPanel
+        }?.view as? NSButton
+    )
+    #expect(pinButton.toolTip == "Pin Window")
+
+    // Act
+    interfaceLanguageSettings.languageIdentifier = "zh-Hant"
+
+    // Assert
+    #expect(pinButton.toolTip == "釘選視窗")
+    fixture.panel.orderOut(nil)
+}
+
 private struct TranslationPanelTestFixture {
     let application: NSApplication
     let applicationNotificationCenter: NotificationCenter
@@ -263,7 +292,8 @@ private func pinPanel(_ panel: TranslationPanel) throws {
 @MainActor
 private func makeTranslationPanelFixture(
     sourceText: String = "Hello",
-    speechPlayer: any SpeechPlaying = PanelControllerSpeechPlayerMock()
+    speechPlayer: any SpeechPlaying = PanelControllerSpeechPlayerMock(),
+    interfaceLanguageSettings: InterfaceLanguageSettings? = nil
 ) throws -> TranslationPanelTestFixture {
     let application = NSApplication.shared
     let applicationNotificationCenter = NotificationCenter()
@@ -280,7 +310,9 @@ private func makeTranslationPanelFixture(
     )
     let controller = TranslationPanelController(
         applicationNotificationCenter: applicationNotificationCenter,
-        speechPlayer: speechPlayer
+        speechPlayer: speechPlayer,
+        interfaceLanguageSettings: interfaceLanguageSettings
+            ?? makeTestInterfaceLanguageSettings()
     )
     controller.show(
         coordinator: coordinator,

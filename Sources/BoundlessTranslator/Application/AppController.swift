@@ -3,15 +3,19 @@ import AppKit
 @MainActor
 final class AppController {
     let settings = TranslationSettings()
+    let interfaceLanguageSettings: InterfaceLanguageSettings
 
     private let coordinator = TranslationCoordinator()
-    private let panelController = TranslationPanelController()
+    private lazy var panelController = TranslationPanelController(
+        interfaceLanguageSettings: interfaceLanguageSettings
+    )
     private let supportedLanguageCatalog = SupportedLanguageCatalog()
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
         self?.handleShortcut()
     }
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
+        interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: shortcutController,
         supportedLanguageCatalog: supportedLanguageCatalog
     )
@@ -27,17 +31,23 @@ final class AppController {
             fallbackReader: ClipboardSelectedTextReader()
         ),
         clipboardImageReader: any ClipboardImageReading = PasteboardClipboardImageReader(),
-        imageWorkspaceController: any ImageWorkspaceControlling = ImageWorkspaceWindowController(),
+        imageWorkspaceController: (any ImageWorkspaceControlling)? = nil,
+        interfaceLanguageSettings: InterfaceLanguageSettings = InterfaceLanguageSettings(),
         sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
             minimumConfidence: 0.60,
             languageIdentifier: NaturalLanguageIdentifier()
         )
     ) {
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         self.clipboardImageReader = clipboardImageReader
-        self.imageWorkspaceController = imageWorkspaceController
+        let resolvedImageWorkspaceController = imageWorkspaceController
+            ?? ImageWorkspaceWindowController(
+                interfaceLanguageSettings: interfaceLanguageSettings
+            )
+        self.imageWorkspaceController = resolvedImageWorkspaceController
         self.selectedTextReader = SelectedTextResolver(
             primaryReader: ImageWorkspaceSelectionReader(
-                provider: imageWorkspaceController
+                provider: resolvedImageWorkspaceController
             ),
             fallbackReader: selectedTextReader
         )
@@ -48,7 +58,11 @@ final class AppController {
         do {
             try shortcutController.start()
         } catch {
-            showError(error.localizedDescription)
+            if let shortcutError = error as? GlobalShortcutError {
+                showError(.globalShortcut(shortcutError))
+            } else {
+                showError(.verbatim(error.localizedDescription))
+            }
         }
 
         Task {
@@ -120,7 +134,7 @@ final class AppController {
         return .none
     }
 
-    func showError(_ message: String) {
+    private func showError(_ message: SelectionErrorMessage) {
         panelController.showError(
             message: message,
             pointerLocation: NSEvent.mouseLocation
@@ -146,9 +160,7 @@ final class AppController {
                 supportedLanguages: supportedLanguages,
                 suggestedLanguageIdentifier: suggestedLanguageIdentifier
             ) else {
-                showError(
-                    "No translation languages are available. Check your macOS language settings and try again."
-                )
+                showError(.translationLanguagesUnavailable)
                 return
             }
 

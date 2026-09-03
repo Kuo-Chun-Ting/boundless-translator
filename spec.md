@@ -50,10 +50,21 @@ Only one shortcut request runs at a time.
 
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the active screen.
+- Present Preferences as one level of labeled rows without section headings.
+- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
+- Group Translate From and Translate To in the first settings card, then Keyboard Shortcut and Language in the second.
+- Use macOS semantic colors to distinguish the window background from settings cards in light and dark appearances.
+- Fit all settings without scrolling or unused vertical space.
+- Configure the interface language independently from translation languages.
+- Follow the current macOS interface language by default.
+- Allow the user to override the interface with any language localized by macOS, and keep that choice when the macOS language changes.
+- Display each interface-language option as its native name followed by its name in the current interface language.
+- Show the effective macOS interface language beside System Default.
+- Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
 - Configure the single global translation shortcut, defaulting to `Command-Shift-T`.
-- Show a compact Usage popover whose shortcut instructions reflect the current shortcut.
-- Provide a Quit action inside Preferences when the menu bar item is unavailable.
+- Open the compact Usage popover from a standard macOS Help button at the bottom right.
+- Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
 
 ## Architecture
 
@@ -65,6 +76,9 @@ Only one shortcut request runs at a time.
 - `Speech` owns language support and source or target playback state.
 - `Presentation` owns translation-window layout, lifecycle, dismissal, pinning, language controls, and Lookup presentation.
 - `Settings` owns Preferences composition and persisted translation defaults.
+- `Settings` owns the persisted interface-language preference and resolves whether the interface follows macOS or uses an explicit language.
+- Interface localization covers every language localized by macOS and remains independent from Translation framework language availability.
+- Usage explains that interface-language coverage and translation-language availability follow macOS support.
 - `Shortcut` owns shortcut recording, persistence, and global registration.
 
 Platform adapters remain behind focused protocols so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals.

@@ -9,6 +9,7 @@ struct PreferencesActionButton: NSViewRepresentable {
 
     let style: Style
     let accessibilityIdentifier: String
+    var accessibilityLabel: String? = nil
     let action: @MainActor @Sendable () -> Void
 
     func makeCoordinator() -> Coordinator {
@@ -35,7 +36,7 @@ struct PreferencesActionButton: NSViewRepresentable {
         case .help:
             button.title = ""
             button.bezelStyle = .helpButton
-            button.setAccessibilityLabel("Show Usage")
+            button.setAccessibilityLabel(accessibilityLabel ?? "Show Usage")
         case .standard(let title):
             button.title = title
             button.bezelStyle = .rounded

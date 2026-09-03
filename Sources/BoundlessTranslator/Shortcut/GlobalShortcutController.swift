@@ -2,6 +2,11 @@ import AppKit
 import Combine
 import Foundation
 
+enum GlobalShortcutFailure {
+    case invalidCandidate
+    case monitor(Error)
+}
+
 @MainActor
 final class GlobalShortcutController: ObservableObject {
     typealias MonitorFactory = @MainActor (
@@ -10,7 +15,7 @@ final class GlobalShortcutController: ObservableObject {
     ) -> any GlobalShortcutMonitoring
 
     @Published private(set) var definition: GlobalShortcutDefinition
-    @Published private(set) var errorMessage: String?
+    @Published private(set) var failure: GlobalShortcutFailure?
 
     private let defaults: UserDefaults
     private let makeMonitor: MonitorFactory
@@ -39,16 +44,16 @@ final class GlobalShortcutController: ObservableObject {
         do {
             try monitor.start()
             self.monitor = monitor
-            errorMessage = nil
+            failure = nil
         } catch {
-            errorMessage = error.localizedDescription
+            failure = .monitor(error)
             throw error
         }
     }
 
     func updateShortcut(_ candidate: GlobalShortcutDefinition) {
         guard candidate.isValid else {
-            errorMessage = "Use Command, Option, or Control with another key."
+            failure = .invalidCandidate
             return
         }
         guard candidate != definition else {
@@ -64,18 +69,18 @@ final class GlobalShortcutController: ObservableObject {
             try candidateMonitor.start()
             monitor = candidateMonitor
             definition = candidate
-            errorMessage = nil
+            failure = nil
             persist(candidate)
         } catch {
             restore(previousDefinition)
-            errorMessage = error.localizedDescription
+            failure = .monitor(error)
         }
     }
 
     func beginRecording() {
         monitor?.stop()
         monitor = nil
-        errorMessage = nil
+        failure = nil
     }
 
     func cancelRecording() {
@@ -96,7 +101,20 @@ final class GlobalShortcutController: ObservableObject {
         do {
             try start()
         } catch {
-            errorMessage = error.localizedDescription
+            failure = .monitor(error)
+        }
+    }
+
+    func failureMessage(localization: AppLocalization) -> String? {
+        switch failure {
+        case .invalidCandidate:
+            return localization.string("shortcut.invalid")
+        case .monitor(let error as GlobalShortcutError):
+            return error.message(localization: localization)
+        case .monitor(let error):
+            return error.localizedDescription
+        case nil:
+            return nil
         }
     }
 

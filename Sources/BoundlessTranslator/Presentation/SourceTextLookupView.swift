@@ -31,9 +31,11 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     private let dictionaryPresenter: any DictionaryDefinitionPresenting
     private let scrollView = OverflowAwareScrollView()
     private let textView = TranslationTextViewFactory.make()
+    private var localization: AppLocalization
     private lazy var lookupActionOverlay = LookupActionOverlay(
         target: self,
-        action: #selector(lookUpSelection(_:))
+        action: #selector(lookUpSelection(_:)),
+        localization: localization
     )
     private var lookupSelection: DictionaryLookupSelection?
     private var isSourceTextActive = false
@@ -44,9 +46,11 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 
     init(
         dictionaryPresenter: any DictionaryDefinitionPresenting =
-            AppleDictionaryDefinitionPresenter()
+            AppleDictionaryDefinitionPresenter(),
+        localization: AppLocalization
     ) {
         self.dictionaryPresenter = dictionaryPresenter
+        self.localization = localization
         super.init(frame: .zero)
 
         configureScrollView()
@@ -100,6 +104,11 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         textView.string = text
         textView.setSelectedRange(NSRange(location: 0, length: 0))
         updateSelection(textView.selectedRange())
+    }
+
+    func updateLocalization(_ localization: AppLocalization) {
+        self.localization = localization
+        lookupActionOverlay.updateLocalization(localization)
     }
 
     func updateSelection(_ selectedRange: NSRange) {
@@ -205,9 +214,18 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 
 struct SelectableSourceTextView: NSViewRepresentable {
     let text: String
+    let localization: AppLocalization
+
+    init(
+        text: String,
+        localization: AppLocalization
+    ) {
+        self.text = text
+        self.localization = localization
+    }
 
     func makeNSView(context: Context) -> SourceTextLookupView {
-        let view = SourceTextLookupView()
+        let view = SourceTextLookupView(localization: localization)
         view.updateText(text)
         return view
     }
@@ -217,5 +235,6 @@ struct SelectableSourceTextView: NSViewRepresentable {
         context: Context
     ) {
         nsView.updateText(text)
+        nsView.updateLocalization(localization)
     }
 }

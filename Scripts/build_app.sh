@@ -40,6 +40,9 @@ swift build \
     --security-path "${TEMP_ROOT}/security"
 
 cp "${SCRATCH_PATH}/release/BoundlessTranslator" "${MACOS_PATH}/BoundlessTranslator"
+cp -R \
+    "${SCRATCH_PATH}/release/BoundlessTranslator_BoundlessTranslator.bundle/"*.lproj \
+    "${RESOURCES_PATH}/"
 cp "${PROJECT_ROOT}/Resources/Info.plist" "${CONTENTS_PATH}/Info.plist"
 cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
 

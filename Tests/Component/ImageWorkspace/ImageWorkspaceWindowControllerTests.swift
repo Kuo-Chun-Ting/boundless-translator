@@ -70,6 +70,30 @@ func test_windowWillClose_whenWorkspaceCloses_then_clearsSelection() {
     #expect(fixture.content.clearSelectionCount == 1)
 }
 
+@Test @MainActor
+func test_languageIdentifier_when_changed_then_updatesOpenImageWorkspaceTitle() throws {
+    // Arrange
+    let suiteName = "ImageWorkspaceLanguageTests.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defaults.removePersistentDomain(forName: suiteName)
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+    let interfaceLanguageSettings = InterfaceLanguageSettings(
+        defaults: defaults,
+        preferredLanguageIdentifiers: { ["en"] }
+    )
+    let fixture = makeImageWorkspaceFixture(
+        interfaceLanguageSettings: interfaceLanguageSettings
+    )
+    let window = try #require(fixture.controller.window)
+    #expect(window.title == "Clipboard Image")
+
+    // Act
+    interfaceLanguageSettings.languageIdentifier = "zh-Hant"
+
+    // Assert
+    #expect(window.title == "剪貼簿圖片")
+}
+
 @MainActor
 private struct ImageWorkspaceFixture {
     let controller: ImageWorkspaceWindowController
@@ -78,13 +102,16 @@ private struct ImageWorkspaceFixture {
 
 @MainActor
 private func makeImageWorkspaceFixture(
-    visibleFrame: CGRect = CGRect(x: 0, y: 0, width: 1_200, height: 800)
+    visibleFrame: CGRect = CGRect(x: 0, y: 0, width: 1_200, height: 800),
+    interfaceLanguageSettings: InterfaceLanguageSettings? = nil
 ) -> ImageWorkspaceFixture {
     let content = ImageWorkspaceContentStub()
     let controller = ImageWorkspaceWindowController(
         content: content,
         visibleFrameForPointer: { _ in visibleFrame },
-        activateApplication: {}
+        activateApplication: {},
+        interfaceLanguageSettings: interfaceLanguageSettings
+            ?? makeTestInterfaceLanguageSettings()
     )
     return ImageWorkspaceFixture(controller: controller, content: content)
 }

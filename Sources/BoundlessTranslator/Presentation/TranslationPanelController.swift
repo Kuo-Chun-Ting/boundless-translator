@@ -9,27 +9,25 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let panelState: TranslationPanelState
     private let panel: TranslationPanel
     private let speechController: TranslationSpeechController
+    private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let applicationNotificationCenter: NotificationCenter
     private lazy var toolbarController = TranslationPanelToolbarController(
-        panelState: panelState
+        panelState: panelState,
+        interfaceLanguageSettings: interfaceLanguageSettings
     )
     private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationPanelKind.translation
     private var mouseDownMonitor: MouseDownMonitor?
 
-    override convenience init() {
-        self.init(
-            applicationNotificationCenter: NSWorkspace.shared.notificationCenter
-        )
-    }
-
     init(
-        applicationNotificationCenter: NotificationCenter,
-        speechPlayer: any SpeechPlaying = AppleSpeechPlayer()
+        applicationNotificationCenter: NotificationCenter = NSWorkspace.shared.notificationCenter,
+        speechPlayer: any SpeechPlaying = AppleSpeechPlayer(),
+        interfaceLanguageSettings: InterfaceLanguageSettings
     ) {
         panelState = TranslationPanelState()
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
         speechController = TranslationSpeechController(player: speechPlayer)
+        self.interfaceLanguageSettings = interfaceLanguageSettings
         self.applicationNotificationCenter = applicationNotificationCenter
         super.init()
         panel.delegate = self
@@ -56,12 +54,14 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     ) {
         let initialSize = translationLayout.metrics(
             sourceText: coordinator.request?.text ?? "",
-            status: coordinator.status
+            status: coordinator.status,
+            localization: localization
         ).size
         present(
             TranslationPanelView(
                 coordinator: coordinator,
                 speechController: speechController,
+                interfaceLanguageSettings: interfaceLanguageSettings,
                 supportedLanguages: supportedLanguages,
                 layout: translationLayout,
                 onPreferredSizeChange: { [weak self] size in
@@ -74,9 +74,15 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         )
     }
 
-    func showError(message: String, pointerLocation: CGPoint) {
+    func showError(
+        message: SelectionErrorMessage,
+        pointerLocation: CGPoint
+    ) {
         present(
-            SelectionErrorView(message: message),
+            SelectionErrorView(
+                message: message,
+                interfaceLanguageSettings: interfaceLanguageSettings
+            ),
             kind: .error,
             pointerLocation: pointerLocation,
             panelSize: auxiliaryPanelSize
@@ -95,6 +101,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
                 selectedText: selectedText,
                 selection: selection,
                 supportedLanguages: supportedLanguages,
+                interfaceLanguageSettings: interfaceLanguageSettings,
                 onCancel: { [weak self] in
                     self?.dismiss(nil)
                 },
@@ -185,6 +192,12 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
             panel.standardWindowButton(.zoomButton)?.isHidden = true
         }
+    }
+
+    private var localization: AppLocalization {
+        AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+        )
     }
 
     private func dismissForCancelOperation(_ sender: Any?) {

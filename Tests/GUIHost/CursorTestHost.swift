@@ -7,7 +7,9 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
     private let panel = TranslationPanel(
         contentSize: NSSize(width: 520, height: 420)
     )
-    private let sourceView = SourceTextLookupView()
+    private let sourceView = SourceTextLookupView(
+        localization: AppLocalization(languageIdentifier: "en")
+    )
     private weak var lookupButton: PointingHandButton?
     private var stateTimer: Timer?
     private var previousButtonFrame: NSRect?

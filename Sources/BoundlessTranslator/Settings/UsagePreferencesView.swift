@@ -2,34 +2,44 @@ import SwiftUI
 
 struct UsagePreferencesView: View {
     let shortcut: GlobalShortcutDefinition
+    let localization: AppLocalization
 
     @State private var isPresentingGuide = false
 
     var body: some View {
-        Section {
-            LabeledContent("Usage") {
-                PreferencesActionButton(
-                    style: .help,
-                    accessibilityIdentifier: "usageHelpButton",
-                    action: {
-                        isPresentingGuide.toggle()
-                    }
-                )
-                .fixedSize()
-                .popover(isPresented: $isPresentingGuide, arrowEdge: .trailing) {
-                    UsageGuideView(shortcut: shortcut)
-                }
+        PreferencesActionButton(
+            style: .help,
+            accessibilityIdentifier: "usageHelpButton",
+            accessibilityLabel: localization.string("usage.show"),
+            action: {
+                isPresentingGuide.toggle()
             }
+        )
+        .fixedSize()
+        .popover(isPresented: $isPresentingGuide, arrowEdge: .trailing) {
+            UsageGuideView(
+                shortcut: shortcut,
+                localization: localization
+            )
         }
     }
 }
 
 struct UsageGuideView: View {
     let shortcut: GlobalShortcutDefinition
+    let localization: AppLocalization
+
+    init(
+        shortcut: GlobalShortcutDefinition,
+        localization: AppLocalization
+    ) {
+        self.shortcut = shortcut
+        self.localization = localization
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Usage")
+            Text(verbatim: localization.string("usage.label"))
                 .font(.title3.weight(.semibold))
 
             ForEach(items) { item in
@@ -39,9 +49,9 @@ struct UsageGuideView: View {
                         .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(item.title)
+                        Text(verbatim: item.title)
                             .font(.headline)
-                        Text(item.description)
+                        Text(verbatim: item.description)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.leading)
@@ -58,7 +68,10 @@ struct UsageGuideView: View {
     }
 
     private var items: [UsageGuideItem] {
-        UsageGuideItem.make(shortcut: shortcut)
+        UsageGuideItem.make(
+            shortcut: shortcut,
+            localization: localization
+        )
     }
 
     @ViewBuilder
@@ -85,7 +98,10 @@ struct UsageGuideItem: Identifiable {
     let title: String
     let description: String
 
-    static func make(shortcut: GlobalShortcutDefinition) -> [UsageGuideItem] {
+    static func make(
+        shortcut: GlobalShortcutDefinition,
+        localization: AppLocalization
+    ) -> [UsageGuideItem] {
         let shortcutName = shortcut.displayName
         return [
             UsageGuideItem(
@@ -94,8 +110,11 @@ struct UsageGuideItem: Identifiable {
                     name: "text.cursor",
                     clockwiseRotationDegrees: 0
                 ),
-                title: "Translate Text",
-                description: "Select text and press \(shortcutName)."
+                title: localization.string("usage.translateText.title"),
+                description: localization.string(
+                    "usage.translateText.description",
+                    arguments: shortcutName
+                )
             ),
             UsageGuideItem(
                 id: "translateImageText",
@@ -103,14 +122,18 @@ struct UsageGuideItem: Identifiable {
                     name: "photo",
                     clockwiseRotationDegrees: 0
                 ),
-                title: "Translate Image Text",
-                description: "Copy an image, press \(shortcutName), select its text, then press \(shortcutName) again."
+                title: localization.string("usage.translateImageText.title"),
+                description: localization.string(
+                    "usage.translateImageText.description",
+                    arguments: shortcutName,
+                    shortcutName
+                )
             ),
             UsageGuideItem(
                 id: "lookUp",
                 icon: .text("📖"),
-                title: "Look Up",
-                description: "Select text in the translation panel, then click the book."
+                title: localization.string("usage.lookUp.title"),
+                description: localization.string("usage.lookUp.description")
             ),
             UsageGuideItem(
                 id: "listen",
@@ -118,8 +141,8 @@ struct UsageGuideItem: Identifiable {
                     name: "speaker.wave.2.fill",
                     clockwiseRotationDegrees: 0
                 ),
-                title: "Listen",
-                description: "Click the speaker beside either language."
+                title: localization.string("usage.listen.title"),
+                description: localization.string("usage.listen.description")
             ),
             UsageGuideItem(
                 id: "pinWindow",
@@ -127,8 +150,19 @@ struct UsageGuideItem: Identifiable {
                     name: "pin",
                     clockwiseRotationDegrees: 45
                 ),
-                title: "Pin Window",
-                description: "Click the pin to keep the translation visible."
+                title: localization.string("usage.pinWindow.title"),
+                description: localization.string("usage.pinWindow.description")
+            ),
+            UsageGuideItem(
+                id: "languageSupport",
+                icon: .systemSymbol(
+                    name: "globe",
+                    clockwiseRotationDegrees: 0
+                ),
+                title: localization.string("usage.languageSupport.title"),
+                description: localization.string(
+                    "usage.languageSupport.description"
+                )
             ),
         ]
     }
