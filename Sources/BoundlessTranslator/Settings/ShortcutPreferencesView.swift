@@ -4,7 +4,7 @@ struct ShortcutPreferencesView: View {
     @ObservedObject var controller: GlobalShortcutController
 
     var body: some View {
-        Section("Keyboard Shortcut") {
+        Section {
             LabeledContent("Translate") {
                 ShortcutRecorderControl(
                     definition: controller.definition,
@@ -20,6 +20,10 @@ struct ShortcutPreferencesView: View {
                     .font(.caption)
                     .foregroundStyle(.red)
             }
+        } header: {
+            Text("Keyboard Shortcut")
+                .font(.headline)
+                .foregroundStyle(.primary)
         }
     }
 }

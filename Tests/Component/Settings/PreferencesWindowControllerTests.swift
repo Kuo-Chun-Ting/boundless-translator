@@ -13,6 +13,8 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
 
     // Assert
     #expect(window.collectionBehavior.contains(.moveToActiveSpace))
+    #expect(window.title == "Boundless Translator Settings")
+    #expect(window.contentLayoutRect.size == CGSize(width: 430, height: 350))
 }
 
 @Test @MainActor

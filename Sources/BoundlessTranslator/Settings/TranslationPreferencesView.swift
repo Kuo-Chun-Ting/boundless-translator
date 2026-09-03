@@ -7,7 +7,7 @@ struct TranslationPreferencesView: View {
     private let languageNames = LanguageDisplayNameFormatter()
 
     var body: some View {
-        Section("Translation") {
+        Section {
             Picker("From", selection: $settings.sourceLanguageIdentifier) {
                 Text("Detect Automatically")
                     .tag(nil as String?)
@@ -26,6 +26,10 @@ struct TranslationPreferencesView: View {
                 }
             }
             .pickerStyle(.menu)
+        } header: {
+            Text("Translation")
+                .font(.headline)
+                .foregroundStyle(.primary)
         }
         .task {
             _ = await supportedLanguageCatalog.load()

@@ -1,67 +1,92 @@
 import AppKit
+import SwiftUI
 import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_preferencesView_when_rendered_then_shows_usage_guidance() throws {
+func test_preferencesView_when_rendered_then_shows_usage_help_button() throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         shortcutController: makeTestShortcutController()
     )
     let contentView = try #require(controller.window?.contentView)
-    contentView.appearance = NSAppearance(named: .darkAqua)
 
     // Act
     contentView.layoutSubtreeIfNeeded()
-    let image = try #require(
-        contentView.bitmapImageRepForCachingDisplay(in: contentView.bounds)
-    )
-    contentView.cacheDisplay(in: contentView.bounds, to: image)
-    let guidanceRows = [
-        NSRect(x: 24, y: 224, width: 382, height: 24),
-        NSRect(x: 24, y: 265, width: 382, height: 24),
-        NSRect(x: 24, y: 306, width: 382, height: 24),
-    ]
+    let usageHelpButtons = findUsageViews(
+        in: contentView,
+        accessibilityIdentifier: "usageHelpButton"
+    ).compactMap { $0 as? NSButton }
 
     // Assert
-    #expect(contentView.bounds.height >= 300)
+    #expect(usageHelpButtons.count == 1)
+    #expect(usageHelpButtons.first?.bezelStyle == .helpButton)
+}
+
+@Test @MainActor
+func test_usageGuideItems_when_created_then_describes_every_current_feature() {
+    // Arrange
+    let expectedIdentifiers = [
+        "translateText",
+        "translateImageText",
+        "lookUp",
+        "listen",
+        "pinWindow",
+    ]
+    let expectedTitles = [
+        "Translate Text",
+        "Translate Image Text",
+        "Look Up",
+        "Listen",
+        "Pin Window",
+    ]
+    let expectedIcons: [UsageGuideIcon] = [
+        .systemSymbol(name: "text.cursor", clockwiseRotationDegrees: 0),
+        .systemSymbol(name: "photo", clockwiseRotationDegrees: 0),
+        .text("📖"),
+        .systemSymbol(name: "speaker.wave.2.fill", clockwiseRotationDegrees: 0),
+        .systemSymbol(name: "pin", clockwiseRotationDegrees: 45),
+    ]
+
+    // Act
+    let items = UsageGuideItem.make(shortcut: .commandShiftT)
+
+    // Assert
+    #expect(items.map(\.id) == expectedIdentifiers)
+    #expect(items.map(\.title) == expectedTitles)
+    #expect(items.map(\.icon) == expectedIcons)
+    #expect(items[0].description.contains("⇧⌘T"))
+    #expect(items[1].description.components(separatedBy: "⇧⌘T").count == 3)
     #expect(
-        guidanceRows.allSatisfy {
-            brightPixelCount(in: $0, image: image) > 20
-        }
+        items[2].description
+            == "Select text in the translation panel, then click the book."
     )
 }
 
-private func brightPixelCount(
-    in rect: NSRect,
-    image: NSBitmapImageRep
-) -> Int {
-    let scaleX = CGFloat(image.pixelsWide) / image.size.width
-    let scaleY = CGFloat(image.pixelsHigh) / image.size.height
-    let pixelRect = NSRect(
-        x: rect.minX * scaleX,
-        y: rect.minY * scaleY,
-        width: rect.width * scaleX,
-        height: rect.height * scaleY
-    ).integral
-    var count = 0
+@Test @MainActor
+func test_usageGuideView_when_rendered_then_uses_readableWidth() {
+    // Arrange
+    let hostingView = NSHostingView(
+        rootView: UsageGuideView(shortcut: .commandShiftT)
+    )
 
-    for y in Int(pixelRect.minY)..<Int(pixelRect.maxY) {
-        for x in Int(pixelRect.minX)..<Int(pixelRect.maxX) {
-            guard let color = image.colorAt(x: x, y: y)?.usingColorSpace(.sRGB) else {
-                continue
-            }
-            let luminance = (
-                color.redComponent
-                    + color.greenComponent
-                    + color.blueComponent
-            ) / 3
-            if luminance > 0.40 {
-                count += 1
-            }
-        }
+    // Act
+    hostingView.layoutSubtreeIfNeeded()
+
+    // Assert
+    #expect(abs(hostingView.fittingSize.width - 520) < 0.5)
+}
+
+@MainActor
+private func findUsageViews(
+    in view: NSView,
+    accessibilityIdentifier: String
+) -> [NSView] {
+    let current = view.accessibilityIdentifier() == accessibilityIdentifier
+        ? [view]
+        : []
+    return current + view.subviews.flatMap {
+        findUsageViews(in: $0, accessibilityIdentifier: accessibilityIdentifier)
     }
-
-    return count
 }

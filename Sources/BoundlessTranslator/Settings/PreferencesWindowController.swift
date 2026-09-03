@@ -10,25 +10,29 @@ final class PreferencesWindowController: NSWindowController {
         settings: TranslationSettings,
         shortcutController: GlobalShortcutController,
         supportedLanguageCatalog: SupportedLanguageCatalog = SupportedLanguageCatalog(),
-        activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil
+        activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
+        quitApplication: @escaping @MainActor @Sendable () -> Void = {
+            NSApplication.shared.terminate(nil)
+        }
     ) {
         self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
             NSScreen.main?.visibleFrame
         }
         let window = NSWindow(
-            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 440)),
+            contentRect: CGRect(origin: .zero, size: CGSize(width: 430, height: 350)),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
         )
-        window.title = "Preferences"
+        window.title = "Boundless Translator Settings"
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
                 shortcutController: shortcutController,
-                supportedLanguageCatalog: supportedLanguageCatalog
+                supportedLanguageCatalog: supportedLanguageCatalog,
+                quitApplication: quitApplication
             )
         )
         super.init(window: window)
