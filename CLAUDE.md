@@ -22,6 +22,12 @@
 
 不得存放或提交簽章私鑰。
 
+## Spec
+
+- `spec.md` 是目前產品行為與架構的唯一規格文件。
+- 修改產品行為或架構後，若 `spec.md` 的描述受到影響，完成開發前同步更新。
+- 使用 Superpowers 產生設計時，將核准內容整合至 `spec.md`；不要在 repo 保留日期型或歷史 spec。
+
 ## App icon
 
 - 修改來源 PNG 後，執行 `Scripts/generate_brand_icons.swift .` 產生 ICNS。

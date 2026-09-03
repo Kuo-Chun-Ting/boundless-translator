@@ -7,17 +7,15 @@ The app runs from the menu bar. Select text in a compatible app, press `Command-
 ## Current Features
 
 - Translate selected text with a global keyboard shortcut.
+- Open clipboard images and select recognized text with macOS Live Text.
 - Read selections through macOS Accessibility, with a clipboard fallback for compatible apps.
 - Detect the source language and request confirmation when confidence is low.
 - Translate with Apple's Translation framework.
 - Change the source or target language for the current translation without changing the defaults.
+- Read the source text or translation aloud with supported macOS voices.
 - Keep a translation visible with a pinnable, resizable result window.
 - Select a word or phrase in the source text and open Apple's Dictionary overlay.
-- Configure default source and target languages from the menu bar.
-
-## Roadmap
-
-- Screenshot and OCR translation for text that cannot be selected or copied.
+- Configure default languages and the global shortcut from Preferences.
 
 ## How It Works
 
@@ -59,6 +57,8 @@ These boundaries keep platform integrations separate from translation and UI log
 5. Press `Command-Shift-T`.
 
 Use the language menus in the result window to retry that translation with a different language pair. Select source text and click the book button to open Apple's Dictionary overlay. Pin the window when you want the result to remain visible while working elsewhere.
+
+To translate text in an image, copy the image and press the shortcut with no text selected. Select text in the Live Text window, then press the shortcut again.
 
 ## Development
 
