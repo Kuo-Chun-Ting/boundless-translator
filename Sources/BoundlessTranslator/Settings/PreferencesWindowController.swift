@@ -32,7 +32,7 @@ final class PreferencesWindowController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        window.backgroundColor = .underPageBackgroundColor
+        window.backgroundColor = .windowBackgroundColor
         window.titlebarAppearsTransparent = true
         window.titlebarSeparatorStyle = .none
         window.collectionBehavior = [.moveToActiveSpace]

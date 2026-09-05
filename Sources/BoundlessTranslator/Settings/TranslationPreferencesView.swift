@@ -39,7 +39,6 @@ struct TranslationPreferencesView: View {
             .pickerStyle(.menu)
 
         }
-        .listRowBackground(Color(nsColor: .controlBackgroundColor))
         .task {
             _ = await supportedLanguageCatalog.load()
         }

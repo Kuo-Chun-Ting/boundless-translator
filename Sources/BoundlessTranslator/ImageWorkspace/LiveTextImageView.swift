@@ -62,6 +62,11 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         overlayView.setContentsRectNeedsUpdate()
     }
 
+    override func viewDidChangeEffectiveAppearance() {
+        super.viewDidChangeEffectiveAppearance()
+        updateBackgroundColor()
+    }
+
     func display(_ image: NSImage) {
         imageGeneration += 1
         let generation = imageGeneration
@@ -106,7 +111,7 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
 
     private func configureSubviews() {
         wantsLayer = true
-        layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        updateBackgroundColor()
 
         imageView.imageScaling = .scaleProportionallyUpOrDown
         imageView.imageAlignment = .alignCenter
@@ -129,6 +134,12 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
             overlayView.topAnchor.constraint(equalTo: imageView.topAnchor),
             overlayView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
         ])
+    }
+
+    private func updateBackgroundColor() {
+        effectiveAppearance.performAsCurrentDrawingAppearance {
+            layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        }
     }
 
     private static func aspectFitRect(

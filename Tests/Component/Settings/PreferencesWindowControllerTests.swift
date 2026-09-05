@@ -3,6 +3,37 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
+func test_appearance_when_switchingLightDarkLight_then_usesOpaqueWindowBackground() async throws {
+    // Arrange
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(),
+        interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
+        shortcutController: makeTestShortcutController()
+    )
+    let window = try #require(controller.window)
+    let contentView = try #require(window.contentView)
+
+    // Act & Assert
+    for name in [NSAppearance.Name.aqua, .darkAqua, .aqua] {
+        window.appearance = NSAppearance(named: name)
+        await Task.yield()
+        contentView.layoutSubtreeIfNeeded()
+        let bitmap = try #require(contentView.bitmapImageRepForCachingDisplay(in: contentView.bounds))
+        contentView.cacheDisplay(in: contentView.bounds, to: bitmap)
+        let contentBackground = try #require(bitmap.colorAt(x: 1, y: 1)?.usingColorSpace(.sRGB))
+        window.effectiveAppearance.performAsCurrentDrawingAppearance {
+            let actual = window.backgroundColor.usingColorSpace(.sRGB)!
+            let expected = NSColor.windowBackgroundColor.usingColorSpace(.sRGB)!
+            #expect(actual == expected)
+            #expect(actual.alphaComponent == 1)
+            #expect(abs(contentBackground.redComponent - expected.redComponent) < 0.02)
+            #expect(abs(contentBackground.greenComponent - expected.greenComponent) < 0.02)
+            #expect(abs(contentBackground.blueComponent - expected.blueComponent) < 0.02)
+        }
+    }
+}
+
+@Test @MainActor
 func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() throws {
     // Arrange & Act
     let controller = PreferencesWindowController(

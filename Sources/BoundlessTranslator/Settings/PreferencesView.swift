@@ -2,8 +2,6 @@ import SwiftUI
 
 enum PreferencesWindowStyle {
     static let contentSize = CGSize(width: 430, height: 280)
-    static let backgroundColor = Color(nsColor: .underPageBackgroundColor)
-    static let cardBackgroundColor = Color(nsColor: .controlBackgroundColor)
 }
 
 struct PreferencesView: View {
@@ -31,7 +29,6 @@ struct PreferencesView: View {
                         settings: interfaceLanguageSettings
                     )
                 }
-                .listRowBackground(PreferencesWindowStyle.cardBackgroundColor)
             }
             .formStyle(.grouped)
             .scrollContentBackground(.hidden)
@@ -60,7 +57,7 @@ struct PreferencesView: View {
             .padding(.top, 4)
             .padding(.bottom, 16)
         }
-        .background(PreferencesWindowStyle.backgroundColor)
+        .background(Color(nsColor: .windowBackgroundColor))
         .frame(
             width: PreferencesWindowStyle.contentSize.width,
             height: PreferencesWindowStyle.contentSize.height

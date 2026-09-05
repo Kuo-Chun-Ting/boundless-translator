@@ -115,6 +115,58 @@ func test_recording_when_startedAndCancelled_then_reportsBothStateChanges() thro
     #expect(recordingCancelled)
 }
 
+@Test @MainActor
+func test_recording_when_windowCloses_then_cancelsAndKeepsOriginalShortcut() {
+    // Arrange
+    var cancellationCount = 0
+    let button = ShortcutRecorderButton(
+        definition: .commandShiftT,
+        localization: testEnglishLocalization,
+        onRecordingCancelled: { cancellationCount += 1 },
+        onShortcutRecorded: { _ in Issue.record("Closing must not save a shortcut") }
+    )
+    let window = NSWindow(
+        contentRect: NSRect(x: 0, y: 0, width: 200, height: 80),
+        styleMask: [.titled, .closable], backing: .buffered, defer: false
+    )
+    window.isReleasedWhenClosed = false
+    window.contentView = button
+    button.beginRecording()
+
+    // Act
+    window.close()
+
+    // Assert
+    #expect(!button.isRecording)
+    #expect(cancellationCount == 1)
+    #expect(button.title == "⇧⌘T")
+}
+
+@Test @MainActor
+func test_recording_when_windowResignsKey_then_cancelsOnlyOnce() {
+    // Arrange
+    var cancellationCount = 0
+    let button = ShortcutRecorderButton(
+        definition: .commandShiftT,
+        localization: testEnglishLocalization,
+        onRecordingCancelled: { cancellationCount += 1 },
+        onShortcutRecorded: { _ in Issue.record("Losing focus must not save a shortcut") }
+    )
+    let window = NSWindow()
+    window.isReleasedWhenClosed = false
+    window.contentView = button
+    button.beginRecording()
+
+    // Act
+    NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: window)
+    window.close()
+
+    // Assert
+    #expect(!button.isRecording)
+    #expect(cancellationCount == 1)
+    #expect(button.title == "⇧⌘T")
+}
+
 private func makeKeyEvent(
     keyCode: UInt16,
     modifierFlags: NSEvent.ModifierFlags,

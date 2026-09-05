@@ -66,6 +66,23 @@ final class ShortcutRecorderButton: NSButton {
         true
     }
 
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        cancelRecording()
+        let center = NotificationCenter.default
+        for name in [NSWindow.willCloseNotification, NSWindow.didResignKeyNotification] {
+            center.removeObserver(self, name: name, object: nil)
+            if let window {
+                center.addObserver(
+                    self,
+                    selector: #selector(cancelRecordingForWindowNotification(_:)),
+                    name: name,
+                    object: window
+                )
+            }
+        }
+    }
+
     func beginRecording() {
         guard !isRecording else {
             return
@@ -156,8 +173,15 @@ final class ShortcutRecorderButton: NSButton {
     }
 
     private func cancelRecording() {
+        guard isRecording else {
+            return
+        }
         finishRecording()
         onRecordingCancelled()
+    }
+
+    @objc private func cancelRecordingForWindowNotification(_ notification: Notification) {
+        cancelRecording()
     }
 
     private func finishRecording() {

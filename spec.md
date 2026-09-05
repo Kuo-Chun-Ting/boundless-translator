@@ -44,6 +44,7 @@ Only one shortcut request runs at a time.
 - Keep the workspace open across app deactivation and translation-window presentation.
 - Replace the displayed image when the shortcut is used with a newer clipboard image.
 - Clear its active selection when the window closes so stale text cannot override later selections.
+- Update the workspace background when macOS appearance changes without replacing the image or resetting its selection.
 - Do not add custom OCR regions, translation overlays, screenshot capture, or image history.
 
 ## Preferences
@@ -53,7 +54,7 @@ Only one shortcut request runs at a time.
 - Present Preferences as one level of labeled rows without section headings.
 - Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
 - Group Translate From and Translate To in the first settings card, then Keyboard Shortcut and Language in the second.
-- Use macOS semantic colors to distinguish the window background from settings cards in light and dark appearances.
+- Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
 - Fit all settings without scrolling or unused vertical space.
 - Configure the interface language independently from translation languages.
 - Follow the current macOS interface language by default.
@@ -63,6 +64,7 @@ Only one shortcut request runs at a time.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
 - Configure the single global translation shortcut, defaulting to `Command-Shift-T`.
+- Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
 - Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
 

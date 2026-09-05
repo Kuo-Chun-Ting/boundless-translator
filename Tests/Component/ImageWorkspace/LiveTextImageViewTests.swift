@@ -4,6 +4,31 @@ import VisionKit
 @testable import BoundlessTranslator
 
 @Test @MainActor
+func test_appearance_when_switchingLightDarkLight_then_updatesBackgroundAndPreservesImage() throws {
+    // Arrange
+    let view = LiveTextImageView(analysisProvider: { _ in nil })
+    let image = NSImage(size: NSSize(width: 400, height: 200))
+    view.display(image)
+    var backgrounds: [CGColor] = []
+
+    // Act & Assert
+    for name in [NSAppearance.Name.aqua, .darkAqua, .aqua] {
+        view.appearance = NSAppearance(named: name)
+        view.displayIfNeeded()
+        let actual = try #require(view.layer?.backgroundColor)
+        var expected: CGColor?
+        view.effectiveAppearance.performAsCurrentDrawingAppearance {
+            expected = NSColor.windowBackgroundColor.cgColor
+        }
+        #expect(actual == expected)
+        #expect(view.imageView.image === image)
+        backgrounds.append(actual)
+    }
+    #expect(backgrounds[0] != backgrounds[1])
+    #expect(backgrounds[0] == backgrounds[2])
+}
+
+@Test @MainActor
 func test_init_whenViewIsCreated_then_composesNativeLiveTextOverlay() {
     // Arrange & Act
     let view = LiveTextImageView(analysisProvider: { _ in nil })
