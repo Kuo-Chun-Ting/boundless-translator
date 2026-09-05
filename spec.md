@@ -83,12 +83,21 @@ Only one shortcut request runs at a time.
 
 Platform adapters remain behind focused protocols so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals.
 
+## Build and Release
+
+- `Scripts/verify.sh` runs all automated tests, builds the App, and verifies its signature. DMGs created by tests are temporary.
+- `Scripts/release_dmg.sh <version>` sets the public version and increments the build number. It builds and verifies the App, then packages and signs the DMG.
+- Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
+- Only a successful release saves `Build/Boundless Translator-<version>.dmg`. A failed release restores the previous version metadata and preserves any existing release DMG.
+- Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
+
 ## Test Layers
 
 - Unit tests cover deterministic logic without visible windows or system input.
 - Component tests cover production components in memory, including state, layout, view hierarchy, and hit testing.
 - GUI tests launch the dedicated test host and validate behavior that depends on real AppKit event routing, such as the final pointer cursor.
-- Deployment tests cover App construction, signing, system frameworks, minimum macOS version, and DMG contents and layout.
+- Deployment tests cover App construction, Developer ID requirements, secure timestamps, system frameworks, minimum macOS version, DMG signing, DMG contents and layout, version updates, and workflow ordering.
+- Notarization flow tests replace Apple network tools with controlled test executables. A real release performs the final Apple notarization and Gatekeeper checks.
 
 Do not test Apple Translation results, Dictionary contents, OCR accuracy, or other framework-owned behavior.
 

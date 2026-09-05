@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h}"
-readonly DEFAULT_APP_PATH="${PROJECT_ROOT}/Build/Boundless Translator.app"
-readonly DEFAULT_DMG_PATH="${PROJECT_ROOT}/Build/Boundless Translator.dmg"
+readonly PROJECT_ROOT="${0:A:h:h:h}"
 readonly BACKGROUND_PATH="${PROJECT_ROOT}/Resources/DMGBackground.png"
+source "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf"
+readonly SIGNING_IDENTITY="${BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY:-${DEFAULT_SIGNING_IDENTITY}}"
 
 if [[ -n "${BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE:-}" ]]; then
     CREATE_DMG_EXECUTABLE="${BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE}"
@@ -14,16 +14,12 @@ else
 fi
 readonly CREATE_DMG_EXECUTABLE
 
-if [[ "$#" -eq 0 ]]; then
-    readonly APP_PATH="${DEFAULT_APP_PATH}"
-    readonly DMG_PATH="${DEFAULT_DMG_PATH}"
-elif [[ "$#" -eq 2 ]]; then
-    readonly APP_PATH="$1"
-    readonly DMG_PATH="$2"
-else
-    print -u2 "Usage: package_dmg.sh [<app-path> <dmg-path>]"
+if [[ "$#" -ne 2 ]]; then
+    print -u2 "Usage: package_dmg.sh <app-path> <dmg-path>"
     exit 1
 fi
+readonly APP_PATH="$1"
+readonly DMG_PATH="$2"
 
 if [[ ! -d "${APP_PATH}" ]]; then
     print -u2 "Source App does not exist: ${APP_PATH}"
@@ -73,7 +69,14 @@ ditto "${APP_PATH}" "${STAGED_APP}"
     "${TEMP_DMG}" \
     "${STAGING_ROOT}"
 
+codesign \
+    --force \
+    --timestamp \
+    --sign "${SIGNING_IDENTITY}" \
+    "${TEMP_DMG}"
+
 hdiutil verify "${TEMP_DMG}" >/dev/null
+codesign --verify --strict --verbose=2 "${TEMP_DMG}"
 mv -f "${TEMP_DMG}" "${DMG_PATH}"
 
 print "Packaged ${DMG_PATH}"

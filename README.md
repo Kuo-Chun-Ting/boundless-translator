@@ -47,36 +47,49 @@ The app interface supports the same languages as macOS. macOS provides translati
 4. Select text in the screenshot window.
 5. Press the keyboard shortcut again.
 
-## Build and Deploy
+## Build and Release
 
-### Development
+### Build the App
 
-Xcode with Swift 6.2 is required.
+Building requires:
+
+- Xcode with Swift 6.2
+- The signing certificate and matching private key in your Mac's Keychain, as configured in `Scripts/Tools/code_signing.conf`
 
 ```bash
 git clone https://github.com/Kuo-Chun-Ting/boundless-translator.git
 cd boundless-translator
-swift test
-swift build
+Scripts/Tools/build_app.sh
 ```
 
-### Release
+This builds and signs `Build/Boundless Translator.app`. Open it to run the app.
 
-Release scripts require the maintainer's signing certificate.
+### Release a DMG
 
-```bash
-Scripts/build_app.sh
-Scripts/verify_app.sh "Build/Boundless Translator.app"
-Scripts/deploy_app.sh
-```
+Release builds the App and packages it as a DMG for sharing. Apple notarization checks the software before distribution.
 
-### DMG
+#### One-time Setup
+
+Install the DMG packaging tool:
 
 ```bash
 brew install create-dmg
-Scripts/package_dmg.sh
 ```
 
-The app is created at `Build/Boundless Translator.app`. The DMG is created at `Build/Boundless Translator.dmg`.
+Save the Apple account credentials used to submit the DMG to Apple. Replace the placeholders with your Apple Account email and Developer Team ID. Enter an app-specific password when prompted:
 
-Users may see a macOS warning when they open this DMG.
+```bash
+xcrun notarytool store-credentials "BoundlessTranslatorNotary" \
+  --apple-id "<apple-id>" \
+  --team-id "<team-id>"
+```
+
+#### Create a Release
+
+Run from the project directory with the version you want to release:
+
+```bash
+Scripts/release_dmg.sh 0.2.0
+```
+
+The finished DMG is saved at `Build/Boundless Translator-0.2.0.dmg` after Apple notarization and Gatekeeper checks pass. Install this DMG to test it before sharing.

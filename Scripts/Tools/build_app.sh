@@ -2,11 +2,12 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h}"
+readonly PROJECT_ROOT="${0:A:h:h:h}"
 readonly BUILD_ROOT="${PROJECT_ROOT}/Build"
 readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
 readonly DEVELOPER_PATH="/Applications/Xcode.app/Contents/Developer"
-readonly SIGNING_IDENTITY="${BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY:-2A650F82E97048C85359EC506D920C5BF684CAEE}"
+source "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf"
+readonly SIGNING_IDENTITY="${BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY:-${DEFAULT_SIGNING_IDENTITY}}"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build.XXXXXX)"
 readonly SCRATCH_PATH="${TEMP_ROOT}/spm"
 readonly STAGED_APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
@@ -50,6 +51,7 @@ plutil -lint "${CONTENTS_PATH}/Info.plist"
 codesign \
     --force \
     --options runtime \
+    --timestamp \
     --sign "${SIGNING_IDENTITY}" \
     "${STAGED_APP_PATH}"
 
