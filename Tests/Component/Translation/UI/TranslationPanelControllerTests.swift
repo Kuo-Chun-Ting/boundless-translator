@@ -286,7 +286,8 @@ private func pinPanel(_ panel: TranslationPanel) throws {
             $0.itemIdentifier == .pinPanel
         }?.view as? NSButton
     )
-    pinButton.performClick(nil)
+    let action = try #require(pinButton.action)
+    #expect(NSApplication.shared.sendAction(action, to: pinButton.target, from: pinButton))
 }
 
 @MainActor
@@ -312,7 +313,8 @@ private func makeTranslationPanelFixture(
         applicationNotificationCenter: applicationNotificationCenter,
         speechPlayer: speechPlayer,
         interfaceLanguageSettings: interfaceLanguageSettings
-            ?? makeTestInterfaceLanguageSettings()
+            ?? makeTestInterfaceLanguageSettings(),
+        engine: makeStubTranslationEngine()
     )
     controller.show(
         coordinator: coordinator,

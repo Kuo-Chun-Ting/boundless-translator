@@ -1,5 +1,4 @@
 import Foundation
-import Translation
 
 enum TranslationFailure: Error, Equatable, Sendable {
     case unsupportedSourceLanguage
@@ -11,21 +10,7 @@ enum TranslationFailure: Error, Equatable, Sendable {
     case unexpected(String)
 
     init(error: Error) {
-        if TranslationError.unsupportedSourceLanguage ~= error {
-            self = .unsupportedSourceLanguage
-        } else if TranslationError.unsupportedTargetLanguage ~= error {
-            self = .unsupportedTargetLanguage
-        } else if TranslationError.unsupportedLanguagePairing ~= error {
-            self = .unsupportedLanguagePairing
-        } else if TranslationError.unableToIdentifyLanguage ~= error {
-            self = .unableToIdentifyLanguage
-        } else if TranslationError.nothingToTranslate ~= error {
-            self = .nothingToTranslate
-        } else if #available(macOS 26.0, *), TranslationError.notInstalled ~= error {
-            self = .languageNotInstalled
-        } else {
-            self = .unexpected(error.localizedDescription)
-        }
+        self = error as? TranslationFailure ?? .unexpected(error.localizedDescription)
     }
 
     func message(localization: AppLocalization) -> String {

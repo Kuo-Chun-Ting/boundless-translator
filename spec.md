@@ -70,24 +70,27 @@ Only one shortcut request runs at a time.
 
 ## Architecture
 
-- `Application` composes dependencies and routes shortcut actions.
+- `Application` composes dependencies and routes shortcut actions. `Application/Shortcut` owns shortcut registration, persistence, and recording state.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
-- `ImageWorkspace` owns clipboard image input, Live Text selection, and its persistent window.
-- `LanguageIdentification` resolves automatic source-language detection and confirmation.
-- `Translation` owns requests, configuration, execution, state, and failures.
-- `Speech` owns language support and source or target playback state.
-- `Presentation` owns translation-window layout, lifecycle, dismissal, pinning, language controls, and Lookup presentation.
-- `Settings` owns Preferences composition and persisted translation defaults.
-- `Settings` owns the persisted interface-language preference and resolves whether the interface follows macOS or uses an explicit language.
+- `ImageViewer` owns clipboard image input, Live Text selection, and its persistent window. Application routes selected image text into the same translation flow as external text.
+- `Translation` owns requests, state, failures, and the supported-language catalog. Its subdirectories group the complete translation feature:
+  - `UI` owns translation-window layout, lifecycle, dismissal, pinning, and language controls.
+  - `Engines` defines the runner contract and the engine composition value. `Engines/Apple` owns Apple configuration, session hosting, language availability, execution, and error conversion.
+  - `LanguageDetection` resolves automatic source-language detection and confirmation.
+  - `Speech` owns language support and source or target playback state.
+  - `Lookup` owns dictionary selection and Lookup presentation.
+- Application selects the engine and supplies its language loader to the catalog and its task host to the translation window. The window recreates the task host for each request, including retries and language changes.
+- Runners report shared translation failures. Apple errors are normalized inside the Apple adapter; the coordinator preserves normalized failures and ignores stale results and errors.
+- `Settings` owns Preferences composition, persisted translation defaults, and the interface-language preference. It receives the composed language catalog instead of choosing an engine.
+- `Localization` resolves interface strings from `Resources`, independently of the translation engine.
 - Interface localization covers every language localized by macOS and remains independent from Translation framework language availability.
 - Usage explains that interface-language coverage and translation-language availability follow macOS support.
-- `Shortcut` owns shortcut recording, persistence, and global registration.
 
-Platform adapters remain behind focused protocols so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals.
+These directories belong to one executable target, not separate Swift packages. Platform adapters remain behind focused protocols or injected operations so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals. The only production translation engine is Apple; this architecture does not add billing or an engine-selection interface.
 
 ## Build and Release
 
-- `Scripts/verify.sh` runs all automated tests, builds the App, and verifies its signature. DMGs created by tests are temporary.
+- `Scripts/verify.sh` runs all automated tests, requires a complete passing Swift Testing report, builds the App, and verifies its signature. DMGs created by tests are temporary.
 - `Scripts/release_dmg.sh <version>` sets the public version and increments the build number. It builds and verifies the App, then packages and signs the DMG.
 - Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
 - Only a successful release saves `Build/Boundless Translator-<version>.dmg`. A failed release restores the previous version metadata and preserves any existing release DMG.

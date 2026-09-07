@@ -7,9 +7,11 @@ final class AppController {
 
     private let coordinator = TranslationCoordinator()
     private lazy var panelController = TranslationPanelController(
-        interfaceLanguageSettings: interfaceLanguageSettings
+        interfaceLanguageSettings: interfaceLanguageSettings,
+        engine: translationEngine
     )
-    private let supportedLanguageCatalog = SupportedLanguageCatalog()
+    private let translationEngine: TranslationEngine
+    private let supportedLanguageCatalog: SupportedLanguageCatalog
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
         self?.handleShortcut()
     }
@@ -21,33 +23,38 @@ final class AppController {
     )
     private let selectedTextReader: any SelectedTextReading
     private let clipboardImageReader: any ClipboardImageReading
-    private let imageWorkspaceController: any ImageWorkspaceControlling
+    private let imageViewerController: any ImageViewerControlling
     private let sourceLanguageResolver: SourceLanguageResolver
     private var selectionTask: Task<Void, Never>?
 
     init(
+        translationEngine: TranslationEngine = .apple,
         selectedTextReader: any SelectedTextReading = SelectedTextResolver(
             primaryReader: AccessibilitySelectedTextReader(),
             fallbackReader: ClipboardSelectedTextReader()
         ),
         clipboardImageReader: any ClipboardImageReading = PasteboardClipboardImageReader(),
-        imageWorkspaceController: (any ImageWorkspaceControlling)? = nil,
+        imageViewerController: (any ImageViewerControlling)? = nil,
         interfaceLanguageSettings: InterfaceLanguageSettings = InterfaceLanguageSettings(),
         sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
             minimumConfidence: 0.60,
             languageIdentifier: NaturalLanguageIdentifier()
         )
     ) {
+        self.translationEngine = translationEngine
+        self.supportedLanguageCatalog = SupportedLanguageCatalog(
+            loadLanguages: translationEngine.loadLanguages
+        )
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.clipboardImageReader = clipboardImageReader
-        let resolvedImageWorkspaceController = imageWorkspaceController
-            ?? ImageWorkspaceWindowController(
+        let resolvedImageViewerController = imageViewerController
+            ?? ImageViewerWindowController(
                 interfaceLanguageSettings: interfaceLanguageSettings
             )
-        self.imageWorkspaceController = resolvedImageWorkspaceController
+        self.imageViewerController = resolvedImageViewerController
         self.selectedTextReader = SelectedTextResolver(
-            primaryReader: ImageWorkspaceSelectionReader(
-                provider: resolvedImageWorkspaceController
+            primaryReader: ImageViewerSelectionReader(
+                provider: resolvedImageViewerController
             ),
             fallbackReader: selectedTextReader
         )
@@ -112,7 +119,7 @@ final class AppController {
             case .translate(let selectedText):
                 await resolveSourceLanguage(for: selectedText)
             case .openImage(let image):
-                imageWorkspaceController.present(
+                imageViewerController.present(
                     image: image,
                     pointerLocation: NSEvent.mouseLocation
                 )

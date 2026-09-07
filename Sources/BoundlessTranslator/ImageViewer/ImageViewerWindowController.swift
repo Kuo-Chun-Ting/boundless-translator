@@ -2,7 +2,7 @@ import AppKit
 import Combine
 
 @MainActor
-protocol ImageWorkspaceContent: AnyObject {
+protocol ImageViewerContent: AnyObject {
     var view: NSView { get }
     var selectedText: String { get }
     var hasActiveTextSelection: Bool { get }
@@ -12,19 +12,19 @@ protocol ImageWorkspaceContent: AnyObject {
 }
 
 @MainActor
-protocol ImageWorkspaceControlling: ImageWorkspaceSelectionProviding {
+protocol ImageViewerControlling: ImageViewerSelectionProviding {
     func present(image: NSImage, pointerLocation: CGPoint)
 }
 
-extension LiveTextImageView: ImageWorkspaceContent {
+extension LiveTextImageView: ImageViewerContent {
     var view: NSView {
         self
     }
 }
 
 @MainActor
-final class ImageWorkspaceWindowController: NSWindowController,
-    ImageWorkspaceControlling,
+final class ImageViewerWindowController: NSWindowController,
+    ImageViewerControlling,
     NSWindowDelegate
 {
     typealias VisibleFrameProvider = @MainActor (CGPoint) -> CGRect?
@@ -37,14 +37,14 @@ final class ImageWorkspaceWindowController: NSWindowController,
         window?.isKeyWindow == true && content.hasActiveTextSelection
     }
 
-    private let content: any ImageWorkspaceContent
+    private let content: any ImageViewerContent
     private let visibleFrameForPointer: VisibleFrameProvider
     private let activateApplication: @MainActor () -> Void
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private var languageCancellable: AnyCancellable?
 
     init(
-        content: any ImageWorkspaceContent = LiveTextImageView(),
+        content: any ImageViewerContent = LiveTextImageView(),
         visibleFrameForPointer: @escaping VisibleFrameProvider = { pointerLocation in
             NSScreen.screens.first {
                 $0.frame.contains(pointerLocation)

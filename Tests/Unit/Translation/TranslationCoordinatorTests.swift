@@ -251,6 +251,27 @@ func test_translate_when_stale_host_starts_after_resubmission_then_ignores_stale
     #expect(coordinator.status == .translating)
 }
 
+@Test @MainActor
+func test_translate_when_runner_reports_domain_failure_then_preserves_failure_and_retry_policy() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(
+        try SelectedText("Hello"),
+        sourceLanguageIdentifier: "en",
+        targetLanguageIdentifier: "zh-Hant"
+    )
+    let request = try #require(coordinator.request)
+    let stub_runner = ImmediateTranslationRunner(
+        result: .failure(TranslationFailure.unsupportedLanguagePairing)
+    )
+
+    // Act
+    await coordinator.translate(request, using: stub_runner)
+
+    // Assert
+    #expect(coordinator.status == .failed(.unsupportedLanguagePairing))
+}
+
 private struct ImmediateTranslationRunner: TranslationRunning {
     let result: Result<TranslationOutput, Error>
 

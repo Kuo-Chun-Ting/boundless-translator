@@ -11,7 +11,7 @@ func test_make_when_request_has_source_and_target_then_returns_explicit_configur
     )
 
     // Act
-    let configuration = TranslationConfigurationFactory.make(for: request)
+    let configuration = AppleTranslationConfigurationFactory.make(for: request)
 
     // Assert
     #expect(configuration.source?.minimalIdentifier == "en")

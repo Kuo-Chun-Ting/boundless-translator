@@ -1,5 +1,4 @@
 import SwiftUI
-@preconcurrency import Translation
 
 struct TranslationPanelView: View {
     @ObservedObject var coordinator: TranslationCoordinator
@@ -7,6 +6,7 @@ struct TranslationPanelView: View {
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
 
     let supportedLanguages: [Locale.Language]
+    let engine: TranslationEngine
     let layout: TranslationPanelLayout
     let onPreferredSizeChange: @MainActor (CGSize) -> Void
 
@@ -15,6 +15,7 @@ struct TranslationPanelView: View {
         speechController: TranslationSpeechController,
         interfaceLanguageSettings: InterfaceLanguageSettings,
         supportedLanguages: [Locale.Language],
+        engine: TranslationEngine,
         layout: TranslationPanelLayout = TranslationPanelLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
@@ -22,6 +23,7 @@ struct TranslationPanelView: View {
         self.speechController = speechController
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.supportedLanguages = supportedLanguages
+        self.engine = engine
         self.layout = layout
         self.onPreferredSizeChange = onPreferredSizeChange
     }
@@ -44,10 +46,7 @@ struct TranslationPanelView: View {
         }
         .background {
             if let request = coordinator.request {
-                TranslationTaskHost(
-                    request: request,
-                    coordinator: coordinator
-                )
+                engine.makeTaskHost(request, coordinator)
                 .id(request.id)
             }
         }
@@ -204,35 +203,6 @@ struct TranslationPanelView: View {
         AppLocalization(
             languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
         )
-    }
-}
-
-private struct TranslationTaskHost: View {
-    let request: TranslationRequest
-    let coordinator: TranslationCoordinator
-
-    @State private var configuration: TranslationSession.Configuration?
-
-    init(
-        request: TranslationRequest,
-        coordinator: TranslationCoordinator
-    ) {
-        self.request = request
-        self.coordinator = coordinator
-        _configuration = State(
-            initialValue: TranslationConfigurationFactory.make(for: request)
-        )
-    }
-
-    var body: some View {
-        Color.clear
-            .frame(width: 0, height: 0)
-            .translationTask(configuration) { session in
-                await coordinator.translate(
-                    request,
-                    using: AppleTranslationRunner(session: session)
-                )
-            }
     }
 }
 

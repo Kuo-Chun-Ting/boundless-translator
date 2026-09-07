@@ -1,12 +1,11 @@
 import Foundation
 import Testing
-import Translation
 @testable import BoundlessTranslator
 
 @Test
 func test_init_when_language_pair_is_unsupported_then_explains_pairing() {
     // Arrange
-    let error = TranslationError.unsupportedLanguagePairing
+    let error = TranslationFailure.unsupportedLanguagePairing
 
     // Act
     let failure = TranslationFailure(error: error)
@@ -19,7 +18,7 @@ func test_init_when_language_pair_is_unsupported_then_explains_pairing() {
 @Test
 func test_init_when_source_language_cannot_be_identified_then_explains_detection() {
     // Arrange
-    let error = TranslationError.unableToIdentifyLanguage
+    let error = TranslationFailure.unableToIdentifyLanguage
 
     // Act
     let failure = TranslationFailure(error: error)

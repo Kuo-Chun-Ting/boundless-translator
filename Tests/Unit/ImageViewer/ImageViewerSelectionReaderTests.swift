@@ -4,11 +4,11 @@ import Testing
 @Test @MainActor
 func test_readSelectedText_whenWorkspaceSelectionIsActive_then_returnsSelection() async throws {
     // Arrange
-    let provider = ImageWorkspaceSelectionProviderStub(
+    let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: true,
         selectedText: "Image selection"
     )
-    let reader = ImageWorkspaceSelectionReader(provider: provider)
+    let reader = ImageViewerSelectionReader(provider: provider)
 
     // Act
     let selectedText = try await reader.readSelectedText()
@@ -20,11 +20,11 @@ func test_readSelectedText_whenWorkspaceSelectionIsActive_then_returnsSelection(
 @Test @MainActor
 func test_readSelectedText_whenWorkspaceSelectionIsInactive_then_throwsNoSelection() async {
     // Arrange
-    let provider = ImageWorkspaceSelectionProviderStub(
+    let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: false,
         selectedText: "Stale selection"
     )
-    let reader = ImageWorkspaceSelectionReader(provider: provider)
+    let reader = ImageViewerSelectionReader(provider: provider)
 
     // Act & Assert
     await #expect(throws: SelectedTextReadError.noSelection) {
@@ -35,11 +35,11 @@ func test_readSelectedText_whenWorkspaceSelectionIsInactive_then_throwsNoSelecti
 @Test @MainActor
 func test_readSelectedText_whenWorkspaceSelectionIsEmpty_then_throwsNoSelection() async {
     // Arrange
-    let provider = ImageWorkspaceSelectionProviderStub(
+    let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: true,
         selectedText: "  \n"
     )
-    let reader = ImageWorkspaceSelectionReader(provider: provider)
+    let reader = ImageViewerSelectionReader(provider: provider)
 
     // Act & Assert
     await #expect(throws: SelectedTextReadError.noSelection) {
@@ -48,7 +48,7 @@ func test_readSelectedText_whenWorkspaceSelectionIsEmpty_then_throwsNoSelection(
 }
 
 @MainActor
-private final class ImageWorkspaceSelectionProviderStub: ImageWorkspaceSelectionProviding {
+private final class ImageViewerSelectionProviderStub: ImageViewerSelectionProviding {
     let isSelectionActive: Bool
     let selectedText: String
 

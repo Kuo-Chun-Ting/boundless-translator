@@ -1,14 +1,14 @@
 @MainActor
-protocol ImageWorkspaceSelectionProviding: AnyObject {
+protocol ImageViewerSelectionProviding: AnyObject {
     var isSelectionActive: Bool { get }
     var selectedText: String { get }
 }
 
 @MainActor
-final class ImageWorkspaceSelectionReader: SelectedTextReading {
-    private weak var provider: (any ImageWorkspaceSelectionProviding)?
+final class ImageViewerSelectionReader: SelectedTextReading {
+    private weak var provider: (any ImageViewerSelectionProviding)?
 
-    init(provider: any ImageWorkspaceSelectionProviding) {
+    init(provider: any ImageViewerSelectionProviding) {
         self.provider = provider
     }
 

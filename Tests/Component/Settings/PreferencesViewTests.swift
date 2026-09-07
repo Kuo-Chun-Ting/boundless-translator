@@ -16,7 +16,8 @@ func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() t
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -35,7 +36,8 @@ func test_preferencesView_when_rendered_then_alignsLanguagePickers() throws {
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -59,7 +61,8 @@ func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -91,7 +94,8 @@ func test_preferencesView_when_rendered_then_placesQuitLeftOfUsageHelp() throws 
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -123,7 +127,8 @@ func test_preferencesView_when_rendered_then_all_settings_fit_without_scrolling(
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -148,7 +153,8 @@ func test_preferencesView_when_shortcutRegistrationFails_then_errorAndFooterDoNo
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeFailingTestShortcutController()
+        shortcutController: makeFailingTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -190,7 +196,8 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesContent() a
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
     contentView.layoutSubtreeIfNeeded()
@@ -227,7 +234,8 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
 
@@ -252,6 +260,7 @@ func test_quitButton_when_clicked_then_requests_application_termination() throws
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog(),
         quitApplication: {
             terminationSpy.request()
         }
@@ -266,7 +275,8 @@ func test_quitButton_when_clicked_then_requests_application_termination() throws
     )
 
     // Act
-    quitButton.performClick(nil)
+    let action = try #require(quitButton.action)
+    #expect(NSApplication.shared.sendAction(action, to: quitButton.target, from: quitButton))
 
     // Assert
     #expect(quitButton.title == "Quit Boundless Translator")

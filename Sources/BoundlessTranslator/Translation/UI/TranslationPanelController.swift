@@ -10,6 +10,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     private let panel: TranslationPanel
     private let speechController: TranslationSpeechController
     private let interfaceLanguageSettings: InterfaceLanguageSettings
+    private let engine: TranslationEngine
     private let applicationNotificationCenter: NotificationCenter
     private lazy var toolbarController = TranslationPanelToolbarController(
         panelState: panelState,
@@ -22,12 +23,14 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     init(
         applicationNotificationCenter: NotificationCenter = NSWorkspace.shared.notificationCenter,
         speechPlayer: any SpeechPlaying = AppleSpeechPlayer(),
-        interfaceLanguageSettings: InterfaceLanguageSettings
+        interfaceLanguageSettings: InterfaceLanguageSettings,
+        engine: TranslationEngine
     ) {
         panelState = TranslationPanelState()
         panel = TranslationPanel(contentSize: auxiliaryPanelSize)
         speechController = TranslationSpeechController(player: speechPlayer)
         self.interfaceLanguageSettings = interfaceLanguageSettings
+        self.engine = engine
         self.applicationNotificationCenter = applicationNotificationCenter
         super.init()
         panel.delegate = self
@@ -63,6 +66,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
                 speechController: speechController,
                 interfaceLanguageSettings: interfaceLanguageSettings,
                 supportedLanguages: supportedLanguages,
+                engine: engine,
                 layout: translationLayout,
                 onPreferredSizeChange: { [weak self] size in
                     self?.resizeTranslationPanel(to: size)

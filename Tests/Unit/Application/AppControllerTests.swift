@@ -15,7 +15,7 @@ func test_resolve_shortcut_action_when_text_is_selected_then_returns_translation
     let controller = AppController(
         selectedTextReader: stub_selectedTextReader,
         clipboardImageReader: mock_imageReader,
-        imageWorkspaceController: ImageWorkspaceControllerStub()
+        imageViewerController: ImageViewerControllerStub()
     )
 
     // Act
@@ -43,7 +43,7 @@ func test_resolve_shortcut_action_when_text_is_not_selected_and_image_is_copied_
     let controller = AppController(
         selectedTextReader: stub_selectedTextReader,
         clipboardImageReader: stub_imageReader,
-        imageWorkspaceController: ImageWorkspaceControllerStub()
+        imageViewerController: ImageViewerControllerStub()
     )
 
     // Act
@@ -67,7 +67,7 @@ func test_resolve_shortcut_action_when_text_and_image_are_missing_then_returns_n
     let controller = AppController(
         selectedTextReader: stub_selectedTextReader,
         clipboardImageReader: stub_imageReader,
-        imageWorkspaceController: ImageWorkspaceControllerStub()
+        imageViewerController: ImageViewerControllerStub()
     )
 
     // Act
@@ -109,7 +109,7 @@ private final class SelectedTextReaderStub: SelectedTextReading {
 }
 
 @MainActor
-private final class ImageWorkspaceControllerStub: ImageWorkspaceControlling {
+private final class ImageViewerControllerStub: ImageViewerControlling {
     var isSelectionActive = false
     var selectedText = ""
 

@@ -8,9 +8,11 @@ func test_appearance_when_switchingLightDarkLight_then_usesOpaqueWindowBackgroun
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
+    window.colorSpace = .sRGB
     let contentView = try #require(window.contentView)
 
     // Act & Assert
@@ -20,12 +22,16 @@ func test_appearance_when_switchingLightDarkLight_then_usesOpaqueWindowBackgroun
         contentView.layoutSubtreeIfNeeded()
         let bitmap = try #require(contentView.bitmapImageRepForCachingDisplay(in: contentView.bounds))
         contentView.cacheDisplay(in: contentView.bounds, to: bitmap)
-        let contentBackground = try #require(bitmap.colorAt(x: 1, y: 1)?.usingColorSpace(.sRGB))
+        #expect(bitmap.colorSpace == .sRGB)
+        // colorAt exposes the bitmap's component values as calibrated RGB.
+        // They are already sRGB here; converting that wrapper would apply a second transfer curve.
+        let contentBackground = try #require(bitmap.colorAt(x: 1, y: 1))
         window.effectiveAppearance.performAsCurrentDrawingAppearance {
             let actual = window.backgroundColor.usingColorSpace(.sRGB)!
             let expected = NSColor.windowBackgroundColor.usingColorSpace(.sRGB)!
             #expect(actual == expected)
             #expect(actual.alphaComponent == 1)
+            #expect(contentBackground.alphaComponent == 1)
             #expect(abs(contentBackground.redComponent - expected.redComponent) < 0.02)
             #expect(abs(contentBackground.greenComponent - expected.greenComponent) < 0.02)
             #expect(abs(contentBackground.blueComponent - expected.blueComponent) < 0.02)
@@ -39,7 +45,8 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
 
@@ -58,6 +65,7 @@ func test_present_when_activeScreenChanges_then_centersWindowOnActiveScreen() as
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog(),
         activeScreenVisibleFrame: { stub_visibleFrame }
     )
     let window = try #require(controller.window)
@@ -86,7 +94,8 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesWindowTitle
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
-        shortcutController: makeTestShortcutController()
+        shortcutController: makeTestShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
     #expect(window.title == "Boundless Translator Settings")

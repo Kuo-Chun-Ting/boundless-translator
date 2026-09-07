@@ -32,7 +32,7 @@ function test_verify_when_steps_succeed_then_runs_every_automated_check_and_buil
     local build_stub="${TEMP_ROOT}/step-build"
     local app_verify_stub="${TEMP_ROOT}/step-app-verify"
     local deployment_stub="${TEMP_ROOT}/step-deployment"
-    create_step_stub "${swift_stub}"
+    create_step_stub "${swift_stub}" 'if [[ "$3" == "--xunit-output" ]]; then print -r -- "<testsuites><testsuite tests=\"1\" errors=\"0\" failures=\"0\"><testcase name=\"example\"/></testsuite></testsuites>" > "${4:r}-swift-testing.xml"; fi'
     create_step_stub "${gui_stub}"
     create_step_stub "${build_stub}" 'mkdir -p "${BOUNDLESS_TRANSLATOR_VERIFY_APP_PATH}"'
     create_step_stub "${app_verify_stub}"
@@ -51,14 +51,41 @@ function test_verify_when_steps_succeed_then_runs_every_automated_check_and_buil
 
     # Assert
     local expected_calls
-    expected_calls=$'step-swift test --disable-sandbox\n'
-    expected_calls+=$'step-gui \n'
+    expected_calls=$'step-gui \n'
     expected_calls+=$'step-build \n'
     expected_calls+=$'step-app-verify '${APP_PATH}$'\n'
     expected_calls+=$'step-deployment '
-    [[ "$(<"${CALL_LOG}")" == "${expected_calls}" ]]
+    [[ "$(head -n 1 "${CALL_LOG}")" == 'step-swift test --disable-sandbox --xunit-output '* ]]
+    [[ "$(tail -n +2 "${CALL_LOG}")" == "${expected_calls}" ]]
 }
 
+function test_verify_when_swift_exits_without_complete_results_then_stops_before_gui_and_build {
+    # Arrange
+    local swift_stub="${TEMP_ROOT}/incomplete-swift"
+    local unexpected_step="${TEMP_ROOT}/unexpected-step"
+    create_step_stub "${swift_stub}" 'if [[ "$3" == "--xunit-output" && -n "${BOUNDLESS_TRANSLATOR_TEST_REPORT_XML:-}" ]]; then print -r -- "${BOUNDLESS_TRANSLATOR_TEST_REPORT_XML}" > "${4:r}-swift-testing.xml"; fi'
+    create_step_stub "${unexpected_step}"
+    local report
+    for report in '' '<testsuites><testsuite tests="1">' '<testsuites><testsuite tests="0" errors="0" failures="0"/></testsuites>' '<testsuites><testsuite tests="1" errors="0" failures="1"/></testsuites>'; do
+        : > "${CALL_LOG}"
+
+        # Act & Assert
+        if BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE="${swift_stub}" \
+            BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE="${unexpected_step}" \
+            BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE="${unexpected_step}" \
+            BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${unexpected_step}" \
+            BOUNDLESS_TRANSLATOR_DEPLOYMENT_TEST_EXECUTABLE="${unexpected_step}" \
+            BOUNDLESS_TRANSLATOR_TEST_REPORT_XML="${report}" \
+            BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
+                zsh "${VERIFIER}" > "${TEMP_ROOT}/output.log" 2>&1; then
+            print -u2 "verify accepted missing, incomplete, empty or failing test results"
+            return 1
+        fi
+        [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 1 ]]
+    done
+}
+
+test_verify_when_swift_exits_without_complete_results_then_stops_before_gui_and_build
 test_verify_when_steps_succeed_then_runs_every_automated_check_and_builds_app
 
 print "Verification workflow tests passed."

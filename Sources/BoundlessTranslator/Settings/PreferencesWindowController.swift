@@ -13,7 +13,7 @@ final class PreferencesWindowController: NSWindowController {
         settings: TranslationSettings,
         interfaceLanguageSettings: InterfaceLanguageSettings,
         shortcutController: GlobalShortcutController,
-        supportedLanguageCatalog: SupportedLanguageCatalog = SupportedLanguageCatalog(),
+        supportedLanguageCatalog: SupportedLanguageCatalog,
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
         quitApplication: @escaping @MainActor @Sendable () -> Void = {
             NSApplication.shared.terminate(nil)

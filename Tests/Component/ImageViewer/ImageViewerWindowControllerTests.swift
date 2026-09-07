@@ -5,7 +5,7 @@ import Testing
 @Test @MainActor
 func test_init_whenWorkspaceIsCreated_then_usesStandardPersistentWindow() throws {
     // Arrange & Act
-    let fixture = makeImageWorkspaceFixture()
+    let fixture = makeImageViewerFixture()
     let window = try #require(fixture.controller.window)
 
     // Assert
@@ -21,7 +21,7 @@ func test_init_whenWorkspaceIsCreated_then_usesStandardPersistentWindow() throws
 @Test @MainActor
 func test_present_whenCalledAgain_then_reusesWindowAndReplacesImage() throws {
     // Arrange
-    let fixture = makeImageWorkspaceFixture()
+    let fixture = makeImageViewerFixture()
     let firstWindow = try #require(fixture.controller.window)
     let firstImage = NSImage(size: NSSize(width: 600, height: 400))
     let secondImage = NSImage(size: NSSize(width: 900, height: 500))
@@ -42,7 +42,7 @@ func test_present_whenCalledAgain_then_reusesWindowAndReplacesImage() throws {
 func test_present_whenPointerScreenIsKnown_then_placesWindowInsideVisibleFrame() throws {
     // Arrange
     let visibleFrame = NSRect(x: 0, y: 0, width: 1_200, height: 800)
-    let fixture = makeImageWorkspaceFixture(visibleFrame: visibleFrame)
+    let fixture = makeImageViewerFixture(visibleFrame: visibleFrame)
     let window = try #require(fixture.controller.window)
 
     // Act
@@ -59,7 +59,7 @@ func test_present_whenPointerScreenIsKnown_then_placesWindowInsideVisibleFrame()
 @Test @MainActor
 func test_windowWillClose_whenWorkspaceCloses_then_clearsSelection() {
     // Arrange
-    let fixture = makeImageWorkspaceFixture()
+    let fixture = makeImageViewerFixture()
 
     // Act
     fixture.controller.windowWillClose(
@@ -71,9 +71,9 @@ func test_windowWillClose_whenWorkspaceCloses_then_clearsSelection() {
 }
 
 @Test @MainActor
-func test_languageIdentifier_when_changed_then_updatesOpenImageWorkspaceTitle() throws {
+func test_languageIdentifier_when_changed_then_updatesOpenImageViewerTitle() throws {
     // Arrange
-    let suiteName = "ImageWorkspaceLanguageTests.\(UUID().uuidString)"
+    let suiteName = "ImageViewerLanguageTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)
     defer { defaults.removePersistentDomain(forName: suiteName) }
@@ -81,7 +81,7 @@ func test_languageIdentifier_when_changed_then_updatesOpenImageWorkspaceTitle() 
         defaults: defaults,
         preferredLanguageIdentifiers: { ["en"] }
     )
-    let fixture = makeImageWorkspaceFixture(
+    let fixture = makeImageViewerFixture(
         interfaceLanguageSettings: interfaceLanguageSettings
     )
     let window = try #require(fixture.controller.window)
@@ -95,29 +95,29 @@ func test_languageIdentifier_when_changed_then_updatesOpenImageWorkspaceTitle() 
 }
 
 @MainActor
-private struct ImageWorkspaceFixture {
-    let controller: ImageWorkspaceWindowController
-    let content: ImageWorkspaceContentStub
+private struct ImageViewerFixture {
+    let controller: ImageViewerWindowController
+    let content: ImageViewerContentStub
 }
 
 @MainActor
-private func makeImageWorkspaceFixture(
+private func makeImageViewerFixture(
     visibleFrame: CGRect = CGRect(x: 0, y: 0, width: 1_200, height: 800),
     interfaceLanguageSettings: InterfaceLanguageSettings? = nil
-) -> ImageWorkspaceFixture {
-    let content = ImageWorkspaceContentStub()
-    let controller = ImageWorkspaceWindowController(
+) -> ImageViewerFixture {
+    let content = ImageViewerContentStub()
+    let controller = ImageViewerWindowController(
         content: content,
         visibleFrameForPointer: { _ in visibleFrame },
         activateApplication: {},
         interfaceLanguageSettings: interfaceLanguageSettings
             ?? makeTestInterfaceLanguageSettings()
     )
-    return ImageWorkspaceFixture(controller: controller, content: content)
+    return ImageViewerFixture(controller: controller, content: content)
 }
 
 @MainActor
-private final class ImageWorkspaceContentStub: ImageWorkspaceContent {
+private final class ImageViewerContentStub: ImageViewerContent {
     let view = NSView()
     var selectedText = ""
     var hasActiveTextSelection = false

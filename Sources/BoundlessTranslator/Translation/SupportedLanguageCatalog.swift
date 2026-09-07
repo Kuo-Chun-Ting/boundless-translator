@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-@preconcurrency import Translation
 
 @MainActor
 final class SupportedLanguageCatalog: ObservableObject {
@@ -15,9 +14,7 @@ final class SupportedLanguageCatalog: ObservableObject {
     private var didLoad = false
 
     init(
-        loadLanguages: @escaping Loader = {
-            await LanguageAvailability().supportedLanguages
-        },
+        loadLanguages: @escaping Loader,
         displayName: @escaping DisplayNameProvider = {
             LanguageDisplayNameFormatter().name(for: $0)
         }

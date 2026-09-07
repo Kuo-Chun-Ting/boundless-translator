@@ -153,6 +153,7 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
             ),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
+            engine: makeStubTranslationEngine(),
             layout: layout
         )
     )
@@ -187,6 +188,7 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
             ),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
+            engine: makeStubTranslationEngine(),
             layout: layout
         )
     )
@@ -359,7 +361,8 @@ func test_sourceSpeechButton_when_clicked_then_readsSourceText() throws {
     )
 
     // Act
-    button.performClick(nil)
+    let action = try #require(button.action)
+    #expect(NSApplication.shared.sendAction(action, to: button.target, from: button))
 
     // Assert
     #expect(
@@ -477,7 +480,8 @@ func test_targetSpeechButton_when_translationIsAvailable_then_readsTranslatedTex
     )
 
     // Act
-    button.performClick(nil)
+    let action = try #require(button.action)
+    #expect(NSApplication.shared.sendAction(action, to: button.target, from: button))
 
     // Assert
     #expect(
@@ -592,6 +596,7 @@ private func makeTranslationHostingView(
             speechController: speechController,
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
+            engine: makeStubTranslationEngine(),
             layout: layout
         )
     )

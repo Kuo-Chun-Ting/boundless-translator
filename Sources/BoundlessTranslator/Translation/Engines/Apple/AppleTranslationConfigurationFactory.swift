@@ -1,7 +1,7 @@
 import Foundation
 @preconcurrency import Translation
 
-enum TranslationConfigurationFactory {
+enum AppleTranslationConfigurationFactory {
     static func make(
         for request: TranslationRequest
     ) -> TranslationSession.Configuration {
