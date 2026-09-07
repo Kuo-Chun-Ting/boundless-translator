@@ -48,6 +48,8 @@ Only one shortcut request runs at a time. Pause both global shortcuts while eith
 - Use VisionKit Live Text for native text recognition and selection.
 - Keep the workspace open across app deactivation and translation-window presentation.
 - Replace the displayed image after a successful capture; keep the existing image when capture is cancelled or fails.
+- Bring the same workspace window to the front after every successful capture, including when it was closed, covered, or minimized.
+- Close the focused workspace with Escape or Command-W, including while image text is selected.
 - Clear its active selection when the window closes so stale text cannot override later selections.
 - Update the workspace background when macOS appearance changes without replacing the image or resetting its selection.
 - Use native macOS interactive capture through `screencapture`.

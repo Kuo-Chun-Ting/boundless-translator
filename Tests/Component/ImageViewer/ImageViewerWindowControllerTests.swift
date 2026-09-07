@@ -39,6 +39,99 @@ func test_present_whenCalledAgain_then_reusesWindowAndReplacesImage() throws {
 }
 
 @Test @MainActor
+func test_present_whenWindowWasClosed_then_reopensSameWindowWithNewImage() throws {
+    // Arrange
+    let fixture = makeImageViewerFixture()
+    let window = try #require(fixture.controller.window)
+    defer { window.orderOut(nil) }
+    fixture.controller.present(image: NSImage(size: NSSize(width: 600, height: 400)), pointerLocation: .zero)
+    window.performClose(nil)
+    #expect(!window.isVisible)
+    let secondImage = NSImage(size: NSSize(width: 900, height: 500))
+
+    // Act
+    fixture.controller.present(image: secondImage, pointerLocation: .zero)
+
+    // Assert
+    #expect(fixture.controller.window === window)
+    #expect(fixture.content.displayedImages.last === secondImage)
+    #expect(window.isVisible)
+}
+
+@Test @MainActor
+func test_cancelOperation_whenImageWindowIsOpen_then_closesAndClearsSelection() throws {
+    // Arrange
+    let fixture = makeImageViewerFixture()
+    let window = try #require(fixture.controller.window)
+    defer { window.orderOut(nil) }
+    fixture.controller.present(image: NSImage(size: NSSize(width: 600, height: 400)), pointerLocation: .zero)
+
+    // Act
+    window.cancelOperation(nil)
+
+    // Assert
+    #expect(!window.isVisible)
+    #expect(fixture.content.clearSelectionCount == 1)
+}
+
+@Test @MainActor
+func test_sendEvent_whenEscapeIsPressedWithContentFocused_then_closesImageWindow() throws {
+    // Arrange
+    let fixture = makeImageViewerFixture()
+    let window = try #require(fixture.controller.window)
+    defer { window.orderOut(nil) }
+    fixture.controller.present(image: NSImage(size: NSSize(width: 600, height: 400)), pointerLocation: .zero)
+    let focusedView = EscapeConsumingView()
+    fixture.content.view.addSubview(focusedView)
+    #expect(window.makeFirstResponder(focusedView))
+    let event = try #require(NSEvent.keyEvent(
+        with: .keyDown, location: .zero, modifierFlags: [],
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53
+    ))
+
+    // Act
+    window.sendEvent(event)
+
+    // Assert
+    #expect(!window.isVisible)
+    #expect(fixture.content.clearSelectionCount == 1)
+}
+
+@Test @MainActor
+func test_performKeyEquivalent_whenCommandWIsPressed_then_closesImageWindow() throws {
+    // Arrange
+    let fixture = makeImageViewerFixture()
+    let window = try #require(fixture.controller.window)
+    defer { window.orderOut(nil) }
+    fixture.controller.present(image: NSImage(size: NSSize(width: 600, height: 400)), pointerLocation: .zero)
+    let event = try #require(NSEvent.keyEvent(
+        with: .keyDown, location: .zero, modifierFlags: .command,
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: "w", charactersIgnoringModifiers: "w", isARepeat: false, keyCode: 13
+    ))
+
+    // Act
+    let handled = window.performKeyEquivalent(with: event)
+
+    // Assert
+    #expect(handled)
+    #expect(!window.isVisible)
+    #expect(fixture.content.clearSelectionCount == 1)
+}
+
+@MainActor
+private final class EscapeConsumingView: NSView {
+    override var acceptsFirstResponder: Bool { true }
+
+    override func keyDown(with event: NSEvent) {
+        interpretKeyEvents([event])
+    }
+
+    override func cancelOperation(_ sender: Any?) {}
+}
+
+@Test @MainActor
 func test_present_whenPointerScreenIsKnown_then_placesWindowInsideVisibleFrame() throws {
     // Arrange
     let visibleFrame = NSRect(x: 0, y: 0, width: 1_200, height: 800)

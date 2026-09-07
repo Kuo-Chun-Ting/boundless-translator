@@ -60,7 +60,7 @@ final class ImageViewerWindowController: NSWindowController,
         self.activateApplication = activateApplication
         self.interfaceLanguageSettings = interfaceLanguageSettings
 
-        let window = NSWindow(
+        let window = ImageViewerWindow(
             contentRect: CGRect(
                 origin: .zero,
                 size: CGSize(width: 760, height: 520)
@@ -97,6 +97,7 @@ final class ImageViewerWindowController: NSWindowController,
         activateApplication()
         showWindow(nil)
         window?.makeKeyAndOrderFront(nil)
+        window?.orderFrontRegardless()
     }
 
     func windowWillClose(_ notification: Notification) {
@@ -149,5 +150,29 @@ final class ImageViewerWindowController: NSWindowController,
             width: max(420, imageSize.width * scale),
             height: max(300, imageSize.height * scale)
         )
+    }
+}
+
+private final class ImageViewerWindow: NSWindow {
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .keyDown, event.keyCode == 53,
+           event.modifierFlags.intersection([.command, .option, .control, .shift]).isEmpty {
+            cancelOperation(nil)
+            return
+        }
+        super.sendEvent(event)
+    }
+
+    override func cancelOperation(_ sender: Any?) {
+        performClose(sender)
+    }
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.modifierFlags.intersection([.command, .option, .control, .shift]) == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "w" {
+            performClose(nil)
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
     }
 }
