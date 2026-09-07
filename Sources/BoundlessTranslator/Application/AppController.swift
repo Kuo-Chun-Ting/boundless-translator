@@ -15,17 +15,22 @@ final class AppController {
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
         self?.handleShortcut()
     }
+    private lazy var screenshotShortcutController = GlobalShortcutController(kind: .screenshot) { [weak self] in
+        self?.handleScreenshotShortcut()
+    }
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: shortcutController,
+        screenshotShortcutController: screenshotShortcutController,
         supportedLanguageCatalog: supportedLanguageCatalog
     )
     private let selectedTextReader: any SelectedTextReading
-    private let clipboardImageReader: any ClipboardImageReading
+    private let screenshotCapture: any ScreenshotCapturing
     private let imageViewerController: any ImageViewerControlling
     private let sourceLanguageResolver: SourceLanguageResolver
     private var selectionTask: Task<Void, Never>?
+    private var isCapturingScreenshot = false
 
     init(
         translationEngine: TranslationEngine = .apple,
@@ -33,7 +38,7 @@ final class AppController {
             primaryReader: AccessibilitySelectedTextReader(),
             fallbackReader: ClipboardSelectedTextReader()
         ),
-        clipboardImageReader: any ClipboardImageReading = PasteboardClipboardImageReader(),
+        screenshotCapture: any ScreenshotCapturing = SystemScreenshotCapture(),
         imageViewerController: (any ImageViewerControlling)? = nil,
         interfaceLanguageSettings: InterfaceLanguageSettings = InterfaceLanguageSettings(),
         sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
@@ -46,7 +51,7 @@ final class AppController {
             loadLanguages: translationEngine.loadLanguages
         )
         self.interfaceLanguageSettings = interfaceLanguageSettings
-        self.clipboardImageReader = clipboardImageReader
+        self.screenshotCapture = screenshotCapture
         let resolvedImageViewerController = imageViewerController
             ?? ImageViewerWindowController(
                 interfaceLanguageSettings: interfaceLanguageSettings
@@ -62,24 +67,13 @@ final class AppController {
     }
 
     func prepare() {
-        do {
-            try shortcutController.start()
-        } catch {
-            if let shortcutError = error as? GlobalShortcutError {
-                showError(.globalShortcut(shortcutError))
-            } else {
-                showError(.verbatim(error.localizedDescription))
-            }
-        }
+        startShortcut(shortcutController)
+        startShortcut(screenshotShortcutController)
 
         Task {
             let supportedLanguages = await supportedLanguageCatalog.load()
-            settings.validateSourceLanguage(
-                supportedLanguages: supportedLanguages
-            )
-            settings.validateTargetLanguage(
-                supportedLanguages: supportedLanguages
-            )
+            settings.validateSourceLanguage(supportedLanguages: supportedLanguages)
+            settings.validateTargetLanguage(supportedLanguages: supportedLanguages)
         }
     }
 
@@ -106,7 +100,7 @@ final class AppController {
     }
 
     func handleShortcut() {
-        guard selectionTask == nil else {
+        guard selectionTask == nil, !isCapturingScreenshot else {
             return
         }
 
@@ -118,11 +112,6 @@ final class AppController {
             switch await resolveShortcutAction() {
             case .translate(let selectedText):
                 await resolveSourceLanguage(for: selectedText)
-            case .openImage(let image):
-                imageViewerController.present(
-                    image: image,
-                    pointerLocation: NSEvent.mouseLocation
-                )
             case .none:
                 return
             }
@@ -134,11 +123,27 @@ final class AppController {
             return .translate(selectedText)
         }
 
-        if let image = clipboardImageReader.readImage() {
-            return .openImage(image)
-        }
-
         return .none
+    }
+
+    func captureScreenshot() async throws {
+        guard !isCapturingScreenshot, selectionTask == nil else { return }
+        isCapturingScreenshot = true
+        defer { isCapturingScreenshot = false }
+        guard let image = try await screenshotCapture.captureRegion() else { return }
+        imageViewerController.present(image: image, pointerLocation: NSEvent.mouseLocation)
+    }
+
+    private func startShortcut(_ controller: GlobalShortcutController) {
+        do {
+            try controller.start()
+        } catch {
+            if let shortcutError = error as? GlobalShortcutError {
+                showError(.globalShortcut(shortcutError))
+            } else {
+                showError(.verbatim(error.localizedDescription))
+            }
+        }
     }
 
     private func showError(_ message: SelectionErrorMessage) {
@@ -146,6 +151,16 @@ final class AppController {
             message: message,
             pointerLocation: NSEvent.mouseLocation
         )
+    }
+
+    private func handleScreenshotShortcut() {
+        Task {
+            do {
+                try await captureScreenshot()
+            } catch {
+                showError(.screenshot((error as? ScreenshotCaptureError) ?? .captureFailed))
+            }
+        }
     }
 
     private func resolveSourceLanguage(for selectedText: SelectedText) async {
@@ -189,6 +204,5 @@ final class AppController {
 
 enum ShortcutAction {
     case translate(SelectedText)
-    case openImage(NSImage)
     case none
 }

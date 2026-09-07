@@ -85,13 +85,13 @@ func test_languageIdentifier_when_changed_then_updatesOpenImageViewerTitle() thr
         interfaceLanguageSettings: interfaceLanguageSettings
     )
     let window = try #require(fixture.controller.window)
-    #expect(window.title == "Clipboard Image")
+    #expect(window.title == "Screenshot")
 
     // Act
     interfaceLanguageSettings.languageIdentifier = "zh-Hant"
 
     // Assert
-    #expect(window.title == "剪貼簿圖片")
+    #expect(window.title == "螢幕截圖")
 }
 
 @MainActor

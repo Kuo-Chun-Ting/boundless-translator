@@ -3,18 +3,11 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_resolve_shortcut_action_when_text_is_selected_then_returns_translation_without_reading_image() async throws {
+func test_resolveShortcutAction_when_external_text_is_selected_then_returns_translation() async throws {
     // Arrange
-    let selectedText = try SelectedText("Selected text")
-    let stub_selectedTextReader = SelectedTextReaderStub(
-        result: .success(selectedText)
-    )
-    let mock_imageReader = ClipboardImageReaderStub(
-        image: NSImage(size: NSSize(width: 640, height: 480))
-    )
+    let text = try SelectedText("Selected text")
     let controller = AppController(
-        selectedTextReader: stub_selectedTextReader,
-        clipboardImageReader: mock_imageReader,
+        selectedTextReader: SelectedTextReaderStub(result: .success(text)),
         imageViewerController: ImageViewerControllerStub()
     )
 
@@ -22,52 +15,20 @@ func test_resolve_shortcut_action_when_text_is_selected_then_returns_translation
     let action = await controller.resolveShortcutAction()
 
     // Assert
-    guard case .translate(let actualText) = action else {
-        Issue.record("Expected the selected text to be translated")
+    guard case .translate(let actual) = action else {
+        Issue.record("Expected selected text")
         return
     }
-    #expect(actualText == selectedText)
-    #expect(mock_imageReader.invocationCount == 0)
+    #expect(actual == text)
 }
 
 @Test @MainActor
-func test_resolve_shortcut_action_when_text_is_not_selected_and_image_is_copied_then_returns_image() async throws {
+func test_resolveShortcutAction_when_no_text_is_selected_then_does_not_open_image() async {
     // Arrange
-    let expectedImage = NSImage(size: NSSize(width: 640, height: 480))
-    let stub_selectedTextReader = SelectedTextReaderStub(
-        result: .failure(SelectedTextReadError.noSelection)
-    )
-    let stub_imageReader = ClipboardImageReaderStub(
-        image: expectedImage
-    )
+    let mock_viewer = ImageViewerControllerStub()
     let controller = AppController(
-        selectedTextReader: stub_selectedTextReader,
-        clipboardImageReader: stub_imageReader,
-        imageViewerController: ImageViewerControllerStub()
-    )
-
-    // Act
-    let action = await controller.resolveShortcutAction()
-
-    // Assert
-    guard case .openImage(let actualImage) = action else {
-        Issue.record("Expected the copied image to open")
-        return
-    }
-    #expect(actualImage === expectedImage)
-}
-
-@Test @MainActor
-func test_resolve_shortcut_action_when_text_and_image_are_missing_then_returns_none() async {
-    // Arrange
-    let stub_selectedTextReader = SelectedTextReaderStub(
-        result: .failure(SelectedTextReadError.noSelection)
-    )
-    let stub_imageReader = ClipboardImageReaderStub(image: nil)
-    let controller = AppController(
-        selectedTextReader: stub_selectedTextReader,
-        clipboardImageReader: stub_imageReader,
-        imageViewerController: ImageViewerControllerStub()
+        selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.noSelection)),
+        imageViewerController: mock_viewer
     )
 
     // Act
@@ -75,43 +36,45 @@ func test_resolve_shortcut_action_when_text_and_image_are_missing_then_returns_n
 
     // Assert
     guard case .none = action else {
-        Issue.record("Expected no shortcut action")
+        Issue.record("Translation shortcut must do nothing without selected text")
         return
     }
+    #expect(mock_viewer.presentationCount == 0)
 }
 
-@MainActor
-private final class ClipboardImageReaderStub: ClipboardImageReading {
-    let image: NSImage?
-    private(set) var invocationCount = 0
+@Test @MainActor
+func test_resolveShortcutAction_when_image_text_is_selected_then_prefers_image_selection() async throws {
+    // Arrange
+    let stub_viewer = ImageViewerControllerStub()
+    stub_viewer.isSelectionActive = true
+    stub_viewer.selectedText = "Image text"
+    let controller = AppController(
+        selectedTextReader: SelectedTextReaderStub(result: .success(try SelectedText("External text"))),
+        imageViewerController: stub_viewer
+    )
 
-    init(image: NSImage?) {
-        self.image = image
-    }
+    // Act
+    let action = await controller.resolveShortcutAction()
 
-    func readImage() -> NSImage? {
-        invocationCount += 1
-        return image
+    // Assert
+    guard case .translate(let actual) = action else {
+        Issue.record("Expected image text")
+        return
     }
+    #expect(actual.value == "Image text")
 }
 
 @MainActor
 private final class SelectedTextReaderStub: SelectedTextReading {
-    private let result: Result<SelectedText, Error>
-
-    init(result: Result<SelectedText, Error>) {
-        self.result = result
-    }
-
-    func readSelectedText() async throws -> SelectedText {
-        try result.get()
-    }
+    let result: Result<SelectedText, Error>
+    init(result: Result<SelectedText, Error>) { self.result = result }
+    func readSelectedText() async throws -> SelectedText { try result.get() }
 }
 
 @MainActor
 private final class ImageViewerControllerStub: ImageViewerControlling {
     var isSelectionActive = false
     var selectedText = ""
-
-    func present(image: NSImage, pointerLocation: CGPoint) {}
+    var presentationCount = 0
+    func present(image: NSImage, pointerLocation: CGPoint) { presentationCount += 1 }
 }

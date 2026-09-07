@@ -4,18 +4,23 @@ import SwiftUI
 struct ShortcutRecorderControl: NSViewRepresentable {
     let definition: GlobalShortcutDefinition
     let localization: AppLocalization
+    var accessibilityIdentifier: String = "shortcutRecorder"
+    var accessibilityLabel: String? = nil
     let onRecordingStarted: () -> Void
     let onRecordingCancelled: () -> Void
     let onShortcutRecorded: (GlobalShortcutDefinition) -> Void
 
     func makeNSView(context: Context) -> ShortcutRecorderButton {
-        ShortcutRecorderButton(
+        let button = ShortcutRecorderButton(
             definition: definition,
             localization: localization,
             onRecordingStarted: onRecordingStarted,
             onRecordingCancelled: onRecordingCancelled,
             onShortcutRecorded: onShortcutRecorded
         )
+        button.setAccessibilityIdentifier(accessibilityIdentifier)
+        if let accessibilityLabel { button.setAccessibilityLabel(accessibilityLabel) }
+        return button
     }
 
     func updateNSView(
@@ -27,6 +32,7 @@ struct ShortcutRecorderControl: NSViewRepresentable {
         button.onRecordingCancelled = onRecordingCancelled
         button.updateLocalization(localization)
         button.updateDefinition(definition)
+        if let accessibilityLabel { button.setAccessibilityLabel(accessibilityLabel) }
     }
 }
 

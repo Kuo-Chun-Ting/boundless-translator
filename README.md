@@ -14,6 +14,7 @@ Most translation apps make you copy text into another app. Boundless Translator 
 
 - macOS 15 or later
 - Accessibility permission
+- Screen Recording permission for screenshots
 - Downloaded translation languages
 
 ## Usage
@@ -27,7 +28,7 @@ Most translation apps make you copy text into another app. Boundless Translator 
 ### Settings
 
 1. Open **Preferences…** from the menu bar.
-2. Set **Translate From**, **Translate To**, and the keyboard shortcut.
+2. Set **Translate From**, **Translate To**, and the **Translate Selected Text** and **Capture Screen Region** shortcuts.
 3. Set **Language** for the app interface.
 
 **Language** uses **System Default** by default. It changes the app interface only. It does not change **Translate From** or **Translate To**.
@@ -37,15 +38,20 @@ The app interface supports the same languages as macOS. macOS provides translati
 ### Translate Text
 
 1. Select text in another app.
-2. Press the keyboard shortcut. The default is `Command-Shift-T`.
+2. Press the **Translate Selected Text** shortcut. The default is `Option-Shift-E`.
 
 ### Translate Screenshot
 
-1. Copy a screenshot.
-2. Make sure no text is selected.
-3. Press the keyboard shortcut.
-4. Select text in the screenshot window.
-5. Press the keyboard shortcut again.
+1. Press the **Capture Screen Region** shortcut. The default is `Option-Shift-R`.
+2. Select a screen region.
+3. Select text in the screenshot window.
+4. Press the **Translate Selected Text** shortcut. The default is `Option-Shift-E`.
+
+Both shortcuts can be changed in Settings. Existing saved shortcuts are preserved when the defaults change.
+
+If prompted, allow Screen Recording for Boundless Translator in **System Settings → Privacy & Security**, then try again. You may need to quit and reopen the app.
+
+Release Control before finishing the selection: macOS uses it to send the capture to the clipboard instead of opening it in the app.
 
 ## Build and Release
 

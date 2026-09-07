@@ -2,18 +2,23 @@
 
 ## Product
 
-Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in clipboard images. It uses one configurable global shortcut and presents results in a compact floating window.
+Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It has independently configurable global shortcuts for translating selected text and capturing a screen region, and presents translations in a compact floating window.
 
 ## Shortcut Flow
 
-When the user presses the configured shortcut:
+When the user presses Translate Selected Text (default `Option-Shift-E`):
 
 1. If text is selected in the active image workspace, translate it.
 2. Otherwise, try to read selected text from the active app through Accessibility, then through the clipboard fallback.
-3. Otherwise, if the clipboard contains an image, open it in the image workspace.
-4. If neither text nor an image is available, do nothing.
+3. If no text is selected, do nothing.
 
-Only one shortcut request runs at a time.
+When the user presses Capture Screen Region (default `Option-Shift-R`):
+
+1. Start the native macOS interactive region capture.
+2. Open the captured image in the image workspace for Live Text selection.
+3. The user selects text and presses Translate Selected Text to translate it.
+
+Only one shortcut request runs at a time. Pause both global shortcuts while either shortcut is being recorded.
 
 ## Translation
 
@@ -36,26 +41,30 @@ Only one shortcut request runs at a time.
 - Keep a pinned translation visible until the user closes or unpins it.
 - Preserve the window's top-left position when its content-driven size changes.
 
-## Clipboard Image Workspace
+## Screenshot Workspace
 
-- Open the clipboard image in a standard, resizable macOS window when no text selection is available.
+- Open the captured image in a standard, resizable macOS window titled Screenshot.
 - Fit the initial window to the image and the active screen while preserving the image aspect ratio.
 - Use VisionKit Live Text for native text recognition and selection.
 - Keep the workspace open across app deactivation and translation-window presentation.
-- Replace the displayed image when the shortcut is used with a newer clipboard image.
+- Replace the displayed image after a successful capture; keep the existing image when capture is cancelled or fails.
 - Clear its active selection when the window closes so stale text cannot override later selections.
 - Update the workspace background when macOS appearance changes without replacing the image or resetting its selection.
-- Do not add custom OCR regions, translation overlays, screenshot capture, or image history.
+- Use native macOS interactive capture through `screencapture`.
+- Control-modified capture is not supported: macOS redirects its result to the clipboard instead of the capture file.
+- Request Screen Recording permission when needed. If it is unavailable, explain how to allow it in System Settings > Privacy & Security and that reopening the app may be necessary.
+- Present a localized error when capture fails.
+- Do not add paste or image-import entry points, custom OCR regions, translation overlays, or image history.
 
 ## Preferences
 
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the active screen.
 - Present Preferences as one level of labeled rows without section headings.
-- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
-- Group Translate From and Translate To in the first settings card, then Keyboard Shortcut and Language in the second.
+- Order Preferences as Translate From, Translate To, Translate Selected Text, Capture Screen Region, Language, then Usage.
+- Group Translate From and Translate To in the first settings card, then both shortcuts and Language in the second.
 - Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
-- Fit all settings without scrolling or unused vertical space.
+- Fit all settings, including both shortcut rows, without scrolling or unused vertical space. Size the window to accommodate localized labels.
 - Configure the interface language independently from translation languages.
 - Follow the current macOS interface language by default.
 - Allow the user to override the interface with any language localized by macOS, and keep that choice when the macOS language changes.
@@ -63,16 +72,18 @@ Only one shortcut request runs at a time.
 - Show the effective macOS interface language beside System Default.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
-- Configure the single global translation shortcut, defaulting to `Command-Shift-T`.
+- Configure the translation and capture shortcuts independently, defaulting to `Option-Shift-E` and `Option-Shift-R` respectively.
+- Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
+- Reject a shortcut already assigned to the other action and keep the saved assignments.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
 - Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
 
 ## Architecture
 
-- `Application` composes dependencies and routes shortcut actions. `Application/Shortcut` owns shortcut registration, persistence, and recording state.
+- `Application` composes dependencies and routes translation and screenshot actions. `Application/Shortcut` owns both shortcut registrations, persistence, and duplicate validation. Settings pauses and restores both shortcuts during recording.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
-- `ImageViewer` owns clipboard image input, Live Text selection, and its persistent window. Application routes selected image text into the same translation flow as external text.
+- `ImageViewer` owns native interactive capture, its permission and failure handling, captured-image input, Live Text selection, and the persistent image window. Application coordinates capture and routes selected image text into the same translation flow as external text.
 - `Translation` owns requests, state, failures, and the supported-language catalog. Its subdirectories group the complete translation feature:
   - `UI` owns translation-window layout, lifecycle, dismissal, pinning, and language controls.
   - `Engines` defines the runner contract and the engine composition value. `Engines/Apple` owns Apple configuration, session hosting, language availability, execution, and error conversion.
@@ -110,6 +121,7 @@ Do not test Apple Translation results, Dictionary contents, OCR accuracy, or oth
 
 - macOS 15 or later.
 - External text selection depends on the active app's Accessibility or Copy support.
+- Screen capture requires Screen Recording permission and the macOS `screencapture` utility.
 - Image text recognition depends on VisionKit Live Text.
 - Translation languages and quality depend on Apple's Translation framework and installed language resources.
 - Speech availability depends on installed macOS voices.

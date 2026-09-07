@@ -9,6 +9,7 @@ func test_appearance_when_switchingLightDarkLight_then_usesOpaqueWindowBackgroun
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
@@ -46,6 +47,7 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
@@ -54,7 +56,7 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
     #expect(window.collectionBehavior.contains(.moveToActiveSpace))
     #expect(window.title == "Boundless Translator Settings")
     #expect(window.contentLayoutRect.size == PreferencesWindowStyle.contentSize)
-    #expect(window.contentLayoutRect.height == 280)
+    #expect(window.contentLayoutRect.height == 330)
 }
 
 @Test @MainActor
@@ -65,6 +67,7 @@ func test_present_when_activeScreenChanges_then_centersWindowOnActiveScreen() as
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog(),
         activeScreenVisibleFrame: { stub_visibleFrame }
     )
@@ -95,6 +98,7 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesWindowTitle
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: makeTestShortcutController(),
+        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)

@@ -1,12 +1,15 @@
 import SwiftUI
 
 enum SelectionErrorMessage {
+    case screenshot(ScreenshotCaptureError)
     case globalShortcut(GlobalShortcutError)
     case translationLanguagesUnavailable
     case verbatim(String)
 
     func localizedText(using localization: AppLocalization) -> String {
         switch self {
+        case .screenshot(let error):
+            error.message(localization: localization)
         case .globalShortcut(let error):
             error.message(localization: localization)
         case .translationLanguagesUnavailable:
@@ -35,7 +38,7 @@ struct SelectionErrorView: View {
                 .font(.headline)
             Divider()
             Label(
-                localization.string("selectionError.title"),
+                localization.string(errorTitleKey),
                 systemImage: "exclamationmark.triangle"
             )
                 .foregroundStyle(.red)
@@ -54,6 +57,11 @@ struct SelectionErrorView: View {
 
     var localizedMessage: String {
         message.localizedText(using: localization)
+    }
+
+    private var errorTitleKey: String {
+        if case .screenshot = message { return "screenshot.errorTitle" }
+        return "selectionError.title"
     }
 
     private var localization: AppLocalization {

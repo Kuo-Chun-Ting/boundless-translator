@@ -38,7 +38,9 @@ protocol GlobalShortcutMonitoring: AnyObject {
 
 @MainActor
 final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
-    private static let hotKeySignature: OSType = 0x5754_524E
+    private nonisolated static let hotKeySignature: OSType = 0x5754_524E
+    private static var nextIdentifier: UInt32 = 0
+    nonisolated let identifier: UInt32
 
     private let definition: GlobalShortcutDefinition
     private let handler: @MainActor () -> Void
@@ -47,11 +49,13 @@ final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
     private var hotKeyReference: EventHotKeyRef?
 
     init(
-        definition: GlobalShortcutDefinition = .commandShiftT,
+        definition: GlobalShortcutDefinition = .optionShiftE,
         handler: @escaping @MainActor () -> Void
     ) {
         self.definition = definition
         self.handler = handler
+        Self.nextIdentifier += 1
+        identifier = Self.nextIdentifier
     }
 
     func start() throws {
@@ -79,7 +83,7 @@ final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
 
         let hotKeyID = EventHotKeyID(
             signature: Self.hotKeySignature,
-            id: 1
+            id: identifier
         )
         let registrationStatus = RegisterEventHotKey(
             UInt32(definition.keyCode),
@@ -107,18 +111,32 @@ final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
     }
 
     private func invokeHandler() {
+        guard hotKeyReference != nil else { return }
         handler()
     }
 
+    nonisolated func acceptsEvent(signature: OSType, identifier: UInt32) -> Bool {
+        signature == Self.hotKeySignature && identifier == self.identifier
+    }
+
     private nonisolated static let carbonEventHandler: EventHandlerUPP = {
-        _, _, userData in
-        guard let userData else {
+        _, event, userData in
+        guard let event, let userData else {
             return OSStatus(eventNotHandledErr)
         }
 
         let monitor = Unmanaged<GlobalShortcutMonitor>
             .fromOpaque(userData)
             .takeUnretainedValue()
+        var eventID = EventHotKeyID()
+        let status = GetEventParameter(
+            event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID),
+            nil, MemoryLayout<EventHotKeyID>.size, nil, &eventID
+        )
+        guard status == noErr,
+              monitor.acceptsEvent(signature: eventID.signature, identifier: eventID.id) else {
+            return OSStatus(eventNotHandledErr)
+        }
         Task { @MainActor in
             monitor.invokeHandler()
         }

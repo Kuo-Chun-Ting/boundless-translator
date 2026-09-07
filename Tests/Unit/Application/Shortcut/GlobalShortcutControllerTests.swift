@@ -4,7 +4,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
+func test_init_when_shortcut_is_missing_then_uses_option_shift_e() {
     // Arrange
     let fixture_defaults = makeShortcutDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -17,7 +17,9 @@ func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
     )
 
     // Assert
-    #expect(controller.definition == .commandShiftT)
+    #expect(controller.definition == GlobalShortcutDefinition(
+        keyCode: 14, modifierFlags: [.option, .shift], keyEquivalent: "E"
+    ))
 }
 
 @Test @MainActor
@@ -50,7 +52,7 @@ func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_
     #expect(controller.definition == candidate)
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
     #expect(restoredController.definition == candidate)
-    #expect(mock_factory.definitions == [.commandShiftT, candidate])
+    #expect(mock_factory.definitions == [.optionShiftE, candidate])
 }
 
 @Test @MainActor
@@ -77,12 +79,12 @@ func test_updateShortcut_when_registration_fails_then_restores_previous_shortcut
     controller.updateShortcut(candidate)
 
     // Assert
-    #expect(controller.definition == .commandShiftT)
+    #expect(controller.definition == .optionShiftE)
     #expect(
         controller.failureMessage(localization: englishLocalization)
             == "The shortcut is already in use."
     )
-    #expect(mock_factory.definitions == [.commandShiftT, candidate, .commandShiftT])
+    #expect(mock_factory.definitions == [.optionShiftE, candidate, .optionShiftE])
 }
 
 @Test @MainActor
@@ -104,7 +106,7 @@ func test_cancelRecording_when_shortcutWasActive_then_reactivatesCurrentShortcut
 
     // Assert
     #expect(mock_factory.stopCount == 1)
-    #expect(mock_factory.definitions == [.commandShiftT, .commandShiftT])
+    #expect(mock_factory.definitions == [.optionShiftE, .optionShiftE])
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
 }
 
@@ -175,6 +177,97 @@ private enum MockShortcutError: LocalizedError {
 }
 
 private let englishLocalization = AppLocalization(languageIdentifier: "en")
+
+@Test @MainActor
+func test_updateShortcut_when_screenshot_changes_then_preserves_translation_preference() {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let translation = GlobalShortcutController(
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make, handler: {}
+    )
+    let screenshot = GlobalShortcutController(
+        kind: .screenshot, defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make, handler: {}
+    )
+    let candidate = GlobalShortcutDefinition(keyCode: 40, modifierFlags: [.command, .option], keyEquivalent: "K")
+
+    // Act
+    screenshot.updateShortcut(candidate)
+    let restored = GlobalShortcutController(
+        kind: .screenshot, defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make, handler: {}
+    )
+
+    // Assert
+    #expect(translation.definition == .optionShiftE)
+    #expect(restored.definition == candidate)
+    #expect(fixture_defaults.defaults.object(forKey: "globalShortcutKeyCode") == nil)
+}
+
+@Test @MainActor
+func test_start_when_screenshot_preference_is_missing_then_registers_option_shift_r() throws {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let mock_factory = MockGlobalShortcutMonitorFactory()
+    let controller = GlobalShortcutController(
+        kind: .screenshot, defaults: fixture_defaults.defaults,
+        makeMonitor: mock_factory.make, handler: {}
+    )
+
+    // Act
+    try controller.start()
+
+    // Assert
+    #expect(mock_factory.definitions == [GlobalShortcutDefinition(
+        keyCode: 15, modifierFlags: [.option, .shift], keyEquivalent: "R"
+    )])
+}
+
+@Test @MainActor
+func test_updateShortcut_when_candidate_matches_other_action_then_restores_saved_shortcut() throws {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let mock_factory = MockGlobalShortcutMonitorFactory()
+    let controller = GlobalShortcutController(
+        defaults: fixture_defaults.defaults, makeMonitor: mock_factory.make, handler: {}
+    )
+    try controller.start()
+    controller.beginRecording()
+
+    // Act
+    controller.updateShortcut(.optionShiftR, reserved: [.optionShiftR])
+
+    // Assert
+    #expect(controller.definition == .optionShiftE)
+    #expect(controller.failureMessage(localization: englishLocalization) != nil)
+    #expect(mock_factory.definitions == [.optionShiftE, .optionShiftE])
+}
+
+@Test(arguments: [GlobalShortcutKind.translation, .screenshot]) @MainActor
+func test_init_when_previous_shortcut_is_saved_then_preserves_preference(kind: GlobalShortcutKind) {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let prefix = kind.storagePrefix
+    fixture_defaults.defaults.set(17, forKey: prefix + "KeyCode")
+    fixture_defaults.defaults.set(Int(NSEvent.ModifierFlags([.command, .shift]).rawValue), forKey: prefix + "Modifiers")
+    fixture_defaults.defaults.set("T", forKey: prefix + "KeyEquivalent")
+
+    // Act
+    let controller = GlobalShortcutController(
+        kind: kind, defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make, handler: {}
+    )
+
+    // Assert
+    #expect(controller.definition == GlobalShortcutDefinition(
+        keyCode: 17, modifierFlags: [.command, .shift], keyEquivalent: "T"
+    ))
+}
 
 private struct ShortcutDefaultsFixture {
     let suiteName: String
