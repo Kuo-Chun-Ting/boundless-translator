@@ -94,7 +94,35 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Interface localization covers every language localized by macOS and remains independent from Translation framework language availability.
 - Usage explains that interface-language coverage and translation-language availability follow macOS support.
 
-These directories belong to one executable target, not separate Swift packages. Platform adapters remain behind focused protocols or injected operations so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals. The only production translation engine is Apple; this architecture does not add billing or an engine-selection interface.
+These directories belong to one executable target, not separate Swift packages. Platform adapters remain behind focused protocols or injected operations so application flow, state, and UI behavior can be tested without invoking external apps or Apple framework internals. The only production translation engine is Apple. Purchase access is an application-level concern and remains independent from the translation engine.
+
+## App Store Distribution
+
+- Maintain the App Store and Developer ID distributions in the same repository and branch.
+- Share product code between distributions. Keep signing, entitlements, packaging, upload, and purchase integration specific to each distribution.
+- Validate the App Store build under App Sandbox before implementing commerce. The validation covers the global shortcut, Accessibility selection, clipboard fallback, region capture, Live Text selection, Apple translation, speech, and Lookup.
+- Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
+- Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
+
+## App Store Subscription
+
+- Distribute the App Store build as a free download with one auto-renewable annual subscription.
+- Set the subscription price to NT$199 per year in App Store Connect.
+- Offer eligible users a one-month introductory free trial. Downloading or launching the App does not start the trial; the user must confirm the subscription through StoreKit.
+- Allow the current product features while the introductory trial or subscription entitlement is active.
+- When access expires, keep Preferences, subscription purchase, subscription management, and restore-purchases available. Require active access before starting translation or screenshot capture.
+- Use StoreKit verified transactions as the source of App Store access. Do not require an account, database, or custom purchase server for the initial release.
+- Handle purchase cancellation, pending approval, renewal failure, expiration, refund or revocation, restored purchases, and reinstall. Do not revoke an already verified, unexpired entitlement solely because StoreKit refresh is temporarily unavailable.
+- Do not define pricing or access rules for unplanned future features.
+
+## App Store Metadata and Privacy
+
+- Provide an in-App privacy-policy entry and matching privacy-policy URL in App Store Connect.
+- Describe how selected text, screenshots, translations, settings, and purchase state are processed.
+- Declare applicable required-reason APIs in the privacy manifest and keep App Store privacy answers consistent with the shipped build.
+- Explain Accessibility and Screen Recording permissions before or when they are requested.
+- Provide localized product metadata, screenshots, support contact information, age rating, review notes, and instructions for testing the shortcut, screenshot flow, and subscription.
+- Validate the complete first-install, permission, translation, screenshot, trial, purchase, expiration, and restore flows with an App Store-signed TestFlight build before submission.
 
 ## Build and Release
 
@@ -103,6 +131,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
 - Only a successful release saves `Build/Boundless Translator-<version>.dmg`. A failed release restores the previous version metadata and preserves any existing release DMG.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
+- The App Store release uses its own signing, archive, validation, and upload workflow. It does not produce or notarize a DMG.
 
 ## Test Layers
 
