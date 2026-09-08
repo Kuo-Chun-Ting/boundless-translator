@@ -4,7 +4,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_init_when_shortcut_is_missing_then_uses_option_shift_t() {
+func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
     // Arrange
     let fixture_defaults = makeShortcutDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -18,7 +18,7 @@ func test_init_when_shortcut_is_missing_then_uses_option_shift_t() {
 
     // Assert
     #expect(controller.definition == GlobalShortcutDefinition(
-        keyCode: 17, modifierFlags: [.option, .shift], keyEquivalent: "T"
+        keyCode: 17, modifierFlags: [.command, .shift], keyEquivalent: "T"
     ))
 }
 
@@ -52,7 +52,7 @@ func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_
     #expect(controller.definition == candidate)
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
     #expect(restoredController.definition == candidate)
-    #expect(mock_factory.definitions == [.optionShiftT, candidate])
+    #expect(mock_factory.definitions == [.commandShiftT, candidate])
 }
 
 @Test @MainActor
@@ -79,12 +79,12 @@ func test_updateShortcut_when_registration_fails_then_restores_previous_shortcut
     controller.updateShortcut(candidate)
 
     // Assert
-    #expect(controller.definition == .optionShiftT)
+    #expect(controller.definition == .commandShiftT)
     #expect(
         controller.failureMessage(localization: englishLocalization)
             == "The shortcut is already in use."
     )
-    #expect(mock_factory.definitions == [.optionShiftT, candidate, .optionShiftT])
+    #expect(mock_factory.definitions == [.commandShiftT, candidate, .commandShiftT])
 }
 
 @Test @MainActor
@@ -106,7 +106,7 @@ func test_cancelRecording_when_shortcutWasActive_then_reactivatesCurrentShortcut
 
     // Assert
     #expect(mock_factory.stopCount == 1)
-    #expect(mock_factory.definitions == [.optionShiftT, .optionShiftT])
+    #expect(mock_factory.definitions == [.commandShiftT, .commandShiftT])
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
 }
 

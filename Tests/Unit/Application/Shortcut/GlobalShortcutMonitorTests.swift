@@ -4,7 +4,7 @@ import Testing
 @Test @MainActor
 func test_acceptsEvent_when_other_monitor_exists_then_matches_only_own_event() {
     // Arrange
-    let translation = GlobalShortcutMonitor(definition: .optionShiftT, handler: {})
+    let translation = GlobalShortcutMonitor(definition: .commandShiftT, handler: {})
     let other = GlobalShortcutMonitor(
         definition: GlobalShortcutDefinition(
             keyCode: 15,

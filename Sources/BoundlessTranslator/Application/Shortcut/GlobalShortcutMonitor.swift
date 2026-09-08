@@ -49,7 +49,7 @@ final class GlobalShortcutMonitor: GlobalShortcutMonitoring {
     private var hotKeyReference: EventHotKeyRef?
 
     init(
-        definition: GlobalShortcutDefinition = .optionShiftT,
+        definition: GlobalShortcutDefinition = .commandShiftT,
         handler: @escaping @MainActor () -> Void
     ) {
         self.definition = definition

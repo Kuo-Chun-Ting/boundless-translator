@@ -4,21 +4,21 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
-func test_carbonModifierFlags_when_option_shift_t_is_used_then_contains_option_and_shift() {
+func test_carbonModifierFlags_when_command_shift_t_is_used_then_contains_command_and_shift() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftT
+    let shortcut = GlobalShortcutDefinition.commandShiftT
 
     // Act
     let modifiers = shortcut.carbonModifierFlags
 
     // Assert
-    #expect(modifiers == UInt32(optionKey | shiftKey))
+    #expect(modifiers == UInt32(cmdKey | shiftKey))
 }
 
 @Test
 func test_carbonRegistrationOptions_when_shortcut_is_registered_then_requests_exclusive_access() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftT
+    let shortcut = GlobalShortcutDefinition.commandShiftT
 
     // Act
     let options = shortcut.carbonRegistrationOptions
@@ -28,15 +28,15 @@ func test_carbonRegistrationOptions_when_shortcut_is_registered_then_requests_ex
 }
 
 @Test
-func test_displayName_when_option_shift_t_is_used_then_uses_keyboard_symbols() {
+func test_displayName_when_command_shift_t_is_used_then_uses_keyboard_symbols() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftT
+    let shortcut = GlobalShortcutDefinition.commandShiftT
 
     // Act
     let displayName = shortcut.displayName
 
     // Assert
-    #expect(displayName == "⌥⇧T")
+    #expect(displayName == "⇧⌘T")
 }
 
 @Test

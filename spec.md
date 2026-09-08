@@ -6,7 +6,7 @@ Boundless Translator is a macOS 15 menu bar app for translating selected text an
 
 ## Shortcut Flow
 
-When the user presses the translation shortcut (default `Option-Shift-T`):
+When the user presses the translation shortcut (default `Command-Shift-T`):
 
 1. If text is selected in the active image workspace, translate it.
 2. Otherwise, try to read selected text from the active app through Accessibility, then through the clipboard fallback.
@@ -70,7 +70,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Show the effective macOS interface language beside System Default.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
-- Configure one translation shortcut, defaulting to `Option-Shift-T`.
+- Configure one translation shortcut, defaulting to `Command-Shift-T`.
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
@@ -101,6 +101,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Maintain the App Store and Developer ID distributions in the same repository and branch.
 - Share product code between distributions. Keep signing, entitlements, packaging, upload, and purchase integration specific to each distribution.
 - Validate the App Store build under App Sandbox before implementing commerce. The validation covers the global shortcut, Accessibility selection, clipboard fallback, region capture, Live Text selection, Apple translation, speech, and Lookup.
+- `Scripts/Tools/build_app.sh --sandbox` creates a Developer ID-signed compatibility build at `Build/Sandbox/Boundless Translator.app`, with App Sandbox and outgoing-network access enabled. Its separate bundle identifier isolates preferences and permissions from the existing distribution. This is not an App Store-signed build or proof of App Review eligibility.
 - Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
 - Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
 

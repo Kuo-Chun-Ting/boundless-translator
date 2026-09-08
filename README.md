@@ -38,11 +38,11 @@ The app interface supports the same languages as macOS. macOS provides translati
 ### Translate Text
 
 1. Select text in another app.
-2. Press the translation shortcut. The default is `Option-Shift-T`.
+2. Press the translation shortcut. The default is `Command-Shift-T`.
 
 ### Translate Screenshot
 
-1. Press the translation shortcut without selecting text. The default is `Option-Shift-T`.
+1. Press the translation shortcut without selecting text. The default is `Command-Shift-T`.
 2. Select a screen region.
 3. Select text in the screenshot window.
 4. Press the same shortcut to translate it.
@@ -69,6 +69,18 @@ Scripts/Tools/build_app.sh
 ```
 
 This builds and signs `Build/Boundless Translator.app`. Open it to run the app.
+
+### Test App Sandbox Compatibility
+
+```bash
+Scripts/Tools/build_app.sh --sandbox
+```
+
+This builds `Build/Sandbox/Boundless Translator.app` with App Sandbox enabled and a separate bundle identifier, `com.lillard.BoundlessTranslator.Sandbox`. It does not replace the normal build or share its saved settings and permissions.
+
+Quit other copies of Boundless Translator before testing so they do not compete for the shortcut. Grant permissions to the Sandbox copy only when prompted or needed for the test. Test external text selection, screenshot capture, Live Text, translation, speech, and Lookup; a successful build alone does not establish compatibility.
+
+This Developer ID-signed build is a local compatibility test, not an App Store or TestFlight release.
 
 ### Release a DMG
 

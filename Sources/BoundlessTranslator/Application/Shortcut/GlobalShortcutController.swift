@@ -142,7 +142,7 @@ final class GlobalShortcutController: ObservableObject {
             defaults.object(forKey: GlobalShortcutStorageKey.modifiers) != nil,
             let keyEquivalent = defaults.string(forKey: GlobalShortcutStorageKey.keyEquivalent)
         else {
-            return .optionShiftT
+            return .commandShiftT
         }
 
         let keyCode = defaults.integer(forKey: GlobalShortcutStorageKey.keyCode)
@@ -151,7 +151,7 @@ final class GlobalShortcutController: ObservableObject {
             let storedKeyCode = UInt16(exactly: keyCode),
             let modifierRawValue = UInt(exactly: modifiers)
         else {
-            return .optionShiftT
+            return .commandShiftT
         }
 
         let definition = GlobalShortcutDefinition(
@@ -159,6 +159,6 @@ final class GlobalShortcutController: ObservableObject {
             modifierFlags: NSEvent.ModifierFlags(rawValue: modifierRawValue),
             keyEquivalent: keyEquivalent
         )
-        return definition.isValid ? definition : .optionShiftT
+        return definition.isValid ? definition : .commandShiftT
     }
 }

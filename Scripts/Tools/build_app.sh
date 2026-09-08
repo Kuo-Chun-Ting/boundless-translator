@@ -3,7 +3,16 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly BUILD_ROOT="${PROJECT_ROOT}/Build"
+if [[ "$#" -gt 1 ]] || [[ "$#" -eq 1 && "$1" != --sandbox ]]; then
+    print -u2 'Usage: build_app.sh [--sandbox]'
+    exit 1
+fi
+readonly BUILD_MODE="${1:-developer-id}"
+if [[ "${BUILD_MODE}" == --sandbox ]]; then
+    readonly BUILD_ROOT="${PROJECT_ROOT}/Build/Sandbox"
+else
+    readonly BUILD_ROOT="${PROJECT_ROOT}/Build"
+fi
 readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
 readonly DEVELOPER_PATH="/Applications/Xcode.app/Contents/Developer"
 source "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf"
@@ -47,13 +56,22 @@ cp -R \
 cp "${PROJECT_ROOT}/Resources/Info.plist" "${CONTENTS_PATH}/Info.plist"
 cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
 
+signing_arguments=()
+if [[ "${BUILD_MODE}" == --sandbox ]]; then
+    plutil -replace CFBundleIdentifier -string 'com.lillard.BoundlessTranslator.Sandbox' "${CONTENTS_PATH}/Info.plist"
+    plutil -replace CFBundleDisplayName -string 'Boundless Translator Sandbox' "${CONTENTS_PATH}/Info.plist"
+    signing_arguments=(--entitlements "${PROJECT_ROOT}/Resources/Sandbox.entitlements")
+fi
+
 plutil -lint "${CONTENTS_PATH}/Info.plist"
 codesign \
     --force \
     --options runtime \
     --timestamp \
     --sign "${SIGNING_IDENTITY}" \
+    "${signing_arguments[@]}" \
     "${STAGED_APP_PATH}"
+codesign --verify --strict --verbose=2 "${STAGED_APP_PATH}"
 
 mkdir -p "${BUILD_ROOT}"
 if ! mkdir "${PUBLISH_LOCK}" 2>/dev/null; then
