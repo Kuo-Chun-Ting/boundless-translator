@@ -2,16 +2,10 @@ import AppKit
 import Carbon.HIToolbox
 
 struct GlobalShortcutDefinition: Equatable {
-    static let optionShiftR = GlobalShortcutDefinition(
-        keyCode: 15,
+    static let optionShiftT = GlobalShortcutDefinition(
+        keyCode: 17,
         modifierFlags: [.option, .shift],
-        keyEquivalent: "R"
-    )
-
-    static let optionShiftE = GlobalShortcutDefinition(
-        keyCode: 14,
-        modifierFlags: [.option, .shift],
-        keyEquivalent: "E"
+        keyEquivalent: "T"
     )
 
     let keyCode: UInt16

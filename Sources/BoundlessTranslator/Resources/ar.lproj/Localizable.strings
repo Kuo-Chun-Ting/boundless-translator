@@ -7,9 +7,6 @@
 "preferences.translateTo" = "الترجمة إلى";
 "translation.from" = "من";
 "translation.detectAutomatically" = "اكتشاف تلقائي";
-"shortcut.section" = "ترجمة النص المحدد";
-"screenshot.shortcut" = "التقاط منطقة من الشاشة";
-"shortcut.alreadyAssigned" = "اختصار لوحة المفاتيح هذا معيّن للإجراء الآخر.";
 "shortcut.invalid" = "استخدم Command أو Option أو Control مع مفتاح آخر.";
 "shortcut.recording" = "اكتب الاختصار";
 "shortcut.tooltip" = "انقر، ثم اكتب اختصار لوحة مفاتيح جديدًا.";

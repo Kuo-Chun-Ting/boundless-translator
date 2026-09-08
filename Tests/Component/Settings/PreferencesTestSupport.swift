@@ -2,12 +2,11 @@ import Foundation
 @testable import BoundlessTranslator
 
 @MainActor
-func makeTestShortcutController(kind: GlobalShortcutKind = .translation) -> GlobalShortcutController {
+func makeTestShortcutController() -> GlobalShortcutController {
     let suiteName = "PreferencesComponentTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)
     return GlobalShortcutController(
-        kind: kind,
         defaults: defaults,
         makeMonitor: { _, _ in NoOpShortcutMonitor() },
         handler: {}

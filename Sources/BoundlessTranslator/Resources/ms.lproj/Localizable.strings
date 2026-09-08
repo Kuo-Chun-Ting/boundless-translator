@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Terjemah kepada";
 "translation.from" = "Daripada";
 "translation.detectAutomatically" = "Kesan Secara Automatik";
-"shortcut.section" = "Terjemah Teks Dipilih";
-"screenshot.shortcut" = "Tangkap Kawasan Skrin";
-"shortcut.alreadyAssigned" = "Pintasan ini ditetapkan kepada tindakan yang satu lagi.";
 "shortcut.invalid" = "Gunakan Command, Option atau Control bersama kekunci lain.";
 "shortcut.recording" = "Taip Pintasan";
 "shortcut.tooltip" = "Klik, kemudian taip pintasan papan kekunci baharu.";

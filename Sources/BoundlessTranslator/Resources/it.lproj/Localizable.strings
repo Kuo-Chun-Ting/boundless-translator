@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Traduci in";
 "translation.from" = "Da";
 "translation.detectAutomatically" = "Rileva automaticamente";
-"shortcut.section" = "Traduci il testo selezionato";
-"screenshot.shortcut" = "Acquisisci un’area dello schermo";
-"shortcut.alreadyAssigned" = "Questa abbreviazione è assegnata all’altra azione.";
 "shortcut.invalid" = "Usa Comando, Opzione o Controllo insieme a un altro tasto.";
 "shortcut.recording" = "Digita abbreviazione";
 "shortcut.tooltip" = "Fai clic, quindi digita una nuova abbreviazione da tastiera.";

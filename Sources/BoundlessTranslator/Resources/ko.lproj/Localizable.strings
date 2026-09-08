@@ -7,9 +7,6 @@
 "preferences.translateTo" = "번역 언어";
 "translation.from" = "출발어";
 "translation.detectAutomatically" = "자동 감지";
-"shortcut.section" = "선택한 텍스트 번역";
-"screenshot.shortcut" = "화면 영역 캡처";
-"shortcut.alreadyAssigned" = "이 단축키는 다른 동작에 할당되어 있습니다.";
 "shortcut.invalid" = "Command, Option 또는 Control 키를 다른 키와 함께 사용하십시오.";
 "shortcut.recording" = "단축키 입력";
 "shortcut.tooltip" = "클릭한 다음 새 키보드 단축키를 입력하십시오.";

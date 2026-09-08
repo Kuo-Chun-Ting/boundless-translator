@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Vertalen naar";
 "translation.from" = "Van";
 "translation.detectAutomatically" = "Automatisch detecteren";
-"shortcut.section" = "Vertaal geselecteerde tekst";
-"screenshot.shortcut" = "Leg schermgebied vast";
-"shortcut.alreadyAssigned" = "Deze sneltoets is toegewezen aan de andere actie.";
 "shortcut.invalid" = "Gebruik Command, Option of Control samen met een andere toets.";
 "shortcut.recording" = "Voer toetscombinatie in";
 "shortcut.tooltip" = "Klik en voer vervolgens een nieuwe toetscombinatie in.";

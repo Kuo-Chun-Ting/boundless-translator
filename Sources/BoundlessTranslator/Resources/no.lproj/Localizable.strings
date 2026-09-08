@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Oversett til";
 "translation.from" = "Fra";
 "translation.detectAutomatically" = "Finn automatisk";
-"shortcut.section" = "Oversett markert tekst";
-"screenshot.shortcut" = "Ta bilde av skjermområde";
-"shortcut.alreadyAssigned" = "Denne snarveien er tilordnet den andre handlingen.";
 "shortcut.invalid" = "Bruk Kommando, Tilvalg eller Kontroll sammen med en annen tast.";
 "shortcut.recording" = "Skriv inn snarvei";
 "shortcut.tooltip" = "Klikk, og skriv deretter inn en ny tastatursnarvei.";

@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Tradueix a";
 "translation.from" = "De";
 "translation.detectAutomatically" = "Detecta automàticament";
-"shortcut.section" = "Tradueix el text seleccionat";
-"screenshot.shortcut" = "Captura una àrea de la pantalla";
-"shortcut.alreadyAssigned" = "Aquesta drecera està assignada a l’altra acció.";
 "shortcut.invalid" = "Fes servir Ordre, Opció o Control amb una altra tecla.";
 "shortcut.recording" = "Introdueix la drecera";
 "shortcut.tooltip" = "Fes clic i introdueix una drecera de teclat nova.";

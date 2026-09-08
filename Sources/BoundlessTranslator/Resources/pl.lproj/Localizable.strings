@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Tłumacz na";
 "translation.from" = "Z";
 "translation.detectAutomatically" = "Wykrywaj automatycznie";
-"shortcut.section" = "Przetłumacz zaznaczony tekst";
-"screenshot.shortcut" = "Zrób zrzut obszaru ekranu";
-"shortcut.alreadyAssigned" = "Ten skrót jest przypisany do drugiej czynności.";
 "shortcut.invalid" = "Użyj klawisza Command, Option lub Control razem z innym klawiszem.";
 "shortcut.recording" = "Wprowadź skrót";
 "shortcut.tooltip" = "Kliknij, a następnie wprowadź nowy skrót klawiszowy.";

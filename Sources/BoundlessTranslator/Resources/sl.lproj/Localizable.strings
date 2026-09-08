@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Prevedi v";
 "translation.from" = "Iz";
 "translation.detectAutomatically" = "Samodejno zaznaj";
-"shortcut.section" = "Prevedi izbrano besedilo";
-"screenshot.shortcut" = "Zajemi območje zaslona";
-"shortcut.alreadyAssigned" = "Ta bližnjica je dodeljena drugemu dejanju.";
 "shortcut.invalid" = "Uporabite Command, Option ali Control skupaj z drugo tipko.";
 "shortcut.recording" = "Vnesite bližnjico";
 "shortcut.tooltip" = "Kliknite in vnesite novo tipkovno bližnjico.";

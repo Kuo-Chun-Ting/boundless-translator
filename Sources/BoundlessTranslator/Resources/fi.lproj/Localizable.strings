@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Käännä kielelle";
 "translation.from" = "Lähde";
 "translation.detectAutomatically" = "Tunnista automaattisesti";
-"shortcut.section" = "Käännä valittu teksti";
-"screenshot.shortcut" = "Ota kuva näytön alueesta";
-"shortcut.alreadyAssigned" = "Tämä oikotie on määritetty toiselle toiminnolle.";
 "shortcut.invalid" = "Käytä Komento-, Optio- tai Ctrl-näppäintä yhdessä toisen näppäimen kanssa.";
 "shortcut.recording" = "Syötä oikotie";
 "shortcut.tooltip" = "Klikkaa ja syötä sitten uusi näppäinoikotie.";

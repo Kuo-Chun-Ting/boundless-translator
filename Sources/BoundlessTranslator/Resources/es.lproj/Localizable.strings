@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Traducir a";
 "translation.from" = "De";
 "translation.detectAutomatically" = "Detectar automáticamente";
-"shortcut.section" = "Traducir el texto seleccionado";
-"screenshot.shortcut" = "Capturar un área de la pantalla";
-"shortcut.alreadyAssigned" = "Este atajo está asignado a la otra acción.";
 "shortcut.invalid" = "Usa Comando, Opción o Control junto con otra tecla.";
 "shortcut.recording" = "Introducir función rápida";
 "shortcut.tooltip" = "Haz clic y, a continuación, introduce una nueva función rápida de teclado.";

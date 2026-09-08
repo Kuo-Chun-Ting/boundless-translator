@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Перевести на";
 "translation.from" = "С";
 "translation.detectAutomatically" = "Определять автоматически";
-"shortcut.section" = "Перевести выбранный текст";
-"screenshot.shortcut" = "Снять область экрана";
-"shortcut.alreadyAssigned" = "Это сочетание клавиш назначено другому действию.";
 "shortcut.invalid" = "Используйте Command, Option или Control вместе с другой клавишей.";
 "shortcut.recording" = "Введите сочетание";
 "shortcut.tooltip" = "Нажмите и введите новое сочетание клавиш.";

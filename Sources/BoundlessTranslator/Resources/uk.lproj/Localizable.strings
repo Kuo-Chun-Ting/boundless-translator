@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Перекласти на";
 "translation.from" = "З";
 "translation.detectAutomatically" = "Визначати автоматично";
-"shortcut.section" = "Перекласти вибраний текст";
-"screenshot.shortcut" = "Зняти ділянку екрана";
-"shortcut.alreadyAssigned" = "Це клавіатурне скорочення призначено іншій дії.";
 "shortcut.invalid" = "Використовуйте Command, Option або Control разом з іншою клавішею.";
 "shortcut.recording" = "Введіть скорочення";
 "shortcut.tooltip" = "Клацніть і введіть нове клавіатурне скорочення.";

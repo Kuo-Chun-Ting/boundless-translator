@@ -13,7 +13,6 @@ final class PreferencesWindowController: NSWindowController {
         settings: TranslationSettings,
         interfaceLanguageSettings: InterfaceLanguageSettings,
         shortcutController: GlobalShortcutController,
-        screenshotShortcutController: GlobalShortcutController,
         supportedLanguageCatalog: SupportedLanguageCatalog,
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
         quitApplication: @escaping @MainActor @Sendable () -> Void = {
@@ -43,7 +42,6 @@ final class PreferencesWindowController: NSWindowController {
                 settings: settings,
                 interfaceLanguageSettings: interfaceLanguageSettings,
                 shortcutController: shortcutController,
-                screenshotShortcutController: screenshotShortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication
             )

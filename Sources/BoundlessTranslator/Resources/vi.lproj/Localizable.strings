@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Dịch sang";
 "translation.from" = "Từ";
 "translation.detectAutomatically" = "Tự động phát hiện";
-"shortcut.section" = "Dịch văn bản đã chọn";
-"screenshot.shortcut" = "Chụp vùng màn hình";
-"shortcut.alreadyAssigned" = "Phím tắt này đã được gán cho tác vụ còn lại.";
 "shortcut.invalid" = "Sử dụng Command, Option hoặc Control cùng với một phím khác.";
 "shortcut.recording" = "Nhập phím tắt";
 "shortcut.tooltip" = "Bấm, sau đó nhập phím tắt mới.";

@@ -15,14 +15,10 @@ final class AppController {
     private lazy var shortcutController = GlobalShortcutController { [weak self] in
         self?.handleShortcut()
     }
-    private lazy var screenshotShortcutController = GlobalShortcutController(kind: .screenshot) { [weak self] in
-        self?.handleScreenshotShortcut()
-    }
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: shortcutController,
-        screenshotShortcutController: screenshotShortcutController,
         supportedLanguageCatalog: supportedLanguageCatalog
     )
     private let selectedTextReader: any SelectedTextReading
@@ -68,7 +64,6 @@ final class AppController {
 
     func prepare() {
         startShortcut(shortcutController)
-        startShortcut(screenshotShortcutController)
 
         Task {
             let supportedLanguages = await supportedLanguageCatalog.load()
@@ -112,8 +107,12 @@ final class AppController {
             switch await resolveShortcutAction() {
             case .translate(let selectedText):
                 await resolveSourceLanguage(for: selectedText)
-            case .none:
-                return
+            case .captureScreenRegion:
+                do {
+                    try await captureScreenshot()
+                } catch {
+                    showError(.screenshot((error as? ScreenshotCaptureError) ?? .captureFailed))
+                }
             }
         }
     }
@@ -123,11 +122,11 @@ final class AppController {
             return .translate(selectedText)
         }
 
-        return .none
+        return .captureScreenRegion
     }
 
     func captureScreenshot() async throws {
-        guard !isCapturingScreenshot, selectionTask == nil else { return }
+        guard !isCapturingScreenshot else { return }
         isCapturingScreenshot = true
         defer { isCapturingScreenshot = false }
         guard let image = try await screenshotCapture.captureRegion() else { return }
@@ -151,16 +150,6 @@ final class AppController {
             message: message,
             pointerLocation: NSEvent.mouseLocation
         )
-    }
-
-    private func handleScreenshotShortcut() {
-        Task {
-            do {
-                try await captureScreenshot()
-            } catch {
-                showError(.screenshot((error as? ScreenshotCaptureError) ?? .captureFailed))
-            }
-        }
     }
 
     private func resolveSourceLanguage(for selectedText: SelectedText) async {
@@ -204,5 +193,5 @@ final class AppController {
 
 enum ShortcutAction {
     case translate(SelectedText)
-    case none
+    case captureScreenRegion
 }

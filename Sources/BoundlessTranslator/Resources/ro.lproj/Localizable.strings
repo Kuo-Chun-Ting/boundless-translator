@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Traduce în";
 "translation.from" = "Din";
 "translation.detectAutomatically" = "Detectare automată";
-"shortcut.section" = "Traduceți textul selectat";
-"screenshot.shortcut" = "Capturați o regiune a ecranului";
-"shortcut.alreadyAssigned" = "Această scurtătură este atribuită celeilalte acțiuni.";
 "shortcut.invalid" = "Folosește Command, Option sau Control împreună cu o altă tastă.";
 "shortcut.recording" = "Tastează scurtătura";
 "shortcut.tooltip" = "Fă clic, apoi tastează o nouă scurtătură din tastatură.";

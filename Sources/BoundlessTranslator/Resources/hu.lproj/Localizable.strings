@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Fordítás erre";
 "translation.from" = "Forrás";
 "translation.detectAutomatically" = "Automatikus felismerés";
-"shortcut.section" = "Kijelölt szöveg fordítása";
-"screenshot.shortcut" = "Képernyőterület rögzítése";
-"shortcut.alreadyAssigned" = "Ez a billentyűparancs a másik művelethez van rendelve.";
 "shortcut.invalid" = "Használja a Command, Option vagy Control billentyűt egy másik billentyűvel együtt.";
 "shortcut.recording" = "Billentyűparancs megadása";
 "shortcut.tooltip" = "Kattintson, majd adjon meg egy új billentyűparancsot.";

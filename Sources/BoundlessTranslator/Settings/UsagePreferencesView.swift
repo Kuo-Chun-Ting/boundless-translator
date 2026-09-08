@@ -2,7 +2,6 @@ import SwiftUI
 
 struct UsagePreferencesView: View {
     let shortcut: GlobalShortcutDefinition
-    let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
 
     @State private var isPresentingGuide = false
@@ -20,7 +19,6 @@ struct UsagePreferencesView: View {
         .popover(isPresented: $isPresentingGuide, arrowEdge: .trailing) {
             UsageGuideView(
                 shortcut: shortcut,
-                screenshotShortcut: screenshotShortcut,
                 localization: localization
             )
         }
@@ -29,16 +27,13 @@ struct UsagePreferencesView: View {
 
 struct UsageGuideView: View {
     let shortcut: GlobalShortcutDefinition
-    let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
 
     init(
         shortcut: GlobalShortcutDefinition,
-        screenshotShortcut: GlobalShortcutDefinition,
         localization: AppLocalization
     ) {
         self.shortcut = shortcut
-        self.screenshotShortcut = screenshotShortcut
         self.localization = localization
     }
 
@@ -75,7 +70,6 @@ struct UsageGuideView: View {
     private var items: [UsageGuideItem] {
         UsageGuideItem.make(
             shortcut: shortcut,
-            screenshotShortcut: screenshotShortcut,
             localization: localization
         )
     }
@@ -106,7 +100,6 @@ struct UsageGuideItem: Identifiable {
 
     static func make(
         shortcut: GlobalShortcutDefinition,
-        screenshotShortcut: GlobalShortcutDefinition,
         localization: AppLocalization
     ) -> [UsageGuideItem] {
         let shortcutName = shortcut.displayName
@@ -132,8 +125,7 @@ struct UsageGuideItem: Identifiable {
                 title: localization.string("usage.translateImageText.title"),
                 description: localization.string(
                     "usage.translateImageText.description",
-                    arguments: screenshotShortcut.displayName,
-                    shortcutName
+                    arguments: shortcutName, shortcutName
                 )
             ),
             UsageGuideItem(

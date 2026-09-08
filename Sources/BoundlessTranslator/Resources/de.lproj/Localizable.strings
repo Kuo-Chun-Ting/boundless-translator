@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Übersetzen in";
 "translation.from" = "Von";
 "translation.detectAutomatically" = "Automatisch erkennen";
-"shortcut.section" = "Ausgewählten Text übersetzen";
-"screenshot.shortcut" = "Bildschirmbereich aufnehmen";
-"shortcut.alreadyAssigned" = "Dieser Kurzbefehl ist der anderen Aktion zugewiesen.";
 "shortcut.invalid" = "Verwende Befehlstaste, Wahltaste oder ctrl-Taste zusammen mit einer weiteren Taste.";
 "shortcut.recording" = "Kurzbefehl eingeben";
 "shortcut.tooltip" = "Klicke und gib dann einen neuen Tastaturkurzbefehl ein.";

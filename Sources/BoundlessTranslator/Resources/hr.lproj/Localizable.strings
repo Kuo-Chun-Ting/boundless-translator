@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Prevedi na";
 "translation.from" = "Iz";
 "translation.detectAutomatically" = "Automatski prepoznaj";
-"shortcut.section" = "Prevedi odabrani tekst";
-"screenshot.shortcut" = "Snimi područje zaslona";
-"shortcut.alreadyAssigned" = "Ovaj je prečac dodijeljen drugoj radnji.";
 "shortcut.invalid" = "Upotrijebite Command, Option ili Control s drugom tipkom.";
 "shortcut.recording" = "Unesite prečac";
 "shortcut.tooltip" = "Kliknite, a zatim unesite novi tipkovni prečac.";

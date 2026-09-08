@@ -2,23 +2,19 @@
 
 ## Product
 
-Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It has independently configurable global shortcuts for translating selected text and capturing a screen region, and presents translations in a compact floating window.
+Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It uses one configurable global shortcut to choose the appropriate input and presents translations in a compact floating window.
 
 ## Shortcut Flow
 
-When the user presses Translate Selected Text (default `Option-Shift-E`):
+When the user presses the translation shortcut (default `Option-Shift-T`):
 
 1. If text is selected in the active image workspace, translate it.
 2. Otherwise, try to read selected text from the active app through Accessibility, then through the clipboard fallback.
-3. If no text is selected, do nothing.
+3. If no text can be read, start the native macOS interactive region capture.
+4. Open the captured image in the image workspace for Live Text selection.
+5. The user selects text and presses the same shortcut to translate it.
 
-When the user presses Capture Screen Region (default `Option-Shift-R`):
-
-1. Start the native macOS interactive region capture.
-2. Open the captured image in the image workspace for Live Text selection.
-3. The user selects text and presses Translate Selected Text to translate it.
-
-Only one shortcut request runs at a time. Pause both global shortcuts while either shortcut is being recorded.
+Only one shortcut request runs at a time. Pause the global shortcut while it is being recorded.
 
 ## Translation
 
@@ -63,10 +59,10 @@ Only one shortcut request runs at a time. Pause both global shortcuts while eith
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the active screen.
 - Present Preferences as one level of labeled rows without section headings.
-- Order Preferences as Translate From, Translate To, Translate Selected Text, Capture Screen Region, Language, then Usage.
-- Group Translate From and Translate To in the first settings card, then both shortcuts and Language in the second.
+- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
+- Group Translate From and Translate To in the first settings card, then the shortcut and Language in the second.
 - Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
-- Fit all settings, including both shortcut rows, without scrolling or unused vertical space. Size the window to accommodate localized labels.
+- Fit all settings without scrolling or unused vertical space. Size the window to accommodate localized labels.
 - Configure the interface language independently from translation languages.
 - Follow the current macOS interface language by default.
 - Allow the user to override the interface with any language localized by macOS, and keep that choice when the macOS language changes.
@@ -74,16 +70,15 @@ Only one shortcut request runs at a time. Pause both global shortcuts while eith
 - Show the effective macOS interface language beside System Default.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
-- Configure the translation and capture shortcuts independently, defaulting to `Option-Shift-E` and `Option-Shift-R` respectively.
+- Configure one translation shortcut, defaulting to `Option-Shift-T`.
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
-- Reject a shortcut already assigned to the other action and keep the saved assignments.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
 - Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
 
 ## Architecture
 
-- `Application` composes dependencies and routes translation and screenshot actions. `Application/Shortcut` owns both shortcut registrations, persistence, and duplicate validation. Settings pauses and restores both shortcuts during recording.
+- `Application` composes dependencies and routes the single shortcut to translation or screenshot capture. `Application/Shortcut` owns shortcut registration and persistence. Settings pauses and restores the shortcut during recording.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
 - `ImageViewer` owns native interactive capture, its permission and failure handling, captured-image input, Live Text selection, and the persistent image window. Application coordinates capture and routes selected image text into the same translation flow as external text.
 - `Translation` owns requests, state, failures, and the supported-language catalog. Its subdirectories group the complete translation feature:

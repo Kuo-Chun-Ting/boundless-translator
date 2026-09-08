@@ -4,9 +4,9 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
-func test_carbonModifierFlags_when_option_shift_e_is_used_then_contains_option_and_shift() {
+func test_carbonModifierFlags_when_option_shift_t_is_used_then_contains_option_and_shift() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftE
+    let shortcut = GlobalShortcutDefinition.optionShiftT
 
     // Act
     let modifiers = shortcut.carbonModifierFlags
@@ -18,7 +18,7 @@ func test_carbonModifierFlags_when_option_shift_e_is_used_then_contains_option_a
 @Test
 func test_carbonRegistrationOptions_when_shortcut_is_registered_then_requests_exclusive_access() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftE
+    let shortcut = GlobalShortcutDefinition.optionShiftT
 
     // Act
     let options = shortcut.carbonRegistrationOptions
@@ -28,15 +28,15 @@ func test_carbonRegistrationOptions_when_shortcut_is_registered_then_requests_ex
 }
 
 @Test
-func test_displayName_when_option_shift_e_is_used_then_uses_keyboard_symbols() {
+func test_displayName_when_option_shift_t_is_used_then_uses_keyboard_symbols() {
     // Arrange
-    let shortcut = GlobalShortcutDefinition.optionShiftE
+    let shortcut = GlobalShortcutDefinition.optionShiftT
 
     // Act
     let displayName = shortcut.displayName
 
     // Assert
-    #expect(displayName == "⌥⇧E")
+    #expect(displayName == "⌥⇧T")
 }
 
 @Test

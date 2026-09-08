@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Translate To";
 "translation.from" = "From";
 "translation.detectAutomatically" = "Detect Automatically";
-"shortcut.section" = "Translate Selected Text";
-"screenshot.shortcut" = "Capture Screen Region";
-"shortcut.alreadyAssigned" = "This shortcut is assigned to the other action.";
 "shortcut.invalid" = "Use Command, Option, or Control with another key.";
 "shortcut.recording" = "Type Shortcut";
 "shortcut.tooltip" = "Click, then type a new keyboard shortcut.";

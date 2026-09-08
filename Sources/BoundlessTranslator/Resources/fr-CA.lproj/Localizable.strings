@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Traduire vers";
 "translation.from" = "De";
 "translation.detectAutomatically" = "Détection automatique";
-"shortcut.section" = "Traduire le texte sélectionné";
-"screenshot.shortcut" = "Capturer une zone de l’écran";
-"shortcut.alreadyAssigned" = "Ce raccourci est attribué à l’autre action.";
 "shortcut.invalid" = "Utilisez Commande, Option ou Contrôle avec une autre touche.";
 "shortcut.recording" = "Saisir le raccourci";
 "shortcut.tooltip" = "Cliquez, puis saisissez un nouveau raccourci clavier.";

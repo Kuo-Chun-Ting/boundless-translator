@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Oversæt til";
 "translation.from" = "Fra";
 "translation.detectAutomatically" = "Find automatisk";
-"shortcut.section" = "Oversæt valgt tekst";
-"screenshot.shortcut" = "Tag billede af skærmområde";
-"shortcut.alreadyAssigned" = "Denne genvej er tildelt den anden handling.";
 "shortcut.invalid" = "Brug Kommando, Alternativ eller Ctrl sammen med en anden tast.";
 "shortcut.recording" = "Indtast genvej";
 "shortcut.tooltip" = "Klik, og indtast derefter en ny tastaturgenvej.";

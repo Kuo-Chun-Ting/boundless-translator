@@ -10,7 +10,6 @@ func test_preferencesView_when_rendered_then_shows_usage_help_button() throws {
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -57,8 +56,7 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
 
     // Act
     let items = UsageGuideItem.make(
-        shortcut: .optionShiftE,
-        screenshotShortcut: .optionShiftR,
+        shortcut: .optionShiftT,
         localization: testEnglishLocalization
     )
 
@@ -66,8 +64,8 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
     #expect(items.map(\.id) == expectedIdentifiers)
     #expect(items.map(\.title) == expectedTitles)
     #expect(items.map(\.icon) == expectedIcons)
-    #expect(items[0].description.contains("⌥⇧E"))
-    #expect(items[1].description.contains("⌥⇧R") && items[1].description.contains("⌥⇧E"))
+    #expect(items[0].description.contains("⌥⇧T"))
+    #expect(items[1].description.components(separatedBy: "⌥⇧T").count == 3)
     #expect(
         items[2].description
             == "Select text in the translation panel, then click the book."
@@ -86,8 +84,7 @@ func test_usageGuideView_when_rendered_then_uses_readableWidth() {
     // Arrange
     let hostingView = NSHostingView(
         rootView: UsageGuideView(
-            shortcut: .optionShiftE,
-        screenshotShortcut: .optionShiftR,
+            shortcut: .optionShiftT,
             localization: testEnglishLocalization
         )
     )

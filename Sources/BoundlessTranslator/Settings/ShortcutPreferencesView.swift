@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ShortcutPreferencesView: View {
     @ObservedObject var controller: GlobalShortcutController
-    let otherController: GlobalShortcutController
     let titleKey: String
     let accessibilityIdentifier: String
     let localization: AppLocalization
@@ -17,15 +16,12 @@ struct ShortcutPreferencesView: View {
                     accessibilityLabel: localization.string(titleKey),
                     onRecordingStarted: {
                         controller.beginRecording()
-                        otherController.beginRecording()
                     },
                     onRecordingCancelled: {
                         controller.cancelRecording()
-                        otherController.cancelRecording()
                     },
                     onShortcutRecorded: { candidate in
-                        controller.updateShortcut(candidate, reserved: [otherController.definition])
-                        otherController.cancelRecording()
+                        controller.updateShortcut(candidate)
                     }
                 )
                 .fixedSize()

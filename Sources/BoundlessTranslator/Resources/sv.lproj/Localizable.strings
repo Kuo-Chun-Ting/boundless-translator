@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Översätt till";
 "translation.from" = "Från";
 "translation.detectAutomatically" = "Identifiera automatiskt";
-"shortcut.section" = "Översätt markerad text";
-"screenshot.shortcut" = "Ta bild av skärmområde";
-"shortcut.alreadyAssigned" = "Det här kortkommandot är tilldelat den andra åtgärden.";
 "shortcut.invalid" = "Använd Kommando, Alternativ eller Kontroll tillsammans med en annan tangent.";
 "shortcut.recording" = "Ange kortkommando";
 "shortcut.tooltip" = "Klicka och ange sedan ett nytt kortkommando.";

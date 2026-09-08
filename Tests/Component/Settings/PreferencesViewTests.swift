@@ -17,7 +17,6 @@ func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() t
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -38,7 +37,6 @@ func test_preferencesView_when_rendered_then_alignsLanguagePickers() throws {
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -64,7 +62,6 @@ func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -98,7 +95,6 @@ func test_preferencesView_when_rendered_then_placesQuitLeftOfUsageHelp() throws 
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -132,7 +128,6 @@ func test_preferencesView_when_rendered_then_all_settings_fit_without_scrolling(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -159,7 +154,6 @@ func test_preferencesView_when_shortcutRegistrationFails_then_errorAndFooterDoNo
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeFailingTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -203,7 +197,6 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesContent() a
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -242,7 +235,6 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -257,12 +249,11 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
 
     // Assert
     #expect(recorders.count == 1)
-    #expect(recorder.title == "⌥⇧E")
+    #expect(recorder.title == "⌥⇧T")
     let screenshotRecorders = findViews(
         in: contentView, accessibilityIdentifier: "screenshotShortcutRecorder"
     ).compactMap { $0 as? NSButton }
-    #expect(screenshotRecorders.count == 1)
-    #expect(screenshotRecorders.first?.title == "⌥⇧R")
+    #expect(screenshotRecorders.isEmpty)
 }
 
 @Test @MainActor
@@ -273,7 +264,6 @@ func test_quitButton_when_clicked_then_requests_application_termination() throws
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
-        screenshotShortcutController: makeTestShortcutController(kind: .screenshot),
         supportedLanguageCatalog: makeStubLanguageCatalog(),
         quitApplication: {
             terminationSpy.request()

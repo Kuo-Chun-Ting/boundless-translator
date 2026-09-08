@@ -23,23 +23,25 @@ func test_resolveShortcutAction_when_external_text_is_selected_then_returns_tran
 }
 
 @Test @MainActor
-func test_resolveShortcutAction_when_no_text_is_selected_then_does_not_open_image() async {
+func test_handleShortcut_when_no_text_is_selected_then_captures_and_presents_image() async {
     // Arrange
     let mock_viewer = ImageViewerControllerStub()
     let controller = AppController(
         selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.noSelection)),
+        screenshotCapture: ScreenshotCaptureStub(
+            result: .success(NSImage(size: NSSize(width: 100, height: 50)))
+        ),
         imageViewerController: mock_viewer
     )
 
     // Act
-    let action = await controller.resolveShortcutAction()
+    controller.handleShortcut()
+    for _ in 0..<5 {
+        await Task.yield()
+    }
 
     // Assert
-    guard case .none = action else {
-        Issue.record("Translation shortcut must do nothing without selected text")
-        return
-    }
-    #expect(mock_viewer.presentationCount == 0)
+    #expect(mock_viewer.presentationCount == 1)
 }
 
 @Test @MainActor
@@ -69,6 +71,12 @@ private final class SelectedTextReaderStub: SelectedTextReading {
     let result: Result<SelectedText, Error>
     init(result: Result<SelectedText, Error>) { self.result = result }
     func readSelectedText() async throws -> SelectedText { try result.get() }
+}
+
+@MainActor
+private struct ScreenshotCaptureStub: ScreenshotCapturing {
+    let result: Result<NSImage?, Error>
+    func captureRegion() async throws -> NSImage? { try result.get() }
 }
 
 @MainActor

@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Şu dile çevir";
 "translation.from" = "Kaynak";
 "translation.detectAutomatically" = "Otomatik Algıla";
-"shortcut.section" = "Seçili Metni Çevir";
-"screenshot.shortcut" = "Ekranın Bir Bölümünü Yakala";
-"shortcut.alreadyAssigned" = "Bu kestirme diğer eyleme atanmış.";
 "shortcut.invalid" = "Command, Option veya Control tuşunu başka bir tuşla birlikte kullanın.";
 "shortcut.recording" = "Kestirmeyi Girin";
 "shortcut.tooltip" = "Tıklayın, ardından yeni bir klavye kestirmesi girin.";

@@ -7,9 +7,6 @@
 "preferences.translateTo" = "แปลเป็น";
 "translation.from" = "จาก";
 "translation.detectAutomatically" = "ตรวจหาโดยอัตโนมัติ";
-"shortcut.section" = "แปลข้อความที่เลือก";
-"screenshot.shortcut" = "จับภาพพื้นที่หน้าจอ";
-"shortcut.alreadyAssigned" = "ปุ่มลัดนี้ถูกกำหนดให้กับการทำงานอีกอย่างแล้ว";
 "shortcut.invalid" = "ใช้ Command, Option หรือ Control ร่วมกับปุ่มอื่น";
 "shortcut.recording" = "ป้อนปุ่มลัด";
 "shortcut.tooltip" = "คลิก แล้วป้อนปุ่มลัดแป้นพิมพ์ใหม่";

@@ -1,6 +1,6 @@
 # Boundless Translator
 
-Most translation apps make you copy text into another app. Boundless Translator translates selected text in other Mac apps with one global shortcut.
+Most translation apps make you copy text into another app. Boundless Translator translates selected text or screen content with one global shortcut.
 
 ## Features
 
@@ -28,7 +28,7 @@ Most translation apps make you copy text into another app. Boundless Translator 
 ### Settings
 
 1. Open **Preferences…** from the menu bar.
-2. Set **Translate From**, **Translate To**, and the **Translate Selected Text** and **Capture Screen Region** shortcuts.
+2. Set **Translate From**, **Translate To**, and the keyboard shortcut.
 3. Set **Language** for the app interface.
 
 **Language** uses **System Default** by default. It changes the app interface only. It does not change **Translate From** or **Translate To**.
@@ -38,16 +38,16 @@ The app interface supports the same languages as macOS. macOS provides translati
 ### Translate Text
 
 1. Select text in another app.
-2. Press the **Translate Selected Text** shortcut. The default is `Option-Shift-E`.
+2. Press the translation shortcut. The default is `Option-Shift-T`.
 
 ### Translate Screenshot
 
-1. Press the **Capture Screen Region** shortcut. The default is `Option-Shift-R`.
+1. Press the translation shortcut without selecting text. The default is `Option-Shift-T`.
 2. Select a screen region.
 3. Select text in the screenshot window.
-4. Press the **Translate Selected Text** shortcut. The default is `Option-Shift-E`.
+4. Press the same shortcut to translate it.
 
-Both shortcuts can be changed in Settings. Existing saved shortcuts are preserved when the defaults change.
+The shortcut can be changed in Settings. Existing saved shortcuts are preserved when the default changes.
 
 If prompted, allow Screen Recording for Boundless Translator in **System Settings → Privacy & Security**, then try again. You may need to quit and reopen the app.
 

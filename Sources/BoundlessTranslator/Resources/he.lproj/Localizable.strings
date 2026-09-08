@@ -7,9 +7,6 @@
 "preferences.translateTo" = "תרגום ל־";
 "translation.from" = "מ";
 "translation.detectAutomatically" = "זיהוי אוטומטי";
-"shortcut.section" = "תרגום המלל הנבחר";
-"screenshot.shortcut" = "צילום אזור במסך";
-"shortcut.alreadyAssigned" = "קיצור זה מוקצה לפעולה האחרת.";
 "shortcut.invalid" = "יש להשתמש ב-Command, ב-Option או ב-Control בשילוב עם מקש נוסף.";
 "shortcut.recording" = "הקלדת קיצור";
 "shortcut.tooltip" = "יש ללחוץ ואז להקליד קיצור מקלדת חדש.";

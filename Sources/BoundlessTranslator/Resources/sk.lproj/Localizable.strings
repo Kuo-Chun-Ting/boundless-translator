@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Preložiť do";
 "translation.from" = "Z";
 "translation.detectAutomatically" = "Rozpoznať automaticky";
-"shortcut.section" = "Preložiť vybraný text";
-"screenshot.shortcut" = "Zachytiť oblasť obrazovky";
-"shortcut.alreadyAssigned" = "Táto skratka je priradená druhej akcii.";
 "shortcut.invalid" = "Použite kláves Command, Option alebo Control spolu s ďalším klávesom.";
 "shortcut.recording" = "Zadajte skratku";
 "shortcut.tooltip" = "Kliknite a zadajte novú klávesovú skratku.";

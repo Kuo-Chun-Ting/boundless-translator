@@ -2,80 +2,49 @@ import AppKit
 import Testing
 @testable import BoundlessTranslator
 
-@Test(arguments: ["shortcutRecorder", "screenshotShortcutRecorder"]) @MainActor
-func test_recording_when_preferences_closes_then_restores_both_shortcuts(identifier: String) throws {
+@Test @MainActor
+func test_recording_when_preferences_closes_then_restores_shortcut() throws {
     // Arrange
-    let fixture = try ShortcutPairFixture()
+    let fixture = try ShortcutFixture()
     defer { fixture.cleanup() }
-    let button = try #require(findRecorder(in: fixture.content, identifier: identifier))
+    let button = try #require(findRecorder(in: fixture.content))
 
     // Act
     button.beginRecording()
 
     // Assert
-    #expect(fixture.translationMonitor.active == false)
-    #expect(fixture.screenshotMonitor.active == false)
+    #expect(fixture.monitor.active == false)
 
     // Act
     fixture.window.close()
 
     // Assert
-    #expect(fixture.translationMonitor.active)
-    #expect(fixture.screenshotMonitor.active)
+    #expect(fixture.monitor.active)
     #expect(!button.isRecording)
 }
 
-@Test @MainActor
-func test_recording_when_other_shortcut_is_entered_then_rejects_duplicate_and_restores_both() throws {
-    // Arrange
-    let fixture = try ShortcutPairFixture()
-    defer { fixture.cleanup() }
-    let button = try #require(findRecorder(in: fixture.content, identifier: "screenshotShortcutRecorder"))
-    let event = try #require(NSEvent.keyEvent(
-        with: .keyDown, location: .zero, modifierFlags: [.option, .shift],
-        timestamp: 0, windowNumber: fixture.window.windowNumber, context: nil,
-        characters: "E", charactersIgnoringModifiers: "e", isARepeat: false, keyCode: 14
-    ))
-    button.beginRecording()
-
-    // Act
-    button.keyDown(with: event)
-
-    // Assert
-    #expect(fixture.translation.definition == .optionShiftE)
-    #expect(fixture.screenshot.definition == .optionShiftR)
-    #expect(fixture.screenshot.failure != nil)
-    #expect(fixture.translationMonitor.active)
-    #expect(fixture.screenshotMonitor.active)
-}
-
 @MainActor
-private struct ShortcutPairFixture {
-    let translationMonitor = RecordingMonitorMock()
-    let screenshotMonitor = RecordingMonitorMock()
-    let translation: GlobalShortcutController
-    let screenshot: GlobalShortcutController
+private struct ShortcutFixture {
+    let monitor = RecordingMonitorMock()
     let controller: PreferencesWindowController
     let window: NSWindow
     let content: NSView
     let defaults: UserDefaults
-    let suiteName = "ShortcutPairTests.\(UUID().uuidString)"
+    let suiteName = "ShortcutTests.\(UUID().uuidString)"
 
     init() throws {
         defaults = try #require(UserDefaults(suiteName: suiteName))
-        let translationMonitor = self.translationMonitor
-        let screenshotMonitor = self.screenshotMonitor
-        translation = GlobalShortcutController(
-            defaults: defaults, makeMonitor: { _, _ in translationMonitor }, handler: {}
+        let monitor = self.monitor
+        let shortcut = GlobalShortcutController(
+            defaults: defaults,
+            makeMonitor: { _, _ in monitor },
+            handler: {}
         )
-        screenshot = GlobalShortcutController(
-            kind: .screenshot, defaults: defaults, makeMonitor: { _, _ in screenshotMonitor }, handler: {}
-        )
-        try translation.start()
-        try screenshot.start()
+        try shortcut.start()
         controller = PreferencesWindowController(
-            settings: TranslationSettings(), interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-            shortcutController: translation, screenshotShortcutController: screenshot,
+            settings: TranslationSettings(),
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
+            shortcutController: shortcut,
             supportedLanguageCatalog: makeStubLanguageCatalog()
         )
         window = try #require(controller.window)
@@ -97,7 +66,9 @@ private final class RecordingMonitorMock: GlobalShortcutMonitoring {
 }
 
 @MainActor
-private func findRecorder(in view: NSView, identifier: String) -> ShortcutRecorderButton? {
-    if view.accessibilityIdentifier() == identifier { return view as? ShortcutRecorderButton }
-    return view.subviews.lazy.compactMap { findRecorder(in: $0, identifier: identifier) }.first
+private func findRecorder(in view: NSView) -> ShortcutRecorderButton? {
+    if view.accessibilityIdentifier() == "shortcutRecorder" {
+        return view as? ShortcutRecorderButton
+    }
+    return view.subviews.lazy.compactMap(findRecorder).first
 }

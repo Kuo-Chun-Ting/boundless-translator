@@ -7,7 +7,7 @@ func test_keyDown_when_validShortcutIsRecorded_then_reportsShortcutAndEndsRecord
     // Arrange
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
@@ -39,7 +39,7 @@ func test_keyDown_when_escapeIsPressed_then_cancelsWithoutChangingShortcut() thr
     // Arrange
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
@@ -65,7 +65,7 @@ func test_keyDown_when_shortcutHasOnlyShiftModifier_then_keepsRecording() throws
     // Arrange
     var recordedShortcut: GlobalShortcutDefinition?
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onShortcutRecorded: { recordedShortcut = $0 }
     )
@@ -92,7 +92,7 @@ func test_recording_when_startedAndCancelled_then_reportsBothStateChanges() thro
     var recordingStarted = false
     var recordingCancelled = false
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onRecordingStarted: { recordingStarted = true },
         onRecordingCancelled: { recordingCancelled = true },
@@ -120,7 +120,7 @@ func test_recording_when_windowCloses_then_cancelsAndKeepsOriginalShortcut() {
     // Arrange
     var cancellationCount = 0
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onRecordingCancelled: { cancellationCount += 1 },
         onShortcutRecorded: { _ in Issue.record("Closing must not save a shortcut") }
@@ -139,7 +139,7 @@ func test_recording_when_windowCloses_then_cancelsAndKeepsOriginalShortcut() {
     // Assert
     #expect(!button.isRecording)
     #expect(cancellationCount == 1)
-    #expect(button.title == "⌥⇧E")
+    #expect(button.title == "⌥⇧T")
 }
 
 @Test @MainActor
@@ -147,7 +147,7 @@ func test_recording_when_windowResignsKey_then_cancelsOnlyOnce() {
     // Arrange
     var cancellationCount = 0
     let button = ShortcutRecorderButton(
-        definition: .optionShiftE,
+        definition: .optionShiftT,
         localization: testEnglishLocalization,
         onRecordingCancelled: { cancellationCount += 1 },
         onShortcutRecorded: { _ in Issue.record("Losing focus must not save a shortcut") }
@@ -164,7 +164,7 @@ func test_recording_when_windowResignsKey_then_cancelsOnlyOnce() {
     // Assert
     #expect(!button.isRecording)
     #expect(cancellationCount == 1)
-    #expect(button.title == "⌥⇧E")
+    #expect(button.title == "⌥⇧T")
 }
 
 private func makeKeyEvent(

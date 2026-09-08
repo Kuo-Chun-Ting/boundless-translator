@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Μετάφραση σε";
 "translation.from" = "Από";
 "translation.detectAutomatically" = "Αυτόματος εντοπισμός";
-"shortcut.section" = "Μετάφραση επιλεγμένου κειμένου";
-"screenshot.shortcut" = "Λήψη περιοχής οθόνης";
-"shortcut.alreadyAssigned" = "Αυτή η συντόμευση έχει εκχωρηθεί στην άλλη ενέργεια.";
 "shortcut.invalid" = "Χρησιμοποιήστε Command, Option ή Control μαζί με ένα άλλο πλήκτρο.";
 "shortcut.recording" = "Πληκτρολογήστε συντόμευση";
 "shortcut.tooltip" = "Κάντε κλικ και πληκτρολογήστε μια νέα συντόμευση πληκτρολογίου.";

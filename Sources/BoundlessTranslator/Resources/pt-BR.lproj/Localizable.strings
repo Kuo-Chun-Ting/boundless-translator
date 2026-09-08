@@ -7,9 +7,6 @@
 "preferences.translateTo" = "Traduzir para";
 "translation.from" = "De";
 "translation.detectAutomatically" = "Detectar Automaticamente";
-"shortcut.section" = "Traduzir Texto Selecionado";
-"screenshot.shortcut" = "Capturar Área da Tela";
-"shortcut.alreadyAssigned" = "Este atalho está atribuído à outra ação.";
 "shortcut.invalid" = "Use Command, Option ou Control junto com outra tecla.";
 "shortcut.recording" = "Digitar Atalho";
 "shortcut.tooltip" = "Clique e digite um novo atalho de teclado.";

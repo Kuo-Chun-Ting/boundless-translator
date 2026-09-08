@@ -7,9 +7,6 @@
 "preferences.translateTo" = "इसमें अनुवाद करें";
 "translation.from" = "से";
 "translation.detectAutomatically" = "अपने आप पहचानें";
-"shortcut.section" = "चुना गया टेक्स्ट अनुवाद करें";
-"screenshot.shortcut" = "स्क्रीन का क्षेत्र कैप्चर करें";
-"shortcut.alreadyAssigned" = "यह शॉर्टकट दूसरी क्रिया के लिए निर्धारित है।";
 "shortcut.invalid" = "Command, Option या Control को किसी दूसरी कुंजी के साथ इस्तेमाल करें।";
 "shortcut.recording" = "शॉर्टकट टाइप करें";
 "shortcut.tooltip" = "क्लिक करें, फिर नया कीबोर्ड शॉर्टकट टाइप करें।";

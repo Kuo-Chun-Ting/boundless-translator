@@ -7,9 +7,6 @@
 "preferences.translateTo" = "翻譯目標";
 "translation.from" = "來源";
 "translation.detectAutomatically" = "自動偵測";
-"shortcut.section" = "翻譯所選文字";
-"screenshot.shortcut" = "擷取螢幕範圍";
-"shortcut.alreadyAssigned" = "此快捷鍵已指派給另一個動作。";
 "shortcut.invalid" = "請配搭 Command、Option 或 Control 與其他按鍵使用。";
 "shortcut.recording" = "輸入快捷鍵";
 "shortcut.tooltip" = "按一下，然後輸入新的鍵盤快捷鍵。";
