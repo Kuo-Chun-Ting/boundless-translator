@@ -2,7 +2,7 @@
 
 ## 工作流
 
-- 完成程式碼修改後，執行 `Scripts/verify.sh`；通過後交付使用者 code review。
+- 完成程式碼修改後，執行 `Scripts/verify.sh`；通過後執行 `Scripts/reset_test_permissions.sh`，再交付使用者 code review。
 - 使用者確認 code review 並要求發布後，依指定版號執行 `Scripts/release_dmg.sh <version>`。
 
 不得存放或提交簽章私鑰。
