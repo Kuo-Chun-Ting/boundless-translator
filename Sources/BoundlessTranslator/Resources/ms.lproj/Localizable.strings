@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Cuba lagi.";
 "shortcutError.installation" = "Pengendali peristiwa pintasan global tidak dapat dipasang (%@).";
 "shortcutError.registration" = "Pintasan papan kekunci tidak dapat didaftarkan (%@). Pintasan mungkin sedang digunakan oleh app lain.";
+
+"permission.accessibilityTitle" = "Kebolehcapaian";
+"permission.screenRecordingTitle" = "Rakaman Skrin";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

@@ -21,7 +21,7 @@ struct SystemScreenshotCapture: ScreenshotCapturing {
 
     init(
         requestPermission: @escaping @MainActor () -> Bool = {
-            CGPreflightScreenCaptureAccess() || CGRequestScreenCaptureAccess()
+            ScreenRecordingPermission.requestIfNeeded()
         },
         runCapture: @escaping @MainActor (URL) async throws -> Int32 = Self.runSystemCapture
     ) {

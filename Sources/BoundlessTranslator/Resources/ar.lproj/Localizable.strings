@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ حاول مرة أخرى.";
 "shortcutError.installation" = "تعذر تثبيت معالج أحداث الاختصار العام (%@).";
 "shortcutError.registration" = "تعذر تسجيل اختصار لوحة المفاتيح (%@). ربما يستخدمه تطبيق آخر.";
+
+"permission.accessibilityTitle" = "تسهيلات الاستخدام";
+"permission.screenRecordingTitle" = "تسجيل الشاشة";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

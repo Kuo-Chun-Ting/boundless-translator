@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Probeer het opnieuw.";
 "shortcutError.installation" = "De gebeurtenisverwerker voor de globale toetscombinatie kon niet worden geïnstalleerd (%@).";
 "shortcutError.registration" = "De toetscombinatie kon niet worden geregistreerd (%@). Mogelijk wordt deze door een andere app gebruikt.";
+
+"permission.accessibilityTitle" = "Toegankelijkheid";
+"permission.screenRecordingTitle" = "Schermopname";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

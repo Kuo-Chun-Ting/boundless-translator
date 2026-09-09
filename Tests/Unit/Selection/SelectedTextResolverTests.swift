@@ -24,11 +24,11 @@ func test_readSelectedText_when_primary_reader_succeeds_then_skips_fallback() as
 }
 
 @Test @MainActor
-func test_readSelectedText_when_primary_reader_fails_then_uses_fallback() async throws {
+func test_readSelectedText_when_primary_has_no_selection_then_uses_fallback() async throws {
     // Arrange
     let expectedSelection = try SelectedText("Fallback")
     let stub_primary = SelectedTextReaderStub(
-        result: .failure(SelectedTextReaderTestError.unavailable)
+        result: .failure(SelectedTextReadError.noSelection)
     )
     let mock_fallback = SelectedTextReaderMock(result: .success(expectedSelection))
     let resolver = SelectedTextResolver(
@@ -42,6 +42,34 @@ func test_readSelectedText_when_primary_reader_fails_then_uses_fallback() async 
     // Assert
     #expect(selection == expectedSelection)
     #expect(mock_fallback.invocationCount == 1)
+}
+
+@Test @MainActor
+func test_readSelectedText_when_primary_is_cancelled_then_stops_without_fallback() async throws {
+    // Arrange
+    let mock_fallback = SelectedTextReaderMock(result: .success(try SelectedText("Fallback")))
+    let resolver = SelectedTextResolver(
+        primaryReader: SelectedTextReaderStub(result: .failure(CancellationError())),
+        fallbackReader: mock_fallback
+    )
+
+    // Act & Assert
+    await #expect(throws: CancellationError.self) { try await resolver.readSelectedText() }
+    #expect(mock_fallback.invocationCount == 0)
+}
+
+@Test @MainActor
+func test_readSelectedText_when_primary_has_unexpected_error_then_preserves_error_without_fallback() async throws {
+    // Arrange
+    let mock_fallback = SelectedTextReaderMock(result: .success(try SelectedText("Fallback")))
+    let resolver = SelectedTextResolver(
+        primaryReader: SelectedTextReaderStub(result: .failure(SelectedTextReaderTestError.unavailable)),
+        fallbackReader: mock_fallback
+    )
+
+    // Act & Assert
+    await #expect(throws: SelectedTextReaderTestError.self) { try await resolver.readSelectedText() }
+    #expect(mock_fallback.invocationCount == 0)
 }
 
 @MainActor

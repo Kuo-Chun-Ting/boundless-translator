@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ ลองอีกครั้ง";
 "shortcutError.installation" = "ไม่สามารถติดตั้งตัวจัดการเหตุการณ์ของปุ่มลัดส่วนกลางได้ (%@)";
 "shortcutError.registration" = "ไม่สามารถลงทะเบียนปุ่มลัดแป้นพิมพ์ได้ (%@) อาจมีแอปอื่นใช้งานอยู่";
+
+"permission.accessibilityTitle" = "การช่วยการเข้าถึง";
+"permission.screenRecordingTitle" = "การบันทึกหน้าจอ";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

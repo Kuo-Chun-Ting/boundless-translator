@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Inténtalo de nuevo.";
 "shortcutError.installation" = "No se ha podido instalar el controlador de eventos de la función rápida global (%@).";
 "shortcutError.registration" = "No se ha podido registrar la función rápida de teclado (%@). Puede que otra app la esté usando.";
+
+"permission.accessibilityTitle" = "Accesibilidad";
+"permission.screenRecordingTitle" = "Grabación de pantalla";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

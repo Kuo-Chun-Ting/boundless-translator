@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ 请再试一次。";
 "shortcutError.installation" = "无法安装全局快捷键事件处理程序（%@）。";
 "shortcutError.registration" = "无法注册键盘快捷键（%@）。其他 App 可能正在使用此快捷键。";
+
+"permission.accessibilityTitle" = "允许辅助功能";
+"permission.accessibilityGuide" = "读取你在其他 App 中选中的文字。";
+"permission.accessibilityInstruction" = "在系统设置中按“＋”，选择 Boundless Translator，然后打开权限。";
+"permission.openSystemSettings" = "打开系统设置";
+"permission.screenRecordingTitle" = "允许屏幕录制";
+"permission.screenRecordingGuide" = "截取你选择的屏幕区域。";
+"permission.allowScreenRecording" = "允许";

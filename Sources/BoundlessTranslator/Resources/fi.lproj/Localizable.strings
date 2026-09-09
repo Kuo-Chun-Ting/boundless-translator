@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Yritä uudelleen.";
 "shortcutError.installation" = "Yleisen oikotien tapahtumankäsittelijää ei voitu asentaa (%@).";
 "shortcutError.registration" = "Näppäinoikotietä ei voitu rekisteröidä (%@). Se voi olla toisen apin käytössä.";
+
+"permission.accessibilityTitle" = "Käyttöapu";
+"permission.screenRecordingTitle" = "Näytön tallennus";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ 다시 시도하십시오.";
 "shortcutError.installation" = "전역 단축키 이벤트 핸들러를 설치할 수 없습니다(%@).";
 "shortcutError.registration" = "키보드 단축키를 등록할 수 없습니다(%@). 다른 앱에서 사용 중일 수 있습니다.";
+
+"permission.accessibilityTitle" = "손쉬운 사용";
+"permission.screenRecordingTitle" = "화면 기록";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

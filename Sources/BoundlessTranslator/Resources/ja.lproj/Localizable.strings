@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ もう一度お試しください。";
 "shortcutError.installation" = "グローバルショートカットのイベントハンドラをインストールできませんでした（%@）。";
 "shortcutError.registration" = "キーボードショートカットを登録できませんでした（%@）。別のアプリで使用されている可能性があります。";
+
+"permission.accessibilityTitle" = "アクセシビリティ";
+"permission.screenRecordingTitle" = "画面収録";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ 請再試一次。";
 "shortcutError.installation" = "無法安裝全域快速鍵事件處理程式（%@）。";
 "shortcutError.registration" = "無法註冊鍵盤快速鍵（%@）。其他 App 可能正在使用此快速鍵。";
+
+"permission.accessibilityTitle" = "允許輔助使用";
+"permission.accessibilityGuide" = "讀取你在其他 App 中選取的文字。";
+"permission.accessibilityInstruction" = "在系統設定按「＋」，選擇 Boundless Translator，然後開啟權限。";
+"permission.openSystemSettings" = "打開系統設定";
+"permission.screenRecordingTitle" = "允許螢幕錄製";
+"permission.screenRecordingGuide" = "擷取你選擇的螢幕區域。";
+"permission.allowScreenRecording" = "允許";

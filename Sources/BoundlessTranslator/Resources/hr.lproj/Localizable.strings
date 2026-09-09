@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Pokušajte ponovno.";
 "shortcutError.installation" = "Nije bilo moguće instalirati rukovatelj događajima globalnog prečaca (%@).";
 "shortcutError.registration" = "Nije bilo moguće registrirati tipkovni prečac (%@). Možda ga upotrebljava druga aplikacija.";
+
+"permission.accessibilityTitle" = "Pristupačnost";
+"permission.screenRecordingTitle" = "Snimanje zaslona";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

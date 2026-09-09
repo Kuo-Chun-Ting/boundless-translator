@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ फिर कोशिश करें।";
 "shortcutError.installation" = "ग्लोबल शॉर्टकट इवेंट हैंडलर इंस्टॉल नहीं किया जा सका (%@)।";
 "shortcutError.registration" = "कीबोर्ड शॉर्टकट रजिस्टर नहीं किया जा सका (%@)। हो सकता है कि कोई दूसरा ऐप इसका उपयोग कर रहा हो।";
+
+"permission.accessibilityTitle" = "ऐक्सेसिबिलिटी";
+"permission.screenRecordingTitle" = "स्क्रीन रिकॉर्डिंग";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

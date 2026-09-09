@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Skúste to znova.";
 "shortcutError.installation" = "Obslužný program udalostí globálnej skratky sa nepodarilo nainštalovať (%@).";
 "shortcutError.registration" = "Klávesovú skratku sa nepodarilo zaregistrovať (%@). Možno ju používa iná aplikácia.";
+
+"permission.accessibilityTitle" = "Prístupnosť";
+"permission.screenRecordingTitle" = "Nahrávanie obrazovky";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

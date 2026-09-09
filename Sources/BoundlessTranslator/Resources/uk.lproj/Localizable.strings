@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Повторіть спробу.";
 "shortcutError.installation" = "Не вдалося встановити обробник подій глобального скорочення (%@).";
 "shortcutError.registration" = "Не вдалося зареєструвати клавіатурне скорочення (%@). Можливо, його використовує інша програма.";
+
+"permission.accessibilityTitle" = "Доступність";
+"permission.screenRecordingTitle" = "Запис екрана";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

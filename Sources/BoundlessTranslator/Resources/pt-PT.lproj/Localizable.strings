@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Tente novamente.";
 "shortcutError.installation" = "Não foi possível instalar o processador de eventos do atalho global (%@).";
 "shortcutError.registration" = "Não foi possível registar o atalho de teclado (%@). Pode estar a ser usado por outra aplicação.";
+
+"permission.accessibilityTitle" = "Acessibilidade";
+"permission.screenRecordingTitle" = "Gravação do ecrã";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

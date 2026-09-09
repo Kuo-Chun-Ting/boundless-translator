@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Försök igen.";
 "shortcutError.installation" = "Händelsehanteraren för det globala kortkommandot kunde inte installeras (%@).";
 "shortcutError.registration" = "Kortkommandot kunde inte registreras (%@). Det kanske används av en annan app.";
+
+"permission.accessibilityTitle" = "Hjälpmedel";
+"permission.screenRecordingTitle" = "Skärminspelning";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

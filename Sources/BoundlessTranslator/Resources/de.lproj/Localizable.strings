@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Versuche es erneut.";
 "shortcutError.installation" = "Der Ereignishandler für den globalen Kurzbefehl konnte nicht installiert werden (%@).";
 "shortcutError.registration" = "Der Tastaturkurzbefehl konnte nicht registriert werden (%@). Möglicherweise wird er von einer anderen App verwendet.";
+
+"permission.accessibilityTitle" = "Bedienungshilfen";
+"permission.screenRecordingTitle" = "Bildschirmaufnahme";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

@@ -104,25 +104,36 @@ final class AppController {
                 selectionTask = nil
             }
 
-            switch await resolveShortcutAction() {
-            case .translate(let selectedText):
-                await resolveSourceLanguage(for: selectedText)
-            case .captureScreenRegion:
-                do {
-                    try await captureScreenshot()
-                } catch {
-                    showError(.screenshot((error as? ScreenshotCaptureError) ?? .captureFailed))
+            do {
+                switch try await resolveShortcutAction() {
+                case .translate(let selectedText):
+                    await resolveSourceLanguage(for: selectedText)
+                case .captureScreenRegion:
+                    do {
+                        try await captureScreenshot()
+                    } catch ScreenshotCaptureError.permissionRequired {
+                        // The permission flow already explained the next step.
+                        return
+                    } catch {
+                        showError(.screenshot((error as? ScreenshotCaptureError) ?? .captureFailed))
+                    }
                 }
+            } catch SelectedTextReadError.accessibilityPermissionRequired {
+                AccessibilityPermission.requestIfNeeded()
+            } catch is CancellationError {
+                return
+            } catch {
+                showError(.verbatim(error.localizedDescription))
             }
         }
     }
 
-    func resolveShortcutAction() async -> ShortcutAction {
-        if let selectedText = try? await selectedTextReader.readSelectedText() {
-            return .translate(selectedText)
+    func resolveShortcutAction() async throws -> ShortcutAction {
+        do {
+            return .translate(try await selectedTextReader.readSelectedText())
+        } catch SelectedTextReadError.noSelection, SelectedTextReadError.copyFailed {
+            return .captureScreenRegion
         }
-
-        return .captureScreenRegion
     }
 
     func captureScreenshot() async throws {

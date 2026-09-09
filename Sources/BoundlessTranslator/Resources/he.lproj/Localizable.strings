@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ יש לנסות שוב.";
 "shortcutError.installation" = "לא ניתן היה להתקין את מטפל האירועים של הקיצור הכללי (%@).";
 "shortcutError.registration" = "לא ניתן היה לרשום את קיצור המקלדת (%@). ייתכן שהוא נמצא בשימוש של יישום אחר.";
+
+"permission.accessibilityTitle" = "נגישות";
+"permission.screenRecordingTitle" = "הקלטת מסך";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

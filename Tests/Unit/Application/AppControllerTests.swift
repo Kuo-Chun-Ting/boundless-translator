@@ -12,7 +12,7 @@ func test_resolveShortcutAction_when_external_text_is_selected_then_returns_tran
     )
 
     // Act
-    let action = await controller.resolveShortcutAction()
+    let action = try await controller.resolveShortcutAction()
 
     // Assert
     guard case .translate(let actual) = action else {
@@ -56,7 +56,7 @@ func test_resolveShortcutAction_when_image_text_is_selected_then_prefers_image_s
     )
 
     // Act
-    let action = await controller.resolveShortcutAction()
+    let action = try await controller.resolveShortcutAction()
 
     // Assert
     guard case .translate(let actual) = action else {
@@ -64,6 +64,34 @@ func test_resolveShortcutAction_when_image_text_is_selected_then_prefers_image_s
         return
     }
     #expect(actual.value == "Image text")
+}
+
+@Test @MainActor
+func test_resolveShortcutAction_when_accessibility_is_missing_then_reports_permission_instead_of_capture() async {
+    // Arrange
+    let controller = AppController(
+        selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.accessibilityPermissionRequired)),
+        imageViewerController: ImageViewerControllerStub()
+    )
+
+    // Act & Assert
+    await #expect(throws: SelectedTextReadError.self) {
+        try await controller.resolveShortcutAction()
+    }
+}
+
+@Test @MainActor
+func test_resolveShortcutAction_when_selection_is_cancelled_then_does_not_capture() async {
+    // Arrange
+    let controller = AppController(
+        selectedTextReader: SelectedTextReaderStub(result: .failure(CancellationError())),
+        imageViewerController: ImageViewerControllerStub()
+    )
+
+    // Act & Assert
+    await #expect(throws: CancellationError.self) {
+        try await controller.resolveShortcutAction()
+    }
 }
 
 @MainActor

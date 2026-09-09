@@ -10,7 +10,7 @@ When the user presses the translation shortcut (default `Command-Shift-T`):
 
 1. If text is selected in the active image workspace, translate it.
 2. Otherwise, try to read selected text from the active app through Accessibility, then through the clipboard fallback.
-3. If no text can be read, start the native macOS interactive region capture.
+3. If there is no selection or the clipboard-copy attempt times out, start native macOS interactive region capture. Missing Accessibility permission instead opens permission guidance; cancellation and unexpected errors do not trigger capture.
 4. Open the captured image in the image workspace for Live Text selection.
 5. The user selects text and presses the same shortcut to translate it.
 
@@ -122,8 +122,14 @@ These directories belong to one executable target, not separate Swift packages. 
 - Describe how selected text, screenshots, translations, settings, and purchase state are processed.
 - Declare applicable required-reason APIs in the privacy manifest and keep App Store privacy answers consistent with the shipped build.
 - Explain Accessibility and Screen Recording permissions before or when they are requested.
+- Request each permission only when the shortcut first reaches the feature that needs it. Missing Accessibility stops external selection before deciding whether to capture; only no-selection or copy timeout enters capture and checks Screen Recording. Closing the guide leaves permissions untouched. Accessibility copy fallback may replace the clipboard.
+- Show a compact guide with the App icon, the permission icon, one short purpose statement, and one primary button. Do not show file paths or technical details.
+- For Accessibility, Continue opens the System Settings permission pane. The user enables or manually adds the installed App there; opening Settings does not grant permission.
+- Accessibility guidance tells the user to click +, choose Boundless Translator, and enable it. Raw command-line executables do not show permission guidance.
+- A missing Accessibility grant must not be treated as absent selected text: the shortcut opens Accessibility guidance and never enters screenshot capture. Cancellation stops the action; other unexpected selection errors are reported. No-selection and clipboard-copy timeouts retain the screenshot fallback.
+- Screen Recording requests access after the user continues from its guide. The macOS prompt offers to open the Screen Recording settings pane when needed; the App does not open the pane separately or cover the prompt with another panel.
 - Provide localized product metadata, screenshots, support contact information, age rating, review notes, and instructions for testing the shortcut, screenshot flow, and subscription.
-- Validate the complete first-install, permission, translation, screenshot, trial, purchase, expiration, and restore flows with an App Store-signed TestFlight build before submission.
+- Validate the complete permission, translation, screenshot, trial, purchase, expiration, and restore flows with an App Store-signed TestFlight build before submission.
 
 ## Build and Release
 

@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Prøv igjen.";
 "shortcutError.installation" = "Hendelsesbehandleren for den globale snarveien kunne ikke installeres (%@).";
 "shortcutError.registration" = "Tastatursnarveien kunne ikke registreres (%@). Den kan være i bruk av en annen app.";
+
+"permission.accessibilityTitle" = "Tilgjengelighet";
+"permission.screenRecordingTitle" = "Skjermopptak";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

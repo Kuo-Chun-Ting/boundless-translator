@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Spróbuj ponownie.";
 "shortcutError.installation" = "Nie udało się zainstalować procedury obsługi zdarzeń globalnego skrótu (%@).";
 "shortcutError.registration" = "Nie udało się zarejestrować skrótu klawiszowego (%@). Może być używany przez inną aplikację.";
+
+"permission.accessibilityTitle" = "Dostępność";
+"permission.screenRecordingTitle" = "Nagrywanie ekranu";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

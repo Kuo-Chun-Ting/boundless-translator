@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Poskusite znova.";
 "shortcutError.installation" = "Obravnavalnika dogodkov globalne bližnjice ni bilo mogoče namestiti (%@).";
 "shortcutError.registration" = "Tipkovne bližnjice ni bilo mogoče registrirati (%@). Morda jo uporablja druga aplikacija.";
+
+"permission.accessibilityTitle" = "Dostopnost";
+"permission.screenRecordingTitle" = "Snemanje zaslona";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

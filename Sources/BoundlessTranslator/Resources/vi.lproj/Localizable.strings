@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Thử lại.";
 "shortcutError.installation" = "Không thể cài đặt trình xử lý sự kiện phím tắt toàn cục (%@).";
 "shortcutError.registration" = "Không thể đăng ký phím tắt (%@). Phím tắt có thể đang được một ứng dụng khác sử dụng.";
+
+"permission.accessibilityTitle" = "Trợ năng";
+"permission.screenRecordingTitle" = "Ghi màn hình";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

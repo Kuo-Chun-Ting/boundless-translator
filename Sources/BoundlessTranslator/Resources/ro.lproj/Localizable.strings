@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Încearcă din nou.";
 "shortcutError.installation" = "Gestionarul de evenimente pentru scurtătura globală nu a putut fi instalat (%@).";
 "shortcutError.registration" = "Scurtătura din tastatură nu a putut fi înregistrată (%@). Este posibil să fie folosită de altă aplicație.";
+
+"permission.accessibilityTitle" = "Accesibilitate";
+"permission.screenRecordingTitle" = "Înregistrarea ecranului";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Tente novamente.";
 "shortcutError.installation" = "Não foi possível instalar o gerenciador de eventos do atalho global (%@).";
 "shortcutError.registration" = "Não foi possível registrar o atalho de teclado (%@). Talvez ele esteja sendo usado por outro app.";
+
+"permission.accessibilityTitle" = "Acessibilidade";
+"permission.screenRecordingTitle" = "Gravação da tela";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

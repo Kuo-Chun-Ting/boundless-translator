@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Torna-ho a provar.";
 "shortcutError.installation" = "No s’ha pogut instal·lar el gestor d’esdeveniments de la drecera global (%@).";
 "shortcutError.registration" = "No s’ha pogut registrar la drecera de teclat (%@). Pot ser que una altra app la faci servir.";
+
+"permission.accessibilityTitle" = "Accessibilitat";
+"permission.screenRecordingTitle" = "Gravació de pantalla";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";

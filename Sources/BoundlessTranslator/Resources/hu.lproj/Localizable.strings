@@ -64,3 +64,11 @@
 "translationFailure.unknown" = "%@ Próbálja újra.";
 "shortcutError.installation" = "A globális billentyűparancs eseménykezelője nem telepíthető (%@).";
 "shortcutError.registration" = "A billentyűparancs nem regisztrálható (%@). Lehet, hogy egy másik alkalmazás használja.";
+
+"permission.accessibilityTitle" = "Kisegítő lehetőségek";
+"permission.screenRecordingTitle" = "Képernyőfelvétel";
+"permission.accessibilityGuide" = "Read selected text in other apps.";
+"permission.accessibilityInstruction" = "In System Settings, click +, choose Boundless Translator, then turn it on.";
+"permission.openSystemSettings" = "Open System Settings";
+"permission.screenRecordingGuide" = "Capture the screen region you select.";
+"permission.allowScreenRecording" = "Allow";
