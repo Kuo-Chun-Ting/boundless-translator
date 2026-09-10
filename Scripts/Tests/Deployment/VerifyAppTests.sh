@@ -25,6 +25,9 @@ function test_verify_app_when_app_has_expected_developer_id_signature_then_succe
     zsh "${VERIFIER}" "${app_path}"
 
     local resources_path="${app_path}/Contents/Resources"
+    local privacy_manifest="${resources_path}/PrivacyInfo.xcprivacy"
+    plutil -lint "${privacy_manifest}"
+    cmp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${privacy_manifest}"
     [[ -d "${resources_path}/en.lproj" ]]
     [[ -d "${resources_path}/zh-Hant.lproj" ]]
     [[ "$(find "${resources_path}" -mindepth 1 -maxdepth 1 -type d -name '*.lproj' | wc -l | tr -d ' ')" == "48" ]]
@@ -98,6 +101,31 @@ function test_verify_app_when_app_is_ad_hoc_signed_then_fails {
     fi
 }
 
+function test_verify_app_when_signature_lacks_sandbox_then_fails {
+    # Arrange: isolate the verifier's entitlement check from certificate checks.
+    local mock_bin="${TEMP_ROOT}/bin"
+    mkdir -p "${mock_bin}"
+    cat > "${mock_bin}/codesign" <<'EOF'
+#!/bin/zsh
+if [[ "$*" == *--entitlements* ]]; then
+    [[ "$*" == *--xml* ]] || { print '[Dict]'; exit 0; }
+    print '<plist version="1.0"><dict><key>com.apple.security.app-sandbox</key><false/></dict></plist>'
+elif [[ "$*" == *--display* ]]; then
+    print 'flags=0x10000(runtime) Timestamp=verified-test-timestamp'
+fi
+exit 0
+EOF
+    chmod +x "${mock_bin}/codesign"
+
+    # Act & Assert
+    if PATH="${mock_bin}:${PATH}" zsh "${VERIFIER}" "${BUILD_APP}" >"${TEMP_ROOT}/no-sandbox.log" 2>&1; then
+        print -u2 'Expected a non-sandboxed signature to fail verification.'
+        return 1
+    fi
+    [[ "$(<"${TEMP_ROOT}/no-sandbox.log")" == *'does not enable App Sandbox'* ]]
+}
+
+test_verify_app_when_signature_lacks_sandbox_then_fails
 test_verify_app_when_app_has_expected_developer_id_signature_then_succeeds
 test_verify_app_when_app_is_launched_then_remains_running
 test_verify_app_when_environment_attempts_to_override_team_then_uses_pinned_team

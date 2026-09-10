@@ -33,4 +33,11 @@ if [[ "${SIGNATURE_DETAILS}" != *"Timestamp="* ]]; then
     exit 1
 fi
 
+readonly ENTITLEMENTS="$(codesign --display --entitlements - --xml "${APP_PATH}" 2>/dev/null)"
+if [[ "$(print -r -- "${ENTITLEMENTS}" | /usr/bin/xmllint --xpath \
+    'boolean(/plist/dict/key[.="com.apple.security.app-sandbox"]/following-sibling::*[1][self::true])' -)" != true ]]; then
+    print -u2 "App signature does not enable App Sandbox."
+    exit 1
+fi
+
 plutil -lint "${APP_PATH}/Contents/Info.plist"

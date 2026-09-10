@@ -21,9 +21,9 @@ Most translation apps make you copy text into another app. Boundless Translator 
 
 ### First Use
 
-1. Launch Boundless Translator.
-2. Open **System Settings → Privacy & Security → Accessibility**.
-3. Allow Boundless Translator.
+1. Install Boundless Translator from the DMG, then launch the installed App.
+2. Select text in another app and press the shortcut. When needed, the Accessibility guide opens **System Settings → Privacy & Security → Accessibility**. Enable Boundless Translator; if it is missing, click **+** and choose the installed App.
+3. With no text selected, use the shortcut to capture a region. When needed, the Screen Recording guide starts Apple's permission flow. Quit and reopen the App if macOS requests it.
 
 ### Settings
 
@@ -68,7 +68,7 @@ cd boundless-translator
 Scripts/Tools/build_app.sh
 ```
 
-This builds and signs `Build/Boundless Translator.app`. Open it to run the app.
+This builds and signs `Build/Boundless Translator.app`, with App Sandbox enabled and no subscription required.
 
 ### Verify
 
@@ -78,27 +78,27 @@ Scripts/verify_subscription.sh
 Scripts/verify.sh
 ```
 
-`verify_features.sh` checks the unrestricted edition, GUI behavior, the App signature, and the DMG workflow. Run it before creating a friend-test DMG. `verify_subscription.sh` checks subscription-mode code, local StoreKit transactions, and the verification scripts. `verify.sh` runs both in that order. These commands do not create release artifacts, make real purchases, or upload builds.
+`verify_features.sh` checks the unrestricted edition, GUI behavior, the Sandbox-enabled App, and the DMG workflow. Run it before creating a friend-test DMG. `verify_subscription.sh` checks subscription-mode code, local StoreKit transactions, and the verification scripts. `verify.sh` runs both in that order. These commands do not create release artifacts, make real purchases, or upload builds.
 
 On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](AppStore/StoreKitTesting.md).
 
 This needs a macOS desktop session and the build/signing prerequisites above. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
 
-### Test App Sandbox Compatibility
+### Create a Test DMG
 
 ```bash
-Scripts/Tools/build_app.sh --sandbox
+Scripts/release_dmg.sh --test
 ```
 
-This builds `Build/Sandbox/Boundless Translator.app` with App Sandbox enabled and a separate bundle identifier, `com.lillard.BoundlessTranslator.Sandbox`. It does not replace the normal build or share its saved settings and permissions.
+Requires `create-dmg` (`brew install create-dmg`). The output is `Build/Boundless Translator-test.dmg`: Sandbox enabled, no subscription, Developer ID signed, **not notarized**. This command does not change version numbers, contact Apple's notarization service, or overwrite versioned release DMGs. Gatekeeper may require an override when installing this unnotarized test artifact.
 
-Quit other copies of Boundless Translator before testing so they do not compete for the shortcut. Grant permissions to the Sandbox copy only when prompted or needed for the test. Test external text selection, screenshot capture, Live Text, translation, speech, and Lookup; a successful build alone does not establish compatibility.
+Install the App from the DMG before testing. Quit other copies so they do not compete for the shortcut. The Accessibility guide opens its System Settings pane; click **+**, choose the installed Boundless Translator App, and enable it. The Screen Recording guide starts the native macOS authorization flow; use the prompt's **Open System Settings** button when needed. Test external text selection, screenshot capture, Live Text, translation, speech, and Lookup.
 
-This Developer ID-signed build is a local compatibility test, not an App Store or TestFlight release.
+The test and versioned DMGs use the same bundle identifier and share settings. They are not separate installations.
 
 ### Release a DMG
 
-Release builds the App and packages it as a DMG for sharing. Apple notarization checks the software before distribution.
+Release builds the same Sandbox-enabled, subscription-free App and packages it as a notarized DMG for sharing with testers. It is not a paid website edition.
 
 #### One-time Setup
 

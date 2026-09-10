@@ -21,11 +21,12 @@ function create_step_stub {
     cat > "${stub_path}" <<'EOF'
 #!/bin/zsh
 print -r -- "${0:t} $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-if [[ "${0:t}" == "step-build" ]]; then
-    mkdir -p "${BOUNDLESS_TRANSLATOR_DMG_APP_PATH}"
-elif [[ "${0:t}" == "step-package" ]]; then
+if [[ "${0:t}" == *step-build ]]; then
+    mkdir -p "${BOUNDLESS_TRANSLATOR_BUILD_ROOT}/Boundless Translator.app"
+    print -n "${TEST_APP_MARKER:-built app}" > "${BOUNDLESS_TRANSLATOR_BUILD_ROOT}/Boundless Translator.app/marker"
+elif [[ "${0:t}" == *step-package ]]; then
     mkdir -p "${2:h}"
-    print -n "built dmg" > "$2"
+    print -n "$(<"$1/marker")" > "$2"
 fi
 EOF
     chmod +x "${stub_path}"
@@ -40,8 +41,8 @@ function run_dmg_builder {
     BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE="${build_stub}" \
     BOUNDLESS_TRANSLATOR_VERIFY_EXECUTABLE="${verify_stub}" \
     BOUNDLESS_TRANSLATOR_PACKAGE_EXECUTABLE="${package_stub}" \
-    BOUNDLESS_TRANSLATOR_DMG_APP_PATH="${APP_PATH}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
+    TEST_APP_MARKER="${TEST_APP_MARKER:-built app}" \
         zsh "${DMG_BUILDER}" "$@"
 }
 
@@ -61,10 +62,33 @@ function test_build_dmg_when_output_path_is_provided_then_builds_verifies_and_pa
     # Assert
     local expected_calls
     expected_calls=$'step-build \n'
-    expected_calls+=$'step-verify '${APP_PATH}$'\n'
-    expected_calls+=$'step-package '${APP_PATH}$' '${DMG_PATH}
+    local staged_app_path="$(sed -n '2p' "${CALL_LOG}")"
+    staged_app_path="${staged_app_path#step-verify }"
+    expected_calls+=$'step-verify '${staged_app_path}$'\n'
+    expected_calls+=$'step-package '${staged_app_path}$' '${DMG_PATH}
     [[ "$(<"${CALL_LOG}")" == "${expected_calls}" ]]
-    [[ "$(<"${DMG_PATH}")" == "built dmg" ]]
+    [[ "$(<"${DMG_PATH}")" == "built app" ]]
+    [[ "${staged_app_path}" != "${APP_PATH}" ]]
+}
+
+function test_build_dmg_when_shared_app_changes_after_build_then_packages_its_staged_app {
+    # Arrange
+    local build_stub="${TEMP_ROOT}/race-step-build"
+    local verify_stub="${TEMP_ROOT}/race-step-verify"
+    local package_stub="${TEMP_ROOT}/race-step-package"
+    create_step_stub "${build_stub}"
+    create_step_stub "${verify_stub}"
+    create_step_stub "${package_stub}"
+    mkdir -p "${APP_PATH}"
+    print -n 'other build' > "${APP_PATH}/marker"
+    : > "${CALL_LOG}"
+
+    # Act
+    TEST_APP_MARKER='this invocation' run_dmg_builder "${build_stub}" "${verify_stub}" "${package_stub}" "${DMG_PATH}"
+
+    # Assert
+    [[ "$(<"${DMG_PATH}")" == 'this invocation' ]]
+    [[ "$(<"${APP_PATH}/marker")" == 'other build' ]]
 }
 
 function test_build_dmg_when_output_path_is_missing_then_skips_build {
@@ -86,6 +110,7 @@ function test_build_dmg_when_output_path_is_missing_then_skips_build {
 }
 
 test_build_dmg_when_output_path_is_provided_then_builds_verifies_and_packages_app
+test_build_dmg_when_shared_app_changes_after_build_then_packages_its_staged_app
 test_build_dmg_when_output_path_is_missing_then_skips_build
 
 print "DMG build tests passed."

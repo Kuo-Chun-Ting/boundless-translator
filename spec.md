@@ -102,8 +102,10 @@ These directories belong to one executable target, not separate Swift packages. 
 
 - Maintain the App Store and Developer ID distributions in the same repository and branch.
 - Share product code between distributions. Keep signing, entitlements, packaging, upload, and purchase integration specific to each distribution.
-- Validate the App Store build under App Sandbox before implementing commerce. The validation covers the global shortcut, Accessibility selection, clipboard fallback, region capture, Live Text selection, Apple translation, speech, and Lookup.
-- `Scripts/Tools/build_app.sh --sandbox` creates a Developer ID-signed compatibility build at `Build/Sandbox/Boundless Translator.app`, with App Sandbox and outgoing-network access enabled. Its separate bundle identifier isolates preferences and permissions from the existing distribution. This is not an App Store-signed build or proof of App Review eligibility.
+- Build verification confirms the signed App Sandbox entitlement before distribution. Runtime behavior is covered by normal DMG acceptance and by testing the exact TestFlight build; there is no separate Sandbox build or Sandbox checklist.
+- Every packaged App enables App Sandbox and outgoing-network access. The default Developer ID build is subscription-free; the App Store build requires a subscription. Both use the same sources and bundle identifier, not a separate Sandbox test edition. A successful build does not prove runtime compatibility or App Review eligibility.
+- `Resources/Sandbox.entitlements` is the shared source for both distributions. The App Store release must add its matching application and team identifiers when signing.
+- Cross-app selection uses `AXUIElement` with the existing clipboard fallback. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
 - Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
 - Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
 
@@ -128,6 +130,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Provide an in-App privacy-policy entry and matching privacy-policy URL in App Store Connect.
 - Describe how selected text, screenshots, translations, settings, and purchase state are processed.
 - Declare applicable required-reason APIs in the privacy manifest and keep App Store privacy answers consistent with the shipped build.
+- Bundle `Resources/PrivacyInfo.xcprivacy` in the App's `Contents/Resources` before signing for every build mode. The current implementation declares no tracking or collected data and uses UserDefaults reason `CA92.1` for its own language and shortcut preferences. Reassess these declarations when data practices change; this manifest does not replace the privacy policy or App Store Connect disclosures.
 - Explain Accessibility and Screen Recording permissions before or when they are requested.
 - Request each permission only when the shortcut first reaches the feature that needs it. Missing Accessibility stops external selection before deciding whether to capture; only no-selection or copy timeout enters capture and checks Screen Recording. Closing the guide leaves permissions untouched. Accessibility copy fallback may replace the clipboard.
 - Show a compact guide with the App icon, the permission icon, one short purpose statement, and one primary button. Do not show file paths or technical details.
@@ -140,14 +143,16 @@ These directories belong to one executable target, not separate Swift packages. 
 
 ## Build and Release
 
-- `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, a subscription-free App build, signature checks, and DMG deployment tests. It does not create a release DMG.
+- `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, a subscription-free Sandbox App build, signature checks, and DMG deployment tests. Passing it is the gate before `Scripts/release_dmg.sh --test`; it does not create the test DMG.
 - `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and verification-script tests. Local StoreKit uses a test-only product; these tests do not charge money, require production credentials, or upload a build.
 - On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), skip the three local StoreKit integration tests before launch and report the reproduced entitlement-query failure. Keep their test code; any different OS or Xcode build executes them again. `Scripts/Tests/test_storekit.sh --force` bypasses this environment exception for diagnosis.
 - `Scripts/verify.sh` runs feature verification followed by subscription verification. Each Swift mode has an isolated build directory and report. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
 - Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
-- `Scripts/release_dmg.sh <version>` sets the public version and increments the build number. It builds and verifies the App, then packages and signs the DMG.
+- App signature verification also requires the signed App Sandbox entitlement to be true.
+- `Scripts/release_dmg.sh --test` builds the subscription-free, sandboxed App and saves a signed but unnotarized `Build/Boundless Translator-test.dmg`. It leaves version metadata and versioned release DMGs unchanged; failure preserves the previous test DMG. Users install this DMG for local acceptance testing.
+- `Scripts/release_dmg.sh <version>` stages the public version and incremented build number in private metadata, then builds, verifies, packages and signs its own App. Each DMG build uses a private output directory so another build cannot replace its input.
 - Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
-- Only a successful release saves `Build/Boundless Translator-<version>.dmg`. A failed release restores the previous version metadata and preserves any existing release DMG.
+- Versioned DMG releases hold a release lock through version calculation and publication. After notarization succeeds, source metadata is replaced atomically and the versioned DMG is published. A later failure atomically restores the previous metadata and preserves any existing release DMG. Failed rollback retains and reports its recovery copy. Shared App building likewise preserves its recovery directory if restoring the previous App fails.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
 - The App Store release uses its own signing, archive, validation, and upload workflow. It does not produce or notarize a DMG.
 
