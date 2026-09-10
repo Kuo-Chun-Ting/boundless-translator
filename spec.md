@@ -75,6 +75,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
 - Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
+- Subscription-required builds expose Subscription from Preferences and the menu bar, including when feature access has expired. Free-testing builds do not show purchase controls.
 
 ## Architecture
 
@@ -91,6 +92,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Runners report shared translation failures. Apple errors are normalized inside the Apple adapter; the coordinator preserves normalized failures and ignores stale results and errors.
 - `Settings` owns Preferences composition, persisted translation defaults, and the interface-language preference. It receives the composed language catalog instead of choosing an engine.
 - `Localization` resolves interface strings from `Resources`, independently of the translation engine.
+- `Subscription` owns verified StoreKit access state and the native subscription window. Application injects an authorization callback into translation coordination and checks access before reading a selection or capturing a screenshot; retry, language changes, and delayed engine execution use the same gate.
 - Interface localization covers every language localized by macOS and remains independent from Translation framework language availability.
 - Usage explains that interface-language coverage and translation-language availability follow macOS support.
 
@@ -113,8 +115,13 @@ These directories belong to one executable target, not separate Swift packages. 
 - Allow the current product features while the introductory trial or subscription entitlement is active.
 - When access expires, keep Preferences, subscription purchase, subscription management, and restore-purchases available. Require active access before starting translation or screenshot capture.
 - Use StoreKit verified transactions as the source of App Store access. Do not require an account, database, or custom purchase server for the initial release.
+- Translation and screenshot capture share the configured basic annual product ID. Await the initial entitlement load before deciding access and continue the original action after a successful load. Concurrent requests share that load; a superseded refresh must not cause an early denial. Once loaded, recheck access at each feature entry, including translation retries and language changes.
 - Handle purchase cancellation, pending approval, renewal failure, expiration, refund or revocation, restored purchases, and reinstall. Do not revoke an already verified, unexpired entitlement solely because StoreKit refresh is temporarily unavailable.
 - Do not define pricing or access rules for unplanned future features.
+- The `SUBSCRIPTION_REQUIRED` compile condition controls access policy independently of packaging format; the App Store build enables it. Missing Store configuration fails closed. Product ID and the public HTTPS privacy-policy URL are injected into the signed bundle, not hard-coded in Swift. Free-testing builds skip subscription checks and StoreKit observation. A paid website edition needs its own purchase provider and is not implemented.
+- Use `SubscriptionStoreView` for product display, localized pricing, trial eligibility, purchase confirmation and restore. Use the native transaction and subscription-status updates to refresh verified access; cancellation or a pending purchase does not grant new access.
+- Check expiration whenever a feature starts. Honor a verified billing grace period through its expiration date; do not treat billing retry without grace as active access. Ignore stale refresh responses so an older result cannot restore access after a newer revocation snapshot.
+- Keep previously displayed content available after expiration; block new translation and capture work, not Preferences, Quit, purchase, restore, privacy links, or subscription management.
 
 ## App Store Metadata and Privacy
 
@@ -133,7 +140,11 @@ These directories belong to one executable target, not separate Swift packages. 
 
 ## Build and Release
 
-- `Scripts/verify.sh` runs all automated tests, requires a complete passing Swift Testing report, builds the App, and verifies its signature. DMGs created by tests are temporary.
+- `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, a subscription-free App build, signature checks, and DMG deployment tests. It does not create a release DMG.
+- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and verification-script tests. Local StoreKit uses a test-only product; these tests do not charge money, require production credentials, or upload a build.
+- On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), skip the three local StoreKit integration tests before launch and report the reproduced entitlement-query failure. Keep their test code; any different OS or Xcode build executes them again. `Scripts/Tests/test_storekit.sh --force` bypasses this environment exception for diagnosis.
+- `Scripts/verify.sh` runs feature verification followed by subscription verification. Each Swift mode has an isolated build directory and report. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
+- Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
 - `Scripts/release_dmg.sh <version>` sets the public version and increments the build number. It builds and verifies the App, then packages and signs the DMG.
 - Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
 - Only a successful release saves `Build/Boundless Translator-<version>.dmg`. A failed release restores the previous version metadata and preserves any existing release DMG.

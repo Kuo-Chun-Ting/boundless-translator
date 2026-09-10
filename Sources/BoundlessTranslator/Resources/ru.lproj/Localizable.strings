@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Повторите попытку.";
 "shortcutError.installation" = "Не удалось установить обработчик событий глобального сочетания клавиш (%@).";
 "shortcutError.registration" = "Не удалось зарегистрировать сочетание клавиш (%@). Возможно, оно используется другим приложением.";
+"subscription.title" = "Подписка…";
+"subscription.features" = "Переводите выделенный текст и текст на снимках экрана одним сочетанием клавиш.";
+"subscription.unavailable" = "Подписки недоступны";
+"subscription.configurationMissing" = "В этой сборке отсутствует конфигурация покупок App Store. Обратитесь к разработчику.";
+"subscription.active" = "Ваша подписка активна.";
+"subscription.required" = "Для перевода и создания снимков экрана нужна активная подписка или бесплатный пробный период.";
+"subscription.refreshFailed" = "Не удалось проверить актуальный статус подписки. Ранее подтвержденный доступ сохранится до истечения срока.";
+"subscription.refresh" = "Проверить снова";
+"subscription.manage" = "Управлять подпиской";
 
 "permission.accessibilityTitle" = "Универсальный доступ";
 "permission.screenRecordingTitle" = "Запись экрана";

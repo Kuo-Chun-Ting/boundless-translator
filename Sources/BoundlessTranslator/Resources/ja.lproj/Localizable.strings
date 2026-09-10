@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ もう一度お試しください。";
 "shortcutError.installation" = "グローバルショートカットのイベントハンドラをインストールできませんでした（%@）。";
 "shortcutError.registration" = "キーボードショートカットを登録できませんでした（%@）。別のアプリで使用されている可能性があります。";
+"subscription.title" = "サブスクリプション…";
+"subscription.features" = "1つのショートカットで、選択したテキストやスクリーンショット内のテキストを翻訳できます。";
+"subscription.unavailable" = "サブスクリプションを利用できません";
+"subscription.configurationMissing" = "このビルドにはApp Storeの購入設定がありません。デベロッパにお問い合わせください。";
+"subscription.active" = "サブスクリプションは有効です。";
+"subscription.required" = "翻訳とスクリーンショットの撮影には、有効なサブスクリプションまたは無料トライアルが必要です。";
+"subscription.refreshFailed" = "最新のサブスクリプション状況を確認できませんでした。以前に確認されたアクセス権は有効期限まで利用できます。";
+"subscription.refresh" = "もう一度確認";
+"subscription.manage" = "サブスクリプションを管理";
 
 "permission.accessibilityTitle" = "アクセシビリティ";
 "permission.screenRecordingTitle" = "画面収録";

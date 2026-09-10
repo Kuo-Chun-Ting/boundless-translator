@@ -12,7 +12,8 @@ struct BoundlessTranslatorApp: App {
                     .interfaceLanguageSettings,
                 onShowPreferences: {
                     appDelegate.controller.showPreferences()
-                }
+                },
+                onShowSubscription: appDelegate.controller.subscriptionAction
             )
         } label: {
             Image(nsImage: AppBrand.menuBarIconImage)
@@ -49,6 +50,7 @@ enum AppBrand {
 private struct MenuBarView: View {
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     let onShowPreferences: @MainActor () -> Void
+    let onShowSubscription: (@MainActor () -> Void)?
 
     var body: some View {
         Group {
@@ -56,6 +58,12 @@ private struct MenuBarView: View {
                 Text(verbatim: localization.string("menu.preferences"))
             }
             .keyboardShortcut(",", modifiers: .command)
+
+            if let onShowSubscription {
+                Button(action: onShowSubscription) {
+                    Text(verbatim: localization.string("subscription.title"))
+                }
+            }
 
             Divider()
 

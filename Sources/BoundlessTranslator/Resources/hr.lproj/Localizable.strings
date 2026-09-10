@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Pokušajte ponovno.";
 "shortcutError.installation" = "Nije bilo moguće instalirati rukovatelj događajima globalnog prečaca (%@).";
 "shortcutError.registration" = "Nije bilo moguće registrirati tipkovni prečac (%@). Možda ga upotrebljava druga aplikacija.";
+"subscription.title" = "Pretplata…";
+"subscription.features" = "Prevedite odabrani tekst i tekst na snimkama zaslona jednim prečacem.";
+"subscription.unavailable" = "Pretplate nisu dostupne";
+"subscription.configurationMissing" = "Ovoj verziji nedostaje konfiguracija kupnje u trgovini App Store. Obratite se razvojnom programeru.";
+"subscription.active" = "Vaša je pretplata aktivna.";
+"subscription.required" = "Za prevođenje i snimanje zaslona potrebna je aktivna pretplata ili besplatno probno razdoblje.";
+"subscription.refreshFailed" = "Nije bilo moguće potvrditi najnoviji status pretplate. Prethodno potvrđen pristup ostaje dostupan do isteka.";
+"subscription.refresh" = "Provjeri ponovno";
+"subscription.manage" = "Upravljaj pretplatom";
 
 "permission.accessibilityTitle" = "Pristupačnost";
 "permission.screenRecordingTitle" = "Snimanje zaslona";

@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Prøv igjen.";
 "shortcutError.installation" = "Hendelsesbehandleren for den globale snarveien kunne ikke installeres (%@).";
 "shortcutError.registration" = "Tastatursnarveien kunne ikke registreres (%@). Den kan være i bruk av en annen app.";
+"subscription.title" = "Abonnement…";
+"subscription.features" = "Oversett markert tekst og tekst i skjermbilder med én snarvei.";
+"subscription.unavailable" = "Abonnementer er ikke tilgjengelige";
+"subscription.configurationMissing" = "Denne versjonen mangler kjøpskonfigurasjon for App Store. Kontakt utvikleren.";
+"subscription.active" = "Abonnementet ditt er aktivt.";
+"subscription.required" = "Et aktivt abonnement eller en gratis prøveperiode kreves for å oversette og ta skjermbilder.";
+"subscription.refreshFailed" = "Den nyeste abonnementsstatusen kunne ikke bekreftes. Tidligere bekreftet tilgang forblir tilgjengelig til den utløper.";
+"subscription.refresh" = "Sjekk igjen";
+"subscription.manage" = "Administrer abonnement";
 
 "permission.accessibilityTitle" = "Tilgjengelighet";
 "permission.screenRecordingTitle" = "Skjermopptak";

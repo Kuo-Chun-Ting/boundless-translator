@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Próbálja újra.";
 "shortcutError.installation" = "A globális billentyűparancs eseménykezelője nem telepíthető (%@).";
 "shortcutError.registration" = "A billentyűparancs nem regisztrálható (%@). Lehet, hogy egy másik alkalmazás használja.";
+"subscription.title" = "Előfizetés…";
+"subscription.features" = "Fordítsa le a kijelölt szöveget és a képernyőképek szövegét egy billentyűparanccsal.";
+"subscription.unavailable" = "Az előfizetések nem érhetők el";
+"subscription.configurationMissing" = "Ebből a buildből hiányzik az App Store-vásárlás konfigurációja. Forduljon a fejlesztőhöz.";
+"subscription.active" = "Az előfizetése aktív.";
+"subscription.required" = "A fordításhoz és képernyőképek készítéséhez aktív előfizetés vagy ingyenes próbaidőszak szükséges.";
+"subscription.refreshFailed" = "Nem sikerült ellenőrizni az előfizetés legújabb állapotát. A korábban ellenőrzött hozzáférés a lejáratáig elérhető marad.";
+"subscription.refresh" = "Ellenőrzés újra";
+"subscription.manage" = "Előfizetés kezelése";
 
 "permission.accessibilityTitle" = "Kisegítő lehetőségek";
 "permission.screenRecordingTitle" = "Képernyőfelvétel";

@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Versuche es erneut.";
 "shortcutError.installation" = "Der Ereignishandler für den globalen Kurzbefehl konnte nicht installiert werden (%@).";
 "shortcutError.registration" = "Der Tastaturkurzbefehl konnte nicht registriert werden (%@). Möglicherweise wird er von einer anderen App verwendet.";
+"subscription.title" = "Abonnement…";
+"subscription.features" = "Übersetze ausgewählten Text und Text in Bildschirmfotos mit einem Kurzbefehl.";
+"subscription.unavailable" = "Abonnements nicht verfügbar";
+"subscription.configurationMissing" = "In diesem Build fehlt die App Store-Kaufkonfiguration. Wende dich an den Entwickler.";
+"subscription.active" = "Dein Abonnement ist aktiv.";
+"subscription.required" = "Zum Übersetzen und Aufnehmen von Bildschirmfotos ist ein aktives Abonnement oder ein kostenloses Probeabo erforderlich.";
+"subscription.refreshFailed" = "Der aktuelle Abonnementstatus konnte nicht geprüft werden. Der zuvor bestätigte Zugriff bleibt bis zum Ablauf verfügbar.";
+"subscription.refresh" = "Erneut prüfen";
+"subscription.manage" = "Abonnement verwalten";
 
 "permission.accessibilityTitle" = "Bedienungshilfen";
 "permission.screenRecordingTitle" = "Bildschirmaufnahme";

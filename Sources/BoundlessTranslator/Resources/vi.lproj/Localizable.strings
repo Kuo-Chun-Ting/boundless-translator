@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Thử lại.";
 "shortcutError.installation" = "Không thể cài đặt trình xử lý sự kiện phím tắt toàn cục (%@).";
 "shortcutError.registration" = "Không thể đăng ký phím tắt (%@). Phím tắt có thể đang được một ứng dụng khác sử dụng.";
+"subscription.title" = "Gói đăng ký…";
+"subscription.features" = "Dịch văn bản đã chọn và văn bản trong ảnh chụp màn hình bằng một phím tắt.";
+"subscription.unavailable" = "Gói đăng ký không khả dụng";
+"subscription.configurationMissing" = "Bản dựng này thiếu cấu hình mua hàng trên App Store. Hãy liên hệ với nhà phát triển.";
+"subscription.active" = "Gói đăng ký của bạn đang hoạt động.";
+"subscription.required" = "Bạn cần có gói đăng ký đang hoạt động hoặc bản dùng thử miễn phí để dịch và chụp màn hình.";
+"subscription.refreshFailed" = "Không thể xác minh trạng thái gói đăng ký mới nhất. Quyền truy cập đã xác minh trước đó vẫn khả dụng cho đến khi hết hạn.";
+"subscription.refresh" = "Kiểm tra lại";
+"subscription.manage" = "Quản lý gói đăng ký";
 
 "permission.accessibilityTitle" = "Trợ năng";
 "permission.screenRecordingTitle" = "Ghi màn hình";

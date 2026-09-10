@@ -9,7 +9,8 @@ func test_captureScreenshot_when_region_is_captured_then_presents_image() async 
     let mock_viewer = ScreenshotViewerMock()
     let controller = AppController(
         screenshotCapture: ScreenshotCaptureStub(result: .success(image)),
-        imageViewerController: mock_viewer
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act
@@ -26,7 +27,8 @@ func test_captureScreenshot_when_cancelled_then_preserves_existing_image() async
     let mock_viewer = ScreenshotViewerMock()
     let controller = AppController(
         screenshotCapture: ScreenshotCaptureStub(result: .success(nil)),
-        imageViewerController: mock_viewer
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act
@@ -42,7 +44,8 @@ func test_captureScreenshot_when_permission_is_denied_then_reports_error_without
     let mock_viewer = ScreenshotViewerMock()
     let controller = AppController(
         screenshotCapture: ScreenshotCaptureStub(result: .failure(ScreenshotCaptureError.permissionRequired)),
-        imageViewerController: mock_viewer
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act & Assert
@@ -57,7 +60,11 @@ func test_captureScreenshot_when_already_capturing_then_ignores_duplicate_and_al
     // Arrange
     let stub_capture = SuspendedScreenshotCapture()
     let mock_viewer = ScreenshotViewerMock()
-    let controller = AppController(screenshotCapture: stub_capture, imageViewerController: mock_viewer)
+    let controller = AppController(
+        screenshotCapture: stub_capture,
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
+    )
     let first = Task { try await controller.captureScreenshot() }
     await stub_capture.waitUntilStarted()
 

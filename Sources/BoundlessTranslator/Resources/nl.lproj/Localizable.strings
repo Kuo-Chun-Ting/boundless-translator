@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Probeer het opnieuw.";
 "shortcutError.installation" = "De gebeurtenisverwerker voor de globale toetscombinatie kon niet worden geïnstalleerd (%@).";
 "shortcutError.registration" = "De toetscombinatie kon niet worden geregistreerd (%@). Mogelijk wordt deze door een andere app gebruikt.";
+"subscription.title" = "Abonnement…";
+"subscription.features" = "Vertaal geselecteerde tekst en tekst in schermafbeeldingen met één toetscombinatie.";
+"subscription.unavailable" = "Abonnementen niet beschikbaar";
+"subscription.configurationMissing" = "In deze build ontbreekt de App Store-aankoopconfiguratie. Neem contact op met de ontwikkelaar.";
+"subscription.active" = "Je abonnement is actief.";
+"subscription.required" = "Voor vertalen en het maken van schermafbeeldingen is een actief abonnement of een gratis proefperiode vereist.";
+"subscription.refreshFailed" = "De nieuwste abonnementsstatus kon niet worden geverifieerd. Eerder geverifieerde toegang blijft beschikbaar tot deze verloopt.";
+"subscription.refresh" = "Opnieuw controleren";
+"subscription.manage" = "Abonnement beheren";
 
 "permission.accessibilityTitle" = "Toegankelijkheid";
 "permission.screenRecordingTitle" = "Schermopname";

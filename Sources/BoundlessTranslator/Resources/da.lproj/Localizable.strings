@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Prøv igen.";
 "shortcutError.installation" = "Hændelsesbehandleren til den globale genvej kunne ikke installeres (%@).";
 "shortcutError.registration" = "Tastaturgenvejen kunne ikke registreres (%@). Den bruges muligvis af en anden app.";
+"subscription.title" = "Abonnement…";
+"subscription.features" = "Oversæt markeret tekst og tekst i skærmbilleder med én genvej.";
+"subscription.unavailable" = "Abonnementer er ikke tilgængelige";
+"subscription.configurationMissing" = "Denne version mangler sin købskonfiguration til App Store. Kontakt udvikleren.";
+"subscription.active" = "Dit abonnement er aktivt.";
+"subscription.required" = "Et aktivt abonnement eller en gratis prøveperiode kræves for at oversætte og tage skærmbilleder.";
+"subscription.refreshFailed" = "Den seneste abonnementsstatus kunne ikke bekræftes. Tidligere bekræftet adgang forbliver tilgængelig, indtil den udløber.";
+"subscription.refresh" = "Kontroller igen";
+"subscription.manage" = "Administrer abonnement";
 
 "permission.accessibilityTitle" = "Tilgængelighed";
 "permission.screenRecordingTitle" = "Skærmoptagelse";

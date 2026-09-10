@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Yritä uudelleen.";
 "shortcutError.installation" = "Yleisen oikotien tapahtumankäsittelijää ei voitu asentaa (%@).";
 "shortcutError.registration" = "Näppäinoikotietä ei voitu rekisteröidä (%@). Se voi olla toisen apin käytössä.";
+"subscription.title" = "Tilaus…";
+"subscription.features" = "Käännä valittu teksti ja näyttökuvien teksti yhdellä oikotiellä.";
+"subscription.unavailable" = "Tilaukset eivät ole käytettävissä";
+"subscription.configurationMissing" = "Tästä versiosta puuttuu App Store -oston määritys. Ota yhteyttä kehittäjään.";
+"subscription.active" = "Tilauksesi on aktiivinen.";
+"subscription.required" = "Kääntäminen ja näyttökuvien ottaminen edellyttävät aktiivista tilausta tai ilmaista kokeilua.";
+"subscription.refreshFailed" = "Uusinta tilaustilaa ei voitu vahvistaa. Aiemmin vahvistettu käyttöoikeus säilyy sen päättymiseen asti.";
+"subscription.refresh" = "Tarkista uudelleen";
+"subscription.manage" = "Hallitse tilausta";
 
 "permission.accessibilityTitle" = "Käyttöapu";
 "permission.screenRecordingTitle" = "Näytön tallennus";

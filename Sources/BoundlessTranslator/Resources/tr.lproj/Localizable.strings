@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Yeniden deneyin.";
 "shortcutError.installation" = "Genel kestirme olay işleyicisi yüklenemedi (%@).";
 "shortcutError.registration" = "Klavye kestirmesi kaydedilemedi (%@). Başka bir uygulama tarafından kullanılıyor olabilir.";
+"subscription.title" = "Abonelik…";
+"subscription.features" = "Seçilen metni ve ekran görüntülerindeki metni tek kestirmeyle çevirin.";
+"subscription.unavailable" = "Abonelikler kullanılamıyor";
+"subscription.configurationMissing" = "Bu derlemede App Store satın alma yapılandırması eksik. Geliştiriciyle iletişime geçin.";
+"subscription.active" = "Aboneliğiniz etkin.";
+"subscription.required" = "Çeviri yapmak ve ekran görüntüsü almak için etkin abonelik veya ücretsiz deneme gerekir.";
+"subscription.refreshFailed" = "En son abonelik durumu doğrulanamadı. Daha önce doğrulanan erişim, süresi dolana kadar kullanılabilir.";
+"subscription.refresh" = "Yeniden Denetle";
+"subscription.manage" = "Aboneliği Yönet";
 
 "permission.accessibilityTitle" = "Erişilebilirlik";
 "permission.screenRecordingTitle" = "Ekran Kaydı";

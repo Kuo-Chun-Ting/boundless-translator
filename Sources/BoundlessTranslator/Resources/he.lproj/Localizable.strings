@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ יש לנסות שוב.";
 "shortcutError.installation" = "לא ניתן היה להתקין את מטפל האירועים של הקיצור הכללי (%@).";
 "shortcutError.registration" = "לא ניתן היה לרשום את קיצור המקלדת (%@). ייתכן שהוא נמצא בשימוש של יישום אחר.";
+"subscription.title" = "מינוי…";
+"subscription.features" = "תרגום טקסט שנבחר וטקסט בצילומי מסך באמצעות קיצור אחד.";
+"subscription.unavailable" = "המינויים אינם זמינים";
+"subscription.configurationMissing" = "בגרסה זו חסרה הגדרת הרכישה ב-App Store. יש לפנות למפתח.";
+"subscription.active" = "המינוי שלך פעיל.";
+"subscription.required" = "נדרשים מינוי פעיל או תקופת ניסיון בחינם כדי לתרגם ולצלם את המסך.";
+"subscription.refreshFailed" = "לא ניתן היה לאמת את מצב המינוי העדכני. הגישה שאומתה קודם תישאר זמינה עד שתפוג.";
+"subscription.refresh" = "בדיקה חוזרת";
+"subscription.manage" = "ניהול המינוי";
 
 "permission.accessibilityTitle" = "נגישות";
 "permission.screenRecordingTitle" = "הקלטת מסך";

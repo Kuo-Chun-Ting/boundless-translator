@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Δοκιμάστε ξανά.";
 "shortcutError.installation" = "Δεν ήταν δυνατή η εγκατάσταση του χειριστή συμβάντων της καθολικής συντόμευσης (%@).";
 "shortcutError.registration" = "Δεν ήταν δυνατή η καταχώριση της συντόμευσης πληκτρολογίου (%@). Μπορεί να χρησιμοποιείται από άλλη εφαρμογή.";
+"subscription.title" = "Συνδρομή…";
+"subscription.features" = "Μεταφράστε επιλεγμένο κείμενο και κείμενο σε στιγμιότυπα με μία συντόμευση.";
+"subscription.unavailable" = "Οι συνδρομές δεν είναι διαθέσιμες";
+"subscription.configurationMissing" = "Από αυτήν την έκδοση λείπει η διαμόρφωση αγοράς App Store. Επικοινωνήστε με τον προγραμματιστή.";
+"subscription.active" = "Η συνδρομή σας είναι ενεργή.";
+"subscription.required" = "Απαιτείται ενεργή συνδρομή ή δωρεάν δοκιμή για μετάφραση και λήψη στιγμιοτύπων.";
+"subscription.refreshFailed" = "Δεν ήταν δυνατή η επαλήθευση της πιο πρόσφατης κατάστασης συνδρομής. Η πρόσβαση που είχε επαληθευτεί παραμένει διαθέσιμη μέχρι να λήξει.";
+"subscription.refresh" = "Νέος έλεγχος";
+"subscription.manage" = "Διαχείριση συνδρομής";
 
 "permission.accessibilityTitle" = "Προσβασιμότητα";
 "permission.screenRecordingTitle" = "Εγγραφή οθόνης";

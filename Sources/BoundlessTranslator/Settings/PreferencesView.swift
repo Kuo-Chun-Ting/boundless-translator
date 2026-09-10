@@ -10,6 +10,7 @@ struct PreferencesView: View {
     @ObservedObject var shortcutController: GlobalShortcutController
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
+    var onShowSubscription: (@MainActor () -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,6 +50,15 @@ struct PreferencesView: View {
                 .fixedSize()
 
                 Spacer()
+
+                if let onShowSubscription {
+                    PreferencesActionButton(
+                        style: .standard(title: localization.string("subscription.title")),
+                        accessibilityIdentifier: "subscriptionButton",
+                        action: onShowSubscription
+                    )
+                    .fixedSize()
+                }
 
                 UsagePreferencesView(
                     shortcut: shortcutController.definition,

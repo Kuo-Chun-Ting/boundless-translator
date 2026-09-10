@@ -5,6 +5,11 @@ import Foundation
 final class TranslationCoordinator: ObservableObject {
     @Published private(set) var request: TranslationRequest?
     @Published private(set) var status: TranslationStatus = .idle
+    private let authorize: @MainActor () -> Bool
+
+    init(authorize: @escaping @MainActor () -> Bool = { true }) {
+        self.authorize = authorize
+    }
 
     func submit(
         _ selectedText: SelectedText,
@@ -12,6 +17,7 @@ final class TranslationCoordinator: ObservableObject {
         targetLanguageIdentifier: String,
         sourceLanguageWasDetected: Bool = false
     ) {
+        guard authorize() else { return }
         request = TranslationRequest(
             text: selectedText.value,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
@@ -68,6 +74,11 @@ final class TranslationCoordinator: ObservableObject {
             return
         }
 
+        guard authorize() else {
+            status = .idle
+            return
+        }
+
         do {
             let output = try await runner.translate(request)
             guard self.request?.id == request.id else {
@@ -88,6 +99,7 @@ final class TranslationCoordinator: ObservableObject {
         targetLanguageIdentifier: String,
         sourceLanguageWasDetected: Bool
     ) {
+        guard authorize() else { return }
         self.request = TranslationRequest(
             text: request.text,
             sourceLanguageIdentifier: sourceLanguageIdentifier,

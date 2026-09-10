@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Torna-ho a provar.";
 "shortcutError.installation" = "No s’ha pogut instal·lar el gestor d’esdeveniments de la drecera global (%@).";
 "shortcutError.registration" = "No s’ha pogut registrar la drecera de teclat (%@). Pot ser que una altra app la faci servir.";
+"subscription.title" = "Subscripció…";
+"subscription.features" = "Tradueix text seleccionat i text de captures de pantalla amb una drecera.";
+"subscription.unavailable" = "Les subscripcions no estan disponibles";
+"subscription.configurationMissing" = "Aquesta versió no té la configuració de compra de l’App Store. Contacta amb el desenvolupador.";
+"subscription.active" = "La subscripció està activa.";
+"subscription.required" = "Cal una subscripció activa o una prova gratuïta per traduir i fer captures de pantalla.";
+"subscription.refreshFailed" = "No s’ha pogut verificar l’estat més recent de la subscripció. L’accés verificat anteriorment continuarà disponible fins que caduqui.";
+"subscription.refresh" = "Torna-ho a comprovar";
+"subscription.manage" = "Gestiona la subscripció";
 
 "permission.accessibilityTitle" = "Accessibilitat";
 "permission.screenRecordingTitle" = "Gravació de pantalla";

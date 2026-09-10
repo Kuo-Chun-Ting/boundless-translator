@@ -1,0 +1,64 @@
+{
+  "identifier" : "A15E67E4-04C4-447B-861B-2C192E10412F",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1234567890",
+    "_developerTeamID" : "",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "A31EEAE2-C943-4480-8012-57EEF038BD0D",
+      "localizations" : [
+
+      ],
+      "name" : "Boundless Translator Test Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "24.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1234567891",
+          "introductoryOffer" : {
+            "internalID" : "1234567892",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "Test-only annual subscription",
+              "displayName" : "Annual Test Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.boundless-translator.test.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual Test Subscription",
+          "subscriptionGroupID" : "A31EEAE2-C943-4480-8012-57EEF038BD0D",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

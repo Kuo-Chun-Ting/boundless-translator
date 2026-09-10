@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ ลองอีกครั้ง";
 "shortcutError.installation" = "ไม่สามารถติดตั้งตัวจัดการเหตุการณ์ของปุ่มลัดส่วนกลางได้ (%@)";
 "shortcutError.registration" = "ไม่สามารถลงทะเบียนปุ่มลัดแป้นพิมพ์ได้ (%@) อาจมีแอปอื่นใช้งานอยู่";
+"subscription.title" = "การสมัครสมาชิก…";
+"subscription.features" = "แปลข้อความที่เลือกและข้อความในภาพหน้าจอด้วยปุ่มลัดเดียว";
+"subscription.unavailable" = "ไม่สามารถใช้การสมัครสมาชิกได้";
+"subscription.configurationMissing" = "รุ่นนี้ไม่มีการกำหนดค่าการซื้อใน App Store โปรดติดต่อนักพัฒนา";
+"subscription.active" = "การสมัครสมาชิกของคุณใช้งานอยู่";
+"subscription.required" = "ต้องมีการสมัครสมาชิกที่ใช้งานอยู่หรือการทดลองใช้ฟรีเพื่อแปลและจับภาพหน้าจอ";
+"subscription.refreshFailed" = "ไม่สามารถตรวจสอบสถานะการสมัครสมาชิกล่าสุดได้ สิทธิ์เข้าถึงที่ตรวจสอบก่อนหน้านี้จะยังใช้ได้จนกว่าจะหมดอายุ";
+"subscription.refresh" = "ตรวจสอบอีกครั้ง";
+"subscription.manage" = "จัดการการสมัครสมาชิก";
 
 "permission.accessibilityTitle" = "การช่วยการเข้าถึง";
 "permission.screenRecordingTitle" = "การบันทึกหน้าจอ";

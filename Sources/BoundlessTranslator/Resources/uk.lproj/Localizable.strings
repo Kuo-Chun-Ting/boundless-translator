@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Повторіть спробу.";
 "shortcutError.installation" = "Не вдалося встановити обробник подій глобального скорочення (%@).";
 "shortcutError.registration" = "Не вдалося зареєструвати клавіатурне скорочення (%@). Можливо, його використовує інша програма.";
+"subscription.title" = "Підписка…";
+"subscription.features" = "Перекладайте виділений текст і текст на знімках екрана одним скороченням.";
+"subscription.unavailable" = "Підписки недоступні";
+"subscription.configurationMissing" = "У цій збірці немає конфігурації покупок App Store. Зверніться до розробника.";
+"subscription.active" = "Ваша підписка активна.";
+"subscription.required" = "Для перекладу та створення знімків екрана потрібна активна підписка або безкоштовний пробний період.";
+"subscription.refreshFailed" = "Не вдалося перевірити актуальний стан підписки. Раніше підтверджений доступ збережеться до завершення строку дії.";
+"subscription.refresh" = "Перевірити знову";
+"subscription.manage" = "Керувати підпискою";
 
 "permission.accessibilityTitle" = "Доступність";
 "permission.screenRecordingTitle" = "Запис екрана";

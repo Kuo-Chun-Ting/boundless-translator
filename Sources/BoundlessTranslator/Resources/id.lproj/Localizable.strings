@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Coba lagi.";
 "shortcutError.installation" = "Penangan kejadian pintasan global tidak dapat diinstal (%@).";
 "shortcutError.registration" = "Pintasan papan ketik tidak dapat didaftarkan (%@). Pintasan mungkin digunakan app lain.";
+"subscription.title" = "Langganan…";
+"subscription.features" = "Terjemahkan teks yang dipilih dan teks dalam tangkapan layar dengan satu pintasan.";
+"subscription.unavailable" = "Langganan tidak tersedia";
+"subscription.configurationMissing" = "Build ini tidak memiliki konfigurasi pembelian App Store. Hubungi pengembang.";
+"subscription.active" = "Langganan Anda aktif.";
+"subscription.required" = "Langganan aktif atau uji coba gratis diperlukan untuk menerjemahkan dan mengambil tangkapan layar.";
+"subscription.refreshFailed" = "Status langganan terbaru tidak dapat diverifikasi. Akses yang telah diverifikasi tetap tersedia hingga berakhir.";
+"subscription.refresh" = "Periksa Lagi";
+"subscription.manage" = "Kelola Langganan";
 
 "permission.accessibilityTitle" = "Aksesibilitas";
 "permission.screenRecordingTitle" = "Perekaman Layar";

@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ 다시 시도하십시오.";
 "shortcutError.installation" = "전역 단축키 이벤트 핸들러를 설치할 수 없습니다(%@).";
 "shortcutError.registration" = "키보드 단축키를 등록할 수 없습니다(%@). 다른 앱에서 사용 중일 수 있습니다.";
+"subscription.title" = "구독…";
+"subscription.features" = "하나의 단축키로 선택한 텍스트와 스크린샷의 텍스트를 번역합니다.";
+"subscription.unavailable" = "구독을 사용할 수 없음";
+"subscription.configurationMissing" = "이 빌드에 App Store 구입 구성이 없습니다. 개발자에게 문의하십시오.";
+"subscription.active" = "구독이 활성 상태입니다.";
+"subscription.required" = "번역하고 스크린샷을 캡처하려면 활성 구독 또는 무료 체험이 필요합니다.";
+"subscription.refreshFailed" = "최신 구독 상태를 확인할 수 없습니다. 이전에 확인된 접근 권한은 만료될 때까지 유지됩니다.";
+"subscription.refresh" = "다시 확인";
+"subscription.manage" = "구독 관리";
 
 "permission.accessibilityTitle" = "손쉬운 사용";
 "permission.screenRecordingTitle" = "화면 기록";

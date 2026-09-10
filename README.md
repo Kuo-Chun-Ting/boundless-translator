@@ -70,6 +70,20 @@ Scripts/Tools/build_app.sh
 
 This builds and signs `Build/Boundless Translator.app`. Open it to run the app.
 
+### Verify
+
+```bash
+Scripts/verify_features.sh
+Scripts/verify_subscription.sh
+Scripts/verify.sh
+```
+
+`verify_features.sh` checks the unrestricted edition, GUI behavior, the App signature, and the DMG workflow. Run it before creating a friend-test DMG. `verify_subscription.sh` checks subscription-mode code, local StoreKit transactions, and the verification scripts. `verify.sh` runs both in that order. These commands do not create release artifacts, make real purchases, or upload builds.
+
+On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](AppStore/StoreKitTesting.md).
+
+This needs a macOS desktop session and the build/signing prerequisites above. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
+
 ### Test App Sandbox Compatibility
 
 ```bash

@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Tente novamente.";
 "shortcutError.installation" = "Não foi possível instalar o gerenciador de eventos do atalho global (%@).";
 "shortcutError.registration" = "Não foi possível registrar o atalho de teclado (%@). Talvez ele esteja sendo usado por outro app.";
+"subscription.title" = "Assinatura…";
+"subscription.features" = "Traduza o texto selecionado e o texto em capturas de tela com um só atalho.";
+"subscription.unavailable" = "Assinaturas indisponíveis";
+"subscription.configurationMissing" = "Esta compilação não tem a configuração de compra da App Store. Entre em contato com o desenvolvedor.";
+"subscription.active" = "Sua assinatura está ativa.";
+"subscription.required" = "É necessária uma assinatura ativa ou avaliação gratuita para traduzir e fazer capturas de tela.";
+"subscription.refreshFailed" = "Não foi possível verificar o status mais recente da assinatura. O acesso verificado anteriormente permanecerá disponível até expirar.";
+"subscription.refresh" = "Verificar Novamente";
+"subscription.manage" = "Gerenciar Assinatura";
 
 "permission.accessibilityTitle" = "Acessibilidade";
 "permission.screenRecordingTitle" = "Gravação da tela";

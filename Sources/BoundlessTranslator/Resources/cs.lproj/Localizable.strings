@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Zkuste to znovu.";
 "shortcutError.installation" = "Obslužnou rutinu událostí globální zkratky se nepodařilo nainstalovat (%@).";
 "shortcutError.registration" = "Klávesovou zkratku se nepodařilo zaregistrovat (%@). Možná ji používá jiná aplikace.";
+"subscription.title" = "Předplatné…";
+"subscription.features" = "Překládejte vybraný text a text na snímcích obrazovky jedinou zkratkou.";
+"subscription.unavailable" = "Předplatné není k dispozici";
+"subscription.configurationMissing" = "V tomto sestavení chybí konfigurace nákupu v App Storu. Kontaktujte vývojáře.";
+"subscription.active" = "Vaše předplatné je aktivní.";
+"subscription.required" = "K překládání a pořizování snímků obrazovky je nutné aktivní předplatné nebo bezplatná zkušební verze.";
+"subscription.refreshFailed" = "Nejnovější stav předplatného se nepodařilo ověřit. Dříve ověřený přístup zůstane dostupný až do vypršení.";
+"subscription.refresh" = "Zkontrolovat znovu";
+"subscription.manage" = "Spravovat předplatné";
 
 "permission.accessibilityTitle" = "Zpřístupnění";
 "permission.screenRecordingTitle" = "Záznam obrazovky";

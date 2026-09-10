@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Poskusite znova.";
 "shortcutError.installation" = "Obravnavalnika dogodkov globalne bližnjice ni bilo mogoče namestiti (%@).";
 "shortcutError.registration" = "Tipkovne bližnjice ni bilo mogoče registrirati (%@). Morda jo uporablja druga aplikacija.";
+"subscription.title" = "Naročnina…";
+"subscription.features" = "Prevedite izbrano besedilo in besedilo na posnetkih zaslona z eno bližnjico.";
+"subscription.unavailable" = "Naročnine niso na voljo";
+"subscription.configurationMissing" = "V tej različici manjka konfiguracija nakupa v trgovini App Store. Obrnite se na razvijalca.";
+"subscription.active" = "Vaša naročnina je aktivna.";
+"subscription.required" = "Za prevajanje in zajemanje zaslona je potrebna aktivna naročnina ali brezplačno preskusno obdobje.";
+"subscription.refreshFailed" = "Najnovejšega stanja naročnine ni bilo mogoče preveriti. Prej preverjen dostop ostane na voljo do poteka.";
+"subscription.refresh" = "Preveri znova";
+"subscription.manage" = "Upravljaj naročnino";
 
 "permission.accessibilityTitle" = "Dostopnost";
 "permission.screenRecordingTitle" = "Snemanje zaslona";

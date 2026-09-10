@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Încearcă din nou.";
 "shortcutError.installation" = "Gestionarul de evenimente pentru scurtătura globală nu a putut fi instalat (%@).";
 "shortcutError.registration" = "Scurtătura din tastatură nu a putut fi înregistrată (%@). Este posibil să fie folosită de altă aplicație.";
+"subscription.title" = "Abonament…";
+"subscription.features" = "Tradu textul selectat și textul din capturi de ecran cu o singură scurtătură.";
+"subscription.unavailable" = "Abonamentele nu sunt disponibile";
+"subscription.configurationMissing" = "Din această versiune lipsește configurarea achiziției din App Store. Contactează dezvoltatorul.";
+"subscription.active" = "Abonamentul tău este activ.";
+"subscription.required" = "Este necesar un abonament activ sau o perioadă de încercare gratuită pentru traducere și capturi de ecran.";
+"subscription.refreshFailed" = "Nu s-a putut verifica cea mai recentă stare a abonamentului. Accesul verificat anterior rămâne disponibil până la expirare.";
+"subscription.refresh" = "Verifică din nou";
+"subscription.manage" = "Gestionează abonamentul";
 
 "permission.accessibilityTitle" = "Accesibilitate";
 "permission.screenRecordingTitle" = "Înregistrarea ecranului";

@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Inténtalo de nuevo.";
 "shortcutError.installation" = "No se ha podido instalar el controlador de eventos de la función rápida global (%@).";
 "shortcutError.registration" = "No se ha podido registrar la función rápida de teclado (%@). Puede que otra app la esté usando.";
+"subscription.title" = "Suscripción…";
+"subscription.features" = "Traduce texto seleccionado y texto de capturas de pantalla con una sola función rápida.";
+"subscription.unavailable" = "Las suscripciones no están disponibles";
+"subscription.configurationMissing" = "A esta versión le falta la configuración de compra de App Store. Contacta con el desarrollador.";
+"subscription.active" = "Tu suscripción está activa.";
+"subscription.required" = "Se necesita una suscripción activa o una prueba gratuita para traducir y hacer capturas de pantalla.";
+"subscription.refreshFailed" = "No se ha podido verificar el estado más reciente de la suscripción. El acceso verificado anteriormente seguirá disponible hasta que caduque.";
+"subscription.refresh" = "Comprobar de nuevo";
+"subscription.manage" = "Gestionar suscripción";
 
 "permission.accessibilityTitle" = "Accesibilidad";
 "permission.screenRecordingTitle" = "Grabación de pantalla";

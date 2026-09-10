@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ फिर कोशिश करें।";
 "shortcutError.installation" = "ग्लोबल शॉर्टकट इवेंट हैंडलर इंस्टॉल नहीं किया जा सका (%@)।";
 "shortcutError.registration" = "कीबोर्ड शॉर्टकट रजिस्टर नहीं किया जा सका (%@)। हो सकता है कि कोई दूसरा ऐप इसका उपयोग कर रहा हो।";
+"subscription.title" = "सब्सक्रिप्शन…";
+"subscription.features" = "एक शॉर्टकट से चुने गए टेक्स्ट और स्क्रीनशॉट के टेक्स्ट का अनुवाद करें।";
+"subscription.unavailable" = "सब्सक्रिप्शन उपलब्ध नहीं हैं";
+"subscription.configurationMissing" = "इस बिल्ड में App Store खरीदारी कॉन्फ़िगरेशन नहीं है। डेवलपर से संपर्क करें।";
+"subscription.active" = "आपका सब्सक्रिप्शन सक्रिय है।";
+"subscription.required" = "अनुवाद और स्क्रीनशॉट लेने के लिए सक्रिय सब्सक्रिप्शन या मुफ़्त ट्रायल ज़रूरी है।";
+"subscription.refreshFailed" = "सब्सक्रिप्शन की नवीनतम स्थिति सत्यापित नहीं की जा सकी। पहले सत्यापित ऐक्सेस की अवधि समाप्त होने तक वह उपलब्ध रहेगा।";
+"subscription.refresh" = "फिर जाँचें";
+"subscription.manage" = "सब्सक्रिप्शन प्रबंधित करें";
 
 "permission.accessibilityTitle" = "ऐक्सेसिबिलिटी";
 "permission.screenRecordingTitle" = "स्क्रीन रिकॉर्डिंग";

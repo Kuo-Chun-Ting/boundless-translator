@@ -14,6 +14,7 @@ final class PreferencesWindowController: NSWindowController {
         interfaceLanguageSettings: InterfaceLanguageSettings,
         shortcutController: GlobalShortcutController,
         supportedLanguageCatalog: SupportedLanguageCatalog,
+        onShowSubscription: (@MainActor () -> Void)? = nil,
         activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
         quitApplication: @escaping @MainActor @Sendable () -> Void = {
             NSApplication.shared.terminate(nil)
@@ -43,7 +44,8 @@ final class PreferencesWindowController: NSWindowController {
                 interfaceLanguageSettings: interfaceLanguageSettings,
                 shortcutController: shortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
-                quitApplication: quitApplication
+                quitApplication: quitApplication,
+                onShowSubscription: onShowSubscription
             )
         )
         super.init(window: window)

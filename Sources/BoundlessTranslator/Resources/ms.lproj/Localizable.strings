@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Cuba lagi.";
 "shortcutError.installation" = "Pengendali peristiwa pintasan global tidak dapat dipasang (%@).";
 "shortcutError.registration" = "Pintasan papan kekunci tidak dapat didaftarkan (%@). Pintasan mungkin sedang digunakan oleh app lain.";
+"subscription.title" = "Langganan…";
+"subscription.features" = "Terjemah teks terpilih dan teks dalam tangkapan skrin dengan satu pintasan.";
+"subscription.unavailable" = "Langganan tidak tersedia";
+"subscription.configurationMissing" = "Binaan ini tiada konfigurasi pembelian App Store. Hubungi pembangun.";
+"subscription.active" = "Langganan anda aktif.";
+"subscription.required" = "Langganan aktif atau percubaan percuma diperlukan untuk menterjemah dan mengambil tangkapan skrin.";
+"subscription.refreshFailed" = "Status langganan terkini tidak dapat disahkan. Akses yang disahkan sebelum ini kekal tersedia sehingga tamat tempoh.";
+"subscription.refresh" = "Semak Lagi";
+"subscription.manage" = "Urus Langganan";
 
 "permission.accessibilityTitle" = "Kebolehcapaian";
 "permission.screenRecordingTitle" = "Rakaman Skrin";

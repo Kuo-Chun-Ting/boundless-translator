@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ 請再試一次。";
 "shortcutError.installation" = "無法安裝全域快捷鍵事件處理程式（%@）。";
 "shortcutError.registration" = "無法註冊鍵盤快捷鍵（%@）。其他 App 可能正在使用此快捷鍵。";
+"subscription.title" = "訂閱…";
+"subscription.features" = "用一組快速鍵翻譯所選文字與截圖中的文字。";
+"subscription.unavailable" = "無法使用訂閱";
+"subscription.configurationMissing" = "此版本缺少 App Store 購買設定，請聯絡開發者。";
+"subscription.active" = "你的訂閱目前有效。";
+"subscription.required" = "翻譯與截圖功能需要有效訂閱或免費試用資格。";
+"subscription.refreshFailed" = "無法確認最新訂閱狀態。先前已驗證的使用權限會保留至到期。";
+"subscription.refresh" = "重新確認";
+"subscription.manage" = "管理訂閱";
 
 "permission.accessibilityTitle" = "允許輔助使用";
 "permission.accessibilityGuide" = "讀取你在其他 App 中選取的文字。";

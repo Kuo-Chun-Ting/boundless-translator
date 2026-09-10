@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ 请再试一次。";
 "shortcutError.installation" = "无法安装全局快捷键事件处理程序（%@）。";
 "shortcutError.registration" = "无法注册键盘快捷键（%@）。其他 App 可能正在使用此快捷键。";
+"subscription.title" = "订阅…";
+"subscription.features" = "用一组快捷键翻译选中文字和截图中的文字。";
+"subscription.unavailable" = "无法使用订阅";
+"subscription.configurationMissing" = "此版本缺少 App Store 购买配置，请联系开发者。";
+"subscription.active" = "你的订阅目前有效。";
+"subscription.required" = "翻译和截图功能需要有效订阅或免费试用资格。";
+"subscription.refreshFailed" = "无法确认最新订阅状态。之前已验证的使用权限会保留至到期。";
+"subscription.refresh" = "重新确认";
+"subscription.manage" = "管理订阅";
 
 "permission.accessibilityTitle" = "允许辅助功能";
 "permission.accessibilityGuide" = "读取你在其他 App 中选中的文字。";

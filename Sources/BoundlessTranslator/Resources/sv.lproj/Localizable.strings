@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Försök igen.";
 "shortcutError.installation" = "Händelsehanteraren för det globala kortkommandot kunde inte installeras (%@).";
 "shortcutError.registration" = "Kortkommandot kunde inte registreras (%@). Det kanske används av en annan app.";
+"subscription.title" = "Abonnemang…";
+"subscription.features" = "Översätt markerad text och text i skärmavbilder med ett kortkommando.";
+"subscription.unavailable" = "Abonnemang är inte tillgängliga";
+"subscription.configurationMissing" = "Den här versionen saknar köpinställningen för App Store. Kontakta utvecklaren.";
+"subscription.active" = "Ditt abonnemang är aktivt.";
+"subscription.required" = "Ett aktivt abonnemang eller en kostnadsfri provperiod krävs för att översätta och ta skärmavbilder.";
+"subscription.refreshFailed" = "Den senaste abonnemangsstatusen kunde inte verifieras. Tidigare verifierad åtkomst förblir tillgänglig tills den löper ut.";
+"subscription.refresh" = "Kontrollera igen";
+"subscription.manage" = "Hantera abonnemang";
 
 "permission.accessibilityTitle" = "Hjälpmedel";
 "permission.screenRecordingTitle" = "Skärminspelning";

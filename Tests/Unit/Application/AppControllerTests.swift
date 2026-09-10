@@ -31,7 +31,8 @@ func test_handleShortcut_when_no_text_is_selected_then_captures_and_presents_ima
         screenshotCapture: ScreenshotCaptureStub(
             result: .success(NSImage(size: NSSize(width: 100, height: 50)))
         ),
-        imageViewerController: mock_viewer
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act

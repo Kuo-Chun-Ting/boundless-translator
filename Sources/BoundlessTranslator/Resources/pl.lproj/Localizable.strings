@@ -64,6 +64,15 @@
 "translationFailure.unknown" = "%@ Spróbuj ponownie.";
 "shortcutError.installation" = "Nie udało się zainstalować procedury obsługi zdarzeń globalnego skrótu (%@).";
 "shortcutError.registration" = "Nie udało się zarejestrować skrótu klawiszowego (%@). Może być używany przez inną aplikację.";
+"subscription.title" = "Subskrypcja…";
+"subscription.features" = "Tłumacz zaznaczony tekst i tekst na zrzutach ekranu jednym skrótem.";
+"subscription.unavailable" = "Subskrypcje są niedostępne";
+"subscription.configurationMissing" = "W tej kompilacji brakuje konfiguracji zakupu w App Store. Skontaktuj się z deweloperem.";
+"subscription.active" = "Twoja subskrypcja jest aktywna.";
+"subscription.required" = "Do tłumaczenia i robienia zrzutów ekranu wymagana jest aktywna subskrypcja lub bezpłatny okres próbny.";
+"subscription.refreshFailed" = "Nie udało się zweryfikować najnowszego stanu subskrypcji. Wcześniej zweryfikowany dostęp pozostanie dostępny do wygaśnięcia.";
+"subscription.refresh" = "Sprawdź ponownie";
+"subscription.manage" = "Zarządzaj subskrypcją";
 
 "permission.accessibilityTitle" = "Dostępność";
 "permission.screenRecordingTitle" = "Nagrywanie ekranu";

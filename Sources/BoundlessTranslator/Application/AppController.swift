@@ -5,7 +5,14 @@ final class AppController {
     let settings = TranslationSettings()
     let interfaceLanguageSettings: InterfaceLanguageSettings
 
-    private let coordinator = TranslationCoordinator()
+    let subscriptionAccess: SubscriptionAccessController
+    private let onSubscriptionRequired: (@MainActor () -> Void)?
+    private lazy var subscriptionWindowController = SubscriptionWindowController(
+        access: subscriptionAccess, interfaceLanguageSettings: interfaceLanguageSettings
+    )
+    private lazy var coordinator = TranslationCoordinator { [weak self] in
+        self?.authorizeFeature() ?? false
+    }
     private lazy var panelController = TranslationPanelController(
         interfaceLanguageSettings: interfaceLanguageSettings,
         engine: translationEngine
@@ -19,7 +26,8 @@ final class AppController {
         settings: settings,
         interfaceLanguageSettings: interfaceLanguageSettings,
         shortcutController: shortcutController,
-        supportedLanguageCatalog: supportedLanguageCatalog
+        supportedLanguageCatalog: supportedLanguageCatalog,
+        onShowSubscription: subscriptionAction
     )
     private let selectedTextReader: any SelectedTextReading
     private let screenshotCapture: any ScreenshotCapturing
@@ -27,6 +35,11 @@ final class AppController {
     private let sourceLanguageResolver: SourceLanguageResolver
     private var selectionTask: Task<Void, Never>?
     private var isCapturingScreenshot = false
+
+    var subscriptionAction: (@MainActor () -> Void)? {
+        guard subscriptionAccess.requiresSubscription else { return nil }
+        return { [weak self] in self?.showSubscription() }
+    }
 
     init(
         translationEngine: TranslationEngine = .apple,
@@ -40,9 +53,13 @@ final class AppController {
         sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
             minimumConfidence: 0.60,
             languageIdentifier: NaturalLanguageIdentifier()
-        )
+        ),
+        subscriptionAccess: SubscriptionAccessController? = nil,
+        onSubscriptionRequired: (@MainActor () -> Void)? = nil
     ) {
         self.translationEngine = translationEngine
+        self.subscriptionAccess = subscriptionAccess ?? SubscriptionConfiguration.makeAccessController()
+        self.onSubscriptionRequired = onSubscriptionRequired
         self.supportedLanguageCatalog = SupportedLanguageCatalog(
             loadLanguages: translationEngine.loadLanguages
         )
@@ -63,6 +80,7 @@ final class AppController {
     }
 
     func prepare() {
+        subscriptionAccess.start()
         startShortcut(shortcutController)
 
         Task {
@@ -76,11 +94,19 @@ final class AppController {
         preferencesWindowController.present()
     }
 
+    func showSubscription() {
+        guard subscriptionAccess.requiresSubscription else { return }
+        subscriptionWindowController.present()
+    }
+
     func translate(
         _ selectedText: SelectedText,
         sourceLanguageIdentifier: String,
         sourceLanguageWasDetected: Bool = false
-    ) {
+    ) async {
+        await subscriptionAccess.loadIfNeeded()
+        guard !Task.isCancelled else { return }
+        guard authorizeFeature() else { return }
         coordinator.submit(
             selectedText,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
@@ -95,6 +121,7 @@ final class AppController {
     }
 
     func handleShortcut() {
+        if subscriptionAccess.hasLoaded, !authorizeFeature() { return }
         guard selectionTask == nil, !isCapturingScreenshot else {
             return
         }
@@ -103,6 +130,9 @@ final class AppController {
             defer {
                 selectionTask = nil
             }
+
+            await subscriptionAccess.loadIfNeeded()
+            guard !Task.isCancelled, authorizeFeature() else { return }
 
             do {
                 switch try await resolveShortcutAction() {
@@ -137,11 +167,22 @@ final class AppController {
     }
 
     func captureScreenshot() async throws {
+        await subscriptionAccess.loadIfNeeded()
+        try Task.checkCancellation()
+        guard authorizeFeature() else { return }
         guard !isCapturingScreenshot else { return }
         isCapturingScreenshot = true
         defer { isCapturingScreenshot = false }
         guard let image = try await screenshotCapture.captureRegion() else { return }
         imageViewerController.present(image: image, pointerLocation: NSEvent.mouseLocation)
+    }
+
+    private func authorizeFeature() -> Bool {
+        guard subscriptionAccess.hasAccess else {
+            if let onSubscriptionRequired { onSubscriptionRequired() } else { showSubscription() }
+            return false
+        }
+        return true
     }
 
     private func startShortcut(_ controller: GlobalShortcutController) {
@@ -172,7 +213,7 @@ final class AppController {
 
         switch resolution {
         case .resolved(let languageIdentifier):
-            translate(
+            await translate(
                 selectedText,
                 sourceLanguageIdentifier: languageIdentifier,
                 sourceLanguageWasDetected: settings.sourceLanguageIdentifier == nil
@@ -192,10 +233,12 @@ final class AppController {
                 supportedLanguages: supportedLanguages,
                 pointerLocation: NSEvent.mouseLocation
             ) { [weak self] languageIdentifier in
-                self?.translate(
-                    selectedText,
-                    sourceLanguageIdentifier: languageIdentifier
-                )
+                Task { [weak self] in
+                    await self?.translate(
+                        selectedText,
+                        sourceLanguageIdentifier: languageIdentifier
+                    )
+                }
             }
         }
     }
