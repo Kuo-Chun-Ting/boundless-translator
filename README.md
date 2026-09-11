@@ -82,7 +82,7 @@ Scripts/verify.sh
 
 `verify_features.sh` checks the unrestricted edition, GUI behavior, the Sandbox-enabled App, and the DMG workflow. Run it before creating a friend-test DMG. `verify_subscription.sh` checks subscription-mode code, local StoreKit transactions, and the App Store package workflow. `verify.sh` runs both in that order. These commands do not create release artifacts, make real purchases, or upload builds.
 
-On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](AppStore/StoreKitTesting.md).
+On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
 
 This needs a macOS desktop session and the build/signing prerequisites above. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
 
@@ -132,7 +132,7 @@ The finished DMG is saved at `Build/Boundless Translator-0.2.0.dmg` after Apple 
 
 The App Store edition uses the same Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. A paid website DMG requires a separate payment and subscription-verification provider; it is not implemented.
 
-Complete the account, signing, product and public privacy-policy setup in [App Store submission](AppStore/Submission.md). Then provide the configuration as environment variables in your terminal:
+Complete the account, signing, product and public privacy-policy setup in the [App Store implementation plan](app-store/implementation-plan.md). Then provide the configuration as environment variables in your terminal:
 
 ```bash
 export BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID="<team-id>"
@@ -159,4 +159,4 @@ Keep the API private key outside this repository in the location expected by App
 
 The signed App and package are saved before upload. If Apple's validation or upload fails, those local files remain for inspection. If local publishing cannot restore previous files after a failure, the script prints the recovery directory instead of deleting it.
 
-The `1.0 (1)` App Store `.app` and PKG have been built and locally verified with the production certificates and provisioning profile. Upload processing and purchase/restore flows still require validation with the exact TestFlight build. See [AppStore/Submission.md](AppStore/Submission.md).
+The `1.0 (1)` App Store `.app` and PKG have been built and locally verified with the production certificates and provisioning profile. Upload processing and purchase/restore flows still require validation with the exact TestFlight build. See the [App Store implementation plan](app-store/implementation-plan.md).
