@@ -1,0 +1,9 @@
+title: Boundless Translator
+description: Privacy policy and support
+theme: minima
+url: https://kuo-chun-ting.github.io
+baseurl: /boundless-translator
+header_pages: []
+exclude:
+  - reviews/
+  - superpowers/
