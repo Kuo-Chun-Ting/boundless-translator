@@ -26,6 +26,8 @@ case "${1:-all}" in
         ;;
     subscription)
         run_tests \
+            AppStoreBuild \
+            AppStoreRelease \
             TestStoreKitScript \
             VerifyWorkflow
         ;;

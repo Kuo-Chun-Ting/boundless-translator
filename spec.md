@@ -104,7 +104,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Share product code between distributions. Keep signing, entitlements, packaging, upload, and purchase integration specific to each distribution.
 - Build verification confirms the signed App Sandbox entitlement before distribution. Runtime behavior is covered by normal DMG acceptance and by testing the exact TestFlight build; there is no separate Sandbox build or Sandbox checklist.
 - Every packaged App enables App Sandbox and outgoing-network access. The default Developer ID build is subscription-free; the App Store build requires a subscription. Both use the same sources and bundle identifier, not a separate Sandbox test edition. A successful build does not prove runtime compatibility or App Review eligibility.
-- `Resources/Sandbox.entitlements` is the shared source for both distributions. The App Store release must add its matching application and team identifiers when signing.
+- `Resources/Sandbox.entitlements` is the shared source for both distributions. App Store signing adds the matching application and team identifiers to a temporary copy before signing; it does not maintain a separate Sandbox configuration.
 - Cross-app selection uses `AXUIElement` with the existing clipboard fallback. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
 - Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
 - Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
@@ -144,7 +144,7 @@ These directories belong to one executable target, not separate Swift packages. 
 ## Build and Release
 
 - `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, a subscription-free Sandbox App build, signature checks, and DMG deployment tests. Passing it is the gate before `Scripts/release_dmg.sh --test`; it does not create the test DMG.
-- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and verification-script tests. Local StoreKit uses a test-only product; these tests do not charge money, require production credentials, or upload a build.
+- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and App Store build and release tests. Local StoreKit uses a test-only product and App Store release tests simulate signing and upload; they do not charge money, require production credentials, create a production PKG, or upload a build.
 - On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), skip the three local StoreKit integration tests before launch and report the reproduced entitlement-query failure. Keep their test code; any different OS or Xcode build executes them again. `Scripts/Tests/test_storekit.sh --force` bypasses this environment exception for diagnosis.
 - `Scripts/verify.sh` runs feature verification followed by subscription verification. Each Swift mode has an isolated build directory and report. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
 - Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
@@ -155,6 +155,9 @@ These directories belong to one executable target, not separate Swift packages. 
 - Versioned DMG releases hold a release lock through version calculation and publication. After notarization succeeds, source metadata is replaced atomically and the versioned DMG is published. A later failure atomically restores the previous metadata and preserves any existing release DMG. Failed rollback retains and reports its recovery copy. Shared App building likewise preserves its recovery directory if restoring the previous App fails.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
 - The App Store release uses its own signing, archive, validation, and upload workflow. It does not produce or notarize a DMG.
+- `Scripts/release_app_store.sh <version> <build-number>` builds the arm64 Store edition and signs an installer package at `Build/AppStore/BoundlessTranslator-<version>-<build-number>.pkg`, leaving source version metadata unchanged. It requires the existing bundle ID, matching App Store certificates/profile, annual product ID, a public HTTPS privacy-policy URL, and the rights holder's copyright notice. The Store bundle uses the Productivity category.
+- App Store upload is opt-in with `--upload` and App Store Connect API authentication. Upload does not submit for review or publish.
+- Save the signed Store artifacts locally before upload. An upload failure retains them; an incomplete local rollback retains its recovery directory and reports its location.
 
 ## Test Layers
 
