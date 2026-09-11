@@ -28,7 +28,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 ## Translation Window
 
 - Show source and translated text in two equal, selectable panels.
-- Grow the window for longer content up to the available screen size, then scroll overflowing text.
+- Grow the initial window height with content up to 440 points, then scroll overflowing text. The translation window remains resizable.
 - Keep language menus and speech controls aligned with their respective panels when resized.
 - Read the source or translated text with a system voice that supports its language.
 - Selecting source text reveals the book action. Activating it opens the macOS Lookup overlay for that exact selection.
