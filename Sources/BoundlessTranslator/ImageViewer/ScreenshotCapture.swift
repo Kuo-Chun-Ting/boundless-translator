@@ -37,7 +37,9 @@ struct SystemScreenshotCapture: ScreenshotCapturing {
         defer { try? FileManager.default.removeItem(at: directory) }
         let output = directory.appendingPathComponent("capture.png")
         let status = try await runCapture(output)
-        if status == 1 && !FileManager.default.fileExists(atPath: output.path) { return nil }
+        if (status == 0 || status == 1) && !FileManager.default.fileExists(atPath: output.path) {
+            return nil
+        }
         guard status == 0, let image = NSImage(contentsOf: output) else {
             throw ScreenshotCaptureError.captureFailed
         }

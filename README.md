@@ -88,45 +88,29 @@ This needs a macOS desktop session and the build/signing prerequisites above. Ac
 
 ### Create a Test DMG
 
-```bash
-Scripts/release_dmg.sh --test
-```
-
-Requires `create-dmg` (`brew install create-dmg`). The output is `Build/Boundless Translator-test.dmg`: Sandbox enabled, no subscription, Developer ID signed, **not notarized**. This command does not change version numbers, contact Apple's notarization service, or overwrite versioned release DMGs. Gatekeeper may require an override when installing this unnotarized test artifact.
-
-Install the App from the DMG before testing. Quit other copies so they do not compete for the shortcut. The Accessibility guide opens its System Settings pane; click **+**, choose the installed Boundless Translator App, and enable it. The Screen Recording guide starts the native macOS authorization flow; use the prompt's **Open System Settings** button when needed. Test external text selection, screenshot capture, Live Text, translation, speech, and Lookup.
-
-The test and versioned DMGs use the same bundle identifier and share settings. They are not separate installations.
-
-### Release a DMG
-
-Release builds the same Sandbox-enabled, subscription-free App and packages it as a notarized DMG for sharing with testers. It is not a paid website edition.
-
-#### One-time Setup
-
-Install the DMG packaging tool:
+Run this setup once. Replace the placeholders with your Apple Account email and Developer Team ID:
 
 ```bash
 brew install create-dmg
-```
-
-Save the Apple account credentials used to submit the DMG to Apple. Replace the placeholders with your Apple Account email and Developer Team ID. Enter an app-specific password when prompted:
-
-```bash
 xcrun notarytool store-credentials "BoundlessTranslatorNotary" \
   --apple-id "<apple-id>" \
   --team-id "<team-id>"
 ```
 
-#### Create a Release
+Enter an app-specific password when prompted. The credentials are stored in Keychain.
 
-Run from the project directory with the version you want to release:
+Build the DMG:
 
 ```bash
-Scripts/release_dmg.sh 0.2.0
+Scripts/release_dmg.sh --test
 ```
 
-The finished DMG is saved at `Build/Boundless Translator-0.2.0.dmg` after Apple notarization and Gatekeeper checks pass. Install this DMG to test it before sharing.
+- Output: `Build/Boundless Translator-test.dmg`.
+- The App has App Sandbox enabled and requires no subscription.
+- The script signs the DMG, gets Apple notarization, attaches the ticket and checks Gatekeeper approval.
+- The script replaces the previous test DMG only after all checks pass.
+
+Quit other copies of the App, then install from this DMG. Test permission setup, selected-text translation, screenshot translation, speech and Lookup.
 
 ### Prepare an App Store Release
 

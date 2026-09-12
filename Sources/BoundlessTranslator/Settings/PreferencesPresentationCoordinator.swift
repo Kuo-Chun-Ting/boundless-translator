@@ -7,9 +7,9 @@ struct PreferencesPresentationCoordinator {
         forceWindowToFront: @escaping @MainActor () -> Void
     ) {
         deferPresentation {
-            activateApplication()
             showWindow()
             forceWindowToFront()
+            activateApplication()
         }
     }
 }

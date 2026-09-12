@@ -44,13 +44,13 @@ func test_captureRegion_when_capture_completes_then_loads_image_and_removes_temp
     #expect(!FileManager.default.fileExists(atPath: directory.path))
 }
 
-@Test @MainActor
-func test_captureRegion_when_user_cancels_then_returns_nil_and_removes_temporary_directory() async throws {
+@Test(arguments: [Int32(0), Int32(1)]) @MainActor
+func test_captureRegion_when_user_cancels_then_returns_nil_and_removes_temporary_directory(status: Int32) async throws {
     // Arrange
     var outputURL: URL?
     let capture = SystemScreenshotCapture(requestPermission: { true }, runCapture: { url in
         outputURL = url
-        return 1
+        return status
     })
 
     // Act
@@ -62,10 +62,10 @@ func test_captureRegion_when_user_cancels_then_returns_nil_and_removes_temporary
     #expect(!FileManager.default.fileExists(atPath: directory.path))
 }
 
-@Test(arguments: [Int32(0), Int32(2)]) @MainActor
-func test_captureRegion_when_output_is_missing_or_command_fails_then_reports_failure(status: Int32) async {
+@Test @MainActor
+func test_captureRegion_when_command_fails_then_reports_failure() async {
     // Arrange
-    let capture = SystemScreenshotCapture(requestPermission: { true }, runCapture: { _ in status })
+    let capture = SystemScreenshotCapture(requestPermission: { true }, runCapture: { _ in 2 })
 
     // Act & Assert
     await #expect(throws: ScreenshotCaptureError.captureFailed) {

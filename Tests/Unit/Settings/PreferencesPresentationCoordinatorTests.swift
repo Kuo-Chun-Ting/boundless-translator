@@ -2,7 +2,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_present_when_preferencesAreRequested_then_defersAndForcesWindowToFront() {
+func test_present_when_preferencesAreRequested_then_showsKeyWindowBeforeActivatingApplication() {
     // Arrange
     let coordinator = PreferencesPresentationCoordinator()
     var calls: [String] = []
@@ -20,5 +20,5 @@ func test_present_when_preferencesAreRequested_then_defersAndForcesWindowToFront
     #expect(calls.isEmpty)
 
     deferredPresentation?()
-    #expect(calls == ["activate", "show", "front"])
+    #expect(calls == ["show", "front", "activate"])
 }

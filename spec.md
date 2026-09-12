@@ -51,13 +51,14 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Use native macOS interactive capture through `screencapture`.
 - Control-modified capture is not supported: macOS redirects its result to the clipboard instead of the capture file.
 - Request Screen Recording permission when needed. If it is unavailable, explain how to allow it in System Settings > Privacy & Security and that reopening the app may be necessary.
+- Pressing Escape during capture cancels it without an error window.
 - Present a localized error when capture fails.
 - Do not add paste or image-import entry points, custom OCR regions, translation overlays, or image history.
 
 ## Preferences
 
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
-- Present Preferences on the active screen.
+- Present Preferences on the active screen and give it keyboard focus so Command-W closes it immediately.
 - Present Preferences as one level of labeled rows without section headings.
 - Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
 - Group Translate From and Translate To in the first settings card, then the shortcut and Language in the second.
@@ -149,10 +150,12 @@ These directories belong to one executable target, not separate Swift packages. 
 - `Scripts/verify.sh` runs feature verification followed by subscription verification. Each Swift mode has an isolated build directory and report. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
 - Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
 - App signature verification also requires the signed App Sandbox entitlement to be true.
-- `Scripts/release_dmg.sh --test` builds the subscription-free, sandboxed App and saves a signed but unnotarized `Build/Boundless Translator-test.dmg`. It leaves version metadata and versioned release DMGs unchanged; failure preserves the previous test DMG. Users install this DMG for local acceptance testing.
-- `Scripts/release_dmg.sh <version>` stages the public version and incremented build number in private metadata, then builds, verifies, packages and signs its own App. Each DMG build uses a private output directory so another build cannot replace its input.
-- Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
-- Versioned DMG releases hold a release lock through version calculation and publication. After notarization succeeds, source metadata is replaced atomically and the versioned DMG is published. A later failure atomically restores the previous metadata and preserves any existing release DMG. Failed rollback retains and reports its recovery copy. Shared App building likewise preserves its recovery directory if restoring the previous App fails.
+- `Scripts/release_dmg.sh --test` creates `Build/Boundless Translator-test.dmg` for feature testing. The App has App Sandbox enabled and requires no subscription.
+  - Build and verify the App in a private directory, then package and sign the DMG.
+  - Submit the DMG to Apple for notarization. Attach and validate the ticket, then check Gatekeeper approval.
+  - Replace the previous test DMG only after all checks pass. A failure keeps the previous DMG.
+  - Keep source version numbers unchanged. Accept only `--test`.
+- Shared App building preserves its recovery directory if restoring the previous App fails.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
 - The App Store release uses its own signing and package workflow. It does not produce or notarize a DMG.
 - `Scripts/release_app_store.sh <version> <build-number>` builds the arm64 Store edition and signs an installer package at `Build/AppStore/BoundlessTranslator-<version>-<build-number>.pkg`, leaving source version metadata unchanged. It requires the existing bundle ID, matching App Store certificates/profile, annual product ID, a public HTTPS privacy-policy URL, and the rights holder's copyright notice. The Store bundle uses the Productivity category.
