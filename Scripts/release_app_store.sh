@@ -6,7 +6,6 @@ readonly PROJECT_ROOT="${0:A:h:h}"
 readonly BUILD_APP_EXECUTABLE="${BOUNDLESS_TRANSLATOR_BUILD_APP_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tools/build_app.sh}"
 readonly PRODUCTBUILD_EXECUTABLE="${BOUNDLESS_TRANSLATOR_PRODUCTBUILD_EXECUTABLE:-productbuild}"
 readonly PKGUTIL_EXECUTABLE="${BOUNDLESS_TRANSLATOR_PKGUTIL_EXECUTABLE:-pkgutil}"
-readonly XCRUN_EXECUTABLE="${BOUNDLESS_TRANSLATOR_XCRUN_EXECUTABLE:-xcrun}"
 readonly MV_EXECUTABLE="${BOUNDLESS_TRANSLATOR_MV_EXECUTABLE:-mv}"
 readonly RELEASE_ROOT="${BOUNDLESS_TRANSLATOR_APP_STORE_RELEASE_ROOT:-${PROJECT_ROOT}/Build/AppStore}"
 
@@ -16,32 +15,17 @@ function fail {
 }
 
 function print_usage {
-    print -u2 'Usage: release_app_store.sh <version> <build-number> [--upload]'
+    print -u2 'Usage: release_app_store.sh <version> <build-number>'
     print -u2 'Example: Scripts/release_app_store.sh 1.0.0 12'
 }
 
-if [[ "$#" -lt 2 ]]; then
+if [[ "$#" -ne 2 ]]; then
     print_usage
     exit 1
 fi
 
 readonly VERSION="$1"
 readonly BUILD_NUMBER="$2"
-shift 2
-
-upload_requested=false
-for argument in "$@"; do
-    case "${argument}" in
-        --upload)
-            [[ "${upload_requested}" == false ]] || fail 'Duplicate --upload option.'
-            upload_requested=true
-            ;;
-        *)
-            print_usage
-            exit 1
-            ;;
-    esac
-done
 
 [[ "${VERSION}" =~ '^[0-9]+\.[0-9]+(\.[0-9]+)?$' ]] || fail 'Version must use major.minor or major.minor.patch.'
 [[ "${BUILD_NUMBER}" =~ '^[1-9][0-9]*$' ]] || fail 'Build number must be a positive integer.'
@@ -58,11 +42,6 @@ required_configuration=(
 for variable_name in "${required_configuration[@]}"; do
     [[ -n "${(P)variable_name:-}" ]] || fail "${variable_name} is required."
 done
-
-if [[ "${upload_requested}" == true ]]; then
-    [[ -n "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID:-}" ]] || fail 'BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID is required for upload.'
-    [[ -n "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID:-}" ]] || fail 'BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID is required for upload.'
-fi
 
 mkdir -p "${RELEASE_ROOT}"
 readonly TEMP_ROOT="$(mktemp -d "${RELEASE_ROOT}/.boundless-translator-app-store-release.XXXXXX")"
@@ -124,25 +103,6 @@ function clean_up {
 }
 trap clean_up EXIT
 
-function validate_and_upload_package {
-    if ! "${XCRUN_EXECUTABLE}" altool \
-        --validate-app \
-        -f "${PACKAGE_PATH}" \
-        -t macos \
-        --apiKey "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID}" \
-        --apiIssuer "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID}"; then
-        return 1
-    fi
-    if ! "${XCRUN_EXECUTABLE}" altool \
-        --upload-app \
-        -f "${PACKAGE_PATH}" \
-        -t macos \
-        --apiKey "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID}" \
-        --apiIssuer "${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID}"; then
-        return 1
-    fi
-}
-
 function publish_artifacts {
     if ! mkdir "${PUBLISH_LOCK}" 2>/dev/null; then
         fail 'Another App Store release is publishing Boundless Translator.'
@@ -190,15 +150,4 @@ if ! publish_artifacts; then
     exit 1
 fi
 
-if [[ "${upload_requested}" == true ]]; then
-    if ! validate_and_upload_package; then
-        print -u2 "App Store upload failed. Validated local artifacts remain at: ${APP_PATH} and ${PACKAGE_PATH}"
-        exit 1
-    fi
-fi
-
-if [[ "${upload_requested}" == true ]]; then
-    print "App Store upload completed: ${PACKAGE_PATH}"
-else
-    print "App Store package ready: ${PACKAGE_PATH}"
-fi
+print "App Store package ready: ${PACKAGE_PATH}"

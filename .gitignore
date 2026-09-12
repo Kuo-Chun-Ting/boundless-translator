@@ -1,4 +1,6 @@
 .DS_Store
+.appstoreconnect/
+.env.local
 .build/
 Build/
 .swiftpm/xcode/package.xcworkspace/xcuserdata/

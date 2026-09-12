@@ -150,13 +150,13 @@ Use your intended public version and a build number higher than any previously u
 Uploading additionally requires App Store Connect API key authentication:
 
 ```bash
-export BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID="<api-key-id>"
-export BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID="<issuer-id>"
-Scripts/release_app_store.sh 1.0 1 --upload
+cp .env.example .env.local
+# Fill the Key ID and Issuer ID in .env.local.
+Scripts/upload_app_store.sh Build/AppStore/BoundlessTranslator-1.0-1.pkg
 ```
 
-Keep the API private key outside this repository in the location expected by Apple's `altool`. Do not put passwords or private keys in project files. Uploading makes the build available for processing in App Store Connect; it does not submit for review or publish it.
+`.env.local` is ignored by Git, and values already exported in the shell take precedence over it. Keep the API private key outside this repository in `~/.appstoreconnect/private_keys/`; do not put passwords or private keys in project files. The upload script validates and uploads the existing PKG without rebuilding it. Uploading makes the build available for processing in App Store Connect; it does not submit for review or publish it.
 
-The signed App and package are saved before upload. If Apple's validation or upload fails, those local files remain for inspection. If local publishing cannot restore previous files after a failure, the script prints the recovery directory instead of deleting it.
+The upload script does not modify the local PKG. If local release publishing cannot restore previous files after a failure, the release script prints the recovery directory instead of deleting it.
 
 The `1.0 (1)` App Store `.app` and PKG have been built and locally verified with the production certificates and provisioning profile. Upload processing and purchase/restore flows still require validation with the exact TestFlight build. See the [App Store implementation plan](app-store/implementation-plan.md).

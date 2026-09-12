@@ -144,7 +144,7 @@ These directories belong to one executable target, not separate Swift packages. 
 ## Build and Release
 
 - `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, a subscription-free Sandbox App build, signature checks, and DMG deployment tests. Passing it is the gate before `Scripts/release_dmg.sh --test`; it does not create the test DMG.
-- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and App Store build and release tests. Local StoreKit uses a test-only product and App Store release tests simulate signing and upload; they do not charge money, require production credentials, create a production PKG, or upload a build.
+- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and App Store build, release, and upload tests. Local StoreKit uses a test-only product; deployment tests simulate signing and upload without charging money, requiring production credentials, creating a production PKG, or uploading a build.
 - On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), skip the three local StoreKit integration tests before launch and report the reproduced entitlement-query failure. Keep their test code; any different OS or Xcode build executes them again. `Scripts/Tests/test_storekit.sh --force` bypasses this environment exception for diagnosis.
 - `Scripts/verify.sh` runs feature verification followed by subscription verification. Each Swift mode has an isolated build directory and report. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
 - Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
@@ -154,10 +154,10 @@ These directories belong to one executable target, not separate Swift packages. 
 - Release submits the DMG to Apple for notarization, attaches the returned ticket, and checks it with Gatekeeper.
 - Versioned DMG releases hold a release lock through version calculation and publication. After notarization succeeds, source metadata is replaced atomically and the versioned DMG is published. A later failure atomically restores the previous metadata and preserves any existing release DMG. Failed rollback retains and reports its recovery copy. Shared App building likewise preserves its recovery directory if restoring the previous App fails.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
-- The App Store release uses its own signing, archive, validation, and upload workflow. It does not produce or notarize a DMG.
+- The App Store release uses its own signing and package workflow. It does not produce or notarize a DMG.
 - `Scripts/release_app_store.sh <version> <build-number>` builds the arm64 Store edition and signs an installer package at `Build/AppStore/BoundlessTranslator-<version>-<build-number>.pkg`, leaving source version metadata unchanged. It requires the existing bundle ID, matching App Store certificates/profile, annual product ID, a public HTTPS privacy-policy URL, and the rights holder's copyright notice. The Store bundle uses the Productivity category.
-- App Store upload is opt-in with `--upload` and App Store Connect API authentication. Upload does not submit for review or publish.
-- Save the signed Store artifacts locally before upload. An upload failure retains them; an incomplete local rollback retains its recovery directory and reports its location.
+- `Scripts/upload_app_store.sh <pkg-path>` loads App Store Connect identifiers from the Git-ignored `.env.local`, while existing shell values take precedence. It validates and uploads an existing signed PKG without rebuilding or modifying it. Upload does not submit for review or publish.
+- Save the signed Store artifacts locally before upload. An incomplete local release rollback retains its recovery directory and reports its location.
 
 ## Test Layers
 

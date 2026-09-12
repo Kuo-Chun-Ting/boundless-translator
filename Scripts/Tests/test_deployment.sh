@@ -28,6 +28,7 @@ case "${1:-all}" in
         run_tests \
             AppStoreBuild \
             AppStoreRelease \
+            AppStoreUpload \
             TestStoreKitScript \
             VerifyWorkflow
         ;;

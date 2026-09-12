@@ -27,8 +27,8 @@
 
 - [ ] 等 Apple 更新開發者地址後，完成 Paid Apps Agreement、銀行與稅務資料並確認狀態為 Active。
 - [ ] 完成 App Store 商品頁資料：分類、年齡分級、內容權利、供應地區、介紹、關鍵字與版權。
-- [ ] 建立 App Store Connect API Key，將 `.p8` 私鑰保存在 repo 外。
-- [ ] 上傳 `Build/AppStore/BoundlessTranslator-1.0-1.pkg`。
+- [x] 建立 App Store Connect API Key，將 `.p8` 私鑰保存在 repo 外。
+- [x] 執行 `Scripts/upload_app_store.sh Build/AppStore/BoundlessTranslator-1.0-1.pkg` 上傳 Build。
 - [ ] 在 TestFlight 驗證權限、選字翻譯、截圖翻譯、免費試用、購買、取消、到期與恢復購買。
 - [ ] 擷取 App Store 商品頁截圖與訂閱 Review Screenshot。
 - [ ] 在 `1.0` 版本選擇 Build `1`，加入第一個訂閱商品並完成 Export Compliance。

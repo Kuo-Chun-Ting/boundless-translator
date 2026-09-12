@@ -10,7 +10,6 @@ readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 readonly BUILD_STUB="${TEMP_ROOT}/build-app"
 readonly PRODUCTBUILD_STUB="${TEMP_ROOT}/productbuild"
 readonly PKGUTIL_STUB="${TEMP_ROOT}/pkgutil"
-readonly XCRUN_STUB="${TEMP_ROOT}/xcrun"
 readonly MV_STUB="${TEMP_ROOT}/mv"
 readonly PACKAGE_PATH="${BUILD_ROOT}/BoundlessTranslator-1.2.3-42.pkg"
 readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
@@ -46,28 +45,6 @@ print -r -- "pkgutil $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 [[ "${TEST_PKGUTIL_FAIL:-false}" != true ]]
 EOF
 
-    cat > "${XCRUN_STUB}" <<'EOF'
-#!/bin/zsh
-set -eu
-[[ "$1" == altool ]]
-shift
-operation="$1"
-[[ "$*" == *"--apiKey ${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID}"* ]]
-[[ "$*" == *"--apiIssuer ${BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID}"* ]]
-package_path=""
-while [[ "$#" -gt 0 ]]; do
-    if [[ "$1" == -f ]]; then
-        package_path="$2"
-        break
-    fi
-    shift
-done
-print -r -- "altool ${operation} ${package_path}" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-if [[ "${TEST_ALTOOL_VALIDATE_FAIL:-false}" == true && "${operation}" == --validate-app ]]; then
-    exit 1
-fi
-EOF
-
     cat > "${MV_STUB}" <<'EOF'
 #!/bin/zsh
 set -eu
@@ -91,14 +68,13 @@ if [[ "${TEST_MV_FAIL_RESTORE_APP:-false}" == true && "$1" == */previous.app && 
 fi
 /bin/mv "$@"
 EOF
-    chmod +x "${BUILD_STUB}" "${PRODUCTBUILD_STUB}" "${PKGUTIL_STUB}" "${XCRUN_STUB}" "${MV_STUB}"
+    chmod +x "${BUILD_STUB}" "${PRODUCTBUILD_STUB}" "${PKGUTIL_STUB}" "${MV_STUB}"
 }
 
 function run_releaser {
     BOUNDLESS_TRANSLATOR_BUILD_APP_EXECUTABLE="${BUILD_STUB}" \
     BOUNDLESS_TRANSLATOR_PRODUCTBUILD_EXECUTABLE="${PRODUCTBUILD_STUB}" \
     BOUNDLESS_TRANSLATOR_PKGUTIL_EXECUTABLE="${PKGUTIL_STUB}" \
-    BOUNDLESS_TRANSLATOR_XCRUN_EXECUTABLE="${XCRUN_STUB}" \
     BOUNDLESS_TRANSLATOR_MV_EXECUTABLE="${MV_STUB}" \
     BOUNDLESS_TRANSLATOR_APP_STORE_RELEASE_ROOT="${BUILD_ROOT}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
@@ -112,13 +88,6 @@ function run_releaser {
     BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL='https://example.com/privacy' \
     BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT='© 2026 Example Company' \
         zsh "${RELEASER}" "$@"
-}
-
-function run_upload_releaser {
-    TEST_LOG_MV=true \
-    BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_KEY_ID='KEYID12345' \
-    BOUNDLESS_TRANSLATOR_APP_STORE_CONNECT_API_ISSUER_ID='11111111-2222-3333-4444-555555555555' \
-        run_releaser 1.2.3 42 --upload
 }
 
 function test_release_app_store_when_configuration_is_valid_then_publishes_signed_package {
@@ -245,38 +214,17 @@ function test_release_app_store_when_new_app_cannot_be_evacuated_then_does_not_n
     [[ "$(<"${TEMP_ROOT}/evacuation-failure.log")" == *"${recovery_paths[1]}"* ]]
 }
 
-function test_release_app_store_when_upload_is_explicit_then_validates_before_uploading {
+function test_release_app_store_when_extra_argument_is_given_then_rejects_it {
     # Arrange
-    : > "${CALL_LOG}"
-
-    # Act
-    run_upload_releaser
-
-    # Assert
-    [[ "$(sed -n '4p' "${CALL_LOG}")" == 'publish app' ]]
-    [[ "$(sed -n '5p' "${CALL_LOG}")" == 'publish package' ]]
-    [[ "$(sed -n '6p' "${CALL_LOG}")" == 'altool --validate-app '*'/Build/AppStore/BoundlessTranslator-1.2.3-42.pkg' ]]
-    [[ "$(sed -n '7p' "${CALL_LOG}")" == 'altool --upload-app '*'/Build/AppStore/BoundlessTranslator-1.2.3-42.pkg' ]]
-    [[ "$(<"${CALL_LOG}")" != *KEYID12345* ]]
-    [[ "$(<"${CALL_LOG}")" != *11111111-2222-3333-4444-555555555555* ]]
-}
-
-function test_release_app_store_when_remote_validation_fails_then_preserves_existing_artifacts {
-    # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
-    print 'existing package' > "${PACKAGE_PATH}"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_ALTOOL_VALIDATE_FAIL=true run_upload_releaser > "${TEMP_ROOT}/validation-failure.log" 2>&1; then
-        print -u2 'Expected failed App Store validation to stop the upload.'
+    if run_releaser 1.2.3 42 --upload > "${TEMP_ROOT}/extra-argument.log" 2>&1; then
+        print -u2 'Expected an extra argument to fail.'
         return 1
     fi
-    [[ "$(<"${APP_PATH}/marker")" == '1.2.3:42' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'signed package' ]]
-    [[ "$(<"${CALL_LOG}")" != *--upload-app* ]]
-    [[ "$(<"${TEMP_ROOT}/validation-failure.log")" == *"${PACKAGE_PATH}"* ]]
+    [[ "$(<"${TEMP_ROOT}/extra-argument.log")" == *'Usage: release_app_store.sh <version> <build-number>'* ]]
+    [[ ! -s "${CALL_LOG}" ]]
 }
 
 touch "${TEMP_ROOT}/distribution.provisionprofile"
@@ -288,7 +236,6 @@ test_release_app_store_when_packaging_fails_then_preserves_existing_artifacts
 test_release_app_store_when_existing_app_cannot_be_backed_up_then_preserves_it
 test_release_app_store_when_rollback_restore_fails_then_preserves_recovery_artifacts
 test_release_app_store_when_new_app_cannot_be_evacuated_then_does_not_nest_previous_app
-test_release_app_store_when_upload_is_explicit_then_validates_before_uploading
-test_release_app_store_when_remote_validation_fails_then_preserves_existing_artifacts
+test_release_app_store_when_extra_argument_is_given_then_rejects_it
 
 print 'App Store release tests passed.'
