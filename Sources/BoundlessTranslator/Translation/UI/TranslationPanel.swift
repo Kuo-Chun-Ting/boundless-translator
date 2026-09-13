@@ -13,7 +13,7 @@ final class TranslationPanel: NSPanel {
     init(contentSize: CGSize = CGSize(width: 420, height: 260)) {
         super.init(
             contentRect: CGRect(origin: .zero, size: contentSize),
-            styleMask: [.titled, .closable, .fullSizeContentView, .nonactivatingPanel],
+            styleMask: [.titled, .closable, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
@@ -71,7 +71,6 @@ final class TranslationPanel: NSPanel {
                 .miniaturizable,
                 .resizable,
                 .fullSizeContentView,
-                .nonactivatingPanel,
             ]
             toolbar?.isVisible = true
         case .error, .sourceLanguageSelection:
@@ -79,7 +78,6 @@ final class TranslationPanel: NSPanel {
                 .titled,
                 .closable,
                 .fullSizeContentView,
-                .nonactivatingPanel,
             ]
             toolbar?.isVisible = false
         }

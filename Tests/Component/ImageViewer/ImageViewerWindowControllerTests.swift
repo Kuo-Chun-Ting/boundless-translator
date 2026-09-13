@@ -13,6 +13,8 @@ func test_init_whenWorkspaceIsCreated_then_usesStandardPersistentWindow() throws
     #expect(window.styleMask.contains(.closable))
     #expect(window.styleMask.contains(.miniaturizable))
     #expect(window.styleMask.contains(.resizable))
+    #expect(!window.styleMask.contains(.nonactivatingPanel))
+    #expect(window.canBecomeKey)
     #expect(window.collectionBehavior.contains(.moveToActiveSpace))
     #expect(!window.isReleasedWhenClosed)
     #expect(!window.hidesOnDeactivate)
@@ -35,6 +37,7 @@ func test_present_whenCalledAgain_then_reusesWindowAndReplacesImage() throws {
     #expect(fixture.content.displayedImages.count == 2)
     #expect(fixture.content.displayedImages.last === secondImage)
     #expect(firstWindow.isVisible)
+    #expect(fixture.windowPresenter.presentedWindows.last === firstWindow)
     firstWindow.orderOut(nil)
 }
 
@@ -56,6 +59,7 @@ func test_present_whenWindowWasClosed_then_reopensSameWindowWithNewImage() throw
     #expect(fixture.controller.window === window)
     #expect(fixture.content.displayedImages.last === secondImage)
     #expect(window.isVisible)
+    #expect(fixture.windowPresenter.presentedWindows.last === window)
 }
 
 @Test @MainActor
@@ -191,6 +195,7 @@ func test_languageIdentifier_when_changed_then_updatesOpenImageViewerTitle() thr
 private struct ImageViewerFixture {
     let controller: ImageViewerWindowController
     let content: ImageViewerContentStub
+    let windowPresenter: ForegroundWindowPresenterSpy
 }
 
 @MainActor
@@ -199,14 +204,19 @@ private func makeImageViewerFixture(
     interfaceLanguageSettings: InterfaceLanguageSettings? = nil
 ) -> ImageViewerFixture {
     let content = ImageViewerContentStub()
+    let windowPresenter = ForegroundWindowPresenterSpy()
     let controller = ImageViewerWindowController(
         content: content,
         visibleFrameForPointer: { _ in visibleFrame },
-        activateApplication: {},
+        windowPresenter: windowPresenter,
         interfaceLanguageSettings: interfaceLanguageSettings
             ?? makeTestInterfaceLanguageSettings()
     )
-    return ImageViewerFixture(controller: controller, content: content)
+    return ImageViewerFixture(
+        controller: controller,
+        content: content,
+        windowPresenter: windowPresenter
+    )
 }
 
 @MainActor

@@ -4,9 +4,9 @@ import SwiftUI
 
 @MainActor
 final class PreferencesWindowController: NSWindowController {
-    private let presentationCoordinator = PreferencesPresentationCoordinator()
     private let interfaceLanguageSettings: InterfaceLanguageSettings
-    private let activeScreenVisibleFrame: @MainActor () -> CGRect?
+    private let pointerScreenVisibleFrame: @MainActor () -> CGRect?
+    private let windowPresenter: any ForegroundWindowPresenting
     private var languageCancellable: AnyCancellable?
 
     init(
@@ -15,15 +15,20 @@ final class PreferencesWindowController: NSWindowController {
         shortcutController: GlobalShortcutController,
         supportedLanguageCatalog: SupportedLanguageCatalog,
         onShowSubscription: (@MainActor () -> Void)? = nil,
-        activeScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
+        pointerScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
+        windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared,
         quitApplication: @escaping @MainActor @Sendable () -> Void = {
             NSApplication.shared.terminate(nil)
         }
     ) {
         self.interfaceLanguageSettings = interfaceLanguageSettings
-        self.activeScreenVisibleFrame = activeScreenVisibleFrame ?? {
-            NSScreen.main?.visibleFrame
+        self.pointerScreenVisibleFrame = pointerScreenVisibleFrame ?? {
+            let pointerLocation = NSEvent.mouseLocation
+            return NSScreen.screens.first {
+                $0.frame.contains(pointerLocation)
+            }?.visibleFrame ?? NSScreen.main?.visibleFrame
         }
+        self.windowPresenter = windowPresenter
         let window = NSWindow(
             contentRect: CGRect(
                 origin: .zero,
@@ -38,6 +43,7 @@ final class PreferencesWindowController: NSWindowController {
         window.titlebarSeparatorStyle = .none
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
+        window.hidesOnDeactivate = false
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
@@ -62,29 +68,14 @@ final class PreferencesWindowController: NSWindowController {
     }
 
     func present() {
-        centerWindowOnActiveScreen()
-        presentationCoordinator.present(
-            deferPresentation: { presentation in
-                Task { @MainActor in
-                    await Task.yield()
-                    presentation()
-                }
-            },
-            activateApplication: {
-                NSApplication.shared.activate()
-            },
-            showWindow: { [weak self] in
-                self?.showWindow(nil)
-            },
-            forceWindowToFront: { [weak self] in
-                self?.window?.makeKeyAndOrderFront(nil)
-                self?.window?.orderFrontRegardless()
-            }
-        )
+        centerWindowOnPointerScreen()
+        if let window {
+            windowPresenter.present(window)
+        }
     }
 
-    private func centerWindowOnActiveScreen() {
-        guard let window, let visibleFrame = activeScreenVisibleFrame() else {
+    private func centerWindowOnPointerScreen() {
+        guard let window, let visibleFrame = pointerScreenVisibleFrame() else {
             return
         }
 

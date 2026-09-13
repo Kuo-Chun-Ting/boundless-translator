@@ -21,6 +21,16 @@ func test_windowDidResignKey_when_translationTemporarilyLosesFocus_then_keepsPan
 }
 
 @Test @MainActor
+func test_show_whenTranslationIsPresented_then_requestsForegroundWindowPresentation() throws {
+    // Arrange & Act
+    let fixture = try makeTranslationPanelFixture()
+
+    // Assert
+    #expect(fixture.windowPresenter.presentedWindows.last === fixture.panel)
+    fixture.panel.orderOut(nil)
+}
+
+@Test @MainActor
 func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslationIsUnpinned_then_closesPanel() throws {
     // Arrange
     let fixture = try makeTranslationPanelFixture()
@@ -277,6 +287,7 @@ private struct TranslationPanelTestFixture {
     let applicationNotificationCenter: NotificationCenter
     let controller: TranslationPanelController
     let panel: TranslationPanel
+    let windowPresenter: ForegroundWindowPresenterSpy
 }
 
 @MainActor
@@ -304,6 +315,7 @@ private func makeTranslationPanelFixture(
         }
     )
     let coordinator = TranslationCoordinator()
+    let windowPresenter = ForegroundWindowPresenterSpy()
     coordinator.submit(
         try SelectedText(sourceText),
         sourceLanguageIdentifier: "en",
@@ -314,7 +326,8 @@ private func makeTranslationPanelFixture(
         speechPlayer: speechPlayer,
         interfaceLanguageSettings: interfaceLanguageSettings
             ?? makeTestInterfaceLanguageSettings(),
-        engine: makeStubTranslationEngine()
+        engine: makeStubTranslationEngine(),
+        windowPresenter: windowPresenter
     )
     controller.show(
         coordinator: coordinator,
@@ -333,7 +346,8 @@ private func makeTranslationPanelFixture(
         application: application,
         applicationNotificationCenter: applicationNotificationCenter,
         controller: controller,
-        panel: panel
+        panel: panel,
+        windowPresenter: windowPresenter
     )
 }
 

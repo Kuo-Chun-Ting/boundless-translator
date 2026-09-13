@@ -4,8 +4,14 @@ import SwiftUI
 @MainActor
 final class PermissionGuideWindowController: NSWindowController, NSWindowDelegate {
     private var didContinue = false
+    private let windowPresenter: any ForegroundWindowPresenting
 
-    init(configuration: PermissionGuideConfiguration, localization: AppLocalization) {
+    init(
+        configuration: PermissionGuideConfiguration,
+        localization: AppLocalization,
+        windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared
+    ) {
+        self.windowPresenter = windowPresenter
         let window = NSWindow(
             contentRect: CGRect(x: 0, y: 0, width: 520, height: 410),
             styleMask: [.titled, .closable],
@@ -31,9 +37,7 @@ final class PermissionGuideWindowController: NSWindowController, NSWindowDelegat
         guard let window else { return false }
         didContinue = false
         window.center()
-        NSApplication.shared.activate()
-        showWindow(nil)
-        window.makeKeyAndOrderFront(nil)
+        windowPresenter.present(window)
         NSApplication.shared.runModal(for: window)
         window.orderOut(nil)
         return didContinue

@@ -39,7 +39,7 @@ final class ImageViewerWindowController: NSWindowController,
 
     private let content: any ImageViewerContent
     private let visibleFrameForPointer: VisibleFrameProvider
-    private let activateApplication: @MainActor () -> Void
+    private let windowPresenter: any ForegroundWindowPresenting
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private var languageCancellable: AnyCancellable?
 
@@ -50,14 +50,12 @@ final class ImageViewerWindowController: NSWindowController,
                 $0.frame.contains(pointerLocation)
             }?.visibleFrame ?? NSScreen.main?.visibleFrame
         },
-        activateApplication: @escaping @MainActor () -> Void = {
-            NSApplication.shared.activate()
-        },
+        windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared,
         interfaceLanguageSettings: InterfaceLanguageSettings
     ) {
         self.content = content
         self.visibleFrameForPointer = visibleFrameForPointer
-        self.activateApplication = activateApplication
+        self.windowPresenter = windowPresenter
         self.interfaceLanguageSettings = interfaceLanguageSettings
 
         let window = ImageViewerWindow(
@@ -94,10 +92,9 @@ final class ImageViewerWindowController: NSWindowController,
         if let visibleFrame = visibleFrameForPointer(pointerLocation) {
             fitWindow(to: image.size, inside: visibleFrame)
         }
-        activateApplication()
-        showWindow(nil)
-        window?.makeKeyAndOrderFront(nil)
-        window?.orderFrontRegardless()
+        if let window {
+            windowPresenter.present(window)
+        }
     }
 
     func windowWillClose(_ notification: Notification) {

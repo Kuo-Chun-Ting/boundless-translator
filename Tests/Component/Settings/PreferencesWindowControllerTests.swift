@@ -52,37 +52,46 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
 
     // Assert
     #expect(window.collectionBehavior.contains(.moveToActiveSpace))
+    #expect(!window.styleMask.contains(.nonactivatingPanel))
+    #expect(window.canBecomeKey)
+    #expect(!window.hidesOnDeactivate)
     #expect(window.title == "Boundless Translator Settings")
     #expect(window.contentLayoutRect.size == PreferencesWindowStyle.contentSize)
     #expect(window.contentLayoutRect.height == 286)
 }
 
 @Test @MainActor
-func test_present_when_activeScreenChanges_then_centersWindowOnActiveScreen() async throws {
+func test_present_when_pointerScreenChanges_then_centersWindowOnPointerScreen() throws {
     // Arrange
-    let stub_visibleFrame = CGRect(x: 10_000, y: 4_000, width: 1_200, height: 800)
+    let screenFrame = try #require(NSScreen.main).visibleFrame
+    let stub_visibleFrame = CGRect(
+        origin: screenFrame.origin,
+        size: CGSize(width: screenFrame.width * 0.8, height: screenFrame.height * 0.85)
+    )
     var visibleFrameRequestCount = 0
+    let windowPresenter = ForegroundWindowPresenterSpy()
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog(),
-        activeScreenVisibleFrame: {
+        pointerScreenVisibleFrame: {
             visibleFrameRequestCount += 1
             return stub_visibleFrame
-        }
+        },
+        windowPresenter: windowPresenter
     )
     let window = try #require(controller.window)
+    defer { window.orderOut(nil) }
 
     // Act
     controller.present()
 
-    // Assert before AppKit constrains the off-screen test frame while showing the window.
+    // Assert
     #expect(visibleFrameRequestCount == 1)
-    #expect(window.frame.midX == stub_visibleFrame.midX)
-    #expect(window.frame.midY == stub_visibleFrame.midY)
-    await Task.yield()
-    window.orderOut(nil)
+    #expect(windowPresenter.presentedWindows.last === window)
+    #expect(abs(window.frame.midX - stub_visibleFrame.midX) < 1)
+    #expect(abs(window.frame.midY - stub_visibleFrame.midY) < 1)
 }
 
 @Test @MainActor

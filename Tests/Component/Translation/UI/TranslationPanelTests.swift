@@ -46,6 +46,7 @@ func test_configureChrome_when_translation_is_presented_then_keeps_resizable_nat
     #expect(panel.styleMask.contains(.closable))
     #expect(panel.styleMask.contains(.miniaturizable))
     #expect(panel.styleMask.contains(.resizable))
+    #expect(!panel.styleMask.contains(.nonactivatingPanel))
     #expect(panel.isOpaque)
     #expect(panel.backgroundColor == .windowBackgroundColor)
     #expect(toolbar.isVisible)

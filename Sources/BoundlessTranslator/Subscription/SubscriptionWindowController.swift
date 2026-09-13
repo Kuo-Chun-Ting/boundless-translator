@@ -3,7 +3,14 @@ import SwiftUI
 
 @MainActor
 final class SubscriptionWindowController: NSWindowController {
-    init(access: SubscriptionAccessController, interfaceLanguageSettings: InterfaceLanguageSettings) {
+    private let windowPresenter: any ForegroundWindowPresenting
+
+    init(
+        access: SubscriptionAccessController,
+        interfaceLanguageSettings: InterfaceLanguageSettings,
+        windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared
+    ) {
+        self.windowPresenter = windowPresenter
         let window = NSWindow(
             contentRect: CGRect(x: 0, y: 0, width: 500, height: 650),
             styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false
@@ -25,8 +32,8 @@ final class SubscriptionWindowController: NSWindowController {
 
     func present() {
         window?.center()
-        NSApplication.shared.activate()
-        showWindow(nil)
-        window?.makeKeyAndOrderFront(nil)
+        if let window {
+            windowPresenter.present(window)
+        }
     }
 }

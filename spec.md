@@ -36,6 +36,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Close an unpinned translation when the user clicks outside it, activates another app, or presses Escape.
 - Keep a pinned translation visible until the user closes or unpins it.
 - Preserve the window's top-left position when its content-driven size changes.
+- When a shortcut presents the translation window, make Boundless Translator the active application and the translation window key.
 
 ## Screenshot Workspace
 
@@ -44,7 +45,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Use VisionKit Live Text for native text recognition and selection.
 - Keep the workspace open across app deactivation and translation-window presentation.
 - Replace the displayed image after a successful capture; keep the existing image when capture is cancelled or fails.
-- Bring the same workspace window to the front after every successful capture, including when it was closed, covered, or minimized.
+- After every successful capture, make Boundless Translator the active application and bring the same workspace window to the front as the key window, including when it was closed, covered, or minimized.
 - Close the focused workspace with Escape or Command-W, including while image text is selected.
 - Clear its active selection when the window closes so stale text cannot override later selections.
 - Update the workspace background when macOS appearance changes without replacing the image or resetting its selection.
@@ -58,7 +59,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 ## Preferences
 
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
-- Present Preferences on the active screen and give it keyboard focus so Command-W closes it immediately.
+- Present Preferences on the screen containing the pointer, make Boundless Translator the active application, and make Preferences the key window so Command-W closes it immediately.
 - Present Preferences as one level of labeled rows without section headings.
 - Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
 - Group Translate From and Translate To in the first settings card, then the shortcut and Language in the second.
@@ -81,6 +82,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 ## Architecture
 
 - `Application` composes dependencies and routes the single shortcut to translation or screenshot capture. `Application/Shortcut` owns shortcut registration and persistence. Settings pauses and restores the shortcut during recording.
+- `Application` owns one foreground-window presenter. It activates the accessory app, then makes the latest requested interactive window key after activation completes.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
 - `ImageViewer` owns native interactive capture, its permission and failure handling, captured-image input, Live Text selection, and the persistent image window. Application coordinates capture and routes selected image text into the same translation flow as external text.
 - `Translation` owns requests, state, failures, and the supported-language catalog. Its subdirectories group the complete translation feature:
