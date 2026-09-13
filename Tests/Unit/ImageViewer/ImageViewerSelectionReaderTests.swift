@@ -2,7 +2,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_readSelectedText_whenWorkspaceSelectionIsActive_then_returnsSelection() async throws {
+func test_readSelectedText_when_workspace_selection_is_active_then_returns_selection() async throws {
     // Arrange
     let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: true,
@@ -18,7 +18,7 @@ func test_readSelectedText_whenWorkspaceSelectionIsActive_then_returnsSelection(
 }
 
 @Test @MainActor
-func test_readSelectedText_whenWorkspaceSelectionIsInactive_then_throwsNoSelection() async {
+func test_readSelectedText_when_workspace_selection_is_inactive_then_reports_reader_unavailable() async {
     // Arrange
     let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: false,
@@ -27,13 +27,13 @@ func test_readSelectedText_whenWorkspaceSelectionIsInactive_then_throwsNoSelecti
     let reader = ImageViewerSelectionReader(provider: provider)
 
     // Act & Assert
-    await #expect(throws: SelectedTextReadError.noSelection) {
+    await #expect(throws: SelectedTextReadError.readerUnavailable) {
         try await reader.readSelectedText()
     }
 }
 
 @Test @MainActor
-func test_readSelectedText_whenWorkspaceSelectionIsEmpty_then_throwsNoSelection() async {
+func test_readSelectedText_when_workspace_selection_is_empty_then_reports_reader_unavailable() async {
     // Arrange
     let provider = ImageViewerSelectionProviderStub(
         isSelectionActive: true,
@@ -42,7 +42,7 @@ func test_readSelectedText_whenWorkspaceSelectionIsEmpty_then_throwsNoSelection(
     let reader = ImageViewerSelectionReader(provider: provider)
 
     // Act & Assert
-    await #expect(throws: SelectedTextReadError.noSelection) {
+    await #expect(throws: SelectedTextReadError.readerUnavailable) {
         try await reader.readSelectedText()
     }
 }

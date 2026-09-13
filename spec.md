@@ -9,7 +9,7 @@ Boundless Translator is a macOS 15 menu bar app for translating selected text an
 When the user presses the translation shortcut (default `Command-Shift-T`):
 
 1. If text is selected in the active image workspace, translate it.
-2. Otherwise, try to read selected text from the active app through Accessibility, then through the clipboard fallback.
+2. Otherwise, read selected text from the active app through Accessibility. Start capture immediately when Accessibility confirms an empty selection; use the clipboard fallback only when Accessibility cannot read the selection.
 3. If there is no selection or the clipboard-copy attempt times out, start native macOS interactive region capture. Missing Accessibility permission instead opens permission guidance; cancellation and unexpected errors do not trigger capture.
 4. Open the captured image in the image workspace for Live Text selection.
 5. The user selects text and presses the same shortcut to translate it.
@@ -108,7 +108,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Build verification confirms the signed App Sandbox entitlement before distribution. Runtime behavior is covered by normal DMG acceptance and by testing the exact TestFlight build; there is no separate Sandbox build or Sandbox checklist.
 - Every packaged App enables App Sandbox and outgoing-network access. The default Developer ID build is subscription-free; the App Store build requires a subscription. Both use the same sources and bundle identifier, not a separate Sandbox test edition. A successful build does not prove runtime compatibility or App Review eligibility.
 - `Resources/Sandbox.entitlements` is the shared source for both distributions. App Store signing adds the matching application and team identifiers to a temporary copy before signing; it does not maintain a separate Sandbox configuration.
-- Cross-app selection uses `AXUIElement` with the existing clipboard fallback. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
+- Cross-app selection uses `AXUIElement`. A confirmed empty Accessibility selection proceeds directly to capture; an unavailable Accessibility selection uses the clipboard fallback. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
 - Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
 - Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
 

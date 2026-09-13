@@ -24,11 +24,11 @@ func test_readSelectedText_when_primary_reader_succeeds_then_skips_fallback() as
 }
 
 @Test @MainActor
-func test_readSelectedText_when_primary_has_no_selection_then_uses_fallback() async throws {
+func test_readSelectedText_when_primary_reader_is_unavailable_then_uses_fallback() async throws {
     // Arrange
     let expectedSelection = try SelectedText("Fallback")
     let stub_primary = SelectedTextReaderStub(
-        result: .failure(SelectedTextReadError.noSelection)
+        result: .failure(SelectedTextReadError.readerUnavailable)
     )
     let mock_fallback = SelectedTextReaderMock(result: .success(expectedSelection))
     let resolver = SelectedTextResolver(
@@ -42,6 +42,26 @@ func test_readSelectedText_when_primary_has_no_selection_then_uses_fallback() as
     // Assert
     #expect(selection == expectedSelection)
     #expect(mock_fallback.invocationCount == 1)
+}
+
+@Test @MainActor
+func test_readSelectedText_when_primary_reader_has_no_selection_then_skips_fallback() async throws {
+    // Arrange
+    let mock_fallback = SelectedTextReaderMock(
+        result: .success(try SelectedText("Fallback"))
+    )
+    let resolver = SelectedTextResolver(
+        primaryReader: SelectedTextReaderStub(
+            result: .failure(SelectedTextReadError.noSelection)
+        ),
+        fallbackReader: mock_fallback
+    )
+
+    // Act & Assert
+    await #expect(throws: SelectedTextReadError.self) {
+        try await resolver.readSelectedText()
+    }
+    #expect(mock_fallback.invocationCount == 0)
 }
 
 @Test @MainActor

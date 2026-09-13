@@ -17,13 +17,13 @@ final class ImageViewerSelectionReader: SelectedTextReading {
             let provider,
             provider.isSelectionActive
         else {
-            throw SelectedTextReadError.noSelection
+            throw SelectedTextReadError.readerUnavailable
         }
 
         do {
             return try SelectedText(provider.selectedText)
         } catch SelectedTextError.empty {
-            throw SelectedTextReadError.noSelection
+            throw SelectedTextReadError.readerUnavailable
         }
     }
 }

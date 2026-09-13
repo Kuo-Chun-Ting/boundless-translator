@@ -19,7 +19,7 @@ final class SelectedTextResolver: SelectedTextReading {
     func readSelectedText() async throws -> SelectedText {
         do {
             return try await primaryReader.readSelectedText()
-        } catch SelectedTextReadError.noSelection, SelectedTextReadError.copyFailed {
+        } catch SelectedTextReadError.readerUnavailable {
             return try await fallbackReader.readSelectedText()
         }
     }
