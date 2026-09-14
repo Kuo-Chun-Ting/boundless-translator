@@ -204,6 +204,9 @@ cp "${SCRATCH_PATH}/release/BoundlessTranslator" "${MACOS_PATH}/BoundlessTransla
 cp -R \
     "${SCRATCH_PATH}/release/BoundlessTranslator_BoundlessTranslator.bundle/"*.lproj \
     "${RESOURCES_PATH}/"
+cp -R \
+    "${SCRATCH_PATH}/release/KeyboardShortcuts_KeyboardShortcuts.bundle" \
+    "${RESOURCES_PATH}/"
 cp "${SOURCE_INFO_PLIST}" "${CONTENTS_PATH}/Info.plist"
 cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
 cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${RESOURCES_PATH}/PrivacyInfo.xcprivacy"

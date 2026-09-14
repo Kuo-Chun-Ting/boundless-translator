@@ -8,8 +8,7 @@ func test_acceptsEvent_when_other_monitor_exists_then_matches_only_own_event() {
     let other = GlobalShortcutMonitor(
         definition: GlobalShortcutDefinition(
             keyCode: 15,
-            modifierFlags: [.option, .shift],
-            keyEquivalent: "R"
+            modifierFlags: [.option, .shift]
         ),
         handler: {}
     )

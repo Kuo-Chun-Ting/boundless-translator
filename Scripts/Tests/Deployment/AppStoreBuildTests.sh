@@ -59,7 +59,9 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 mkdir -p "${scratch_path}/release/BoundlessTranslator_BoundlessTranslator.bundle/en.lproj"
+mkdir -p "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj"
 print 'store executable' > "${scratch_path}/release/BoundlessTranslator"
+print 'shortcut localization' > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
 EOF
 
     cat > "${MOCK_BIN}/security" <<'EOF'
@@ -157,6 +159,7 @@ function test_build_app_when_app_store_requested_then_builds_store_variant_from_
 
     # Assert
     [[ -f "${APP_PATH}/Contents/MacOS/BoundlessTranslator" ]]
+    [[ -f "${APP_PATH}/Contents/Resources/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings" ]]
     [[ -f "${APP_PATH}/Contents/embedded.provisionprofile" ]]
     cmp "${PROFILE_PATH}" "${APP_PATH}/Contents/embedded.provisionprofile"
     [[ "$(plutil -extract CFBundleShortVersionString raw "${APP_PATH}/Contents/Info.plist")" == 1.2.3 ]]

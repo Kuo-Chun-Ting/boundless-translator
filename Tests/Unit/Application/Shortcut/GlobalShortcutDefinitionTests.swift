@@ -27,7 +27,7 @@ func test_carbonRegistrationOptions_when_shortcut_is_registered_then_requests_ex
     #expect(options == UInt32(kEventHotKeyExclusive))
 }
 
-@Test
+@Test @MainActor
 func test_displayName_when_command_shift_1_is_used_then_uses_keyboard_symbols() {
     // Arrange
     let shortcut = GlobalShortcutDefinition.commandShift1
@@ -39,7 +39,7 @@ func test_displayName_when_command_shift_1_is_used_then_uses_keyboard_symbols() 
     #expect(displayName == "⇧⌘1")
 }
 
-@Test
+@Test @MainActor
 func test_commandShift2_when_created_then_uses_command_shift_2() {
     // Arrange
     let shortcut = GlobalShortcutDefinition.commandShift2
@@ -53,13 +53,29 @@ func test_commandShift2_when_created_then_uses_command_shift_2() {
     #expect(displayName == "⇧⌘2")
 }
 
+@Test @MainActor
+func test_displayName_when_specialKeysAreUsed_then_uses_macOSLabels() {
+    // Arrange
+    let shortcuts = [
+        GlobalShortcutDefinition(keyCode: UInt16(kVK_Return), modifierFlags: [.command]),
+        GlobalShortcutDefinition(keyCode: UInt16(kVK_LeftArrow), modifierFlags: [.command]),
+        GlobalShortcutDefinition(keyCode: UInt16(kVK_F1), modifierFlags: [.command]),
+        GlobalShortcutDefinition(keyCode: UInt16(kVK_Space), modifierFlags: [.command]),
+    ]
+
+    // Act
+    let displayNames = shortcuts.map(\.displayName)
+
+    // Assert
+    #expect(displayNames == ["⌘↩", "⌘←", "⌘F1", "⌘Space"])
+}
+
 @Test
 func test_isValid_when_shortcut_has_command_modifier_then_returns_true() {
     // Arrange
     let shortcut = GlobalShortcutDefinition(
         keyCode: 0,
-        modifierFlags: [.command],
-        keyEquivalent: "A"
+        modifierFlags: [.command]
     )
 
     // Act
@@ -74,8 +90,7 @@ func test_isValid_when_shortcut_has_only_shift_modifier_then_returns_false() {
     // Arrange
     let shortcut = GlobalShortcutDefinition(
         keyCode: 0,
-        modifierFlags: [.shift],
-        keyEquivalent: "A"
+        modifierFlags: [.shift]
     )
 
     // Act

@@ -104,6 +104,7 @@ struct UsageGuideItem: Identifiable {
     let title: String
     let description: String
 
+    @MainActor
     static func make(
         translationShortcut: GlobalShortcutDefinition,
         screenshotShortcut: GlobalShortcutDefinition,

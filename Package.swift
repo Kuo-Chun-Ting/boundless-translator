@@ -11,9 +11,16 @@ let package = Package(
     products: [
         .executable(name: "BoundlessTranslator", targets: ["BoundlessTranslator"])
     ],
+    dependencies: [
+        .package(
+            url: "https://github.com/sindresorhus/KeyboardShortcuts",
+            from: "3.1.0"
+        )
+    ],
     targets: [
         .executableTarget(
             name: "BoundlessTranslator",
+            dependencies: ["KeyboardShortcuts"],
             resources: [.process("Resources")]
         ),
         .testTarget(

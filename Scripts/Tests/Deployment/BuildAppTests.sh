@@ -33,7 +33,9 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 mkdir -p "${scratch_path}/release/BoundlessTranslator_BoundlessTranslator.bundle/en.lproj"
+mkdir -p "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj"
 print 'test executable' > "${scratch_path}/release/BoundlessTranslator"
+print 'shortcut localization' > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
 EOF
 
 cat > "${MOCK_BIN}/codesign" <<'EOF'
@@ -130,6 +132,7 @@ function test_build_app_when_built_then_enables_sandbox_without_changing_source_
     assert_privacy_manifest "${app_path}"
     [[ -f "${app_path}/Contents/MacOS/BoundlessTranslator" ]]
     [[ -d "${app_path}/Contents/Resources/en.lproj" ]]
+    [[ -f "${app_path}/Contents/Resources/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings" ]]
     [[ "$(plutil -extract CFBundleIdentifier raw "${app_path}/Contents/Info.plist")" == com.lillard.BoundlessTranslator ]]
     [[ "$(<"${TEMP_ROOT}/signing.log")" == *"--entitlements ${FIXTURE}/Resources/Sandbox.entitlements"* ]]
     [[ "$(shasum "${FIXTURE}/Resources/Info.plist")" == "${original_info}" ]]

@@ -27,11 +27,37 @@ func test_keyDown_when_validShortcutIsRecorded_then_reportsShortcutAndEndsRecord
     #expect(
         recordedShortcut == GlobalShortcutDefinition(
             keyCode: 40,
-            modifierFlags: [.command, .option],
-            keyEquivalent: "K"
+            modifierFlags: [.command, .option]
         )
     )
     #expect(!button.isRecording)
+}
+
+@Test @MainActor
+func test_keyDown_when_command_shift_1_is_recorded_then_uses_unmodified_key() throws {
+    // Arrange
+    var recordedShortcut: GlobalShortcutDefinition?
+    let button = ShortcutRecorderButton(
+        definition: .commandShift1,
+        localization: testEnglishLocalization,
+        onShortcutRecorded: { recordedShortcut = $0 }
+    )
+    let event = try #require(
+        makeKeyEvent(
+            keyCode: 18,
+            modifierFlags: [.command, .shift],
+            characters: "!",
+            charactersIgnoringModifiers: "!"
+        )
+    )
+    button.beginRecording()
+
+    // Act
+    button.keyDown(with: event)
+
+    // Assert
+    #expect(recordedShortcut == .commandShift1)
+    #expect(button.title == "⇧⌘1")
 }
 
 @Test @MainActor
@@ -170,6 +196,7 @@ func test_recording_when_windowResignsKey_then_cancelsOnlyOnce() {
 private func makeKeyEvent(
     keyCode: UInt16,
     modifierFlags: NSEvent.ModifierFlags,
+    characters: String? = nil,
     charactersIgnoringModifiers: String
 ) -> NSEvent? {
     NSEvent.keyEvent(
@@ -179,7 +206,7 @@ private func makeKeyEvent(
         timestamp: 0,
         windowNumber: 0,
         context: nil,
-        characters: charactersIgnoringModifiers,
+        characters: characters ?? charactersIgnoringModifiers,
         charactersIgnoringModifiers: charactersIgnoringModifiers,
         isARepeat: false,
         keyCode: keyCode

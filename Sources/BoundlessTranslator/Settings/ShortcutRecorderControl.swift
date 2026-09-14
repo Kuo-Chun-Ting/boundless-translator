@@ -163,18 +163,10 @@ final class ShortcutRecorderButton: NSButton {
             .control,
             .shift,
         ])
-        guard
-            let characters = event.charactersIgnoringModifiers,
-            let keyEquivalent = characters.first.map(String.init),
-            !keyEquivalent.isEmpty
-        else {
-            return nil
-        }
 
         return GlobalShortcutDefinition(
             keyCode: event.keyCode,
-            modifierFlags: modifierFlags,
-            keyEquivalent: keyEquivalent.uppercased()
+            modifierFlags: modifierFlags
         )
     }
 

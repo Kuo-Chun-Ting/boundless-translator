@@ -25,14 +25,12 @@ enum GlobalShortcutPurpose {
         case .translation:
             return GlobalShortcutStorageKeys(
                 keyCode: "globalShortcutKeyCode",
-                modifiers: "globalShortcutModifiers",
-                keyEquivalent: "globalShortcutKeyEquivalent"
+                modifiers: "globalShortcutModifiers"
             )
         case .screenshot:
             return GlobalShortcutStorageKeys(
                 keyCode: "screenshotShortcutKeyCode",
-                modifiers: "screenshotShortcutModifiers",
-                keyEquivalent: "screenshotShortcutKeyEquivalent"
+                modifiers: "screenshotShortcutModifiers"
             )
         }
     }
@@ -41,7 +39,6 @@ enum GlobalShortcutPurpose {
 private struct GlobalShortcutStorageKeys {
     let keyCode: String
     let modifiers: String
-    let keyEquivalent: String
 }
 
 @MainActor
@@ -168,10 +165,6 @@ final class GlobalShortcutController: ObservableObject {
             Int(definition.modifierFlags.rawValue),
             forKey: storageKeys.modifiers
         )
-        defaults.set(
-            definition.keyEquivalent,
-            forKey: storageKeys.keyEquivalent
-        )
     }
 
     private static func loadDefinition(
@@ -181,8 +174,7 @@ final class GlobalShortcutController: ObservableObject {
     ) -> GlobalShortcutDefinition {
         guard
             defaults.object(forKey: storageKeys.keyCode) != nil,
-            defaults.object(forKey: storageKeys.modifiers) != nil,
-            let keyEquivalent = defaults.string(forKey: storageKeys.keyEquivalent)
+            defaults.object(forKey: storageKeys.modifiers) != nil
         else {
             return defaultDefinition
         }
@@ -198,8 +190,7 @@ final class GlobalShortcutController: ObservableObject {
 
         let definition = GlobalShortcutDefinition(
             keyCode: storedKeyCode,
-            modifierFlags: NSEvent.ModifierFlags(rawValue: modifierRawValue),
-            keyEquivalent: keyEquivalent
+            modifierFlags: NSEvent.ModifierFlags(rawValue: modifierRawValue)
         )
         return definition.isValid ? definition : defaultDefinition
     }

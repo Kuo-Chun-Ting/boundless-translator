@@ -1,45 +1,32 @@
 import AppKit
 import Carbon.HIToolbox
+import KeyboardShortcuts
 
 struct GlobalShortcutDefinition: Equatable {
     static let commandShift1 = GlobalShortcutDefinition(
         keyCode: 18,
-        modifierFlags: [.command, .shift],
-        keyEquivalent: "1"
+        modifierFlags: [.command, .shift]
     )
 
     static let commandShift2 = GlobalShortcutDefinition(
         keyCode: 19,
-        modifierFlags: [.command, .shift],
-        keyEquivalent: "2"
+        modifierFlags: [.command, .shift]
     )
 
     let keyCode: UInt16
     let modifierFlags: NSEvent.ModifierFlags
-    let keyEquivalent: String
 
+    @MainActor
     var displayName: String {
-        var parts: [String] = []
-        if modifierFlags.contains(.control) {
-            parts.append("⌃")
-        }
-        if modifierFlags.contains(.option) {
-            parts.append("⌥")
-        }
-        if modifierFlags.contains(.shift) {
-            parts.append("⇧")
-        }
-        if modifierFlags.contains(.command) {
-            parts.append("⌘")
-        }
-        parts.append(keyEquivalent.uppercased())
-        return parts.joined()
+        KeyboardShortcuts.Shortcut(
+            carbonKeyCode: Int(keyCode),
+            carbonModifiers: Int(carbonModifierFlags)
+        ).description
     }
 
     var isValid: Bool {
         let primaryModifiers: NSEvent.ModifierFlags = [.command, .option, .control]
-        return !keyEquivalent.isEmpty
-            && !modifierFlags.intersection(primaryModifiers).isEmpty
+        return !modifierFlags.intersection(primaryModifiers).isEmpty
     }
 
     var carbonRegistrationOptions: UInt32 {

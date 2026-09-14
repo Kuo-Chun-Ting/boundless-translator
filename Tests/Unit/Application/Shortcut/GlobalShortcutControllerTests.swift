@@ -18,7 +18,7 @@ func test_init_when_translation_shortcut_is_missing_then_uses_command_shift_1() 
 
     // Assert
     #expect(controller.definition == GlobalShortcutDefinition(
-        keyCode: 18, modifierFlags: [.command, .shift], keyEquivalent: "1"
+        keyCode: 18, modifierFlags: [.command, .shift]
     ))
 }
 
@@ -59,13 +59,11 @@ func test_updateShortcut_when_purposes_differ_then_persists_each_shortcut_indepe
     )
     let translationCandidate = GlobalShortcutDefinition(
         keyCode: 40,
-        modifierFlags: [.command, .option],
-        keyEquivalent: "K"
+        modifierFlags: [.command, .option]
     )
     let screenshotCandidate = GlobalShortcutDefinition(
         keyCode: 37,
-        modifierFlags: [.control, .option],
-        keyEquivalent: "L"
+        modifierFlags: [.control, .option]
     )
 
     // Act
@@ -102,8 +100,7 @@ func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_
     )
     let candidate = GlobalShortcutDefinition(
         keyCode: 40,
-        modifierFlags: [.command, .option],
-        keyEquivalent: "K"
+        modifierFlags: [.command, .option]
     )
     try? controller.start()
 
@@ -137,8 +134,7 @@ func test_updateShortcut_when_registration_fails_then_restores_previous_shortcut
     )
     let candidate = GlobalShortcutDefinition(
         keyCode: 40,
-        modifierFlags: [.command, .option],
-        keyEquivalent: "K"
+        modifierFlags: [.command, .option]
     )
     try? controller.start()
 
@@ -255,8 +251,6 @@ func test_init_when_previous_shortcut_is_saved_then_preserves_preference() {
         Int(NSEvent.ModifierFlags([.command, .shift]).rawValue),
         forKey: "globalShortcutModifiers"
     )
-    fixture_defaults.defaults.set("K", forKey: "globalShortcutKeyEquivalent")
-
     // Act
     let controller = GlobalShortcutController(
         defaults: fixture_defaults.defaults,
@@ -265,8 +259,32 @@ func test_init_when_previous_shortcut_is_saved_then_preserves_preference() {
 
     // Assert
     #expect(controller.definition == GlobalShortcutDefinition(
-        keyCode: 40, modifierFlags: [.command, .shift], keyEquivalent: "K"
+        keyCode: 40, modifierFlags: [.command, .shift]
     ))
+}
+
+@Test @MainActor
+func test_init_when_legacy_displayValue_is_wrong_then_uses_savedKeyCode() {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    fixture_defaults.defaults.set(18, forKey: "globalShortcutKeyCode")
+    fixture_defaults.defaults.set(
+        Int(NSEvent.ModifierFlags([.command, .shift]).rawValue),
+        forKey: "globalShortcutModifiers"
+    )
+    fixture_defaults.defaults.set("!", forKey: "globalShortcutKeyEquivalent")
+
+    // Act
+    let controller = GlobalShortcutController(
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+
+    // Assert
+    #expect(controller.definition == .commandShift1)
+    #expect(controller.definition.displayName == "⇧⌘1")
 }
 
 private struct ShortcutDefaultsFixture {
