@@ -23,6 +23,73 @@ func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
 }
 
 @Test @MainActor
+func test_init_when_screenshot_shortcut_is_missing_then_uses_command_shift_r() {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+
+    // Act
+    let controller = GlobalShortcutController(
+        purpose: .screenshot,
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+
+    // Assert
+    #expect(controller.definition == .commandShiftR)
+}
+
+@Test @MainActor
+func test_updateShortcut_when_purposes_differ_then_persists_each_shortcut_independently() {
+    // Arrange
+    let fixture_defaults = makeShortcutDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let translation = GlobalShortcutController(
+        purpose: .translation,
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+    let screenshot = GlobalShortcutController(
+        purpose: .screenshot,
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+    let translationCandidate = GlobalShortcutDefinition(
+        keyCode: 40,
+        modifierFlags: [.command, .option],
+        keyEquivalent: "K"
+    )
+    let screenshotCandidate = GlobalShortcutDefinition(
+        keyCode: 37,
+        modifierFlags: [.control, .option],
+        keyEquivalent: "L"
+    )
+
+    // Act
+    translation.updateShortcut(translationCandidate)
+    screenshot.updateShortcut(screenshotCandidate)
+    let restoredTranslation = GlobalShortcutController(
+        purpose: .translation,
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+    let restoredScreenshot = GlobalShortcutController(
+        purpose: .screenshot,
+        defaults: fixture_defaults.defaults,
+        makeMonitor: MockGlobalShortcutMonitorFactory().make,
+        handler: {}
+    )
+
+    // Assert
+    #expect(restoredTranslation.definition == translationCandidate)
+    #expect(restoredScreenshot.definition == screenshotCandidate)
+}
+
+@Test @MainActor
 func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_candidate() {
     // Arrange
     let fixture_defaults = makeShortcutDefaults()

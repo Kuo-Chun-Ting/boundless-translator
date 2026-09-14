@@ -1,13 +1,14 @@
 import SwiftUI
 
 enum PreferencesWindowStyle {
-    static let contentSize = CGSize(width: 430, height: 286)
+    static let contentSize = CGSize(width: 430, height: 322)
 }
 
 struct PreferencesView: View {
     @ObservedObject var settings: TranslationSettings
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     @ObservedObject var shortcutController: GlobalShortcutController
+    @ObservedObject var screenshotShortcutController: GlobalShortcutController
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
     var onShowSubscription: (@MainActor () -> Void)? = nil
@@ -26,6 +27,12 @@ struct PreferencesView: View {
                         controller: shortcutController,
                         titleKey: "shortcut.accessibilityLabel",
                         accessibilityIdentifier: "shortcutRecorder",
+                        localization: localization
+                    )
+                    ShortcutPreferencesView(
+                        controller: screenshotShortcutController,
+                        titleKey: "imageWorkspace.windowTitle",
+                        accessibilityIdentifier: "screenshotShortcutRecorder",
                         localization: localization
                     )
                     InterfaceLanguagePreferencesView(
@@ -61,7 +68,8 @@ struct PreferencesView: View {
                 }
 
                 UsagePreferencesView(
-                    shortcut: shortcutController.definition,
+                    translationShortcut: shortcutController.definition,
+                    screenshotShortcut: screenshotShortcutController.definition,
                     localization: localization
                 )
             }

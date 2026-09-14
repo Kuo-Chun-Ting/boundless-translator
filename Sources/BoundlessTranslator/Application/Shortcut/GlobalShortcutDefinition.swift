@@ -8,6 +8,12 @@ struct GlobalShortcutDefinition: Equatable {
         keyEquivalent: "T"
     )
 
+    static let commandShiftR = GlobalShortcutDefinition(
+        keyCode: 15,
+        modifierFlags: [.command, .shift],
+        keyEquivalent: "R"
+    )
+
     let keyCode: UInt16
     let modifierFlags: NSEvent.ModifierFlags
     let keyEquivalent: String

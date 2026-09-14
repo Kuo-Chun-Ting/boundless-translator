@@ -7,10 +7,41 @@ enum GlobalShortcutFailure {
     case monitor(Error)
 }
 
-private enum GlobalShortcutStorageKey {
-    static let keyCode = "globalShortcutKeyCode"
-    static let modifiers = "globalShortcutModifiers"
-    static let keyEquivalent = "globalShortcutKeyEquivalent"
+enum GlobalShortcutPurpose {
+    case translation
+    case screenshot
+
+    fileprivate var defaultDefinition: GlobalShortcutDefinition {
+        switch self {
+        case .translation:
+            return .commandShiftT
+        case .screenshot:
+            return .commandShiftR
+        }
+    }
+
+    fileprivate var storageKeys: GlobalShortcutStorageKeys {
+        switch self {
+        case .translation:
+            return GlobalShortcutStorageKeys(
+                keyCode: "globalShortcutKeyCode",
+                modifiers: "globalShortcutModifiers",
+                keyEquivalent: "globalShortcutKeyEquivalent"
+            )
+        case .screenshot:
+            return GlobalShortcutStorageKeys(
+                keyCode: "screenshotShortcutKeyCode",
+                modifiers: "screenshotShortcutModifiers",
+                keyEquivalent: "screenshotShortcutKeyEquivalent"
+            )
+        }
+    }
+}
+
+private struct GlobalShortcutStorageKeys {
+    let keyCode: String
+    let modifiers: String
+    let keyEquivalent: String
 }
 
 @MainActor
@@ -24,11 +55,13 @@ final class GlobalShortcutController: ObservableObject {
     @Published private(set) var failure: GlobalShortcutFailure?
 
     private let defaults: UserDefaults
+    private let storageKeys: GlobalShortcutStorageKeys
     private let makeMonitor: MonitorFactory
     private let handler: @MainActor () -> Void
     private var monitor: (any GlobalShortcutMonitoring)?
 
     init(
+        purpose: GlobalShortcutPurpose = .translation,
         defaults: UserDefaults = .standard,
         makeMonitor: @escaping MonitorFactory = {
             GlobalShortcutMonitor(definition: $0, handler: $1)
@@ -36,9 +69,14 @@ final class GlobalShortcutController: ObservableObject {
         handler: @escaping @MainActor () -> Void
     ) {
         self.defaults = defaults
+        self.storageKeys = purpose.storageKeys
         self.makeMonitor = makeMonitor
         self.handler = handler
-        definition = Self.loadDefinition(from: defaults)
+        definition = Self.loadDefinition(
+            from: defaults,
+            storageKeys: purpose.storageKeys,
+            defaultDefinition: purpose.defaultDefinition
+        )
     }
 
     func start() throws {
@@ -125,33 +163,37 @@ final class GlobalShortcutController: ObservableObject {
     }
 
     private func persist(_ definition: GlobalShortcutDefinition) {
-        defaults.set(Int(definition.keyCode), forKey: GlobalShortcutStorageKey.keyCode)
+        defaults.set(Int(definition.keyCode), forKey: storageKeys.keyCode)
         defaults.set(
             Int(definition.modifierFlags.rawValue),
-            forKey: GlobalShortcutStorageKey.modifiers
+            forKey: storageKeys.modifiers
         )
         defaults.set(
             definition.keyEquivalent,
-            forKey: GlobalShortcutStorageKey.keyEquivalent
+            forKey: storageKeys.keyEquivalent
         )
     }
 
-    private static func loadDefinition(from defaults: UserDefaults) -> GlobalShortcutDefinition {
+    private static func loadDefinition(
+        from defaults: UserDefaults,
+        storageKeys: GlobalShortcutStorageKeys,
+        defaultDefinition: GlobalShortcutDefinition
+    ) -> GlobalShortcutDefinition {
         guard
-            defaults.object(forKey: GlobalShortcutStorageKey.keyCode) != nil,
-            defaults.object(forKey: GlobalShortcutStorageKey.modifiers) != nil,
-            let keyEquivalent = defaults.string(forKey: GlobalShortcutStorageKey.keyEquivalent)
+            defaults.object(forKey: storageKeys.keyCode) != nil,
+            defaults.object(forKey: storageKeys.modifiers) != nil,
+            let keyEquivalent = defaults.string(forKey: storageKeys.keyEquivalent)
         else {
-            return .commandShiftT
+            return defaultDefinition
         }
 
-        let keyCode = defaults.integer(forKey: GlobalShortcutStorageKey.keyCode)
-        let modifiers = defaults.integer(forKey: GlobalShortcutStorageKey.modifiers)
+        let keyCode = defaults.integer(forKey: storageKeys.keyCode)
+        let modifiers = defaults.integer(forKey: storageKeys.modifiers)
         guard
             let storedKeyCode = UInt16(exactly: keyCode),
             let modifierRawValue = UInt(exactly: modifiers)
         else {
-            return .commandShiftT
+            return defaultDefinition
         }
 
         let definition = GlobalShortcutDefinition(
@@ -159,6 +201,6 @@ final class GlobalShortcutController: ObservableObject {
             modifierFlags: NSEvent.ModifierFlags(rawValue: modifierRawValue),
             keyEquivalent: keyEquivalent
         )
-        return definition.isValid ? definition : .commandShiftT
+        return definition.isValid ? definition : defaultDefinition
     }
 }

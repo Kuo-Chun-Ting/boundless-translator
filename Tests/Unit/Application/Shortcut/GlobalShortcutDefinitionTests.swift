@@ -40,6 +40,20 @@ func test_displayName_when_command_shift_t_is_used_then_uses_keyboard_symbols() 
 }
 
 @Test
+func test_commandShiftR_when_created_then_uses_command_shift_r() {
+    // Arrange
+    let shortcut = GlobalShortcutDefinition.commandShiftR
+
+    // Act
+    let displayName = shortcut.displayName
+
+    // Assert
+    #expect(shortcut.keyCode == 15)
+    #expect(shortcut.carbonModifierFlags == UInt32(cmdKey | shiftKey))
+    #expect(displayName == "⇧⌘R")
+}
+
+@Test
 func test_isValid_when_shortcut_has_command_modifier_then_returns_true() {
     // Arrange
     let shortcut = GlobalShortcutDefinition(

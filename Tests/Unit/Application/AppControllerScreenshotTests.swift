@@ -22,6 +22,30 @@ func test_captureScreenshot_when_region_is_captured_then_presents_image() async 
 }
 
 @Test @MainActor
+func test_handleScreenshotShortcut_when_triggered_then_captures_without_reading_selection() async throws {
+    // Arrange
+    let image = NSImage(size: NSSize(width: 100, height: 50))
+    let mock_reader = ScreenshotSelectedTextReaderMock()
+    let mock_viewer = ScreenshotViewerMock()
+    let controller = AppController(
+        selectedTextReader: mock_reader,
+        screenshotCapture: ScreenshotCaptureStub(result: .success(image)),
+        imageViewerController: mock_viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess()
+    )
+
+    // Act
+    controller.handleScreenshotShortcut()
+    for _ in 0..<10 {
+        await Task.yield()
+    }
+
+    // Assert
+    #expect(mock_reader.invocationCount == 0)
+    #expect(mock_viewer.images.count == 1)
+}
+
+@Test @MainActor
 func test_captureScreenshot_when_cancelled_then_preserves_existing_image() async throws {
     // Arrange
     let mock_viewer = ScreenshotViewerMock()
@@ -86,6 +110,16 @@ func test_captureScreenshot_when_already_capturing_then_ignores_duplicate_and_al
 private struct ScreenshotCaptureStub: ScreenshotCapturing {
     let result: Result<NSImage?, Error>
     func captureRegion() async throws -> NSImage? { try result.get() }
+}
+
+@MainActor
+private final class ScreenshotSelectedTextReaderMock: SelectedTextReading {
+    private(set) var invocationCount = 0
+
+    func readSelectedText() async throws -> SelectedText {
+        invocationCount += 1
+        return try SelectedText("Selected text")
+    }
 }
 
 @MainActor

@@ -13,6 +13,10 @@ final class PreferencesWindowController: NSWindowController {
         settings: TranslationSettings,
         interfaceLanguageSettings: InterfaceLanguageSettings,
         shortcutController: GlobalShortcutController,
+        screenshotShortcutController: GlobalShortcutController = GlobalShortcutController(
+            purpose: .screenshot,
+            handler: {}
+        ),
         supportedLanguageCatalog: SupportedLanguageCatalog,
         onShowSubscription: (@MainActor () -> Void)? = nil,
         pointerScreenVisibleFrame: (@MainActor () -> CGRect?)? = nil,
@@ -49,6 +53,7 @@ final class PreferencesWindowController: NSWindowController {
                 settings: settings,
                 interfaceLanguageSettings: interfaceLanguageSettings,
                 shortcutController: shortcutController,
+                screenshotShortcutController: screenshotShortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication,
                 onShowSubscription: onShowSubscription

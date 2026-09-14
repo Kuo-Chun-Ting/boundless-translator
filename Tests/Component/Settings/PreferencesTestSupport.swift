@@ -14,6 +14,19 @@ func makeTestShortcutController() -> GlobalShortcutController {
 }
 
 @MainActor
+func makeTestScreenshotShortcutController() -> GlobalShortcutController {
+    let suiteName = "PreferencesComponentTests.Screenshot.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defaults.removePersistentDomain(forName: suiteName)
+    return GlobalShortcutController(
+        purpose: .screenshot,
+        defaults: defaults,
+        makeMonitor: { _, _ in NoOpShortcutMonitor() },
+        handler: {}
+    )
+}
+
+@MainActor
 func makeFailingTestShortcutController() -> GlobalShortcutController {
     let suiteName = "PreferencesComponentTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!

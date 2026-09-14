@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct UsagePreferencesView: View {
-    let shortcut: GlobalShortcutDefinition
+    let translationShortcut: GlobalShortcutDefinition
+    let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
 
     @State private var isPresentingGuide = false
@@ -18,7 +19,8 @@ struct UsagePreferencesView: View {
         .fixedSize()
         .popover(isPresented: $isPresentingGuide, arrowEdge: .trailing) {
             UsageGuideView(
-                shortcut: shortcut,
+                translationShortcut: translationShortcut,
+                screenshotShortcut: screenshotShortcut,
                 localization: localization
             )
         }
@@ -26,14 +28,17 @@ struct UsagePreferencesView: View {
 }
 
 struct UsageGuideView: View {
-    let shortcut: GlobalShortcutDefinition
+    let translationShortcut: GlobalShortcutDefinition
+    let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
 
     init(
-        shortcut: GlobalShortcutDefinition,
+        translationShortcut: GlobalShortcutDefinition,
+        screenshotShortcut: GlobalShortcutDefinition,
         localization: AppLocalization
     ) {
-        self.shortcut = shortcut
+        self.translationShortcut = translationShortcut
+        self.screenshotShortcut = screenshotShortcut
         self.localization = localization
     }
 
@@ -69,7 +74,8 @@ struct UsageGuideView: View {
 
     private var items: [UsageGuideItem] {
         UsageGuideItem.make(
-            shortcut: shortcut,
+            translationShortcut: translationShortcut,
+            screenshotShortcut: screenshotShortcut,
             localization: localization
         )
     }
@@ -99,10 +105,12 @@ struct UsageGuideItem: Identifiable {
     let description: String
 
     static func make(
-        shortcut: GlobalShortcutDefinition,
+        translationShortcut: GlobalShortcutDefinition,
+        screenshotShortcut: GlobalShortcutDefinition,
         localization: AppLocalization
     ) -> [UsageGuideItem] {
-        let shortcutName = shortcut.displayName
+        let translationShortcutName = translationShortcut.displayName
+        let screenshotShortcutName = screenshotShortcut.displayName
         return [
             UsageGuideItem(
                 id: "translateText",
@@ -113,7 +121,7 @@ struct UsageGuideItem: Identifiable {
                 title: localization.string("usage.translateText.title"),
                 description: localization.string(
                     "usage.translateText.description",
-                    arguments: shortcutName
+                    arguments: translationShortcutName
                 )
             ),
             UsageGuideItem(
@@ -125,7 +133,7 @@ struct UsageGuideItem: Identifiable {
                 title: localization.string("usage.translateImageText.title"),
                 description: localization.string(
                     "usage.translateImageText.description",
-                    arguments: shortcutName, shortcutName
+                    arguments: screenshotShortcutName, translationShortcutName
                 )
             ),
             UsageGuideItem(

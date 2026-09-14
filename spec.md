@@ -2,7 +2,7 @@
 
 ## Product
 
-Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It uses one configurable global shortcut to choose the appropriate input and presents translations in a compact floating window.
+Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It presents translations in a compact floating window and provides configurable shortcuts for translation and direct screenshot capture.
 
 ## Shortcut Flow
 
@@ -14,7 +14,7 @@ When the user presses the translation shortcut (default `Command-Shift-T`):
 4. Open the captured image in the image workspace for Live Text selection.
 5. The user selects text and presses the same shortcut to translate it.
 
-Only one shortcut request runs at a time. Pause the global shortcut while it is being recorded.
+The screenshot shortcut (default `Command-Shift-R`) starts native region capture directly, without checking selected text. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
 
 ## Translation
 
@@ -61,8 +61,8 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the screen containing the pointer, make Boundless Translator the active application, and make Preferences the key window so Command-W closes it immediately.
 - Present Preferences as one level of labeled rows without section headings.
-- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Language, then Usage.
-- Group Translate From and Translate To in the first settings card, then the shortcut and Language in the second.
+- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Screenshot, Language, then Usage.
+- Group Translate From and Translate To in the first settings card, then both shortcuts and Language in the second.
 - Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
 - Fit all settings without scrolling or unused vertical space. Size the window to accommodate localized labels.
 - Configure the interface language independently from translation languages.
@@ -72,7 +72,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 - Show the effective macOS interface language beside System Default.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
-- Configure one translation shortcut, defaulting to `Command-Shift-T`.
+- Configure the translation shortcut, defaulting to `Command-Shift-T`, and the direct screenshot shortcut, defaulting to `Command-Shift-R`.
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
@@ -81,7 +81,7 @@ Only one shortcut request runs at a time. Pause the global shortcut while it is 
 
 ## Architecture
 
-- `Application` composes dependencies and routes the single shortcut to translation or screenshot capture. `Application/Shortcut` owns shortcut registration and persistence. Settings pauses and restores the shortcut during recording.
+- `Application` composes dependencies, routes the translation shortcut to translation or screenshot fallback, and routes the screenshot shortcut directly to capture. `Application/Shortcut` owns independent shortcut registration and persistence. Settings pauses and restores each shortcut during recording.
 - `Application` owns one foreground-window presenter. It activates the accessory app, then makes the latest requested interactive window key after activation completes.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
 - `ImageViewer` owns native interactive capture, its permission and failure handling, captured-image input, Live Text selection, and the persistent image window. Application coordinates capture and routes selected image text into the same translation flow as external text.

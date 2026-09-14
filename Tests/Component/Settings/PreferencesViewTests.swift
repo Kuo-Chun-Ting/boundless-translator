@@ -235,6 +235,7 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         shortcutController: makeTestShortcutController(),
+        screenshotShortcutController: makeTestScreenshotShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)
@@ -253,7 +254,8 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
     let screenshotRecorders = findViews(
         in: contentView, accessibilityIdentifier: "screenshotShortcutRecorder"
     ).compactMap { $0 as? NSButton }
-    #expect(screenshotRecorders.isEmpty)
+    #expect(screenshotRecorders.count == 1)
+    #expect(screenshotRecorders.first?.title == "⇧⌘R")
 }
 
 @Test @MainActor
