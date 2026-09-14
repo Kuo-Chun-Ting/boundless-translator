@@ -19,8 +19,8 @@ final class AppController {
     )
     private let translationEngine: TranslationEngine
     private let supportedLanguageCatalog: SupportedLanguageCatalog
-    private lazy var shortcutController = GlobalShortcutController { [weak self] in
-        self?.handleShortcut()
+    private lazy var translationShortcutController = GlobalShortcutController { [weak self] in
+        self?.handleTranslationShortcut()
     }
     private lazy var screenshotShortcutController = GlobalShortcutController(
         purpose: .screenshot
@@ -30,7 +30,7 @@ final class AppController {
     private lazy var preferencesWindowController = PreferencesWindowController(
         settings: settings,
         interfaceLanguageSettings: interfaceLanguageSettings,
-        shortcutController: shortcutController,
+        translationShortcutController: translationShortcutController,
         screenshotShortcutController: screenshotShortcutController,
         supportedLanguageCatalog: supportedLanguageCatalog,
         onShowSubscription: subscriptionAction
@@ -87,7 +87,7 @@ final class AppController {
 
     func prepare() {
         subscriptionAccess.start()
-        startShortcut(shortcutController)
+        startShortcut(translationShortcutController)
         startShortcut(screenshotShortcutController)
 
         Task {
@@ -127,7 +127,7 @@ final class AppController {
         )
     }
 
-    func handleShortcut() {
+    func handleTranslationShortcut() {
         if subscriptionAccess.hasLoaded, !authorizeFeature() { return }
         guard shortcutTask == nil, !isCapturingScreenshot else {
             return
@@ -142,16 +142,13 @@ final class AppController {
             guard !Task.isCancelled, authorizeFeature() else { return }
 
             do {
-                switch try await resolveShortcutAction() {
-                case .translate(let selectedText):
-                    await resolveSourceLanguage(for: selectedText)
-                case .captureScreenRegion:
-                    await captureScreenshotFromShortcut()
-                }
+                let selectedText = try await selectedTextReader.readSelectedText()
+                await resolveSourceLanguage(for: selectedText)
+            } catch SelectedTextReadError.noSelection,
+                    is CancellationError {
+                return
             } catch SelectedTextReadError.accessibilityPermissionRequired {
                 AccessibilityPermission.requestIfNeeded()
-            } catch is CancellationError {
-                return
             } catch {
                 showError(.verbatim(error.localizedDescription))
             }
@@ -165,14 +162,6 @@ final class AppController {
         shortcutTask = Task {
             defer { shortcutTask = nil }
             await captureScreenshotFromShortcut()
-        }
-    }
-
-    func resolveShortcutAction() async throws -> ShortcutAction {
-        do {
-            return .translate(try await selectedTextReader.readSelectedText())
-        } catch SelectedTextReadError.noSelection, SelectedTextReadError.copyFailed {
-            return .captureScreenRegion
         }
     }
 
@@ -266,9 +255,4 @@ final class AppController {
         }
     }
 
-}
-
-enum ShortcutAction {
-    case translate(SelectedText)
-    case captureScreenRegion
 }

@@ -44,7 +44,7 @@ private struct ShortcutFixture {
         controller = PreferencesWindowController(
             settings: TranslationSettings(),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-            shortcutController: shortcut,
+            translationShortcutController: shortcut,
             supportedLanguageCatalog: makeStubLanguageCatalog()
         )
         window = try #require(controller.window)

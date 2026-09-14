@@ -3,96 +3,45 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_resolveShortcutAction_when_external_text_is_selected_then_returns_translation() async throws {
+func test_handleTranslationShortcut_when_no_text_is_selected_then_does_not_capture_screenshot() async {
     // Arrange
-    let text = try SelectedText("Selected text")
-    let controller = AppController(
-        selectedTextReader: SelectedTextReaderStub(result: .success(text)),
-        imageViewerController: ImageViewerControllerStub()
-    )
-
-    // Act
-    let action = try await controller.resolveShortcutAction()
-
-    // Assert
-    guard case .translate(let actual) = action else {
-        Issue.record("Expected selected text")
-        return
-    }
-    #expect(actual == text)
-}
-
-@Test @MainActor
-func test_handleShortcut_when_no_text_is_selected_then_captures_and_presents_image() async {
-    // Arrange
-    let mock_viewer = ImageViewerControllerStub()
+    let mock_capture = ScreenshotCaptureMock()
     let controller = AppController(
         selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.noSelection)),
-        screenshotCapture: ScreenshotCaptureStub(
-            result: .success(NSImage(size: NSSize(width: 100, height: 50)))
-        ),
-        imageViewerController: mock_viewer,
+        screenshotCapture: mock_capture,
+        imageViewerController: ImageViewerControllerStub(),
         subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act
-    controller.handleShortcut()
+    controller.handleTranslationShortcut()
     for _ in 0..<5 {
         await Task.yield()
     }
 
     // Assert
-    #expect(mock_viewer.presentationCount == 1)
+    #expect(mock_capture.captureCount == 0)
 }
 
 @Test @MainActor
-func test_resolveShortcutAction_when_image_text_is_selected_then_prefers_image_selection() async throws {
+func test_handleTranslationShortcut_when_selection_is_cancelled_then_does_not_capture_screenshot() async {
     // Arrange
-    let stub_viewer = ImageViewerControllerStub()
-    stub_viewer.isSelectionActive = true
-    stub_viewer.selectedText = "Image text"
+    let mock_capture = ScreenshotCaptureMock()
     let controller = AppController(
-        selectedTextReader: SelectedTextReaderStub(result: .success(try SelectedText("External text"))),
-        imageViewerController: stub_viewer
+        selectedTextReader: SelectedTextReaderStub(result: .failure(CancellationError())),
+        screenshotCapture: mock_capture,
+        imageViewerController: ImageViewerControllerStub(),
+        subscriptionAccess: makeUnrestrictedTestAccess()
     )
 
     // Act
-    let action = try await controller.resolveShortcutAction()
+    controller.handleTranslationShortcut()
+    for _ in 0..<5 {
+        await Task.yield()
+    }
 
     // Assert
-    guard case .translate(let actual) = action else {
-        Issue.record("Expected image text")
-        return
-    }
-    #expect(actual.value == "Image text")
-}
-
-@Test @MainActor
-func test_resolveShortcutAction_when_accessibility_is_missing_then_reports_permission_instead_of_capture() async {
-    // Arrange
-    let controller = AppController(
-        selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.accessibilityPermissionRequired)),
-        imageViewerController: ImageViewerControllerStub()
-    )
-
-    // Act & Assert
-    await #expect(throws: SelectedTextReadError.self) {
-        try await controller.resolveShortcutAction()
-    }
-}
-
-@Test @MainActor
-func test_resolveShortcutAction_when_selection_is_cancelled_then_does_not_capture() async {
-    // Arrange
-    let controller = AppController(
-        selectedTextReader: SelectedTextReaderStub(result: .failure(CancellationError())),
-        imageViewerController: ImageViewerControllerStub()
-    )
-
-    // Act & Assert
-    await #expect(throws: CancellationError.self) {
-        try await controller.resolveShortcutAction()
-    }
+    #expect(mock_capture.captureCount == 0)
 }
 
 @MainActor
@@ -103,9 +52,13 @@ private final class SelectedTextReaderStub: SelectedTextReading {
 }
 
 @MainActor
-private struct ScreenshotCaptureStub: ScreenshotCapturing {
-    let result: Result<NSImage?, Error>
-    func captureRegion() async throws -> NSImage? { try result.get() }
+private final class ScreenshotCaptureMock: ScreenshotCapturing {
+    private(set) var captureCount = 0
+
+    func captureRegion() async throws -> NSImage? {
+        captureCount += 1
+        return nil
+    }
 }
 
 @MainActor

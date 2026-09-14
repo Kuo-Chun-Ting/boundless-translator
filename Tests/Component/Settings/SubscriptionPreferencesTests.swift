@@ -9,7 +9,7 @@ func test_preferences_when_store_action_supplied_then_purchase_entry_and_quit_re
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog(),
         onShowSubscription: { purchasePresentations += 1 }
     )
@@ -38,7 +38,7 @@ func test_preferences_when_direct_distribution_then_does_not_show_purchase_entry
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let content = try #require(controller.window?.contentView)

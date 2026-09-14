@@ -8,7 +8,7 @@ func test_appearance_when_switchingLightDarkLight_then_usesOpaqueWindowBackgroun
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
@@ -45,7 +45,7 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
@@ -72,7 +72,7 @@ func test_present_when_pointerScreenChanges_then_centersWindowOnPointerScreen() 
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog(),
         pointerScreenVisibleFrame: {
             visibleFrameRequestCount += 1
@@ -107,7 +107,7 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesWindowTitle
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: interfaceLanguageSettings,
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)

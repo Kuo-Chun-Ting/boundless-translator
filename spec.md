@@ -9,12 +9,10 @@ Boundless Translator is a macOS 15 menu bar app for translating selected text an
 When the user presses the translation shortcut (default `Command-Shift-T`):
 
 1. If text is selected in the active image workspace, translate it.
-2. Otherwise, read selected text from the active app through Accessibility. Start capture immediately when Accessibility confirms an empty selection; use the clipboard fallback only when Accessibility cannot read the selection.
-3. If there is no selection or the clipboard-copy attempt times out, start native macOS interactive region capture. Missing Accessibility permission instead opens permission guidance; cancellation and unexpected errors do not trigger capture.
-4. Open the captured image in the image workspace for Live Text selection.
-5. The user selects text and presses the same shortcut to translate it.
+2. Otherwise, read selected text from the active app through Accessibility. Use the clipboard fallback only when Accessibility cannot read the selection.
+3. Translate the selected text. No selection or cancellation stops quietly. Missing Accessibility permission opens permission guidance; unexpected errors are reported without starting screenshot capture.
 
-The screenshot shortcut (default `Command-Shift-R`) starts native region capture directly, without checking selected text. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
+The screenshot shortcut (default `Command-Shift-R`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for Live Text selection; the user can then select text and press the translation shortcut. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
 
 ## Translation
 
@@ -81,7 +79,7 @@ The screenshot shortcut (default `Command-Shift-R`) starts native region capture
 
 ## Architecture
 
-- `Application` composes dependencies, routes the translation shortcut to translation or screenshot fallback, and routes the screenshot shortcut directly to capture. `Application/Shortcut` owns independent shortcut registration and persistence. Settings pauses and restores each shortcut during recording.
+- `Application` composes dependencies and routes the translation and screenshot shortcuts to their separate features. `Application/Shortcut` owns independent shortcut registration and persistence. Settings pauses and restores each shortcut during recording.
 - `Application` owns one foreground-window presenter. It activates the accessory app, then makes the latest requested interactive window key after activation completes.
 - `Selection` reads external text through Accessibility and clipboard fallback strategies.
 - `ImageViewer` owns native interactive capture, its permission and failure handling, captured-image input, Live Text selection, and the persistent image window. Application coordinates capture and routes selected image text into the same translation flow as external text.
@@ -108,7 +106,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - Build verification confirms the signed App Sandbox entitlement before distribution. Runtime behavior is covered by normal DMG acceptance and by testing the exact TestFlight build; there is no separate Sandbox build or Sandbox checklist.
 - Every packaged App enables App Sandbox and outgoing-network access. The default Developer ID build is subscription-free; the App Store build requires a subscription. Both use the same sources and bundle identifier, not a separate Sandbox test edition. A successful build does not prove runtime compatibility or App Review eligibility.
 - `Resources/Sandbox.entitlements` is the shared source for both distributions. App Store signing adds the matching application and team identifiers to a temporary copy before signing; it does not maintain a separate Sandbox configuration.
-- Cross-app selection uses `AXUIElement`. A confirmed empty Accessibility selection proceeds directly to capture; an unavailable Accessibility selection uses the clipboard fallback. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
+- Cross-app selection uses `AXUIElement`. An unavailable Accessibility selection uses the clipboard fallback; a confirmed empty selection stops quietly. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
 - Preserve the existing Developer ID DMG workflow for development and direct testing. Do not sell the DMG or add a separate DMG payment system in the initial release.
 - Add a separate App Store release entry point that produces an App Store-signed archive and uploads it to App Store Connect. Uploading a build does not publish it.
 
@@ -135,11 +133,11 @@ These directories belong to one executable target, not separate Swift packages. 
 - Declare applicable required-reason APIs in the privacy manifest and keep App Store privacy answers consistent with the shipped build.
 - Bundle `Resources/PrivacyInfo.xcprivacy` in the App's `Contents/Resources` before signing for every build mode. The current implementation declares no tracking or collected data and uses UserDefaults reason `CA92.1` for its own language and shortcut preferences. Reassess these declarations when data practices change; this manifest does not replace the privacy policy or App Store Connect disclosures.
 - Explain Accessibility and Screen Recording permissions before or when they are requested.
-- Request each permission only when the shortcut first reaches the feature that needs it. Missing Accessibility stops external selection before deciding whether to capture; only no-selection or copy timeout enters capture and checks Screen Recording. Closing the guide leaves permissions untouched. Accessibility copy fallback may replace the clipboard.
+- Request each permission only when the shortcut first reaches the feature that needs it. The translation shortcut requests Accessibility when needed; only the screenshot shortcut reaches Screen Recording. Closing the guide leaves permissions untouched. Accessibility copy fallback may replace the clipboard.
 - Show a compact guide with the App icon, the permission icon, one short purpose statement, and one primary button. Do not show file paths or technical details.
 - For Accessibility, Continue opens the System Settings permission pane. The user enables or manually adds the installed App there; opening Settings does not grant permission.
 - Accessibility guidance tells the user to click +, choose Boundless Translator, and enable it. Raw command-line executables do not show permission guidance.
-- A missing Accessibility grant must not be treated as absent selected text: the shortcut opens Accessibility guidance and never enters screenshot capture. Cancellation stops the action; other unexpected selection errors are reported. No-selection and clipboard-copy timeouts retain the screenshot fallback.
+- A missing Accessibility grant opens Accessibility guidance. No selection, clipboard-copy timeout, and cancellation stop quietly. Unexpected selection errors are reported. None of these cases enter screenshot capture.
 - Screen Recording requests access after the user continues from its guide. The macOS prompt offers to open the Screen Recording settings pane when needed; the App does not open the pane separately or cover the prompt with another panel.
 - Provide localized product metadata, screenshots, support contact information, age rating, review notes, and instructions for testing the shortcut, screenshot flow, and subscription.
 - Validate the complete permission, translation, screenshot, trial, purchase, expiration, and restore flows with an App Store-signed TestFlight build before submission.

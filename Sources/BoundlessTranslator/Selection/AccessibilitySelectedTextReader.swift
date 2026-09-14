@@ -4,7 +4,6 @@ enum SelectedTextReadError: LocalizedError {
     case accessibilityPermissionRequired
     case readerUnavailable
     case noSelection
-    case copyFailed
 
     var errorDescription: String? {
         switch self {
@@ -14,8 +13,6 @@ enum SelectedTextReadError: LocalizedError {
             "The selected text could not be read from this app."
         case .noSelection:
             "No selected text was found. Select text and use the translation shortcut again."
-        case .copyFailed:
-            "The selected text could not be copied from this app."
         }
     }
 }

@@ -3,7 +3,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_handleShortcut_when_subscription_missing_then_requests_subscription_without_reading_selection() async {
+func test_handleTranslationShortcut_when_subscription_missing_then_requests_subscription_without_reading_selection() async {
     // Arrange
     let mock_reader = SubscriptionSelectionReaderMock()
     var presentations = 0
@@ -14,7 +14,7 @@ func test_handleShortcut_when_subscription_missing_then_requests_subscription_wi
     )
 
     // Act
-    controller.handleShortcut()
+    controller.handleTranslationShortcut()
 
     // Assert
     #expect(presentations == 1)

@@ -9,7 +9,7 @@ func test_preferencesView_when_rendered_then_shows_usage_help_button() throws {
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
-        shortcutController: makeTestShortcutController(),
+        translationShortcutController: makeTestTranslationShortcutController(),
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let contentView = try #require(controller.window?.contentView)

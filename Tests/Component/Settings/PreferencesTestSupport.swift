@@ -2,7 +2,7 @@ import Foundation
 @testable import BoundlessTranslator
 
 @MainActor
-func makeTestShortcutController() -> GlobalShortcutController {
+func makeTestTranslationShortcutController() -> GlobalShortcutController {
     let suiteName = "PreferencesComponentTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)
@@ -27,7 +27,7 @@ func makeTestScreenshotShortcutController() -> GlobalShortcutController {
 }
 
 @MainActor
-func makeFailingTestShortcutController() -> GlobalShortcutController {
+func makeFailingTestTranslationShortcutController() -> GlobalShortcutController {
     let suiteName = "PreferencesComponentTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)

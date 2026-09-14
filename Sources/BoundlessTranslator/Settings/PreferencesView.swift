@@ -7,7 +7,7 @@ enum PreferencesWindowStyle {
 struct PreferencesView: View {
     @ObservedObject var settings: TranslationSettings
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
-    @ObservedObject var shortcutController: GlobalShortcutController
+    @ObservedObject var translationShortcutController: GlobalShortcutController
     @ObservedObject var screenshotShortcutController: GlobalShortcutController
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
@@ -24,7 +24,7 @@ struct PreferencesView: View {
 
                 Section {
                     ShortcutPreferencesView(
-                        controller: shortcutController,
+                        controller: translationShortcutController,
                         titleKey: "shortcut.accessibilityLabel",
                         accessibilityIdentifier: "shortcutRecorder",
                         localization: localization
@@ -68,7 +68,7 @@ struct PreferencesView: View {
                 }
 
                 UsagePreferencesView(
-                    translationShortcut: shortcutController.definition,
+                    translationShortcut: translationShortcutController.definition,
                     screenshotShortcut: screenshotShortcutController.definition,
                     localization: localization
                 )

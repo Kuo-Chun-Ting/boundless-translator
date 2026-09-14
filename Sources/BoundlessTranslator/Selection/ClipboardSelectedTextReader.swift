@@ -36,7 +36,7 @@ final class ClipboardSelectedTextReader: SelectedTextReading {
             try await Task.sleep(for: pollInterval)
         }
 
-        throw SelectedTextReadError.copyFailed
+        throw SelectedTextReadError.noSelection
     }
 
     private func postCopyShortcut() throws {
@@ -53,7 +53,7 @@ final class ClipboardSelectedTextReader: SelectedTextReading {
                 keyDown: false
             )
         else {
-            throw SelectedTextReadError.copyFailed
+            throw SelectedTextReadError.noSelection
         }
 
         keyDown.flags = .maskCommand

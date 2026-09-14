@@ -12,7 +12,7 @@ final class PreferencesWindowController: NSWindowController {
     init(
         settings: TranslationSettings,
         interfaceLanguageSettings: InterfaceLanguageSettings,
-        shortcutController: GlobalShortcutController,
+        translationShortcutController: GlobalShortcutController,
         screenshotShortcutController: GlobalShortcutController = GlobalShortcutController(
             purpose: .screenshot,
             handler: {}
@@ -52,7 +52,7 @@ final class PreferencesWindowController: NSWindowController {
             rootView: PreferencesView(
                 settings: settings,
                 interfaceLanguageSettings: interfaceLanguageSettings,
-                shortcutController: shortcutController,
+                translationShortcutController: translationShortcutController,
                 screenshotShortcutController: screenshotShortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication,
