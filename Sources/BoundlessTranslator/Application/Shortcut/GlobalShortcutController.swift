@@ -14,9 +14,9 @@ enum GlobalShortcutPurpose {
     fileprivate var defaultDefinition: GlobalShortcutDefinition {
         switch self {
         case .translation:
-            return .commandShiftT
+            return .commandShift1
         case .screenshot:
-            return .commandShiftR
+            return .commandShift2
         }
     }
 

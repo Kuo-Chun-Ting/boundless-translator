@@ -4,7 +4,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
+func test_init_when_translation_shortcut_is_missing_then_uses_command_shift_1() {
     // Arrange
     let fixture_defaults = makeShortcutDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -18,12 +18,12 @@ func test_init_when_shortcut_is_missing_then_uses_command_shift_t() {
 
     // Assert
     #expect(controller.definition == GlobalShortcutDefinition(
-        keyCode: 17, modifierFlags: [.command, .shift], keyEquivalent: "T"
+        keyCode: 18, modifierFlags: [.command, .shift], keyEquivalent: "1"
     ))
 }
 
 @Test @MainActor
-func test_init_when_screenshot_shortcut_is_missing_then_uses_command_shift_r() {
+func test_init_when_screenshot_shortcut_is_missing_then_uses_command_shift_2() {
     // Arrange
     let fixture_defaults = makeShortcutDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -37,7 +37,7 @@ func test_init_when_screenshot_shortcut_is_missing_then_uses_command_shift_r() {
     )
 
     // Assert
-    #expect(controller.definition == .commandShiftR)
+    #expect(controller.definition == .commandShift2)
 }
 
 @Test @MainActor
@@ -119,7 +119,7 @@ func test_updateShortcut_when_registration_succeeds_then_activates_and_persists_
     #expect(controller.definition == candidate)
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
     #expect(restoredController.definition == candidate)
-    #expect(mock_factory.definitions == [.commandShiftT, candidate])
+    #expect(mock_factory.definitions == [.commandShift1, candidate])
 }
 
 @Test @MainActor
@@ -146,12 +146,12 @@ func test_updateShortcut_when_registration_fails_then_restores_previous_shortcut
     controller.updateShortcut(candidate)
 
     // Assert
-    #expect(controller.definition == .commandShiftT)
+    #expect(controller.definition == .commandShift1)
     #expect(
         controller.failureMessage(localization: englishLocalization)
             == "The shortcut is already in use."
     )
-    #expect(mock_factory.definitions == [.commandShiftT, candidate, .commandShiftT])
+    #expect(mock_factory.definitions == [.commandShift1, candidate, .commandShift1])
 }
 
 @Test @MainActor
@@ -173,7 +173,7 @@ func test_cancelRecording_when_shortcutWasActive_then_reactivatesCurrentShortcut
 
     // Assert
     #expect(mock_factory.stopCount == 1)
-    #expect(mock_factory.definitions == [.commandShiftT, .commandShiftT])
+    #expect(mock_factory.definitions == [.commandShift1, .commandShift1])
     #expect(controller.failureMessage(localization: englishLocalization) == nil)
 }
 

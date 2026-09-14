@@ -250,12 +250,12 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
 
     // Assert
     #expect(recorders.count == 1)
-    #expect(recorder.title == "⇧⌘T")
+    #expect(recorder.title == "⇧⌘1")
     let screenshotRecorders = findViews(
         in: contentView, accessibilityIdentifier: "screenshotShortcutRecorder"
     ).compactMap { $0 as? NSButton }
     #expect(screenshotRecorders.count == 1)
-    #expect(screenshotRecorders.first?.title == "⇧⌘R")
+    #expect(screenshotRecorders.first?.title == "⇧⌘2")
 }
 
 @Test @MainActor

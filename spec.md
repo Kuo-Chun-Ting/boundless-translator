@@ -6,13 +6,13 @@ Boundless Translator is a macOS 15 menu bar app for translating selected text an
 
 ## Shortcut Flow
 
-When the user presses the translation shortcut (default `Command-Shift-T`):
+When the user presses the translation shortcut (default `Command-Shift-1`):
 
 1. If text is selected in the active image workspace, translate it.
 2. Otherwise, read selected text from the active app through Accessibility. Use the clipboard fallback only when Accessibility cannot read the selection.
 3. Translate the selected text. No selection or cancellation stops quietly. Missing Accessibility permission opens permission guidance; unexpected errors are reported without starting screenshot capture.
 
-The screenshot shortcut (default `Command-Shift-R`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for Live Text selection; the user can then select text and press the translation shortcut. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
+The screenshot shortcut (default `Command-Shift-2`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for Live Text selection; the user can then select text and press the translation shortcut. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
 
 ## Translation
 
@@ -70,7 +70,7 @@ The screenshot shortcut (default `Command-Shift-R`) starts native region capture
 - Show the effective macOS interface language beside System Default.
 - Apply interface-language changes immediately to open Preferences and translation windows.
 - Configure the default source and target languages.
-- Configure the translation shortcut, defaulting to `Command-Shift-T`, and the direct screenshot shortcut, defaulting to `Command-Shift-R`.
+- Configure the translation shortcut, defaulting to `Command-Shift-1`, and the direct screenshot shortcut, defaulting to `Command-Shift-2`.
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.

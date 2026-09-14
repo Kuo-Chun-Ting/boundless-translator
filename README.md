@@ -38,14 +38,14 @@ The app interface supports the same languages as macOS. macOS provides translati
 ### Translate Text
 
 1. Select text in another app.
-2. Press the translation shortcut. The default is `Command-Shift-T`.
+2. Press the translation shortcut. The default is `Command-Shift-1`.
 
 ### Translate Screenshot
 
-1. Press the translation shortcut without selecting text. The default is `Command-Shift-T`.
+1. Press the screenshot shortcut. The default is `Command-Shift-2`.
 2. Select a screen region.
 3. Select text in the screenshot window.
-4. Press the same shortcut to translate it.
+4. Press the translation shortcut to translate it.
 
 The shortcut can be changed in Settings. Existing saved shortcuts are preserved when the default changes.
 
