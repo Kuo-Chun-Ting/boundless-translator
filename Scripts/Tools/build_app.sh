@@ -51,6 +51,148 @@ function fail {
     exit 1
 }
 
+function main {
+    validate_build_configuration
+    compile_application
+    assemble_app_bundle
+    configure_app_bundle
+    validate_app_bundle
+    sign_and_verify_app
+    publish_app
+}
+
+function validate_build_configuration {
+    if ! is_app_store_build; then
+        return
+    fi
+
+    require_app_store_configuration
+    local bundle_identifier
+    bundle_identifier="$(plutil -extract CFBundleIdentifier raw "${SOURCE_INFO_PLIST}")"
+    validate_signing_identity "${BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY}" app
+    validate_signing_identity "${BOUNDLESS_TRANSLATOR_INSTALLER_SIGNING_IDENTITY}" installer
+    validate_distribution_profile "${bundle_identifier}"
+    validate_profile_signing_certificate
+    create_app_store_entitlements "${bundle_identifier}"
+}
+
+function compile_application {
+    mkdir -p "${MACOS_PATH}" "${RESOURCES_PATH}"
+
+    local -a swift_arguments=(
+        build
+        --configuration release
+        --disable-sandbox
+        --package-path "${PROJECT_ROOT}"
+        --scratch-path "${SCRATCH_PATH}"
+        --cache-path "${TEMP_ROOT}/cache"
+        --config-path "${TEMP_ROOT}/config"
+        --security-path "${TEMP_ROOT}/security"
+    )
+    if is_app_store_build; then
+        swift_arguments+=( --arch arm64 -Xswiftc -D -Xswiftc SUBSCRIPTION_REQUIRED )
+    fi
+
+    CLANG_MODULE_CACHE_PATH="${TEMP_ROOT}/clang-cache" \
+    SWIFTPM_MODULECACHE_OVERRIDE="${TEMP_ROOT}/module-cache" \
+    DEVELOPER_DIR="${DEVELOPER_PATH}" \
+    swift "${swift_arguments[@]}"
+}
+
+function assemble_app_bundle {
+    cp "${SCRATCH_PATH}/release/BoundlessTranslator" "${MACOS_PATH}/BoundlessTranslator"
+    cp -R \
+        "${SCRATCH_PATH}/release/BoundlessTranslator_BoundlessTranslator.bundle/"*.lproj \
+        "${RESOURCES_PATH}/"
+    cp -R \
+        "${SCRATCH_PATH}/release/KeyboardShortcuts_KeyboardShortcuts.bundle" \
+        "${RESOURCES_PATH}/"
+    cp "${SOURCE_INFO_PLIST}" "${CONTENTS_PATH}/Info.plist"
+    cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
+    cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${RESOURCES_PATH}/PrivacyInfo.xcprivacy"
+    plutil -lint "${RESOURCES_PATH}/PrivacyInfo.xcprivacy"
+}
+
+function configure_app_bundle {
+    if is_app_store_build; then
+        configure_app_store_bundle
+    fi
+    plutil -lint "${CONTENTS_PATH}/Info.plist"
+}
+
+function configure_app_store_bundle {
+    plutil -replace CFBundleShortVersionString -string "${BOUNDLESS_TRANSLATOR_APP_STORE_VERSION}" "${CONTENTS_PATH}/Info.plist"
+    plutil -replace CFBundleVersion -string "${BOUNDLESS_TRANSLATOR_APP_STORE_BUILD_NUMBER}" "${CONTENTS_PATH}/Info.plist"
+    plutil -insert BoundlessSubscriptionProductID -string "${BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID}" "${CONTENTS_PATH}/Info.plist"
+    plutil -insert BoundlessPrivacyPolicyURL -string "${BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL}" "${CONTENTS_PATH}/Info.plist"
+    plutil -insert NSHumanReadableCopyright -string "${BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT}" "${CONTENTS_PATH}/Info.plist"
+    plutil -insert LSApplicationCategoryType -string "${APP_STORE_CATEGORY}" "${CONTENTS_PATH}/Info.plist"
+    cp "${BOUNDLESS_TRANSLATOR_APP_STORE_PROVISIONING_PROFILE}" "${CONTENTS_PATH}/embedded.provisionprofile"
+}
+
+function validate_app_bundle {
+    [[ "$(xattr -r "${STAGED_APP_PATH}")" != *com.apple.quarantine* ]] || fail 'Built app contains quarantine attributes.'
+}
+
+function sign_and_verify_app {
+    if is_app_store_build; then
+        sign_app_store_bundle
+    else
+        sign_developer_id_bundle
+    fi
+    codesign --verify --strict --verbose=2 "${STAGED_APP_PATH}"
+}
+
+function sign_app_store_bundle {
+    codesign \
+        --force \
+        --timestamp \
+        --sign "${BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY}" \
+        --entitlements "${APP_STORE_ENTITLEMENTS_PATH}" \
+        "${STAGED_APP_PATH}"
+}
+
+function sign_developer_id_bundle {
+    codesign \
+        --force \
+        --options runtime \
+        --timestamp \
+        --sign "${SIGNING_IDENTITY}" \
+        --entitlements "${PROJECT_ROOT}/Resources/Sandbox.entitlements" \
+        "${STAGED_APP_PATH}"
+}
+
+function publish_app {
+    mkdir -p "${BUILD_ROOT}"
+    acquire_publish_lock
+
+    if [[ -e "${APP_PATH}" ]]; then
+        "${MV_EXECUTABLE}" "${APP_PATH}" "${PREVIOUS_APP_PATH}"
+    fi
+    if ! "${MV_EXECUTABLE}" "${STAGED_APP_PATH}" "${APP_PATH}"; then
+        if [[ -e "${PREVIOUS_APP_PATH}" ]]; then
+            if ! "${MV_EXECUTABLE}" "${PREVIOUS_APP_PATH}" "${APP_PATH}"; then
+                rollback_failed=true
+            fi
+        fi
+        exit 1
+    fi
+
+    rm -rf "${PREVIOUS_APP_PATH}"
+    print "Built ${APP_PATH}"
+}
+
+function acquire_publish_lock {
+    if ! mkdir "${PUBLISH_LOCK}" 2>/dev/null; then
+        fail 'Another build is publishing Boundless Translator.'
+    fi
+    publish_lock_acquired=true
+}
+
+function is_app_store_build {
+    [[ "${BUILD_MODE}" == --app-store ]]
+}
+
 function require_app_store_configuration {
     [[ -n "${BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY:-}" ]] || fail 'BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY is required.'
     [[ -n "${BOUNDLESS_TRANSLATOR_INSTALLER_SIGNING_IDENTITY:-}" ]] || fail 'BOUNDLESS_TRANSLATOR_INSTALLER_SIGNING_IDENTITY is required.'
@@ -169,100 +311,4 @@ function validate_profile_signing_certificate {
     fail 'App Store app signing certificate is not authorized by the provisioning profile.'
 }
 
-if [[ "${BUILD_MODE}" == --app-store ]]; then
-    require_app_store_configuration
-    readonly SOURCE_BUNDLE_IDENTIFIER="$(plutil -extract CFBundleIdentifier raw "${SOURCE_INFO_PLIST}")"
-    validate_signing_identity "${BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY}" app
-    validate_signing_identity "${BOUNDLESS_TRANSLATOR_INSTALLER_SIGNING_IDENTITY}" installer
-    validate_distribution_profile "${SOURCE_BUNDLE_IDENTIFIER}"
-    validate_profile_signing_certificate
-    create_app_store_entitlements "${SOURCE_BUNDLE_IDENTIFIER}"
-fi
-
-mkdir -p "${MACOS_PATH}" "${RESOURCES_PATH}"
-
-swift_arguments=(
-    build
-    --configuration release
-    --disable-sandbox
-    --package-path "${PROJECT_ROOT}"
-    --scratch-path "${SCRATCH_PATH}"
-    --cache-path "${TEMP_ROOT}/cache"
-    --config-path "${TEMP_ROOT}/config"
-    --security-path "${TEMP_ROOT}/security"
-)
-if [[ "${BUILD_MODE}" == --app-store ]]; then
-    swift_arguments+=( --arch arm64 -Xswiftc -D -Xswiftc SUBSCRIPTION_REQUIRED )
-fi
-
-CLANG_MODULE_CACHE_PATH="${TEMP_ROOT}/clang-cache" \
-SWIFTPM_MODULECACHE_OVERRIDE="${TEMP_ROOT}/module-cache" \
-DEVELOPER_DIR="${DEVELOPER_PATH}" \
-swift "${swift_arguments[@]}"
-
-cp "${SCRATCH_PATH}/release/BoundlessTranslator" "${MACOS_PATH}/BoundlessTranslator"
-cp -R \
-    "${SCRATCH_PATH}/release/BoundlessTranslator_BoundlessTranslator.bundle/"*.lproj \
-    "${RESOURCES_PATH}/"
-cp -R \
-    "${SCRATCH_PATH}/release/KeyboardShortcuts_KeyboardShortcuts.bundle" \
-    "${RESOURCES_PATH}/"
-cp "${SOURCE_INFO_PLIST}" "${CONTENTS_PATH}/Info.plist"
-cp "${PROJECT_ROOT}/Resources/AppIcon.icns" "${RESOURCES_PATH}/AppIcon.icns"
-cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${RESOURCES_PATH}/PrivacyInfo.xcprivacy"
-plutil -lint "${RESOURCES_PATH}/PrivacyInfo.xcprivacy"
-
-signing_arguments=(--entitlements "${PROJECT_ROOT}/Resources/Sandbox.entitlements")
-if [[ "${BUILD_MODE}" == --app-store ]]; then
-    plutil -replace CFBundleShortVersionString -string "${BOUNDLESS_TRANSLATOR_APP_STORE_VERSION}" "${CONTENTS_PATH}/Info.plist"
-    plutil -replace CFBundleVersion -string "${BOUNDLESS_TRANSLATOR_APP_STORE_BUILD_NUMBER}" "${CONTENTS_PATH}/Info.plist"
-    plutil -insert BoundlessSubscriptionProductID -string "${BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID}" "${CONTENTS_PATH}/Info.plist"
-    plutil -insert BoundlessPrivacyPolicyURL -string "${BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL}" "${CONTENTS_PATH}/Info.plist"
-    plutil -insert NSHumanReadableCopyright -string "${BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT}" "${CONTENTS_PATH}/Info.plist"
-    plutil -insert LSApplicationCategoryType -string "${APP_STORE_CATEGORY}" "${CONTENTS_PATH}/Info.plist"
-    cp "${BOUNDLESS_TRANSLATOR_APP_STORE_PROVISIONING_PROFILE}" "${CONTENTS_PATH}/embedded.provisionprofile"
-    signing_arguments=(--entitlements "${APP_STORE_ENTITLEMENTS_PATH}")
-fi
-
-plutil -lint "${CONTENTS_PATH}/Info.plist"
-if [[ "${BUILD_MODE}" == --app-store ]]; then
-    codesign \
-        --force \
-        --timestamp \
-        --sign "${BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY}" \
-        "${signing_arguments[@]}" \
-        "${STAGED_APP_PATH}"
-else
-    codesign \
-        --force \
-        --options runtime \
-        --timestamp \
-        --sign "${SIGNING_IDENTITY}" \
-        "${signing_arguments[@]}" \
-        "${STAGED_APP_PATH}"
-fi
-codesign --verify --strict --verbose=2 "${STAGED_APP_PATH}"
-
-mkdir -p "${BUILD_ROOT}"
-if ! mkdir "${PUBLISH_LOCK}" 2>/dev/null; then
-    print -u2 "Another build is publishing Boundless Translator."
-    exit 1
-fi
-publish_lock_acquired=true
-
-if [[ -e "${APP_PATH}" ]]; then
-    "${MV_EXECUTABLE}" "${APP_PATH}" "${PREVIOUS_APP_PATH}"
-fi
-
-if ! "${MV_EXECUTABLE}" "${STAGED_APP_PATH}" "${APP_PATH}"; then
-    if [[ -e "${PREVIOUS_APP_PATH}" ]]; then
-        if ! "${MV_EXECUTABLE}" "${PREVIOUS_APP_PATH}" "${APP_PATH}"; then
-            rollback_failed=true
-        fi
-    fi
-    exit 1
-fi
-
-rm -rf "${PREVIOUS_APP_PATH}"
-
-print "Built ${APP_PATH}"
+main

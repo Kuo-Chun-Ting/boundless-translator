@@ -36,6 +36,7 @@ mkdir -p "${scratch_path}/release/BoundlessTranslator_BoundlessTranslator.bundle
 mkdir -p "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj"
 print 'test executable' > "${scratch_path}/release/BoundlessTranslator"
 print 'shortcut localization' > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
+chmod a-w "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
 EOF
 
 cat > "${MOCK_BIN}/codesign" <<'EOF'
@@ -138,6 +139,25 @@ function test_build_app_when_built_then_enables_sandbox_without_changing_source_
     [[ "$(shasum "${FIXTURE}/Resources/Info.plist")" == "${original_info}" ]]
 }
 
+function test_build_app_when_resource_is_quarantined_then_rejects_build_before_signing {
+    # Arrange
+    local app_path="${FIXTURE}/Build/Boundless Translator.app"
+    mkdir -p "${app_path}"
+    print 'existing app' > "${app_path}/marker"
+    xattr -w com.apple.quarantine '0081;00000000;test;' "${FIXTURE}/Resources/AppIcon.icns"
+    : > "${TEMP_ROOT}/signing.log"
+
+    # Act & Assert
+    if run_builder > "${TEMP_ROOT}/quarantine.log" 2>&1; then
+        print -u2 'Expected a quarantined resource to stop the build.'
+        return 1
+    fi
+    [[ "$(<"${app_path}/marker")" == 'existing app' ]]
+    [[ ! -s "${TEMP_ROOT}/signing.log" ]]
+    [[ "$(<"${TEMP_ROOT}/quarantine.log")" == *'Built app contains quarantine attributes.'* ]]
+    xattr -d com.apple.quarantine "${FIXTURE}/Resources/AppIcon.icns"
+}
+
 function test_build_app_when_signing_fails_then_preserves_previous_app {
     # Arrange
     local app_path="${FIXTURE}/Build/Boundless Translator.app"
@@ -193,6 +213,7 @@ function test_build_app_when_no_mode_given_then_preserves_developer_id_build_con
 test_build_app_when_argument_is_invalid_then_preserves_existing_app
 test_build_app_when_output_root_is_overridden_then_only_publishes_staged_app
 test_build_app_when_built_then_enables_sandbox_without_changing_source_info
+test_build_app_when_resource_is_quarantined_then_rejects_build_before_signing
 test_build_app_when_signing_fails_then_preserves_previous_app
 test_build_app_when_publish_and_rollback_fail_then_preserves_recovery_directory
 test_build_app_when_no_mode_given_then_preserves_developer_id_build_contract
