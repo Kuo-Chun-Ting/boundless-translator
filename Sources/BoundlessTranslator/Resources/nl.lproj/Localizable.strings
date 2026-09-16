@@ -65,7 +65,7 @@
 "shortcutError.installation" = "De gebeurtenisverwerker voor de globale toetscombinatie kon niet worden geïnstalleerd (%@).";
 "shortcutError.registration" = "De toetscombinatie kon niet worden geregistreerd (%@). Mogelijk wordt deze door een andere app gebruikt.";
 "subscription.title" = "Abonnement…";
-"subscription.features" = "Vertaal geselecteerde tekst en tekst in schermafbeeldingen met één toetscombinatie.";
+"subscription.features" = "Vertaal geselecteerde tekst of tekst in schermafbeeldingen.";
 "subscription.unavailable" = "Abonnementen niet beschikbaar";
 "subscription.configurationMissing" = "In deze build ontbreekt de App Store-aankoopconfiguratie. Neem contact op met de ontwikkelaar.";
 "subscription.active" = "Je abonnement is actief.";

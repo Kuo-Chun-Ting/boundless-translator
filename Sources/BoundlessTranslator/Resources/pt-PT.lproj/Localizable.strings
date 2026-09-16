@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Não foi possível instalar o processador de eventos do atalho global (%@).";
 "shortcutError.registration" = "Não foi possível registar o atalho de teclado (%@). Pode estar a ser usado por outra aplicação.";
 "subscription.title" = "Assinatura…";
-"subscription.features" = "Traduza texto selecionado e texto em capturas de ecrã com um só atalho.";
+"subscription.features" = "Traduza texto selecionado ou texto em capturas de ecrã.";
 "subscription.unavailable" = "Assinaturas indisponíveis";
 "subscription.configurationMissing" = "Esta compilação não tem a configuração de compra da App Store. Contacte o programador.";
 "subscription.active" = "A sua assinatura está ativa.";

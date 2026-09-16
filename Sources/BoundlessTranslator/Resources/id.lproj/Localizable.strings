@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Penangan kejadian pintasan global tidak dapat diinstal (%@).";
 "shortcutError.registration" = "Pintasan papan ketik tidak dapat didaftarkan (%@). Pintasan mungkin digunakan app lain.";
 "subscription.title" = "Langganan…";
-"subscription.features" = "Terjemahkan teks yang dipilih dan teks dalam tangkapan layar dengan satu pintasan.";
+"subscription.features" = "Terjemahkan teks yang dipilih atau teks dalam tangkapan layar.";
 "subscription.unavailable" = "Langganan tidak tersedia";
 "subscription.configurationMissing" = "Build ini tidak memiliki konfigurasi pembelian App Store. Hubungi pengembang.";
 "subscription.active" = "Langganan Anda aktif.";

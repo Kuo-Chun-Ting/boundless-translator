@@ -65,7 +65,7 @@
 "shortcutError.installation" = "تعذر تثبيت معالج أحداث الاختصار العام (%@).";
 "shortcutError.registration" = "تعذر تسجيل اختصار لوحة المفاتيح (%@). ربما يستخدمه تطبيق آخر.";
 "subscription.title" = "الاشتراك…";
-"subscription.features" = "ترجم النص المحدد والنص في لقطات الشاشة باختصار واحد.";
+"subscription.features" = "ترجم النص المحدد أو النص في لقطات الشاشة.";
 "subscription.unavailable" = "الاشتراكات غير متاحة";
 "subscription.configurationMissing" = "يفتقد هذا الإصدار إعداد شراء App Store. يُرجى التواصل مع المطور.";
 "subscription.active" = "اشتراكك نشط.";

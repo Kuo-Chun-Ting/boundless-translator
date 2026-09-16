@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Impossibile installare il gestore eventi per l’abbreviazione globale (%@).";
 "shortcutError.registration" = "Impossibile registrare l’abbreviazione da tastiera (%@). Potrebbe essere utilizzata da un’altra app.";
 "subscription.title" = "Abbonamento…";
-"subscription.features" = "Traduci il testo selezionato e quello negli screenshot con un’unica abbreviazione.";
+"subscription.features" = "Traduci il testo selezionato o quello negli screenshot.";
 "subscription.unavailable" = "Abbonamenti non disponibili";
 "subscription.configurationMissing" = "In questa versione manca la configurazione degli acquisti su App Store. Contatta lo sviluppatore.";
 "subscription.active" = "Il tuo abbonamento è attivo.";

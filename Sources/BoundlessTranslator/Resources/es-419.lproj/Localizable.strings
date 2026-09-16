@@ -65,7 +65,7 @@
 "shortcutError.installation" = "No se pudo instalar el controlador de eventos del atajo global (%@).";
 "shortcutError.registration" = "No se pudo registrar el atajo de teclado (%@). Es posible que otra app lo esté usando.";
 "subscription.title" = "Suscripción…";
-"subscription.features" = "Traduce texto seleccionado y texto de capturas de pantalla con una sola función rápida.";
+"subscription.features" = "Traduce texto seleccionado o texto de capturas de pantalla.";
 "subscription.unavailable" = "Las suscripciones no están disponibles";
 "subscription.configurationMissing" = "A esta versión le falta la configuración de compra de App Store. Contacta con el desarrollador.";
 "subscription.active" = "Tu suscripción está activa.";

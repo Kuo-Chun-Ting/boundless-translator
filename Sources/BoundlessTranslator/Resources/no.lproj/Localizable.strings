@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Hendelsesbehandleren for den globale snarveien kunne ikke installeres (%@).";
 "shortcutError.registration" = "Tastatursnarveien kunne ikke registreres (%@). Den kan være i bruk av en annen app.";
 "subscription.title" = "Abonnement…";
-"subscription.features" = "Oversett markert tekst og tekst i skjermbilder med én snarvei.";
+"subscription.features" = "Oversett markert tekst eller tekst i skjermbilder.";
 "subscription.unavailable" = "Abonnementer er ikke tilgjengelige";
 "subscription.configurationMissing" = "Denne versjonen mangler kjøpskonfigurasjon for App Store. Kontakt utvikleren.";
 "subscription.active" = "Abonnementet ditt er aktivt.";

@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Genel kestirme olay işleyicisi yüklenemedi (%@).";
 "shortcutError.registration" = "Klavye kestirmesi kaydedilemedi (%@). Başka bir uygulama tarafından kullanılıyor olabilir.";
 "subscription.title" = "Abonelik…";
-"subscription.features" = "Seçilen metni ve ekran görüntülerindeki metni tek kestirmeyle çevirin.";
+"subscription.features" = "Seçilen metni veya ekran görüntülerindeki metni çevirin.";
 "subscription.unavailable" = "Abonelikler kullanılamıyor";
 "subscription.configurationMissing" = "Bu derlemede App Store satın alma yapılandırması eksik. Geliştiriciyle iletişime geçin.";
 "subscription.active" = "Aboneliğiniz etkin.";

@@ -65,7 +65,7 @@
 "shortcutError.installation" = "No s’ha pogut instal·lar el gestor d’esdeveniments de la drecera global (%@).";
 "shortcutError.registration" = "No s’ha pogut registrar la drecera de teclat (%@). Pot ser que una altra app la faci servir.";
 "subscription.title" = "Subscripció…";
-"subscription.features" = "Tradueix text seleccionat i text de captures de pantalla amb una drecera.";
+"subscription.features" = "Tradueix text seleccionat o text de captures de pantalla.";
 "subscription.unavailable" = "Les subscripcions no estan disponibles";
 "subscription.configurationMissing" = "Aquesta versió no té la configuració de compra de l’App Store. Contacta amb el desenvolupador.";
 "subscription.active" = "La subscripció està activa.";

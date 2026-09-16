@@ -65,7 +65,7 @@
 "shortcutError.installation" = "無法安裝全域快捷鍵事件處理程式（%@）。";
 "shortcutError.registration" = "無法註冊鍵盤快捷鍵（%@）。其他 App 可能正在使用此快捷鍵。";
 "subscription.title" = "訂閱…";
-"subscription.features" = "用一組快速鍵翻譯所選文字與截圖中的文字。";
+"subscription.features" = "翻譯所選文字或截圖中的文字。";
 "subscription.unavailable" = "無法使用訂閱";
 "subscription.configurationMissing" = "此版本缺少 App Store 購買設定，請聯絡開發者。";
 "subscription.active" = "你的訂閱目前有效。";

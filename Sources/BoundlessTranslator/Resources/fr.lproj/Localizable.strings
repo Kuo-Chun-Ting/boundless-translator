@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Le gestionnaire d’événements du raccourci global n’a pas pu être installé (%@).";
 "shortcutError.registration" = "Le raccourci clavier n’a pas pu être enregistré (%@). Il est peut-être utilisé par une autre app.";
 "subscription.title" = "Abonnement…";
-"subscription.features" = "Traduisez le texte sélectionné et le texte des captures d’écran avec un seul raccourci.";
+"subscription.features" = "Traduisez le texte sélectionné ou le texte des captures d’écran.";
 "subscription.unavailable" = "Abonnements indisponibles";
 "subscription.configurationMissing" = "La configuration d’achat App Store manque dans cette version. Contactez le développeur.";
 "subscription.active" = "Votre abonnement est actif.";

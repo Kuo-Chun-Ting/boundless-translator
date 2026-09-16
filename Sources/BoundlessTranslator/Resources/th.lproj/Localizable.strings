@@ -65,7 +65,7 @@
 "shortcutError.installation" = "ไม่สามารถติดตั้งตัวจัดการเหตุการณ์ของปุ่มลัดส่วนกลางได้ (%@)";
 "shortcutError.registration" = "ไม่สามารถลงทะเบียนปุ่มลัดแป้นพิมพ์ได้ (%@) อาจมีแอปอื่นใช้งานอยู่";
 "subscription.title" = "การสมัครสมาชิก…";
-"subscription.features" = "แปลข้อความที่เลือกและข้อความในภาพหน้าจอด้วยปุ่มลัดเดียว";
+"subscription.features" = "แปลข้อความที่เลือกหรือข้อความในภาพหน้าจอ";
 "subscription.unavailable" = "ไม่สามารถใช้การสมัครสมาชิกได้";
 "subscription.configurationMissing" = "รุ่นนี้ไม่มีการกำหนดค่าการซื้อใน App Store โปรดติดต่อนักพัฒนา";
 "subscription.active" = "การสมัครสมาชิกของคุณใช้งานอยู่";

@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Obslužný program udalostí globálnej skratky sa nepodarilo nainštalovať (%@).";
 "shortcutError.registration" = "Klávesovú skratku sa nepodarilo zaregistrovať (%@). Možno ju používa iná aplikácia.";
 "subscription.title" = "Predplatné…";
-"subscription.features" = "Prekladajte vybraný text a text na snímkach obrazovky jedinou skratkou.";
+"subscription.features" = "Prekladajte vybraný text alebo text na snímkach obrazovky.";
 "subscription.unavailable" = "Predplatné nie je k dispozícii";
 "subscription.configurationMissing" = "V tejto zostave chýba konfigurácia nákupu v App Store. Kontaktujte vývojára.";
 "subscription.active" = "Vaše predplatné je aktívne.";

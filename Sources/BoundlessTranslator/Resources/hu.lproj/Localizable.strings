@@ -65,7 +65,7 @@
 "shortcutError.installation" = "A globális billentyűparancs eseménykezelője nem telepíthető (%@).";
 "shortcutError.registration" = "A billentyűparancs nem regisztrálható (%@). Lehet, hogy egy másik alkalmazás használja.";
 "subscription.title" = "Előfizetés…";
-"subscription.features" = "Fordítsa le a kijelölt szöveget és a képernyőképek szövegét egy billentyűparanccsal.";
+"subscription.features" = "Fordítsa le a kijelölt szöveget vagy a képernyőképek szövegét.";
 "subscription.unavailable" = "Az előfizetések nem érhetők el";
 "subscription.configurationMissing" = "Ebből a buildből hiányzik az App Store-vásárlás konfigurációja. Forduljon a fejlesztőhöz.";
 "subscription.active" = "Az előfizetése aktív.";

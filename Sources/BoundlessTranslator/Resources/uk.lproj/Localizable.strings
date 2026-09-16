@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Не вдалося встановити обробник подій глобального скорочення (%@).";
 "shortcutError.registration" = "Не вдалося зареєструвати клавіатурне скорочення (%@). Можливо, його використовує інша програма.";
 "subscription.title" = "Підписка…";
-"subscription.features" = "Перекладайте виділений текст і текст на знімках екрана одним скороченням.";
+"subscription.features" = "Перекладайте виділений текст або текст на знімках екрана.";
 "subscription.unavailable" = "Підписки недоступні";
 "subscription.configurationMissing" = "У цій збірці немає конфігурації покупок App Store. Зверніться до розробника.";
 "subscription.active" = "Ваша підписка активна.";

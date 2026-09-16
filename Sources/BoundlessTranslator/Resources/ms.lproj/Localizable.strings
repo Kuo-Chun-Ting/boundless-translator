@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Pengendali peristiwa pintasan global tidak dapat dipasang (%@).";
 "shortcutError.registration" = "Pintasan papan kekunci tidak dapat didaftarkan (%@). Pintasan mungkin sedang digunakan oleh app lain.";
 "subscription.title" = "Langganan…";
-"subscription.features" = "Terjemah teks terpilih dan teks dalam tangkapan skrin dengan satu pintasan.";
+"subscription.features" = "Terjemah teks terpilih atau teks dalam tangkapan skrin.";
 "subscription.unavailable" = "Langganan tidak tersedia";
 "subscription.configurationMissing" = "Binaan ini tiada konfigurasi pembelian App Store. Hubungi pembangun.";
 "subscription.active" = "Langganan anda aktif.";

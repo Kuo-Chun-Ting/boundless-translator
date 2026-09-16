@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Nie udało się zainstalować procedury obsługi zdarzeń globalnego skrótu (%@).";
 "shortcutError.registration" = "Nie udało się zarejestrować skrótu klawiszowego (%@). Może być używany przez inną aplikację.";
 "subscription.title" = "Subskrypcja…";
-"subscription.features" = "Tłumacz zaznaczony tekst i tekst na zrzutach ekranu jednym skrótem.";
+"subscription.features" = "Tłumacz zaznaczony tekst lub tekst na zrzutach ekranu.";
 "subscription.unavailable" = "Subskrypcje są niedostępne";
 "subscription.configurationMissing" = "W tej kompilacji brakuje konfiguracji zakupu w App Store. Skontaktuj się z deweloperem.";
 "subscription.active" = "Twoja subskrypcja jest aktywna.";

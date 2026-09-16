@@ -65,7 +65,7 @@
 "shortcutError.installation" = "לא ניתן היה להתקין את מטפל האירועים של הקיצור הכללי (%@).";
 "shortcutError.registration" = "לא ניתן היה לרשום את קיצור המקלדת (%@). ייתכן שהוא נמצא בשימוש של יישום אחר.";
 "subscription.title" = "מינוי…";
-"subscription.features" = "תרגום טקסט שנבחר וטקסט בצילומי מסך באמצעות קיצור אחד.";
+"subscription.features" = "תרגום טקסט שנבחר או טקסט בצילומי מסך.";
 "subscription.unavailable" = "המינויים אינם זמינים";
 "subscription.configurationMissing" = "בגרסה זו חסרה הגדרת הרכישה ב-App Store. יש לפנות למפתח.";
 "subscription.active" = "המינוי שלך פעיל.";

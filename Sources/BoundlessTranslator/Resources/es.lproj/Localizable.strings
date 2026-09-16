@@ -65,7 +65,7 @@
 "shortcutError.installation" = "No se ha podido instalar el controlador de eventos de la función rápida global (%@).";
 "shortcutError.registration" = "No se ha podido registrar la función rápida de teclado (%@). Puede que otra app la esté usando.";
 "subscription.title" = "Suscripción…";
-"subscription.features" = "Traduce texto seleccionado y texto de capturas de pantalla con una sola función rápida.";
+"subscription.features" = "Traduce texto seleccionado o texto de capturas de pantalla.";
 "subscription.unavailable" = "Las suscripciones no están disponibles";
 "subscription.configurationMissing" = "A esta versión le falta la configuración de compra de App Store. Contacta con el desarrollador.";
 "subscription.active" = "Tu suscripción está activa.";

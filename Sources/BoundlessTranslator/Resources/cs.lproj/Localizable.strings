@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Obslužnou rutinu událostí globální zkratky se nepodařilo nainstalovat (%@).";
 "shortcutError.registration" = "Klávesovou zkratku se nepodařilo zaregistrovat (%@). Možná ji používá jiná aplikace.";
 "subscription.title" = "Předplatné…";
-"subscription.features" = "Překládejte vybraný text a text na snímcích obrazovky jedinou zkratkou.";
+"subscription.features" = "Překládejte vybraný text nebo text na snímcích obrazovky.";
 "subscription.unavailable" = "Předplatné není k dispozici";
 "subscription.configurationMissing" = "V tomto sestavení chybí konfigurace nákupu v App Storu. Kontaktujte vývojáře.";
 "subscription.active" = "Vaše předplatné je aktivní.";

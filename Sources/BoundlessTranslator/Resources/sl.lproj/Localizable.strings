@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Obravnavalnika dogodkov globalne bližnjice ni bilo mogoče namestiti (%@).";
 "shortcutError.registration" = "Tipkovne bližnjice ni bilo mogoče registrirati (%@). Morda jo uporablja druga aplikacija.";
 "subscription.title" = "Naročnina…";
-"subscription.features" = "Prevedite izbrano besedilo in besedilo na posnetkih zaslona z eno bližnjico.";
+"subscription.features" = "Prevedite izbrano besedilo ali besedilo na posnetkih zaslona.";
 "subscription.unavailable" = "Naročnine niso na voljo";
 "subscription.configurationMissing" = "V tej različici manjka konfiguracija nakupa v trgovini App Store. Obrnite se na razvijalca.";
 "subscription.active" = "Vaša naročnina je aktivna.";

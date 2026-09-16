@@ -65,7 +65,7 @@
 "shortcutError.installation" = "Hændelsesbehandleren til den globale genvej kunne ikke installeres (%@).";
 "shortcutError.registration" = "Tastaturgenvejen kunne ikke registreres (%@). Den bruges muligvis af en anden app.";
 "subscription.title" = "Abonnement…";
-"subscription.features" = "Oversæt markeret tekst og tekst i skærmbilleder med én genvej.";
+"subscription.features" = "Oversæt markeret tekst eller tekst i skærmbilleder.";
 "subscription.unavailable" = "Abonnementer er ikke tilgængelige";
 "subscription.configurationMissing" = "Denne version mangler sin købskonfiguration til App Store. Kontakt udvikleren.";
 "subscription.active" = "Dit abonnement er aktivt.";
