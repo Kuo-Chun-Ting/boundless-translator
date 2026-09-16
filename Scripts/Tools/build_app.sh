@@ -114,10 +114,19 @@ function assemble_app_bundle {
 }
 
 function configure_app_bundle {
+    configure_keyboard_shortcuts_bundle
     if is_app_store_build; then
         configure_app_store_bundle
     fi
     plutil -lint "${CONTENTS_PATH}/Info.plist"
+}
+
+function configure_keyboard_shortcuts_bundle {
+    local info_plist="${RESOURCES_PATH}/KeyboardShortcuts_KeyboardShortcuts.bundle/Info.plist"
+    local bundle_identifier
+    bundle_identifier="$(plutil -extract CFBundleIdentifier raw "${CONTENTS_PATH}/Info.plist")"
+    plutil -replace CFBundleIdentifier -string "${bundle_identifier}.KeyboardShortcuts" "${info_plist}"
+    plutil -lint "${info_plist}"
 }
 
 function configure_app_store_bundle {
@@ -127,7 +136,7 @@ function configure_app_store_bundle {
     plutil -insert BoundlessPrivacyPolicyURL -string "${BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL}" "${CONTENTS_PATH}/Info.plist"
     plutil -insert NSHumanReadableCopyright -string "${BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT}" "${CONTENTS_PATH}/Info.plist"
     plutil -insert LSApplicationCategoryType -string "${APP_STORE_CATEGORY}" "${CONTENTS_PATH}/Info.plist"
-    cp "${BOUNDLESS_TRANSLATOR_APP_STORE_PROVISIONING_PROFILE}" "${CONTENTS_PATH}/embedded.provisionprofile"
+    cat "${BOUNDLESS_TRANSLATOR_APP_STORE_PROVISIONING_PROFILE}" > "${CONTENTS_PATH}/embedded.provisionprofile"
 }
 
 function validate_app_bundle {

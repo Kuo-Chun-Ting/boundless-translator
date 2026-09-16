@@ -62,6 +62,11 @@ mkdir -p "${scratch_path}/release/BoundlessTranslator_BoundlessTranslator.bundle
 mkdir -p "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj"
 print 'store executable' > "${scratch_path}/release/BoundlessTranslator"
 print 'shortcut localization' > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
+cat > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/Info.plist" <<'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict><key>CFBundleDevelopmentRegion</key><string>en</string></dict></plist>
+PLIST
 EOF
 
     cat > "${MOCK_BIN}/security" <<'EOF'
@@ -160,6 +165,7 @@ function test_build_app_when_app_store_requested_then_builds_store_variant_from_
     # Assert
     [[ -f "${APP_PATH}/Contents/MacOS/BoundlessTranslator" ]]
     [[ -f "${APP_PATH}/Contents/Resources/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings" ]]
+    [[ "$(plutil -extract CFBundleIdentifier raw "${APP_PATH}/Contents/Resources/KeyboardShortcuts_KeyboardShortcuts.bundle/Info.plist")" == "${BUNDLE_ID}.KeyboardShortcuts" ]]
     [[ -f "${APP_PATH}/Contents/embedded.provisionprofile" ]]
     cmp "${PROFILE_PATH}" "${APP_PATH}/Contents/embedded.provisionprofile"
     [[ "$(plutil -extract CFBundleShortVersionString raw "${APP_PATH}/Contents/Info.plist")" == 1.2.3 ]]
@@ -271,6 +277,23 @@ function test_build_app_when_signing_certificate_is_not_in_profile_then_stops_be
     [[ ! -s "${TEMP_ROOT}/signing.log" ]]
 }
 
+function test_build_app_when_profile_is_quarantined_then_embeds_only_profile_contents {
+    # Arrange
+    create_distribution_profile
+    xattr -w com.apple.quarantine '0081;00000000;test;' "${PROFILE_PATH}"
+    : > "${TEMP_ROOT}/signing.log"
+
+    # Act
+    run_builder
+
+    # Assert
+    cmp "${PROFILE_PATH}" "${APP_PATH}/Contents/embedded.provisionprofile"
+    if xattr -p com.apple.quarantine "${APP_PATH}/Contents/embedded.provisionprofile" >/dev/null 2>&1; then
+        print -u2 'Embedded provisioning profile must not retain quarantine attributes.'
+        return 1
+    fi
+}
+
 create_fixture
 create_platform_stubs
 test_build_app_when_app_store_requested_then_builds_store_variant_from_shared_sources
@@ -282,5 +305,6 @@ test_build_app_when_copyright_is_empty_then_stops_before_external_tools
 test_build_app_when_developer_id_identity_is_supplied_then_rejects_wrong_distribution_type
 test_build_app_when_profile_omits_get_task_allow_then_accepts_distribution_profile
 test_build_app_when_signing_certificate_is_not_in_profile_then_stops_before_signing
+test_build_app_when_profile_is_quarantined_then_embeds_only_profile_contents
 
 print 'App Store build tests passed.'
