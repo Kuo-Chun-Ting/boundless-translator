@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h:h:h}"
+readonly PROJECT_ROOT="${0:A:h:h:h}"
 readonly RESETTER="${PROJECT_ROOT}/Scripts/reset_test_permissions.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-permission-reset-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"

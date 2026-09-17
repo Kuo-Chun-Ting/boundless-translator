@@ -4,8 +4,6 @@ set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly ALL_VERIFIER="${PROJECT_ROOT}/Scripts/verify.sh"
-readonly FEATURE_VERIFIER="${PROJECT_ROOT}/Scripts/verify_features.sh"
-readonly SUBSCRIPTION_VERIFIER="${PROJECT_ROOT}/Scripts/verify_subscription.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-workflow-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 
@@ -30,8 +28,6 @@ function create_passing_steps {
     create_step_stub "${TEMP_ROOT}/step-swift" 'if [[ "$3" == "--xunit-output" ]]; then print -r -- "<testsuites><testsuite tests=\"1\" errors=\"0\" failures=\"0\"><testcase name=\"example\"/></testsuite></testsuites>" > "${4:r}-swift-testing.xml"; fi'
     create_step_stub "${TEMP_ROOT}/step-gui"
     create_step_stub "${TEMP_ROOT}/step-storekit"
-    create_step_stub "${TEMP_ROOT}/step-build" 'exit 99'
-    create_step_stub "${TEMP_ROOT}/step-app-verify" 'exit 99'
     create_step_stub "${TEMP_ROOT}/step-deployment"
 }
 
@@ -42,9 +38,7 @@ function run_verifier {
     BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE="${TEMP_ROOT}/step-swift" \
     BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE="${TEMP_ROOT}/step-gui" \
     BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE="${TEMP_ROOT}/step-storekit" \
-    BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE="${TEMP_ROOT}/step-build" \
-    BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${TEMP_ROOT}/step-app-verify" \
-    BOUNDLESS_TRANSLATOR_DEPLOYMENT_TEST_EXECUTABLE="${TEMP_ROOT}/step-deployment" \
+    BOUNDLESS_TRANSLATOR_SCRIPT_TEST_EXECUTABLE="${TEMP_ROOT}/step-deployment" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
         zsh "${verifier}" "$@"
 }
@@ -55,7 +49,7 @@ function test_verify_features_when_steps_succeed_then_runs_only_free_feature_che
     : > "${CALL_LOG}"
 
     # Act
-    run_verifier "${FEATURE_VERIFIER}"
+    run_verifier "${ALL_VERIFIER}" features
 
     # Assert
     [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 3 ]]
@@ -73,7 +67,7 @@ function test_verify_subscription_when_steps_succeed_then_runs_only_subscription
     : > "${CALL_LOG}"
 
     # Act
-    run_verifier "${SUBSCRIPTION_VERIFIER}"
+    run_verifier "${ALL_VERIFIER}" subscription
 
     # Assert
     [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 3 ]]
@@ -93,11 +87,10 @@ function test_verify_when_steps_succeed_then_runs_features_before_subscription {
     run_verifier "${ALL_VERIFIER}"
 
     # Assert
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 6 ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 5 ]]
     [[ "$(sed -n '1p' "${CALL_LOG}")" != *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(sed -n '3p' "${CALL_LOG}")" == 'step-deployment features' ]]
-    [[ "$(sed -n '4p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(sed -n '6p' "${CALL_LOG}")" == 'step-deployment subscription' ]]
+    [[ "$(sed -n '3p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
+    [[ "$(sed -n '5p' "${CALL_LOG}")" == 'step-deployment all' ]]
 }
 
 function test_verify_features_when_results_are_incomplete_then_stops_before_gui {
@@ -105,13 +98,11 @@ function test_verify_features_when_results_are_incomplete_then_stops_before_gui 
     create_step_stub "${TEMP_ROOT}/step-swift"
     create_step_stub "${TEMP_ROOT}/step-gui"
     create_step_stub "${TEMP_ROOT}/step-storekit"
-    create_step_stub "${TEMP_ROOT}/step-build"
-    create_step_stub "${TEMP_ROOT}/step-app-verify"
     create_step_stub "${TEMP_ROOT}/step-deployment"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if run_verifier "${FEATURE_VERIFIER}" > "${TEMP_ROOT}/feature-output.log" 2>&1; then
+    if run_verifier "${ALL_VERIFIER}" features > "${TEMP_ROOT}/feature-output.log" 2>&1; then
         print -u2 'feature verification accepted missing test results'
         return 1
     fi
@@ -125,7 +116,7 @@ function test_verify_subscription_when_storekit_fails_then_stops_before_packagin
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if run_verifier "${SUBSCRIPTION_VERIFIER}" > "${TEMP_ROOT}/subscription-output.log" 2>&1; then
+    if run_verifier "${ALL_VERIFIER}" subscription > "${TEMP_ROOT}/subscription-output.log" 2>&1; then
         print -u2 'subscription verification accepted failing StoreKit tests'
         return 1
     fi
@@ -141,7 +132,7 @@ function test_verify_subscription_when_storekit_is_skipped_then_finishes_checks_
     local exit_status=0
 
     # Act
-    run_verifier "${SUBSCRIPTION_VERIFIER}" > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
+    run_verifier "${ALL_VERIFIER}" subscription > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
 
     # Assert
     if [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" != 3 ]]; then
@@ -169,9 +160,9 @@ function test_verify_when_storekit_is_skipped_then_reports_incomplete_coverage_a
 
     # Assert
     [[ "${exit_status}" == 0 ]]
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 6 ]]
-    [[ "$(sed -n '4p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(tail -n 1 "${CALL_LOG}")" == 'step-deployment subscription' ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 5 ]]
+    [[ "$(sed -n '3p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
+    [[ "$(tail -n 1 "${CALL_LOG}")" == 'step-deployment all' ]]
     local output="$(<"${TEMP_ROOT}/all-output.log")"
     [[ "${output}" == *'StoreKit integration coverage is incomplete'* ]]
     [[ "${output}" == *'release readiness is not established'* ]]
@@ -187,7 +178,7 @@ function test_verify_subscription_when_unit_tests_fail_then_stops_before_storeki
     local exit_status=0
 
     # Act
-    run_verifier "${SUBSCRIPTION_VERIFIER}" > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
+    run_verifier "${ALL_VERIFIER}" subscription > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
 
     # Assert
     [[ "${exit_status}" == 65 ]]
@@ -204,7 +195,7 @@ function test_verify_subscription_when_deployment_fails_after_storekit_skip_then
     local exit_status=0
 
     # Act
-    run_verifier "${SUBSCRIPTION_VERIFIER}" > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
+    run_verifier "${ALL_VERIFIER}" subscription > "${TEMP_ROOT}/subscription-output.log" 2>&1 || exit_status=$?
 
     # Assert
     [[ "${exit_status}" == 5 ]]

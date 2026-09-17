@@ -5,7 +5,7 @@ import Foundation
 
 let arguments = CommandLine.arguments
 guard arguments.count == 2 else {
-    FileHandle.standardError.write(Data("Usage: generate_dmg_background.swift <output-path>\n".utf8))
+    FileHandle.standardError.write(Data("Usage: generate_dmg_install_background.swift <output-path>\n".utf8))
     exit(1)
 }
 

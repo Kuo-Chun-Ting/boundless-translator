@@ -3,7 +3,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly NOTARIZER="${PROJECT_ROOT}/Scripts/Tools/notarize_dmg.sh"
+readonly NOTARIZER="${PROJECT_ROOT}/Scripts/DMG/notarize_dmg.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-notarize-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 readonly XCRUN_STUB="${TEMP_ROOT}/xcrun"

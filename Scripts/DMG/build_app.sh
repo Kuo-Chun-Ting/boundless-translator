@@ -3,11 +3,10 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-source "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf"
+source "${PROJECT_ROOT}/Scripts/DMG/signing.conf"
 
 readonly XCODE_PROJECT="${PROJECT_ROOT}/BoundlessTranslator.xcodeproj"
 readonly XCODEBUILD_EXECUTABLE="${BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE:-xcodebuild}"
-readonly VERIFY_EXECUTABLE="${BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tools/verify_app.sh}"
 readonly BUILD_ROOT="${BOUNDLESS_TRANSLATOR_BUILD_ROOT:-${PROJECT_ROOT}/Build}"
 readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
 
@@ -38,7 +37,6 @@ command=(
 "${command[@]}"
 
 [[ -d "${BUILT_APP_PATH}" ]] || fail "Xcode build is missing the App: ${BUILT_APP_PATH}"
-"${VERIFY_EXECUTABLE}" "${BUILT_APP_PATH}"
 rm -rf "${APP_PATH}"
 mv "${BUILT_APP_PATH}" "${APP_PATH}"
 print "Built ${APP_PATH}"

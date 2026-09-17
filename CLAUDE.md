@@ -15,6 +15,6 @@
 
 ## App icon
 
-- 修改來源 PNG 後，執行 `Scripts/Tools/generate_brand_icons.swift .` 產生 ICNS。
-- 切換 App icon 時，執行 `Scripts/Tools/replace_app_icon.sh <icns-path>` 更新 `Resources/AppIcon.icns`。
+- 修改來源 PNG 後，執行 `Scripts/Assets/generate_brand_icons.swift .` 產生 ICNS。
+- 切換 App icon 時，執行 `Scripts/Assets/replace_app_icon.sh <icns-path>` 更新 `Resources/AppIcon.icns`。
 - 完成後執行 `Scripts/verify.sh`。

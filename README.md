@@ -60,31 +60,39 @@ Release Control before finishing the selection: macOS uses it to send the captur
 Building requires:
 
 - Xcode with Swift 6.2
-- The signing certificate and matching private key in your Mac's Keychain, as configured in `Scripts/Tools/code_signing.conf`
+- The signing certificate and matching private key in your Mac's Keychain, as configured in `Scripts/DMG/signing.conf`
 
 ```bash
 git clone https://github.com/Kuo-Chun-Ting/boundless-translator.git
 cd boundless-translator
-Scripts/Tools/build_app.sh
+Scripts/DMG/build_app.sh
 ```
 
 This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator.app`, with App Sandbox enabled and no subscription required. Test DMG releases use this build path; the App Store release uses an Xcode archive.
+
+`release_dmg.sh` normally calls this step for you. Run it directly only when diagnosing the App build before DMG packaging.
 
 Launch that `.app` when testing product behavior. App Sandbox is applied through the signed app's entitlements and enforced when it runs. Running the raw SwiftPM executable does not exercise the same sandboxed app environment. SwiftPM's `--disable-sandbox` option controls its build subprocesses, independently of the shipped App Sandbox entitlement.
 
 ### Verify
 
 ```bash
-Scripts/verify_features.sh
-Scripts/verify_subscription.sh
 Scripts/verify.sh
 ```
 
-`verify_features.sh` checks free-mode code, GUI behavior, Xcode project settings, and DMG release-script logic. `verify_subscription.sh` checks subscription-mode code and local StoreKit transactions. `verify.sh` runs both in that order before code review. These commands build only test targets and test hosts; they do not build the production App or create a DMG, archive, or PKG.
+`verify.sh` checks free-mode code, GUI behavior, subscription-mode code, local StoreKit transactions, Xcode project settings, and shell workflows. Pass `features` or `subscription` only when diagnosing one side; the normal workflow runs everything. It builds only test targets and test hosts; it does not build the production App or create a DMG, archive, or PKG.
 
-On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
+On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/TestRunners/run_storekit_tests.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
 
 GUI and StoreKit integration tests need a macOS desktop session. They do not need the production signing certificate. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
+
+### Script Layout
+
+- `Scripts/verify.sh`, `Scripts/release_dmg.sh`, and `Scripts/reset_test_permissions.sh` are the commands run directly during normal development.
+- `Scripts/DMG/` contains the private steps used by `release_dmg.sh` to build the App, package the DMG, verify the mounted DMG, and notarize it.
+- `Scripts/TestRunners/` contains test runners called by `verify.sh`.
+- `Scripts/Assets/` contains manual tools for regenerating App and DMG artwork.
+- `Tests/Scripts/` tests the shell workflows themselves.
 
 ### Create a Test DMG
 

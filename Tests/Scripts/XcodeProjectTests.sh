@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h:h:h}"
+readonly PROJECT_ROOT="${0:A:h:h:h}"
 readonly XCODE_PROJECT="${PROJECT_ROOT}/BoundlessTranslator.xcodeproj"
 readonly PROJECT_FILE="${XCODE_PROJECT}/project.pbxproj"
 readonly PACKAGE_RESOLVED="${PROJECT_ROOT}/Package.resolved"

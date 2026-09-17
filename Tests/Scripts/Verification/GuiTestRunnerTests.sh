@@ -3,7 +3,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly GUI_TESTER="${PROJECT_ROOT}/Scripts/Tests/test_gui.sh"
+readonly GUI_TESTER="${PROJECT_ROOT}/Scripts/TestRunners/run_gui_tests.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-test-gui-script-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 readonly XCODEBUILD_STUB="${TEMP_ROOT}/xcodebuild"

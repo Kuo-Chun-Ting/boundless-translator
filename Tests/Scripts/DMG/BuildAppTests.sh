@@ -3,12 +3,11 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly BUILDER="${PROJECT_ROOT}/Scripts/Tools/build_app.sh"
+readonly BUILDER="${PROJECT_ROOT}/Scripts/DMG/build_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build-app-tests.XXXXXX)"
 readonly BUILD_ROOT="${TEMP_ROOT}/Build"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 readonly XCODEBUILD_STUB="${TEMP_ROOT}/xcodebuild"
-readonly VERIFY_STUB="${TEMP_ROOT}/verify-app"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
 cat > "${XCODEBUILD_STUB}" <<'STUB'
@@ -30,22 +29,12 @@ mkdir -p "${derived_data_path}/Build/Products/${configuration}/Boundless Transla
 print app > "${derived_data_path}/Build/Products/${configuration}/Boundless Translator.app/Contents/MacOS/BoundlessTranslator"
 STUB
 
-cat > "${VERIFY_STUB}" <<'STUB'
-#!/bin/zsh
-set -eu
-print -r -- "verify $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-[[ "${TEST_VERIFY_FAIL:-false}" != true ]]
-STUB
-chmod +x "${XCODEBUILD_STUB}" "${VERIFY_STUB}"
+chmod +x "${XCODEBUILD_STUB}"
 
 function run_builder {
     BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE="${XCODEBUILD_STUB}" \
-    BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${VERIFY_STUB}" \
     BOUNDLESS_TRANSLATOR_BUILD_ROOT="${BUILD_ROOT}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
-    BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID=com.lillard.boundless.annual \
-    BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL=https://example.com/privacy \
-    BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT='© 2026 Example Company' \
         zsh "${BUILDER}" "$@"
 }
 
@@ -65,7 +54,7 @@ function test_build_app_when_requested_then_builds_test_dmg_app {
     [[ "${build_call}" != *MARKETING_VERSION=* ]]
     [[ "${build_call}" != *CURRENT_PROJECT_VERSION=* ]]
     [[ "${build_call}" != *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(sed -n '2p' "${CALL_LOG}")" == verify\ *'/Boundless Translator.app' ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 1 ]]
 }
 
 function test_build_app_when_xcode_build_fails_then_preserves_previous_app {
@@ -76,19 +65,6 @@ function test_build_app_when_xcode_build_fails_then_preserves_previous_app {
     # Act & Assert
     if TEST_XCODEBUILD_FAIL=true run_builder >/dev/null 2>&1; then
         print -u2 'Expected Xcode build failure to stop the build.'
-        return 1
-    fi
-    [[ "$(<"${BUILD_ROOT}/Boundless Translator.app/marker")" == previous ]]
-}
-
-function test_build_app_when_verification_fails_then_preserves_previous_app {
-    # Arrange
-    mkdir -p "${BUILD_ROOT}/Boundless Translator.app"
-    print previous > "${BUILD_ROOT}/Boundless Translator.app/marker"
-
-    # Act & Assert
-    if TEST_VERIFY_FAIL=true run_builder >/dev/null 2>&1; then
-        print -u2 'Expected verification failure to stop the build.'
         return 1
     fi
     [[ "$(<"${BUILD_ROOT}/Boundless Translator.app/marker")" == previous ]]
@@ -108,6 +84,5 @@ function test_build_app_when_argument_is_given_then_stops_before_xcode_build {
 
 test_build_app_when_requested_then_builds_test_dmg_app
 test_build_app_when_xcode_build_fails_then_preserves_previous_app
-test_build_app_when_verification_fails_then_preserves_previous_app
 test_build_app_when_argument_is_given_then_stops_before_xcode_build
 print 'App build tests passed.'

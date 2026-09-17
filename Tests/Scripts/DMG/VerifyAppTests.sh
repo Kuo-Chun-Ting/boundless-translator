@@ -3,7 +3,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly VERIFIER="${PROJECT_ROOT}/Scripts/Tools/verify_app.sh"
+readonly VERIFIER="${PROJECT_ROOT}/Scripts/DMG/verify_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-tests.XXXXXX)"
 readonly APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
 readonly MOCK_BIN="${TEMP_ROOT}/bin"

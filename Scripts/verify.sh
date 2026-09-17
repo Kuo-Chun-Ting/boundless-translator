@@ -4,9 +4,9 @@ set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h}"
 readonly SWIFT_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE:-$(command -v swift)}"
-readonly GUI_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_gui.sh}"
-readonly STOREKIT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_storekit.sh}"
-readonly DEPLOYMENT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_DEPLOYMENT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_deployment.sh}"
+readonly GUI_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_gui_tests.sh}"
+readonly STOREKIT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_storekit_tests.sh}"
+readonly SCRIPT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SCRIPT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_script_tests.sh}"
 readonly TEST_REPORT_ROOT="$(mktemp -d /private/tmp/boundless-translator-test-results.XXXXXX)"
 readonly VERIFICATION_BUILD_ROOT="${PROJECT_ROOT}/.build/verification"
 storekit_integration_skipped=false
@@ -42,8 +42,6 @@ function verify_swift_tests {
 function verify_features {
     verify_swift_tests features
     "${GUI_TEST_EXECUTABLE}"
-    "${DEPLOYMENT_TEST_EXECUTABLE}" features
-    print "Feature verification passed."
 }
 
 function verify_subscription {
@@ -55,24 +53,21 @@ function verify_subscription {
         78) storekit_integration_skipped=true ;;
         *) return "${storekit_exit_status}" ;;
     esac
-    "${DEPLOYMENT_TEST_EXECUTABLE}" subscription
-    if [[ "${storekit_integration_skipped}" == true ]]; then
-        print "Subscription unit and deployment checks passed; StoreKit integration tests were skipped."
-    else
-        print "Subscription verification passed."
-    fi
 }
 
 case "${1:-all}" in
     features)
         verify_features
+        "${SCRIPT_TEST_EXECUTABLE}" features
         ;;
     subscription)
         verify_subscription
+        "${SCRIPT_TEST_EXECUTABLE}" subscription
         ;;
     all)
         verify_features
         verify_subscription
+        "${SCRIPT_TEST_EXECUTABLE}" all
         ;;
     *)
         print -u2 'Usage: Scripts/verify.sh [features|subscription|all]'
