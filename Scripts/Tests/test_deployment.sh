@@ -22,11 +22,11 @@ case "${1:-all}" in
             ResetTestPermissions \
             TestGuiScript \
             VerifyApp \
-            VerifyWorkflow
+            VerifyWorkflow \
+            XcodeProject
         ;;
     subscription)
         run_tests \
-            AppStoreBuild \
             AppStoreRelease \
             AppStoreUpload \
             TestStoreKitScript \

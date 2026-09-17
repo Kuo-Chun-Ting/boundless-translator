@@ -6,10 +6,7 @@ readonly PROJECT_ROOT="${0:A:h:h}"
 readonly SWIFT_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE:-$(command -v swift)}"
 readonly GUI_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_gui.sh}"
 readonly STOREKIT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_storekit.sh}"
-readonly BUILD_EXECUTABLE="${BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tools/build_app.sh}"
-readonly APP_VERIFY_EXECUTABLE="${BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tools/verify_app.sh}"
 readonly DEPLOYMENT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_DEPLOYMENT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tests/test_deployment.sh}"
-readonly APP_PATH="${BOUNDLESS_TRANSLATOR_VERIFY_APP_PATH:-${PROJECT_ROOT}/Build/Boundless Translator.app}"
 readonly TEST_REPORT_ROOT="$(mktemp -d /private/tmp/boundless-translator-test-results.XXXXXX)"
 readonly VERIFICATION_BUILD_ROOT="${PROJECT_ROOT}/.build/verification"
 storekit_integration_skipped=false
@@ -45,8 +42,6 @@ function verify_swift_tests {
 function verify_features {
     verify_swift_tests features
     "${GUI_TEST_EXECUTABLE}"
-    "${BUILD_EXECUTABLE}"
-    "${APP_VERIFY_EXECUTABLE}" "${APP_PATH}"
     "${DEPLOYMENT_TEST_EXECUTABLE}" features
     print "Feature verification passed."
 }

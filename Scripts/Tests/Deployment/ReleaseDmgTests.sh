@@ -1,95 +1,93 @@
 #!/bin/zsh
+
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly RELEASER="${PROJECT_ROOT}/Scripts/release_dmg.sh"
-readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-release-tests.XXXXXX)"
-trap 'rm -rf "${TEMP_ROOT}"' EXIT
+readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-release-test-dmg-tests.XXXXXX)"
 readonly BUILD_ROOT="${TEMP_ROOT}/Build"
-readonly INFO_PLIST="${TEMP_ROOT}/Info.plist"
-readonly DMG_PATH="${BUILD_ROOT}/Boundless Translator-test.dmg"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
-readonly MOCK_BUILD="${TEMP_ROOT}/mock-build"
-readonly MOCK_NOTARIZE="${TEMP_ROOT}/notarize"
-readonly STUB_MV="${TEMP_ROOT}/mv"
-mkdir -p "${BUILD_ROOT}"
-print 'original metadata' > "${INFO_PLIST}"
-cat > "${MOCK_BUILD}" <<'STUB'
+readonly BUILD_STUB="${TEMP_ROOT}/build-dmg"
+readonly NOTARIZE_STUB="${TEMP_ROOT}/notarize"
+readonly MV_STUB="${TEMP_ROOT}/mv"
+trap 'rm -rf "${TEMP_ROOT}"' EXIT
+
+cat > "${BUILD_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print build >> "${TEST_LOG}"
-[[ "${FAIL_STEP:-}" != build ]]
-cmp "${BOUNDLESS_TRANSLATOR_BUILD_INFO_PLIST}" "${BOUNDLESS_TRANSLATOR_INFO_PLIST}"
-print -n built > "$1"
+print -r -- "build $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+[[ "${TEST_FAIL_RELEASE_STEP:-}" != build ]]
+print built > "$1"
 STUB
-cat > "${MOCK_NOTARIZE}" <<'STUB'
+
+cat > "${NOTARIZE_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print notarize >> "${TEST_LOG}"
-[[ "$(<"${TEST_DMG}")" == previous ]]
-[[ "${FAIL_STEP:-}" != notarize ]]
-print -n ' notarized' >> "$1"
+print notarize >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+[[ "${TEST_FAIL_RELEASE_STEP:-}" != notarize ]]
+print -n notarized >> "$1"
 STUB
-cat > "${STUB_MV}" <<'STUB'
+
+cat > "${MV_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-[[ "${FAIL_STEP:-}" != publish ]]
-/bin/mv "$@"
+[[ "${TEST_FAIL_RELEASE_STEP:-}" != publish ]]
+exec /bin/mv "$@"
 STUB
-chmod +x "${MOCK_BUILD}" "${MOCK_NOTARIZE}" "${STUB_MV}"
+chmod +x "${BUILD_STUB}" "${NOTARIZE_STUB}" "${MV_STUB}"
 
 function run_releaser {
-    TEST_LOG="${CALL_LOG}" TEST_DMG="${DMG_PATH}" \
-    BOUNDLESS_TRANSLATOR_BUILD_DMG_EXECUTABLE="${MOCK_BUILD}" \
-    BOUNDLESS_TRANSLATOR_NOTARIZE_EXECUTABLE="${MOCK_NOTARIZE}" \
-    BOUNDLESS_TRANSLATOR_MV_EXECUTABLE="${STUB_MV}" \
-    BOUNDLESS_TRANSLATOR_INFO_PLIST="${INFO_PLIST}" \
+    BOUNDLESS_TRANSLATOR_BUILD_DMG_EXECUTABLE="${BUILD_STUB}" \
+    BOUNDLESS_TRANSLATOR_NOTARIZE_EXECUTABLE="${NOTARIZE_STUB}" \
+    BOUNDLESS_TRANSLATOR_MV_EXECUTABLE="${MV_STUB}" \
     BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT="${BUILD_ROOT}" \
+    BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
         zsh "${RELEASER}" "$@"
 }
 
-function test_release_dmg_when_test_requested_then_notarizes_before_replacing_previous_dmg {
+function test_release_dmg_when_run_then_notarizes_and_publishes_test_image {
     # Arrange
-    print -n previous > "${DMG_PATH}"
     : > "${CALL_LOG}"
+
     # Act
-    run_releaser --test
+    run_releaser
+
     # Assert
-    [[ "$(<"${CALL_LOG}")" == $'build\nnotarize' ]]
-    [[ "$(<"${DMG_PATH}")" == 'built notarized' ]]
-    [[ "$(<"${INFO_PLIST}")" == 'original metadata' ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == build\ *'/Boundless Translator-test.dmg' ]]
+    [[ "$(sed -n '2p' "${CALL_LOG}")" == notarize ]]
+    [[ "$(<"${BUILD_ROOT}/Boundless Translator-test.dmg")" == $'built\nnotarized' ]]
 }
 
-function test_release_dmg_when_step_fails_then_preserves_previous_dmg {
-    # Arrange
-    local step
-    for step in build notarize publish; do
-        print -n previous > "${DMG_PATH}"
-        : > "${CALL_LOG}"
-        # Act & Assert
-        if FAIL_STEP="${step}" run_releaser --test; then
-            print -u2 "Expected ${step} failure to stop release."
-            return 1
-        fi
-        [[ "$(<"${DMG_PATH}")" == previous ]]
-        [[ "$(<"${INFO_PLIST}")" == 'original metadata' ]]
-        [[ -z "$(find "${BUILD_ROOT}" -name '.boundless-translator-test.*' -print)" ]]
-    done
-}
-
-function test_release_dmg_when_version_given_then_rejects_before_building {
+function test_release_dmg_when_argument_is_given_then_stops_before_build {
     # Arrange
     : > "${CALL_LOG}"
+
     # Act & Assert
-    if run_releaser 0.2.0 > "${TEMP_ROOT}/error.log" 2>&1; then
-        print -u2 'Expected versioned DMG release to be rejected.'
+    if run_releaser --test >/dev/null 2>&1; then
+        print -u2 'Expected release_dmg.sh to reject arguments.'
         return 1
     fi
     [[ ! -s "${CALL_LOG}" ]]
-    [[ "$(<"${TEMP_ROOT}/error.log")" == *'Usage: release_dmg.sh --test'* ]]
 }
 
-test_release_dmg_when_test_requested_then_notarizes_before_replacing_previous_dmg
-test_release_dmg_when_step_fails_then_preserves_previous_dmg
-test_release_dmg_when_version_given_then_rejects_before_building
-print 'DMG release tests passed.'
+function test_release_dmg_when_release_step_fails_then_preserves_previous_image {
+    local step
+    for step in build notarize publish; do
+        # Arrange
+        mkdir -p "${BUILD_ROOT}"
+        print -n previous > "${BUILD_ROOT}/Boundless Translator-test.dmg"
+        : > "${CALL_LOG}"
+
+        # Act & Assert
+        if TEST_FAIL_RELEASE_STEP="${step}" run_releaser >/dev/null 2>&1; then
+            print -u2 "Expected ${step} failure to stop the test DMG release."
+            return 1
+        fi
+        [[ "$(<"${BUILD_ROOT}/Boundless Translator-test.dmg")" == previous ]]
+    done
+}
+
+test_release_dmg_when_run_then_notarizes_and_publishes_test_image
+test_release_dmg_when_argument_is_given_then_stops_before_build
+test_release_dmg_when_release_step_fails_then_preserves_previous_image
+print 'Test DMG release tests passed.'

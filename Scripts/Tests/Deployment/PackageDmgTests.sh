@@ -4,92 +4,129 @@ set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly PACKAGER="${PROJECT_ROOT}/Scripts/Tools/package_dmg.sh"
-readonly BUILD_APP="${PROJECT_ROOT}/Build/Boundless Translator.app"
-readonly VERIFIER="${PROJECT_ROOT}/Scripts/Tools/verify_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-dmg-tests.XXXXXX)"
-active_mount_point=""
+readonly APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
+readonly MOCK_BIN="${TEMP_ROOT}/bin"
+readonly CALL_LOG="${TEMP_ROOT}/calls.log"
+trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
-function clean_up {
-    if [[ -n "${active_mount_point}" ]]; then
-        hdiutil detach "${active_mount_point}" >/dev/null 2>&1 || true
+function create_tool_stubs {
+    mkdir -p "${MOCK_BIN}"
+    cat > "${MOCK_BIN}/create-dmg" <<'EOF'
+#!/bin/zsh
+print -r -- "create-dmg $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+print image > "${@[-2]}"
+EOF
+    cat > "${MOCK_BIN}/codesign" <<'EOF'
+#!/bin/zsh
+print -r -- "codesign $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+if [[ "$*" == *--display* ]]; then
+    print 'Authority=Developer ID Application: Chun Ting Kuo (3S9ZKKJ6PW)'
+    print 'TeamIdentifier=3S9ZKKJ6PW'
+    print 'Timestamp=verified-test-timestamp'
+fi
+EOF
+    cat > "${MOCK_BIN}/hdiutil" <<'EOF'
+#!/bin/zsh
+print -r -- "hdiutil $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+[[ "$1" == attach ]] || exit 0
+
+mount_point=''
+while [[ "$#" -gt 0 ]]; do
+    if [[ "$1" == -mountpoint ]]; then
+        mount_point="$2"
+        break
     fi
-    rm -rf "${TEMP_ROOT}"
+    shift
+done
+mkdir -p "${mount_point}"
+[[ "${TEST_MOUNT_CONTENTS_COMPLETE:-true}" == true ]] || exit 0
+mkdir -p "${mount_point}/Boundless Translator.app" "${mount_point}/.background"
+ln -s /Applications "${mount_point}/Applications"
+touch "${mount_point}/.DS_Store" "${mount_point}/.background/DMGBackground.png"
+EOF
+    cat > "${MOCK_BIN}/verify-app" <<'EOF'
+#!/bin/zsh
+print -r -- "verify-app $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+EOF
+    chmod +x "${MOCK_BIN}/create-dmg" "${MOCK_BIN}/codesign" "${MOCK_BIN}/hdiutil" "${MOCK_BIN}/verify-app"
 }
-trap clean_up EXIT
+
+function run_packager {
+    PATH="${MOCK_BIN}:${PATH}" \
+    BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE="${MOCK_BIN}/create-dmg" \
+    BOUNDLESS_TRANSLATOR_VERIFY_EXECUTABLE="${MOCK_BIN}/verify-app" \
+    BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
+        zsh "${PACKAGER}" "$@"
+}
 
 function test_package_dmg_when_paths_are_missing_then_fails_before_creating_image {
     # Arrange
-    local call_log="${TEMP_ROOT}/create-dmg-calls.log"
-    local create_dmg_stub="${TEMP_ROOT}/create-dmg"
-    cat > "${create_dmg_stub}" <<'EOF'
-#!/bin/zsh
-print -r -- "$*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-EOF
-    chmod +x "${create_dmg_stub}"
-    : > "${call_log}"
+    : > "${CALL_LOG}"
 
     # Act & Assert
-    if BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE="${create_dmg_stub}" \
-        BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${call_log}" \
-        zsh "${PACKAGER}" >/dev/null 2>&1; then
-        print -u2 "Expected packaging without App and DMG paths to fail."
+    if run_packager >/dev/null 2>&1; then
+        print -u2 'Expected packaging without App and DMG paths to fail.'
         return 1
     fi
-    [[ ! -s "${call_log}" ]]
+    [[ ! -s "${CALL_LOG}" ]]
 }
 
 function test_package_dmg_when_source_app_is_missing_then_preserves_existing_image {
     # Arrange
     local missing_app="${TEMP_ROOT}/Missing.app"
     local output_dmg="${TEMP_ROOT}/Existing.dmg"
-    print -n "existing image" > "${output_dmg}"
+    print -n 'existing image' > "${output_dmg}"
+    : > "${CALL_LOG}"
 
     # Act & Assert
-    if zsh "${PACKAGER}" "${missing_app}" "${output_dmg}" >/dev/null 2>&1; then
-        print -u2 "Expected packaging to fail when the source App is missing."
+    if run_packager "${missing_app}" "${output_dmg}" >/dev/null 2>&1; then
+        print -u2 'Expected packaging to fail when the source App is missing.'
         return 1
     fi
-
-    [[ "$(<"${output_dmg}")" == "existing image" ]]
+    [[ "$(<"${output_dmg}")" == 'existing image' ]]
+    [[ ! -s "${CALL_LOG}" ]]
 }
 
-function test_package_dmg_when_release_app_exists_then_creates_installable_image {
+function test_package_dmg_when_image_is_complete_then_validates_mounted_contents {
     # Arrange
-    local output_dmg="${TEMP_ROOT}/Boundless Translator.dmg"
-    local mount_point="${TEMP_ROOT}/Mounted"
-    mkdir -p "${mount_point}"
+    local output_dmg="${TEMP_ROOT}/Complete.dmg"
+    mkdir -p "${APP_PATH}"
+    : > "${CALL_LOG}"
 
     # Act
-    zsh "${PACKAGER}" "${BUILD_APP}" "${output_dmg}"
-    hdiutil attach \
-        -readonly \
-        -nobrowse \
-        -mountpoint "${mount_point}" \
-        "${output_dmg}" \
-        >/dev/null
-    active_mount_point="${mount_point}"
+    run_packager "${APP_PATH}" "${output_dmg}"
 
     # Assert
-    hdiutil verify "${output_dmg}" >/dev/null
-    codesign --verify --strict --verbose=2 "${output_dmg}"
-    local signature_details
-    signature_details="$(codesign --display --verbose=4 "${output_dmg}" 2>&1)"
-    [[ "${signature_details}" == *"Authority=Developer ID Application: Chun Ting Kuo (3S9ZKKJ6PW)"* ]]
-    [[ "${signature_details}" == *"TeamIdentifier=3S9ZKKJ6PW"* ]]
-    [[ "${signature_details}" == *"Timestamp="* ]]
-    [[ -d "${mount_point}/Boundless Translator.app" ]]
-    [[ -L "${mount_point}/Applications" ]]
-    [[ "$(readlink "${mount_point}/Applications")" == "/Applications" ]]
-    [[ -f "${mount_point}/.DS_Store" ]]
-    [[ -f "${mount_point}/.background/DMGBackground.png" ]]
-    zsh "${VERIFIER}" "${mount_point}/Boundless Translator.app"
-
-    hdiutil detach "${mount_point}" >/dev/null
-    active_mount_point=""
+    [[ -f "${output_dmg}" ]]
+    local calls="$(<"${CALL_LOG}")"
+    [[ "${calls}" == *$'hdiutil verify '* ]]
+    [[ "${calls}" == *$'codesign --verify --strict --verbose=2 '* ]]
+    [[ "${calls}" == *$'hdiutil attach -readonly -nobrowse -mountpoint '* ]]
+    [[ "${calls}" == *$'verify-app '*'/Boundless Translator.app'* ]]
+    [[ "${calls}" == *$'hdiutil detach '* ]]
 }
 
+function test_package_dmg_when_mounted_contents_are_incomplete_then_preserves_existing_image {
+    # Arrange
+    local output_dmg="${TEMP_ROOT}/Existing.dmg"
+    print -n 'existing image' > "${output_dmg}"
+    mkdir -p "${APP_PATH}"
+    : > "${CALL_LOG}"
+
+    # Act & Assert
+    if TEST_MOUNT_CONTENTS_COMPLETE=false run_packager "${APP_PATH}" "${output_dmg}" >/dev/null 2>&1; then
+        print -u2 'Expected incomplete mounted contents to fail validation.'
+        return 1
+    fi
+    [[ "$(<"${output_dmg}")" == 'existing image' ]]
+    [[ "$(<"${CALL_LOG}")" == *$'hdiutil detach '* ]]
+}
+
+create_tool_stubs
 test_package_dmg_when_paths_are_missing_then_fails_before_creating_image
 test_package_dmg_when_source_app_is_missing_then_preserves_existing_image
-test_package_dmg_when_release_app_exists_then_creates_installable_image
+test_package_dmg_when_image_is_complete_then_validates_mounted_contents
+test_package_dmg_when_mounted_contents_are_incomplete_then_preserves_existing_image
 
-print "DMG packaging tests passed."
+print 'DMG packaging tests passed.'

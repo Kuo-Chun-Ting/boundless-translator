@@ -5,92 +5,141 @@ set -euo pipefail
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly RELEASER="${PROJECT_ROOT}/Scripts/release_app_store.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-app-store-release-tests.XXXXXX)"
-readonly BUILD_ROOT="${TEMP_ROOT}/Build/AppStore"
+readonly RELEASE_ROOT="${TEMP_ROOT}/Build/AppStore"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
-readonly BUILD_STUB="${TEMP_ROOT}/build-app"
-readonly PRODUCTBUILD_STUB="${TEMP_ROOT}/productbuild"
+readonly XCODEBUILD_STUB="${TEMP_ROOT}/xcodebuild"
 readonly PKGUTIL_STUB="${TEMP_ROOT}/pkgutil"
+readonly CODESIGN_STUB="${TEMP_ROOT}/codesign"
+readonly LIPO_STUB="${TEMP_ROOT}/lipo"
+readonly OTOOL_STUB="${TEMP_ROOT}/otool"
 readonly MV_STUB="${TEMP_ROOT}/mv"
-readonly PACKAGE_PATH="${BUILD_ROOT}/BoundlessTranslator-1.2.3-42.pkg"
-readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
+trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
-function clean_up {
-    rm -rf "${TEMP_ROOT}"
-}
-trap clean_up EXIT
-
-function create_step_stubs {
-    cat > "${BUILD_STUB}" <<'EOF'
+cat > "${XCODEBUILD_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print -r -- "build $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-mkdir -p "${BOUNDLESS_TRANSLATOR_APP_STORE_BUILD_ROOT}/Boundless Translator.app"
-print -r -- "${BOUNDLESS_TRANSLATOR_APP_STORE_VERSION}:${BOUNDLESS_TRANSLATOR_APP_STORE_BUILD_NUMBER}" > "${BOUNDLESS_TRANSLATOR_APP_STORE_BUILD_ROOT}/Boundless Translator.app/marker"
-EOF
 
-    cat > "${PRODUCTBUILD_STUB}" <<'EOF'
-#!/bin/zsh
-set -eu
-print -r -- "productbuild $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-if [[ "${TEST_PRODUCTBUILD_FAIL:-false}" == true ]]; then
-    exit 1
+operation="$1"
+print -r -- "${operation} $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+if [[ "${TEST_SIGNAL_STEP:-}" == "${operation}" ]]; then
+    kill -TERM "${PPID}"
+    exit 143
 fi
-print 'signed package' > "${@: -1}"
-EOF
+[[ "${TEST_FAIL_STEP:-}" != "${operation}" ]]
 
-    cat > "${PKGUTIL_STUB}" <<'EOF'
+archive_path=''
+options_path=''
+export_path=''
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -archivePath) archive_path="$2"; shift 2 ;;
+        -exportOptionsPlist) options_path="$2"; shift 2 ;;
+        -exportPath) export_path="$2"; shift 2 ;;
+        *) shift ;;
+    esac
+done
+
+case "${operation}" in
+    archive)
+        app_path="${archive_path}/Products/Applications/Boundless Translator.app"
+        resources_path="${app_path}/Contents/Resources"
+        mkdir -p "${app_path}/Contents/MacOS"
+        for localization_path in "${BOUNDLESS_TRANSLATOR_TEST_LOCALIZATIONS_ROOT}"/*.lproj; do
+            mkdir -p "${resources_path}/${localization_path:t}"
+        done
+        print app > "${app_path}/Contents/MacOS/BoundlessTranslator"
+        chmod +x "${app_path}/Contents/MacOS/BoundlessTranslator"
+        touch "${resources_path}/AppIcon.icns"
+        cp "${BOUNDLESS_TRANSLATOR_TEST_PRIVACY_MANIFEST}" "${resources_path}/PrivacyInfo.xcprivacy"
+        info_path="${app_path}/Contents/Info.plist"
+        plutil -create xml1 "${info_path}"
+        plutil -insert CFBundleIdentifier -string com.lillard.BoundlessTranslator "${info_path}"
+        plutil -insert CFBundleShortVersionString -string 1.2.3 "${info_path}"
+        plutil -insert CFBundleVersion -string 42 "${info_path}"
+        plutil -insert LSMinimumSystemVersion -string 15.0 "${info_path}"
+        plutil -insert LSApplicationCategoryType -string public.app-category.productivity "${info_path}"
+        plutil -insert ITSAppUsesNonExemptEncryption -bool false "${info_path}"
+        plutil -insert BoundlessSubscriptionProductID -string "${TEST_ARCHIVE_PRODUCT_ID:-${BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID}}" "${info_path}"
+        plutil -insert BoundlessPrivacyPolicyURL -string "${BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL}" "${info_path}"
+        plutil -insert NSHumanReadableCopyright -string "${BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT}" "${info_path}"
+        ;;
+    -exportArchive)
+        [[ -d "${archive_path}" ]]
+        [[ "$(plutil -extract method raw "${options_path}")" == app-store-connect ]]
+        [[ "$(plutil -extract destination raw "${options_path}")" == export ]]
+        [[ "$(plutil -extract manageAppVersionAndBuildNumber raw "${options_path}")" == false ]]
+        mkdir -p "${export_path}"
+        print package > "${export_path}/Boundless Translator.pkg"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+STUB
+
+cat > "${PKGUTIL_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
 print -r -- "pkgutil $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-[[ "${TEST_PKGUTIL_FAIL:-false}" != true ]]
-EOF
+[[ "${TEST_FAIL_STEP:-}" != verify ]]
+STUB
 
-    cat > "${MV_STUB}" <<'EOF'
+cat > "${CODESIGN_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-if [[ "${TEST_LOG_MV:-false}" == true && "$1" == */staged/'Boundless Translator.app' && "$2" == "${TEST_FINAL_APP_PATH}" ]]; then
-    print 'publish app' >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
-elif [[ "${TEST_LOG_MV:-false}" == true && "$1" == */BoundlessTranslator-1.2.3-42.pkg && "$2" == "${TEST_FINAL_PACKAGE_PATH}" ]]; then
-    print 'publish package' >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+print -r -- "codesign $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+if [[ "$*" == *--entitlements* ]]; then
+    sandbox_value='<true/>'
+    [[ "${TEST_ARCHIVE_SANDBOX_ENABLED:-true}" == true ]] || sandbox_value='<false/>'
+    print "<plist version=\"1.0\"><dict><key>com.apple.security.app-sandbox</key>${sandbox_value}<key>com.apple.security.network.client</key><true/></dict></plist>"
+elif [[ "$*" == *--display* ]]; then
+    print 'TeamIdentifier=ABCDE12345'
 fi
-if [[ "${TEST_MV_FAIL_SOURCE:-}" == "$1" && "$2" == */previous.app && ! -e "${TEST_MV_FAILED_MARKER:-/nonexistent}" ]]; then
-    touch "${TEST_MV_FAILED_MARKER}"
+STUB
+
+cat > "${LIPO_STUB}" <<'STUB'
+#!/bin/zsh
+set -eu
+print "${TEST_ARCHIVE_ARCHITECTURES:-arm64}"
+STUB
+
+cat > "${OTOOL_STUB}" <<'STUB'
+#!/bin/zsh
+set -eu
+print "$2:"
+print '/System/Library/Frameworks/Translation.framework/Versions/A/Translation'
+print '/System/Library/Frameworks/VisionKit.framework/Versions/A/VisionKit'
+STUB
+
+cat > "${MV_STUB}" <<'STUB'
+#!/bin/zsh
+set -eu
+if [[ "${TEST_FAIL_PACKAGE_PUBLISH:-false}" == true && "$2" == *.pkg ]]; then
     exit 1
 fi
-if [[ "${TEST_MV_FAIL_PUBLISH_PACKAGE:-false}" == true && "$1" == */BoundlessTranslator-1.2.3-42.pkg && "$2" == "${TEST_FINAL_PACKAGE_PATH}" ]]; then
-    exit 1
-fi
-if [[ "${TEST_MV_FAIL_EVACUATE_APP:-false}" == true && "$1" == "${TEST_FINAL_APP_PATH}" && "$2" == */failed.app ]]; then
-    exit 1
-fi
-if [[ "${TEST_MV_FAIL_RESTORE_APP:-false}" == true && "$1" == */previous.app && "$2" == "${TEST_FINAL_APP_PATH}" ]]; then
-    exit 1
-fi
-/bin/mv "$@"
-EOF
-    chmod +x "${BUILD_STUB}" "${PRODUCTBUILD_STUB}" "${PKGUTIL_STUB}" "${MV_STUB}"
-}
+exec /bin/mv "$@"
+STUB
+chmod +x "${XCODEBUILD_STUB}" "${PKGUTIL_STUB}" "${CODESIGN_STUB}" "${LIPO_STUB}" "${OTOOL_STUB}" "${MV_STUB}"
 
 function run_releaser {
-    BOUNDLESS_TRANSLATOR_BUILD_APP_EXECUTABLE="${BUILD_STUB}" \
-    BOUNDLESS_TRANSLATOR_PRODUCTBUILD_EXECUTABLE="${PRODUCTBUILD_STUB}" \
+    BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE="${XCODEBUILD_STUB}" \
     BOUNDLESS_TRANSLATOR_PKGUTIL_EXECUTABLE="${PKGUTIL_STUB}" \
+    BOUNDLESS_TRANSLATOR_CODESIGN_EXECUTABLE="${CODESIGN_STUB}" \
+    BOUNDLESS_TRANSLATOR_LIPO_EXECUTABLE="${LIPO_STUB}" \
+    BOUNDLESS_TRANSLATOR_OTOOL_EXECUTABLE="${OTOOL_STUB}" \
     BOUNDLESS_TRANSLATOR_MV_EXECUTABLE="${MV_STUB}" \
-    BOUNDLESS_TRANSLATOR_APP_STORE_RELEASE_ROOT="${BUILD_ROOT}" \
+    BOUNDLESS_TRANSLATOR_APP_STORE_RELEASE_ROOT="${RELEASE_ROOT}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
-    TEST_FINAL_APP_PATH="${APP_PATH}" \
-    TEST_FINAL_PACKAGE_PATH="${PACKAGE_PATH}" \
-    BOUNDLESS_TRANSLATOR_APP_STORE_SIGNING_IDENTITY='Apple Distribution: Example (ABCDE12345)' \
-    BOUNDLESS_TRANSLATOR_INSTALLER_SIGNING_IDENTITY='Mac Installer Distribution: Example (ABCDE12345)' \
-    BOUNDLESS_TRANSLATOR_APP_STORE_PROVISIONING_PROFILE="${TEMP_ROOT}/distribution.provisionprofile" \
-    BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID='ABCDE12345' \
-    BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID='com.lillard.boundless.annual' \
-    BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL='https://example.com/privacy' \
+    BOUNDLESS_TRANSLATOR_TEST_PRIVACY_MANIFEST="${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" \
+    BOUNDLESS_TRANSLATOR_TEST_LOCALIZATIONS_ROOT="${PROJECT_ROOT}/Sources/BoundlessTranslator/Resources" \
+    BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID=ABCDE12345 \
+    BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID=com.lillard.boundless.annual \
+    BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL=https://example.com/privacy \
     BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT='© 2026 Example Company' \
         zsh "${RELEASER}" "$@"
 }
 
-function test_release_app_store_when_configuration_is_valid_then_publishes_signed_package {
+function test_release_app_store_when_configuration_is_valid_then_publishes_archive_and_package {
     # Arrange
     : > "${CALL_LOG}"
 
@@ -98,144 +147,139 @@ function test_release_app_store_when_configuration_is_valid_then_publishes_signe
     run_releaser 1.2.3 42
 
     # Assert
-    [[ "$(<"${APP_PATH}/marker")" == '1.2.3:42' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'signed package' ]]
-    [[ "$(sed -n '1p' "${CALL_LOG}")" == 'build --app-store' ]]
-    [[ "$(sed -n '2p' "${CALL_LOG}")" == *'productbuild --sign Mac Installer Distribution: Example (ABCDE12345) --component '*'/Boundless Translator.app /Applications '*'/BoundlessTranslator-1.2.3-42.pkg' ]]
-    [[ "$(sed -n '3p' "${CALL_LOG}")" == *'pkgutil --check-signature '*'/BoundlessTranslator-1.2.3-42.pkg' ]]
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 3 ]]
+    local archive_path="${RELEASE_ROOT}/BoundlessTranslator-1.2.3-42.xcarchive"
+    local package_path="${RELEASE_ROOT}/BoundlessTranslator-1.2.3-42.pkg"
+    [[ -d "${archive_path}" ]]
+    [[ "$(<"${package_path}")" == package ]]
+    [[ ! -e "${RELEASE_ROOT}/Boundless Translator.app" ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == archive\ *'-scheme BoundlessTranslator-AppStore'* ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == *'MARKETING_VERSION=1.2.3'* ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == *'CURRENT_PROJECT_VERSION=42'* ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == *'CODE_SIGN_STYLE=Automatic'* ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" == *'-allowProvisioningUpdates'* ]]
+    [[ "$(sed -n '1p' "${CALL_LOG}")" != *'-authenticationKeyPath'* ]]
+    [[ "$(<"${CALL_LOG}")" == *$'codesign --verify --deep --strict --verbose=2 '* ]]
+    [[ "$(<"${CALL_LOG}")" == *$'-exportArchive -exportArchive '* ]]
+    [[ "$(<"${CALL_LOG}")" != *'-authenticationKeyID'* ]]
+    [[ "$(<"${CALL_LOG}")" == *$'pkgutil --check-signature '*'/Boundless Translator.pkg' ]]
 }
 
-function test_release_app_store_when_version_has_two_components_then_accepts_it {
+function test_release_app_store_when_same_build_exists_then_stops_before_xcode {
     # Arrange
-    : > "${CALL_LOG}"
-    local package_path="${BUILD_ROOT}/BoundlessTranslator-1.0-1.pkg"
-
-    # Act
-    run_releaser 1.0 1
-
-    # Assert
-    [[ "$(<"${APP_PATH}/marker")" == '1.0:1' ]]
-    [[ "$(<"${package_path}")" == 'signed package' ]]
-}
-
-function test_release_app_store_when_build_number_is_invalid_then_preserves_existing_artifacts {
-    # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
-    print 'existing package' > "${PACKAGE_PATH}"
+    mkdir -p "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-43.xcarchive"
+    print existing > "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-43.pkg"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if run_releaser 1.2.3 0 > "${TEMP_ROOT}/invalid-build.log" 2>&1; then
-        print -u2 'Expected a zero build number to fail.'
+    if run_releaser 1.2.3 43 >/dev/null 2>&1; then
+        print -u2 'Expected an existing App Store build to stop the release.'
         return 1
     fi
-    [[ "$(<"${APP_PATH}/marker")" == 'existing app' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'existing package' ]]
     [[ ! -s "${CALL_LOG}" ]]
 }
 
-function test_release_app_store_when_packaging_fails_then_preserves_existing_artifacts {
+function test_release_app_store_when_another_release_is_running_then_stops_before_xcode {
     # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
-    print 'existing package' > "${PACKAGE_PATH}"
+    mkdir -p "${RELEASE_ROOT}/.publish-lock"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_PRODUCTBUILD_FAIL=true run_releaser 1.2.3 42 > "${TEMP_ROOT}/package-failure.log" 2>&1; then
-        print -u2 'Expected productbuild failure to stop the release.'
+    if run_releaser 1.2.3 47 >/dev/null 2>&1; then
+        print -u2 'Expected a concurrent App Store release to stop.'
         return 1
     fi
-    [[ "$(<"${APP_PATH}/marker")" == 'existing app' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'existing package' ]]
+    [[ ! -s "${CALL_LOG}" ]]
+    rmdir "${RELEASE_ROOT}/.publish-lock"
 }
 
-function test_release_app_store_when_existing_app_cannot_be_backed_up_then_preserves_it {
+function test_release_app_store_when_export_fails_then_does_not_publish_artifacts {
     # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_MV_FAIL_SOURCE="${APP_PATH}" TEST_MV_FAILED_MARKER="${TEMP_ROOT}/mv-failed" run_releaser 1.2.3 42 > "${TEMP_ROOT}/backup-failure.log" 2>&1; then
-        print -u2 'Expected a failed existing-app backup to stop publishing.'
+    if TEST_FAIL_STEP=-exportArchive run_releaser 1.2.3 44 >/dev/null 2>&1; then
+        print -u2 'Expected export failure to stop the release.'
         return 1
     fi
-    [[ "$(<"${APP_PATH}/marker")" == 'existing app' ]]
-    if [[ -e "${BUILD_ROOT}/.publish-lock" ]]; then
-        cat "${TEMP_ROOT}/backup-failure.log" >&2
-        print -u2 'Expected failed publishing to release its lock.'
-        return 1
-    fi
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-44.xcarchive" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-44.pkg" ]]
 }
 
-function test_release_app_store_when_rollback_restore_fails_then_preserves_recovery_artifacts {
+function test_release_app_store_when_interrupted_then_removes_temporary_files_and_lock {
     # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
-    print 'existing package' > "${PACKAGE_PATH}"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_MV_FAIL_PUBLISH_PACKAGE=true TEST_MV_FAIL_RESTORE_APP=true run_releaser 1.2.3 42 > "${TEMP_ROOT}/rollback-failure.log" 2>&1; then
-        print -u2 'Expected failed publishing and rollback to fail the release.'
+    if TEST_SIGNAL_STEP=archive run_releaser 1.2.3 49 >/dev/null 2>&1; then
+        print -u2 'Expected an interrupted App Store release to stop.'
         return 1
     fi
-    local recovery_paths=("${BUILD_ROOT}"/.boundless-translator-app-store-release.*(N))
-    [[ "${#recovery_paths}" == 1 ]]
-    [[ "$(<"${recovery_paths[1]}/previous.app/marker")" == 'existing app' ]]
-    [[ "$(<"${recovery_paths[1]}/failed.app/marker")" == '1.2.3:42' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'existing package' ]]
-    [[ "$(<"${TEMP_ROOT}/rollback-failure.log")" == *"${recovery_paths[1]}"* ]]
-    [[ ! -e "${BUILD_ROOT}/.publish-lock" ]]
-    rm -rf "${recovery_paths[1]}"
+    [[ ! -e "${RELEASE_ROOT}/.publish-lock" ]]
+    [[ -z "$(find "${RELEASE_ROOT}" -maxdepth 1 -name '.boundless-translator-app-store-release.*' -print -quit)" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-49.xcarchive" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-49.pkg" ]]
 }
 
-function test_release_app_store_when_new_app_cannot_be_evacuated_then_does_not_nest_previous_app {
+function test_release_app_store_when_package_publish_fails_then_removes_partial_archive {
     # Arrange
-    mkdir -p "${APP_PATH}"
-    print 'existing app' > "${APP_PATH}/marker"
-    print 'existing package' > "${PACKAGE_PATH}"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_MV_FAIL_PUBLISH_PACKAGE=true TEST_MV_FAIL_EVACUATE_APP=true run_releaser 1.2.3 42 > "${TEMP_ROOT}/evacuation-failure.log" 2>&1; then
-        print -u2 'Expected failed package publishing and App evacuation to fail the release.'
+    if TEST_FAIL_PACKAGE_PUBLISH=true run_releaser 1.2.3 48 >/dev/null 2>&1; then
+        print -u2 'Expected package publish failure to stop the release.'
         return 1
     fi
-    local recovery_paths=("${BUILD_ROOT}"/.boundless-translator-app-store-release.*(N))
-    [[ "${#recovery_paths}" == 1 ]]
-    [[ "$(<"${APP_PATH}/marker")" == '1.2.3:42' ]]
-    [[ ! -e "${APP_PATH}/previous.app" ]]
-    [[ "$(<"${recovery_paths[1]}/previous.app/marker")" == 'existing app' ]]
-    [[ "$(<"${PACKAGE_PATH}")" == 'existing package' ]]
-    [[ "$(<"${TEMP_ROOT}/evacuation-failure.log")" == *"${recovery_paths[1]}"* ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-48.xcarchive" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-48.pkg" ]]
 }
 
-function test_release_app_store_when_extra_argument_is_given_then_rejects_it {
+function test_release_app_store_when_archive_has_wrong_product_id_then_stops_before_export {
     # Arrange
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if run_releaser 1.2.3 42 --upload > "${TEMP_ROOT}/extra-argument.log" 2>&1; then
-        print -u2 'Expected an extra argument to fail.'
+    if TEST_ARCHIVE_PRODUCT_ID=com.example.wrong run_releaser 1.2.3 45 >/dev/null 2>&1; then
+        print -u2 'Expected incorrect subscription metadata to stop the release.'
         return 1
     fi
-    [[ "$(<"${TEMP_ROOT}/extra-argument.log")" == *'Usage: release_app_store.sh <version> <build-number>'* ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-45.xcarchive" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-45.pkg" ]]
+    [[ "$(<"${CALL_LOG}")" != *-exportArchive* ]]
+}
+
+function test_release_app_store_when_archive_lacks_sandbox_then_stops_before_export {
+    # Arrange
+    : > "${CALL_LOG}"
+
+    # Act & Assert
+    if TEST_ARCHIVE_SANDBOX_ENABLED=false run_releaser 1.2.3 46 >/dev/null 2>&1; then
+        print -u2 'Expected an archive without App Sandbox to stop the release.'
+        return 1
+    fi
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-46.xcarchive" ]]
+    [[ ! -e "${RELEASE_ROOT}/BoundlessTranslator-1.2.3-46.pkg" ]]
+    [[ "$(<"${CALL_LOG}")" != *-exportArchive* ]]
+}
+
+function test_release_app_store_when_build_number_is_invalid_then_stops_before_xcode {
+    # Arrange
+    : > "${CALL_LOG}"
+
+    # Act & Assert
+    if run_releaser 1.2.3 0 >/dev/null 2>&1; then
+        print -u2 'Expected an invalid build number to fail.'
+        return 1
+    fi
     [[ ! -s "${CALL_LOG}" ]]
 }
 
-touch "${TEMP_ROOT}/distribution.provisionprofile"
-create_step_stubs
-test_release_app_store_when_configuration_is_valid_then_publishes_signed_package
-test_release_app_store_when_version_has_two_components_then_accepts_it
-test_release_app_store_when_build_number_is_invalid_then_preserves_existing_artifacts
-test_release_app_store_when_packaging_fails_then_preserves_existing_artifacts
-test_release_app_store_when_existing_app_cannot_be_backed_up_then_preserves_it
-test_release_app_store_when_rollback_restore_fails_then_preserves_recovery_artifacts
-test_release_app_store_when_new_app_cannot_be_evacuated_then_does_not_nest_previous_app
-test_release_app_store_when_extra_argument_is_given_then_rejects_it
-
+test_release_app_store_when_configuration_is_valid_then_publishes_archive_and_package
+test_release_app_store_when_same_build_exists_then_stops_before_xcode
+test_release_app_store_when_another_release_is_running_then_stops_before_xcode
+test_release_app_store_when_export_fails_then_does_not_publish_artifacts
+test_release_app_store_when_interrupted_then_removes_temporary_files_and_lock
+test_release_app_store_when_package_publish_fails_then_removes_partial_archive
+test_release_app_store_when_archive_has_wrong_product_id_then_stops_before_export
+test_release_app_store_when_archive_lacks_sandbox_then_stops_before_export
+test_release_app_store_when_build_number_is_invalid_then_stops_before_xcode
 print 'App Store release tests passed.'

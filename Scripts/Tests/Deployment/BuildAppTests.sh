@@ -3,224 +3,117 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
+readonly BUILDER="${PROJECT_ROOT}/Scripts/Tools/build_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build-app-tests.XXXXXX)"
+readonly BUILD_ROOT="${TEMP_ROOT}/Build"
+readonly INFO_PLIST="${TEMP_ROOT}/Info.plist"
+readonly CALL_LOG="${TEMP_ROOT}/calls.log"
+readonly XCODEBUILD_STUB="${TEMP_ROOT}/xcodebuild"
+readonly VERIFY_STUB="${TEMP_ROOT}/verify-app"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
-readonly FIXTURE="${TEMP_ROOT}/project"
-readonly MOCK_BIN="${TEMP_ROOT}/bin"
-readonly MV_STUB="${TEMP_ROOT}/mv"
 
-mkdir -p "${FIXTURE}/Scripts/Tools" "${FIXTURE}/Resources" "${MOCK_BIN}"
-cp "${PROJECT_ROOT}/Scripts/Tools/build_app.sh" "${FIXTURE}/Scripts/Tools/"
-cp "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf" "${FIXTURE}/Scripts/Tools/"
-cp "${PROJECT_ROOT}/Resources/Info.plist" "${FIXTURE}/Resources/"
-if [[ -f "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" ]]; then
-    cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${FIXTURE}/Resources/"
-fi
-touch "${FIXTURE}/Resources/AppIcon.icns"
-if [[ -f "${PROJECT_ROOT}/Resources/Sandbox.entitlements" ]]; then
-    cp "${PROJECT_ROOT}/Resources/Sandbox.entitlements" "${FIXTURE}/Resources/"
-fi
+cp "${PROJECT_ROOT}/Resources/Info.plist" "${INFO_PLIST}"
+plutil -replace CFBundleShortVersionString -string 1.2.3 "${INFO_PLIST}"
+plutil -replace CFBundleVersion -string 42 "${INFO_PLIST}"
 
-cat > "${MOCK_BIN}/swift" <<'EOF'
+cat > "${XCODEBUILD_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print -r -- "$*" > "${TEST_SWIFT_LOG}"
+print -r -- "$*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+[[ "${TEST_XCODEBUILD_FAIL:-false}" != true ]]
+
+derived_data_path=''
+configuration=''
 while [[ "$#" -gt 0 ]]; do
-    if [[ "$1" == --scratch-path ]]; then
-        scratch_path="$2"
-        break
-    fi
-    shift
+    case "$1" in
+        -derivedDataPath) derived_data_path="$2"; shift 2 ;;
+        -configuration) configuration="$2"; shift 2 ;;
+        *) shift ;;
+    esac
 done
-mkdir -p "${scratch_path}/release/BoundlessTranslator_BoundlessTranslator.bundle/en.lproj"
-mkdir -p "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj"
-print 'test executable' > "${scratch_path}/release/BoundlessTranslator"
-print 'shortcut localization' > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
-cat > "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/Info.plist" <<'PLIST'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict><key>CFBundleDevelopmentRegion</key><string>en</string></dict></plist>
-PLIST
-chmod a-w "${scratch_path}/release/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings"
-EOF
+mkdir -p "${derived_data_path}/Build/Products/${configuration}/Boundless Translator.app/Contents/MacOS"
+print app > "${derived_data_path}/Build/Products/${configuration}/Boundless Translator.app/Contents/MacOS/BoundlessTranslator"
+STUB
 
-cat > "${MOCK_BIN}/codesign" <<'EOF'
+cat > "${VERIFY_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print -r -- "$*" >> "${TEST_SIGNING_LOG}"
-if [[ "${TEST_SIGNING_FAIL:-false}" == true ]]; then
-    exit 1
-fi
-while [[ "$#" -gt 0 ]]; do
-    if [[ "$1" == --entitlements ]]; then
-        [[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.app-sandbox' "$2")" == true ]]
-        [[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.network.client' "$2")" == true ]]
-        break
-    fi
-    shift
-done
-EOF
-chmod +x "${MOCK_BIN}/swift" "${MOCK_BIN}/codesign"
-
-cat > "${MV_STUB}" <<'EOF'
-#!/bin/zsh
-set -eu
-if [[ "$1" == */boundless-translator-build.*'/Boundless Translator.app' && "$2" == "${TEST_FINAL_APP_PATH}" ]]; then
-    exit 1
-fi
-if [[ "$1" == */'Previous Boundless Translator.app' && "$2" == "${TEST_FINAL_APP_PATH}" ]]; then
-    exit 1
-fi
-/bin/mv "$@"
-EOF
-chmod +x "${MV_STUB}"
+print -r -- "verify $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+[[ "${TEST_VERIFY_FAIL:-false}" != true ]]
+STUB
+chmod +x "${XCODEBUILD_STUB}" "${VERIFY_STUB}"
 
 function run_builder {
-    PATH="${MOCK_BIN}:${PATH}" TEST_SIGNING_LOG="${TEMP_ROOT}/signing.log" \
-        TEST_SWIFT_LOG="${TEMP_ROOT}/swift.log" \
-        zsh "${FIXTURE}/Scripts/Tools/build_app.sh" "$@"
+    BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE="${XCODEBUILD_STUB}" \
+    BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${VERIFY_STUB}" \
+    BOUNDLESS_TRANSLATOR_BUILD_INFO_PLIST="${INFO_PLIST}" \
+    BOUNDLESS_TRANSLATOR_BUILD_ROOT="${BUILD_ROOT}" \
+    BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
+    BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID=com.lillard.boundless.annual \
+    BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL=https://example.com/privacy \
+    BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT='© 2026 Example Company' \
+        zsh "${BUILDER}" "$@"
 }
 
-function test_build_app_when_output_root_is_overridden_then_only_publishes_staged_app {
+function test_build_app_when_requested_then_builds_test_dmg_app {
     # Arrange
-    local staged_root="${TEMP_ROOT}/isolated-build"
-    local shared_app="${FIXTURE}/Build/Boundless Translator.app"
-    mkdir -p "${shared_app}"
-    print 'shared app' > "${shared_app}/marker"
-    : > "${TEMP_ROOT}/signing.log"
-
-    # Act
-    BOUNDLESS_TRANSLATOR_BUILD_ROOT="${staged_root}" run_builder
-
-    # Assert
-    [[ -f "${staged_root}/Boundless Translator.app/Contents/MacOS/BoundlessTranslator" ]]
-    [[ "$(<"${shared_app}/marker")" == 'shared app' ]]
-}
-
-function assert_privacy_manifest {
-    local manifest="$1/Contents/Resources/PrivacyInfo.xcprivacy"
-    plutil -lint "${manifest}"
-    [[ "$(plutil -extract NSPrivacyTracking raw -expect bool "${manifest}")" == false ]]
-    [[ "$(plutil -extract NSPrivacyTrackingDomains raw -expect array "${manifest}")" == 0 ]]
-    [[ "$(plutil -extract NSPrivacyCollectedDataTypes raw -expect array "${manifest}")" == 0 ]]
-    [[ "$(plutil -extract NSPrivacyAccessedAPITypes raw -expect array "${manifest}")" == 1 ]]
-    [[ "$(plutil -extract NSPrivacyAccessedAPITypes.0.NSPrivacyAccessedAPIType raw "${manifest}")" == NSPrivacyAccessedAPICategoryUserDefaults ]]
-    [[ "$(plutil -extract NSPrivacyAccessedAPITypes.0.NSPrivacyAccessedAPITypeReasons.0 raw "${manifest}")" == CA92.1 ]]
-}
-
-function test_build_app_when_argument_is_invalid_then_preserves_existing_app {
-    # Arrange
-    : > "${TEMP_ROOT}/signing.log"
-    mkdir -p "${FIXTURE}/Build/Boundless Translator.app"
-    print 'existing app' > "${FIXTURE}/Build/Boundless Translator.app/marker"
-
-    # Act & Assert
-    if run_builder --invalid > "${TEMP_ROOT}/invalid.log" 2>&1; then
-        print -u2 'Expected an unsupported build mode to fail.'
-        return 1
-    fi
-    [[ "$(<"${FIXTURE}/Build/Boundless Translator.app/marker")" == 'existing app' ]]
-    [[ ! -s "${TEMP_ROOT}/signing.log" ]]
-}
-
-function test_build_app_when_built_then_enables_sandbox_without_changing_source_info {
-    # Arrange
-    local app_path="${FIXTURE}/Build/Boundless Translator.app"
-    local original_info="$(shasum "${FIXTURE}/Resources/Info.plist")"
-    mkdir -p "${FIXTURE}/Build/Boundless Translator.app"
-    print 'existing app' > "${FIXTURE}/Build/Boundless Translator.app/marker"
-    : > "${TEMP_ROOT}/signing.log"
+    : > "${CALL_LOG}"
 
     # Act
     run_builder
 
     # Assert
-    assert_privacy_manifest "${app_path}"
-    [[ -f "${app_path}/Contents/MacOS/BoundlessTranslator" ]]
-    [[ -d "${app_path}/Contents/Resources/en.lproj" ]]
-    [[ -f "${app_path}/Contents/Resources/KeyboardShortcuts_KeyboardShortcuts.bundle/en.lproj/Localizable.strings" ]]
-    [[ "$(plutil -extract CFBundleIdentifier raw "${app_path}/Contents/Info.plist")" == com.lillard.BoundlessTranslator ]]
-    [[ "$(<"${TEMP_ROOT}/signing.log")" == *"--entitlements ${FIXTURE}/Resources/Sandbox.entitlements"* ]]
-    [[ "$(shasum "${FIXTURE}/Resources/Info.plist")" == "${original_info}" ]]
+    [[ -f "${BUILD_ROOT}/Boundless Translator.app/Contents/MacOS/BoundlessTranslator" ]]
+    local build_call="$(sed -n '1p' "${CALL_LOG}")"
+    [[ "${build_call}" == build\ * ]]
+    [[ "${build_call}" == *'-scheme BoundlessTranslator-Direct'* ]]
+    [[ "${build_call}" == *'-configuration DirectRelease'* ]]
+    [[ "${build_call}" == *'MARKETING_VERSION=1.2.3'* ]]
+    [[ "${build_call}" == *'CURRENT_PROJECT_VERSION=42'* ]]
+    [[ "${build_call}" != *SUBSCRIPTION_REQUIRED* ]]
+    [[ "$(sed -n '2p' "${CALL_LOG}")" == verify\ *'/Boundless Translator.app' ]]
 }
 
-function test_build_app_when_resource_is_quarantined_then_rejects_build_before_signing {
+function test_build_app_when_xcode_build_fails_then_preserves_previous_app {
     # Arrange
-    local app_path="${FIXTURE}/Build/Boundless Translator.app"
-    mkdir -p "${app_path}"
-    print 'existing app' > "${app_path}/marker"
-    xattr -w com.apple.quarantine '0081;00000000;test;' "${FIXTURE}/Resources/AppIcon.icns"
-    : > "${TEMP_ROOT}/signing.log"
+    mkdir -p "${BUILD_ROOT}/Boundless Translator.app"
+    print previous > "${BUILD_ROOT}/Boundless Translator.app/marker"
 
     # Act & Assert
-    if run_builder > "${TEMP_ROOT}/quarantine.log" 2>&1; then
-        print -u2 'Expected a quarantined resource to stop the build.'
+    if TEST_XCODEBUILD_FAIL=true run_builder >/dev/null 2>&1; then
+        print -u2 'Expected Xcode build failure to stop the build.'
         return 1
     fi
-    [[ "$(<"${app_path}/marker")" == 'existing app' ]]
-    [[ ! -s "${TEMP_ROOT}/signing.log" ]]
-    [[ "$(<"${TEMP_ROOT}/quarantine.log")" == *'Built app contains quarantine attributes.'* ]]
-    xattr -d com.apple.quarantine "${FIXTURE}/Resources/AppIcon.icns"
+    [[ "$(<"${BUILD_ROOT}/Boundless Translator.app/marker")" == previous ]]
 }
 
-function test_build_app_when_signing_fails_then_preserves_previous_app {
+function test_build_app_when_verification_fails_then_preserves_previous_app {
     # Arrange
-    local app_path="${FIXTURE}/Build/Boundless Translator.app"
-    mkdir -p "${app_path}"
-    print 'previous sandbox' > "${app_path}/marker"
+    mkdir -p "${BUILD_ROOT}/Boundless Translator.app"
+    print previous > "${BUILD_ROOT}/Boundless Translator.app/marker"
 
     # Act & Assert
-    if TEST_SIGNING_FAIL=true run_builder > "${TEMP_ROOT}/failure.log" 2>&1; then
-        print -u2 'Expected signing failure to stop the build.'
+    if TEST_VERIFY_FAIL=true run_builder >/dev/null 2>&1; then
+        print -u2 'Expected verification failure to stop the build.'
         return 1
     fi
-    [[ "$(<"${app_path}/marker")" == 'previous sandbox' ]]
+    [[ "$(<"${BUILD_ROOT}/Boundless Translator.app/marker")" == previous ]]
 }
 
-function test_build_app_when_publish_and_rollback_fail_then_preserves_recovery_directory {
+function test_build_app_when_argument_is_given_then_stops_before_xcode_build {
     # Arrange
-    local app_path="${FIXTURE}/Build/Boundless Translator.app"
-    mkdir -p "${app_path}"
-    print 'previous app' > "${app_path}/marker"
+    : > "${CALL_LOG}"
 
     # Act & Assert
-    if TEST_FINAL_APP_PATH="${app_path}" BOUNDLESS_TRANSLATOR_MV_EXECUTABLE="${MV_STUB}" \
-        run_builder > "${TEMP_ROOT}/rollback-failure.log" 2>&1; then
-        print -u2 'Expected publish and rollback failure to fail the build.'
+    if run_builder --formal-dmg >/dev/null 2>&1; then
+        print -u2 'Expected build_app.sh to reject arguments.'
         return 1
     fi
-    local recovery_path="$(sed -n 's/^Publish rollback incomplete. Recovery artifacts preserved at: //p' "${TEMP_ROOT}/rollback-failure.log")"
-    [[ -n "${recovery_path}" ]]
-    [[ "$(<"${recovery_path}/Previous Boundless Translator.app/marker")" == 'previous app' ]]
-    rm -rf "${recovery_path}"
+    [[ ! -s "${CALL_LOG}" ]]
 }
 
-function test_build_app_when_no_mode_given_then_preserves_developer_id_build_contract {
-    # Arrange
-    local app_path="${FIXTURE}/Build/Boundless Translator.app"
-    : > "${TEMP_ROOT}/signing.log"
-
-    # Act
-    run_builder
-
-    # Assert
-    assert_privacy_manifest "${app_path}"
-    [[ "$(plutil -extract CFBundleIdentifier raw "${app_path}/Contents/Info.plist")" == com.lillard.BoundlessTranslator ]]
-    [[ "$(<"${TEMP_ROOT}/signing.log")" == *--entitlements* ]]
-    [[ "$(<"${TEMP_ROOT}/signing.log")" == *"--options runtime --timestamp --sign"* ]]
-    [[ "$(<"${TEMP_ROOT}/swift.log")" != *SUBSCRIPTION_REQUIRED* ]]
-    if plutil -extract BoundlessSubscriptionProductID raw "${app_path}/Contents/Info.plist" >/dev/null 2>&1; then
-        print -u2 'Free test builds must not contain subscription product configuration.'
-        return 1
-    fi
-}
-
-test_build_app_when_argument_is_invalid_then_preserves_existing_app
-test_build_app_when_output_root_is_overridden_then_only_publishes_staged_app
-test_build_app_when_built_then_enables_sandbox_without_changing_source_info
-test_build_app_when_resource_is_quarantined_then_rejects_build_before_signing
-test_build_app_when_signing_fails_then_preserves_previous_app
-test_build_app_when_publish_and_rollback_fail_then_preserves_recovery_directory
-test_build_app_when_no_mode_given_then_preserves_developer_id_build_contract
-
+test_build_app_when_requested_then_builds_test_dmg_app
+test_build_app_when_xcode_build_fails_then_preserves_previous_app
+test_build_app_when_verification_fails_then_preserves_previous_app
+test_build_app_when_argument_is_given_then_stops_before_xcode_build
 print 'App build tests passed.'

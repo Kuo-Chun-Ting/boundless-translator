@@ -8,7 +8,6 @@ readonly FEATURE_VERIFIER="${PROJECT_ROOT}/Scripts/verify_features.sh"
 readonly SUBSCRIPTION_VERIFIER="${PROJECT_ROOT}/Scripts/verify_subscription.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-workflow-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
-readonly APP_PATH="${TEMP_ROOT}/Build/Boundless Translator.app"
 
 function clean_up {
     rm -rf "${TEMP_ROOT}"
@@ -31,8 +30,8 @@ function create_passing_steps {
     create_step_stub "${TEMP_ROOT}/step-swift" 'if [[ "$3" == "--xunit-output" ]]; then print -r -- "<testsuites><testsuite tests=\"1\" errors=\"0\" failures=\"0\"><testcase name=\"example\"/></testsuite></testsuites>" > "${4:r}-swift-testing.xml"; fi'
     create_step_stub "${TEMP_ROOT}/step-gui"
     create_step_stub "${TEMP_ROOT}/step-storekit"
-    create_step_stub "${TEMP_ROOT}/step-build" 'mkdir -p "${BOUNDLESS_TRANSLATOR_VERIFY_APP_PATH}"'
-    create_step_stub "${TEMP_ROOT}/step-app-verify"
+    create_step_stub "${TEMP_ROOT}/step-build" 'exit 99'
+    create_step_stub "${TEMP_ROOT}/step-app-verify" 'exit 99'
     create_step_stub "${TEMP_ROOT}/step-deployment"
 }
 
@@ -46,7 +45,6 @@ function run_verifier {
     BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE="${TEMP_ROOT}/step-build" \
     BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${TEMP_ROOT}/step-app-verify" \
     BOUNDLESS_TRANSLATOR_DEPLOYMENT_TEST_EXECUTABLE="${TEMP_ROOT}/step-deployment" \
-    BOUNDLESS_TRANSLATOR_VERIFY_APP_PATH="${APP_PATH}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
         zsh "${verifier}" "$@"
 }
@@ -60,15 +58,13 @@ function test_verify_features_when_steps_succeed_then_runs_only_free_feature_che
     run_verifier "${FEATURE_VERIFIER}"
 
     # Assert
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 5 ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 3 ]]
     local swift_call="$(sed -n '1p' "${CALL_LOG}")"
     [[ "${swift_call}" == 'step-swift test --disable-sandbox --xunit-output '* ]]
     [[ "${swift_call}" != *SUBSCRIPTION_REQUIRED* ]]
     [[ "${swift_call}" == *'--scratch-path '*'/features'* ]]
     [[ "$(sed -n '2p' "${CALL_LOG}")" == 'step-gui ' ]]
-    [[ "$(sed -n '3p' "${CALL_LOG}")" == 'step-build ' ]]
-    [[ "$(sed -n '4p' "${CALL_LOG}")" == "step-app-verify ${APP_PATH}" ]]
-    [[ "$(sed -n '5p' "${CALL_LOG}")" == 'step-deployment features' ]]
+    [[ "$(sed -n '3p' "${CALL_LOG}")" == 'step-deployment features' ]]
 }
 
 function test_verify_subscription_when_steps_succeed_then_runs_only_subscription_checks {
@@ -97,11 +93,11 @@ function test_verify_when_steps_succeed_then_runs_features_before_subscription {
     run_verifier "${ALL_VERIFIER}"
 
     # Assert
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 8 ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 6 ]]
     [[ "$(sed -n '1p' "${CALL_LOG}")" != *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(sed -n '5p' "${CALL_LOG}")" == 'step-deployment features' ]]
-    [[ "$(sed -n '6p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
-    [[ "$(sed -n '8p' "${CALL_LOG}")" == 'step-deployment subscription' ]]
+    [[ "$(sed -n '3p' "${CALL_LOG}")" == 'step-deployment features' ]]
+    [[ "$(sed -n '4p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
+    [[ "$(sed -n '6p' "${CALL_LOG}")" == 'step-deployment subscription' ]]
 }
 
 function test_verify_features_when_results_are_incomplete_then_stops_before_gui {
@@ -173,8 +169,8 @@ function test_verify_when_storekit_is_skipped_then_reports_incomplete_coverage_a
 
     # Assert
     [[ "${exit_status}" == 0 ]]
-    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 8 ]]
-    [[ "$(sed -n '6p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
+    [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 6 ]]
+    [[ "$(sed -n '4p' "${CALL_LOG}")" == *SUBSCRIPTION_REQUIRED* ]]
     [[ "$(tail -n 1 "${CALL_LOG}")" == 'step-deployment subscription' ]]
     local output="$(<"${TEMP_ROOT}/all-output.log")"
     [[ "${output}" == *'StoreKit integration coverage is incomplete'* ]]

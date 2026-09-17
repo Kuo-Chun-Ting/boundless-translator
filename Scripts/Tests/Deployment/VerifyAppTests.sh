@@ -3,133 +3,165 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly BUILD_APP="${PROJECT_ROOT}/Build/Boundless Translator.app"
 readonly VERIFIER="${PROJECT_ROOT}/Scripts/Tools/verify_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-tests.XXXXXX)"
-active_app_pid=""
+readonly APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
+readonly MOCK_BIN="${TEMP_ROOT}/bin"
+trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
-function clean_up {
-    if [[ -n "${active_app_pid}" ]]; then
-        kill "${active_app_pid}" >/dev/null 2>&1 || true
-        wait "${active_app_pid}" >/dev/null 2>&1 || true
-    fi
-    rm -rf "${TEMP_ROOT}"
+function create_app_fixture {
+    local resources_path="${APP_PATH}/Contents/Resources"
+    local executable_path="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
+
+    mkdir -p "${APP_PATH}/Contents/MacOS"
+    local localization_path
+    for localization_path in "${PROJECT_ROOT}"/Sources/BoundlessTranslator/Resources/*.lproj; do
+        mkdir -p "${resources_path}/${localization_path:t}"
+    done
+    cp "${PROJECT_ROOT}/Resources/Info.plist" "${APP_PATH}/Contents/Info.plist"
+    cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${resources_path}/PrivacyInfo.xcprivacy"
+    cat > "${executable_path}" <<'EOF'
+#!/bin/zsh
+sleep 10
+EOF
+    chmod +x "${executable_path}"
 }
-trap clean_up EXIT
 
-function test_verify_app_when_app_has_expected_developer_id_signature_then_succeeds {
+function create_tool_stubs {
+    mkdir -p "${MOCK_BIN}"
+    cat > "${MOCK_BIN}/codesign" <<'EOF'
+#!/bin/zsh
+if [[ "$*" == *--verify* && "${TEST_CODESIGN_VERIFY_FAIL:-false}" == true ]]; then
+    exit 1
+fi
+if [[ "$*" == *--entitlements* ]]; then
+    sandbox_value='<true/>'
+    network_value='<true/>'
+    [[ "${TEST_SANDBOX_ENABLED:-true}" == true ]] || sandbox_value='<false/>'
+    [[ "${TEST_NETWORK_ENABLED:-true}" == true ]] || network_value='<false/>'
+    print "<plist version=\"1.0\"><dict><key>com.apple.security.app-sandbox</key>${sandbox_value}<key>com.apple.security.network.client</key>${network_value}</dict></plist>"
+elif [[ "$*" == *--display* ]]; then
+    print 'flags=0x10000(runtime) Timestamp=verified-test-timestamp TeamIdentifier=3S9ZKKJ6PW'
+fi
+EOF
+    cat > "${MOCK_BIN}/vtool" <<'EOF'
+#!/bin/zsh
+print "minos ${TEST_MINIMUM_OS_VERSION:-15.0}"
+EOF
+    cat > "${MOCK_BIN}/otool" <<'EOF'
+#!/bin/zsh
+print "$2:"
+[[ "${TEST_INCLUDE_TRANSLATION_FRAMEWORK:-true}" != true ]] || print '/System/Library/Frameworks/Translation.framework/Versions/A/Translation'
+[[ "${TEST_INCLUDE_VISIONKIT_FRAMEWORK:-true}" != true ]] || print '/System/Library/Frameworks/VisionKit.framework/Versions/A/VisionKit'
+EOF
+    chmod +x "${MOCK_BIN}/codesign" "${MOCK_BIN}/vtool" "${MOCK_BIN}/otool"
+}
+
+function run_verifier {
+    PATH="${MOCK_BIN}:${PATH}" \
+    BOUNDLESS_TRANSLATOR_APP_LAUNCH_WAIT_SECONDS=0.05 \
+        zsh "${VERIFIER}" "${APP_PATH}"
+}
+
+function test_verify_app_when_app_contract_is_complete_then_succeeds {
     # Arrange
-    local app_path="${BUILD_APP}"
 
     # Act & Assert
-    zsh "${VERIFIER}" "${app_path}"
-
-    local resources_path="${app_path}/Contents/Resources"
-    local privacy_manifest="${resources_path}/PrivacyInfo.xcprivacy"
-    plutil -lint "${privacy_manifest}"
-    cmp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${privacy_manifest}"
-    [[ -d "${resources_path}/en.lproj" ]]
-    [[ -d "${resources_path}/zh-Hant.lproj" ]]
-    [[ "$(find "${resources_path}" -mindepth 1 -maxdepth 1 -type d -name '*.lproj' | wc -l | tr -d ' ')" == "48" ]]
-
-    local executable="${app_path}/Contents/MacOS/BoundlessTranslator"
-    [[ "$(plutil -extract LSMinimumSystemVersion raw "${app_path}/Contents/Info.plist")" == "15.0" ]]
-    [[ "$(vtool -show-build "${executable}")" == *"minos 15.0"* ]]
-
-    local dependencies
-    dependencies="$(otool -L "${executable}")"
-    [[ "${dependencies}" == *"/System/Library/Frameworks/Translation.framework/"* ]]
-    [[ "${dependencies}" == *"/System/Library/Frameworks/VisionKit.framework/"* ]]
-    [[ "${dependencies}" != *"@rpath"* ]]
-    [[ "${dependencies}" != *"@loader_path"* ]]
-    [[ "${dependencies}" != *"@executable_path"* ]]
+    run_verifier
 }
 
-function test_verify_app_when_app_is_launched_then_remains_running {
+function test_verify_app_when_privacy_manifest_is_missing_then_fails {
     # Arrange
-    local executable="${BUILD_APP}/Contents/MacOS/BoundlessTranslator"
-    local output="${TEMP_ROOT}/launch.log"
+    rm "${APP_PATH}/Contents/Resources/PrivacyInfo.xcprivacy"
 
-    # Act
-    "${executable}" >"${output}" 2>&1 &
-    active_app_pid=$!
-    sleep 2
-
-    # Assert
-    if ! kill -0 "${active_app_pid}" >/dev/null 2>&1; then
-        cat "${output}" >&2
-        print -u2 "Expected the built App to remain running after launch."
+    # Act & Assert
+    if run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected a missing privacy manifest to fail verification.'
         return 1
     fi
-    kill "${active_app_pid}"
-    wait "${active_app_pid}" >/dev/null 2>&1 || true
-    active_app_pid=""
+    cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${APP_PATH}/Contents/Resources/PrivacyInfo.xcprivacy"
 }
 
-function test_verify_app_when_environment_attempts_to_override_team_then_uses_pinned_team {
+function test_verify_app_when_binary_targets_wrong_macos_version_then_fails {
     # Arrange
-    local unexpected_team_id="0000000000"
 
     # Act & Assert
-    BOUNDLESS_TRANSLATOR_EXPECTED_TEAM_ID="${unexpected_team_id}" \
-        zsh "${VERIFIER}" "${BUILD_APP}"
-}
-
-function test_verify_app_when_executable_is_modified_then_fails {
-    # Arrange
-    local test_app="${TEMP_ROOT}/Modified.app"
-    ditto "${BUILD_APP}" "${test_app}"
-    print '\0' >> "${test_app}/Contents/MacOS/BoundlessTranslator"
-
-    # Act & Assert
-    if zsh "${VERIFIER}" "${test_app}" >/dev/null 2>&1; then
-        print -u2 "Expected modified App verification to fail."
+    if TEST_MINIMUM_OS_VERSION=14.0 run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected an incorrect binary deployment target to fail verification.'
         return 1
     fi
 }
 
-function test_verify_app_when_app_is_ad_hoc_signed_then_fails {
+function test_verify_app_when_required_framework_is_missing_then_fails {
     # Arrange
-    local test_app="${TEMP_ROOT}/Ad Hoc.app"
-    ditto "${BUILD_APP}" "${test_app}"
-    codesign --force --sign - "${test_app}" >/dev/null 2>&1
 
     # Act & Assert
-    if zsh "${VERIFIER}" "${test_app}" >/dev/null 2>&1; then
-        print -u2 "Expected ad hoc signed App verification to fail."
+    if TEST_INCLUDE_TRANSLATION_FRAMEWORK=false run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected a missing Translation framework dependency to fail verification.'
         return 1
     fi
+}
+
+function test_verify_app_when_executable_exits_immediately_then_fails {
+    # Arrange
+    local executable_path="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
+    cat > "${executable_path}" <<'EOF'
+#!/bin/zsh
+exit 0
+EOF
+    chmod +x "${executable_path}"
+
+    # Act & Assert
+    if run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected an App that exits immediately to fail verification.'
+        return 1
+    fi
+    cat > "${executable_path}" <<'EOF'
+#!/bin/zsh
+sleep 10
+EOF
+    chmod +x "${executable_path}"
 }
 
 function test_verify_app_when_signature_lacks_sandbox_then_fails {
-    # Arrange: isolate the verifier's entitlement check from certificate checks.
-    local mock_bin="${TEMP_ROOT}/bin"
-    mkdir -p "${mock_bin}"
-    cat > "${mock_bin}/codesign" <<'EOF'
-#!/bin/zsh
-if [[ "$*" == *--entitlements* ]]; then
-    [[ "$*" == *--xml* ]] || { print '[Dict]'; exit 0; }
-    print '<plist version="1.0"><dict><key>com.apple.security.app-sandbox</key><false/></dict></plist>'
-elif [[ "$*" == *--display* ]]; then
-    print 'flags=0x10000(runtime) Timestamp=verified-test-timestamp'
-fi
-exit 0
-EOF
-    chmod +x "${mock_bin}/codesign"
+    # Arrange
 
     # Act & Assert
-    if PATH="${mock_bin}:${PATH}" zsh "${VERIFIER}" "${BUILD_APP}" >"${TEMP_ROOT}/no-sandbox.log" 2>&1; then
+    if TEST_SANDBOX_ENABLED=false run_verifier >/dev/null 2>&1; then
         print -u2 'Expected a non-sandboxed signature to fail verification.'
         return 1
     fi
-    [[ "$(<"${TEMP_ROOT}/no-sandbox.log")" == *'does not enable App Sandbox'* ]]
 }
 
-test_verify_app_when_signature_lacks_sandbox_then_fails
-test_verify_app_when_app_has_expected_developer_id_signature_then_succeeds
-test_verify_app_when_app_is_launched_then_remains_running
-test_verify_app_when_environment_attempts_to_override_team_then_uses_pinned_team
-test_verify_app_when_executable_is_modified_then_fails
-test_verify_app_when_app_is_ad_hoc_signed_then_fails
+function test_verify_app_when_signature_lacks_network_access_then_fails {
+    # Arrange
 
-print "App verification tests passed."
+    # Act & Assert
+    if TEST_NETWORK_ENABLED=false run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected a signature without outgoing network access to fail verification.'
+        return 1
+    fi
+}
+
+function test_verify_app_when_signature_is_invalid_then_fails {
+    # Arrange
+
+    # Act & Assert
+    if TEST_CODESIGN_VERIFY_FAIL=true run_verifier >/dev/null 2>&1; then
+        print -u2 'Expected an invalid signature to fail verification.'
+        return 1
+    fi
+}
+
+create_app_fixture
+create_tool_stubs
+test_verify_app_when_privacy_manifest_is_missing_then_fails
+test_verify_app_when_binary_targets_wrong_macos_version_then_fails
+test_verify_app_when_required_framework_is_missing_then_fails
+test_verify_app_when_executable_exits_immediately_then_fails
+test_verify_app_when_signature_lacks_sandbox_then_fails
+test_verify_app_when_signature_lacks_network_access_then_fails
+test_verify_app_when_signature_is_invalid_then_fails
+test_verify_app_when_app_contract_is_complete_then_succeeds
+
+print 'App verification tests passed.'

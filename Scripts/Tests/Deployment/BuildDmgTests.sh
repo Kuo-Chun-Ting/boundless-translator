@@ -34,37 +34,33 @@ EOF
 
 function run_dmg_builder {
     local build_stub="$1"
-    local verify_stub="$2"
-    local package_stub="$3"
-    shift 3
+    local package_stub="$2"
+    shift 2
 
     BOUNDLESS_TRANSLATOR_BUILD_EXECUTABLE="${build_stub}" \
-    BOUNDLESS_TRANSLATOR_VERIFY_EXECUTABLE="${verify_stub}" \
     BOUNDLESS_TRANSLATOR_PACKAGE_EXECUTABLE="${package_stub}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
     TEST_APP_MARKER="${TEST_APP_MARKER:-built app}" \
         zsh "${DMG_BUILDER}" "$@"
 }
 
-function test_build_dmg_when_output_path_is_provided_then_builds_verifies_and_packages_app {
+function test_build_dmg_when_output_path_is_provided_then_builds_and_packages_app {
     # Arrange
     local build_stub="${TEMP_ROOT}/step-build"
-    local verify_stub="${TEMP_ROOT}/step-verify"
     local package_stub="${TEMP_ROOT}/step-package"
     create_step_stub "${build_stub}"
-    create_step_stub "${verify_stub}"
     create_step_stub "${package_stub}"
     : > "${CALL_LOG}"
 
     # Act
-    run_dmg_builder "${build_stub}" "${verify_stub}" "${package_stub}" "${DMG_PATH}"
+    run_dmg_builder "${build_stub}" "${package_stub}" "${DMG_PATH}"
 
     # Assert
     local expected_calls
     expected_calls=$'step-build \n'
     local staged_app_path="$(sed -n '2p' "${CALL_LOG}")"
-    staged_app_path="${staged_app_path#step-verify }"
-    expected_calls+=$'step-verify '${staged_app_path}$'\n'
+    staged_app_path="${staged_app_path#step-package }"
+    staged_app_path="${staged_app_path% ${DMG_PATH}}"
     expected_calls+=$'step-package '${staged_app_path}$' '${DMG_PATH}
     [[ "$(<"${CALL_LOG}")" == "${expected_calls}" ]]
     [[ "$(<"${DMG_PATH}")" == "built app" ]]
@@ -74,17 +70,15 @@ function test_build_dmg_when_output_path_is_provided_then_builds_verifies_and_pa
 function test_build_dmg_when_shared_app_changes_after_build_then_packages_its_staged_app {
     # Arrange
     local build_stub="${TEMP_ROOT}/race-step-build"
-    local verify_stub="${TEMP_ROOT}/race-step-verify"
     local package_stub="${TEMP_ROOT}/race-step-package"
     create_step_stub "${build_stub}"
-    create_step_stub "${verify_stub}"
     create_step_stub "${package_stub}"
     mkdir -p "${APP_PATH}"
     print -n 'other build' > "${APP_PATH}/marker"
     : > "${CALL_LOG}"
 
     # Act
-    TEST_APP_MARKER='this invocation' run_dmg_builder "${build_stub}" "${verify_stub}" "${package_stub}" "${DMG_PATH}"
+    TEST_APP_MARKER='this invocation' run_dmg_builder "${build_stub}" "${package_stub}" "${DMG_PATH}"
 
     # Assert
     [[ "$(<"${DMG_PATH}")" == 'this invocation' ]]
@@ -94,22 +88,20 @@ function test_build_dmg_when_shared_app_changes_after_build_then_packages_its_st
 function test_build_dmg_when_output_path_is_missing_then_skips_build {
     # Arrange
     local build_stub="${TEMP_ROOT}/missing-path-step-build"
-    local verify_stub="${TEMP_ROOT}/missing-path-step-verify"
     local package_stub="${TEMP_ROOT}/missing-path-step-package"
     create_step_stub "${build_stub}"
-    create_step_stub "${verify_stub}"
     create_step_stub "${package_stub}"
     : > "${CALL_LOG}"
 
     # Act & Assert
-    if run_dmg_builder "${build_stub}" "${verify_stub}" "${package_stub}" >/dev/null 2>&1; then
+    if run_dmg_builder "${build_stub}" "${package_stub}" >/dev/null 2>&1; then
         print -u2 "Expected a missing output path to fail."
         return 1
     fi
     [[ ! -s "${CALL_LOG}" ]]
 }
 
-test_build_dmg_when_output_path_is_provided_then_builds_verifies_and_packages_app
+test_build_dmg_when_output_path_is_provided_then_builds_and_packages_app
 test_build_dmg_when_shared_app_changes_after_build_then_packages_its_staged_app
 test_build_dmg_when_output_path_is_missing_then_skips_build
 
