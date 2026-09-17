@@ -12,13 +12,15 @@ trap 'rm -rf "${TEMP_ROOT}"' EXIT
 function create_app_fixture {
     local resources_path="${APP_PATH}/Contents/Resources"
     local executable_path="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
+    local info_plist="${APP_PATH}/Contents/Info.plist"
 
     mkdir -p "${APP_PATH}/Contents/MacOS"
     local localization_path
     for localization_path in "${PROJECT_ROOT}"/Sources/BoundlessTranslator/Resources/*.lproj; do
         mkdir -p "${resources_path}/${localization_path:t}"
     done
-    cp "${PROJECT_ROOT}/Resources/Info.plist" "${APP_PATH}/Contents/Info.plist"
+    plutil -create xml1 "${info_plist}"
+    plutil -insert LSMinimumSystemVersion -string 15.0 "${info_plist}"
     cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${resources_path}/PrivacyInfo.xcprivacy"
     cat > "${executable_path}" <<'EOF'
 #!/bin/zsh

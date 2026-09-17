@@ -108,7 +108,7 @@ These directories belong to one executable target, not separate Swift packages. 
 - `Resources/Sandbox.entitlements` is the shared source for both distributions. Xcode signing adds the matching application and team identifiers to the signed App; the project does not maintain a separate App Store entitlements file.
 - Cross-app selection uses `AXUIElement`. An unavailable Accessibility selection uses the clipboard fallback; a confirmed empty selection stops quietly. It has been exercised in a sandboxed local build; the exact App Store-signed build remains part of normal TestFlight acceptance.
 - Preserve the Developer ID DMG workflow for development and direct testing. Direct distribution currently produces only the unrestricted test edition.
-- Keep App Store packaging and upload as separate steps. The release entry point produces a signed archive and PKG; the upload entry point sends that existing PKG to App Store Connect. Uploading a build does not publish it.
+- Use Xcode Organizer for the App Store Archive, validation, package creation and upload. Uploading a build to App Store Connect does not submit it for review or publish it.
 
 ## App Store Subscription
 
@@ -144,34 +144,34 @@ These directories belong to one executable target, not separate Swift packages. 
 
 ## Build and Release
 
-- `BoundlessTranslator.xcodeproj` owns the macOS App target, resource membership, build configurations, signing inputs, and archives. `DirectRelease` builds Developer ID DMG editions; `AppStoreRelease` enables `SUBSCRIPTION_REQUIRED` and builds the App Store edition. `Package.swift` remains the source of SwiftPM unit and component tests.
+- `BoundlessTranslator.xcodeproj` owns the macOS App target, resource membership, build configurations, signing inputs, and archives. `DirectRelease` builds the subscription-free Developer ID edition for test DMGs; `AppStoreRelease` enables `SUBSCRIPTION_REQUIRED` and builds the App Store edition. `Package.swift` remains the source of SwiftPM unit and component tests.
 - Xcode places `Localizable.strings` directly in each root `*.lproj` directory in the App bundle. Both configurations include the App icon, privacy manifest, Sandbox entitlements, and `ITSAppUsesNonExemptEncryption = false`. Only the App Store configuration injects the App Store product ID, privacy-policy URL, category, and copyright.
-- `Scripts/Tools/build_app.sh` builds the Developer ID App through Xcode for the test DMG. `Scripts/release_app_store.sh` creates the App Store archive and exports its PKG through Xcode. Shell scripts retain release validation, DMG packaging, notarization, and App Store export/upload orchestration; they do not manually assemble the App bundle.
+- `Resources/Info.plist` is the single Xcode App metadata template for both editions. Xcode resolves its build-setting placeholders when it builds the App. Version, build number, developer team, subscription product ID, privacy-policy URL and copyright live in the Xcode project settings.
+- `Scripts/Tools/build_app.sh` builds the Developer ID App through Xcode for the test DMG. The remaining shell release tools only package, verify and notarize the test DMG; they do not archive, export or upload an App Store build.
+- `Scripts/Tools/verify_app.sh` verifies the Developer ID App during the test-DMG build and again after the DMG is mounted, including resources, linked system frameworks, minimum macOS version, Sandbox entitlements, Developer ID signature, Hardened Runtime, secure timestamp and launch behavior. It is not part of the App Store flow.
 - `Scripts/verify_features.sh` runs free-mode unit and component tests, GUI tests, Xcode project configuration checks, and shell workflow tests. It does not build the production App or create, sign, notarize, or inspect a real DMG.
-- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and App Store release and upload workflow tests. Local StoreKit uses a test-only product; workflow tests simulate external release steps without charging money, requiring production credentials, creating a production PKG, or uploading a build.
+- `Scripts/verify_subscription.sh` runs subscription-mode unit and component tests, app-hosted local StoreKit integration tests, and Xcode project configuration checks. Local StoreKit uses a test-only product; these checks do not charge money, require production credentials, create a production PKG, or upload a build.
 - On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), skip the three local StoreKit integration tests before launch and report the reproduced entitlement-query failure. Keep their test code; any different OS or Xcode build executes them again. `Scripts/Tests/test_storekit.sh --force` bypasses this environment exception for diagnosis.
 - `Scripts/verify.sh` runs feature verification followed by subscription verification before code review. Each Swift mode has an isolated build directory and report. It builds only test targets and test hosts; it does not build the production App, archive, DMG, or PKG. Failed checks or missing, incomplete, empty, or failing reports stop the workflow. The explicit StoreKit environment skip permits remaining checks and a zero exit status, with a warning that subscription integration remains unverified. A skip is not a passing integration test or release approval.
 - Verify the real Apple purchase UI and transactions separately with TestFlight, using the subscription-enabled edition. The free test DMG remains unrestricted for ongoing feature testing; its distribution does not reduce subscription test coverage.
 - App signature verification also requires the signed App Sandbox entitlement to be true.
 - `Scripts/release_dmg.sh` creates `Build/Boundless Translator-test.dmg` for feature testing. The App has App Sandbox enabled and requires no subscription.
-  - Build the real App in a private directory and verify its Developer ID signature, Sandbox entitlement, resources, linked system frameworks, minimum macOS version, and launch behavior.
-  - Package and sign the real DMG, mount it, verify its signature, layout, Applications shortcut, background, and contained App.
+  - Build the real Developer ID App in a private directory.
+  - Package and sign the real DMG, mount it, verify its signature, layout, Applications shortcut, background, and contained App. The contained App checks cover its Developer ID signature, Sandbox entitlement, resources, linked system frameworks, minimum macOS version, and launch behavior.
   - Submit the DMG to Apple for notarization. Attach and validate the ticket, then check Gatekeeper approval.
   - Replace the previous test DMG only after all checks pass. A failure keeps the previous DMG.
   - Keep source version numbers unchanged.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
-- The App Store release uses its own Xcode configuration and does not produce or notarize a DMG.
-- `Scripts/release_app_store.sh <version> <build-number>` archives the arm64 Store edition and exports a signed installer package. Before publishing either output, it verifies the real archived App's signature team, Sandbox and network entitlements, resources, architecture, linked system frameworks, version, subscription metadata, privacy-policy URL, copyright, category, and minimum macOS version, then verifies the exported PKG signature. It writes the versioned `.xcarchive` and `.pkg` to `Build/AppStore` and stops before building if either output already exists. It does not retain a duplicate `.app`; the App is contained in the archive. Source version metadata remains unchanged. Xcode automatic signing uses the configured team and account.
-- App Store export uses `method = app-store-connect`, `destination = export`, and `manageAppVersionAndBuildNumber = false`, so the requested build number remains authoritative.
-- `Scripts/upload_app_store.sh <pkg-path>` loads App Store Connect identifiers from the Git-ignored `.env.local`, while existing shell values take precedence. It validates and uploads the existing signed PKG through Xcode's `altool`; it does not rebuild, sign, submit for review, or publish the App.
-- Save the signed Store artifacts locally before upload. Build, export, and verification failures publish no output from that attempt.
+- The App Store release uses the `BoundlessTranslator-AppStore` scheme and `AppStoreRelease` configuration. It does not produce or notarize a DMG.
+- Use Xcode Organizer to create the Archive, validate it, create the App Store package and upload it to App Store Connect. Xcode automatic signing uses the configured developer team and the Apple Account signed in under Xcode Settings. The repository contains no separate App Store archive, package, verification or upload shell workflow.
+- Set the intended version and a build number higher than every previously uploaded build before archiving. Validate the uploaded build through TestFlight before submitting it for App Review.
 
 ## Test Layers
 
 - Unit tests cover deterministic logic without visible windows or system input.
 - Component tests cover production components in memory, including state, layout, view hierarchy, and hit testing.
 - GUI tests launch the dedicated test host and validate behavior that depends on real AppKit event routing, such as the final pointer cursor.
-- Deployment tests cover Xcode project configuration, release-script orchestration, validation failures, App Store archive/export/upload settings, and workflow ordering without creating production artifacts. The real test-DMG release validates its built App and mounted DMG; the real App Store release validates its archive and exported PKG.
+- Deployment tests cover Xcode project configuration, DMG release-script orchestration, validation failures, and verification workflow ordering without creating production artifacts. The real test-DMG release validates its built App and mounted DMG. Xcode validates the App Store archive before upload.
 - Notarization flow tests replace Apple network tools with controlled test executables. A real release performs the final Apple notarization and Gatekeeper checks.
 
 Do not test Apple Translation results, Dictionary contents, OCR accuracy, or other framework-owned behavior.

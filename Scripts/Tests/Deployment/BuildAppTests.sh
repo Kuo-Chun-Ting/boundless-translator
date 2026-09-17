@@ -6,15 +6,10 @@ readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly BUILDER="${PROJECT_ROOT}/Scripts/Tools/build_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build-app-tests.XXXXXX)"
 readonly BUILD_ROOT="${TEMP_ROOT}/Build"
-readonly INFO_PLIST="${TEMP_ROOT}/Info.plist"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 readonly XCODEBUILD_STUB="${TEMP_ROOT}/xcodebuild"
 readonly VERIFY_STUB="${TEMP_ROOT}/verify-app"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
-
-cp "${PROJECT_ROOT}/Resources/Info.plist" "${INFO_PLIST}"
-plutil -replace CFBundleShortVersionString -string 1.2.3 "${INFO_PLIST}"
-plutil -replace CFBundleVersion -string 42 "${INFO_PLIST}"
 
 cat > "${XCODEBUILD_STUB}" <<'STUB'
 #!/bin/zsh
@@ -46,7 +41,6 @@ chmod +x "${XCODEBUILD_STUB}" "${VERIFY_STUB}"
 function run_builder {
     BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE="${XCODEBUILD_STUB}" \
     BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE="${VERIFY_STUB}" \
-    BOUNDLESS_TRANSLATOR_BUILD_INFO_PLIST="${INFO_PLIST}" \
     BOUNDLESS_TRANSLATOR_BUILD_ROOT="${BUILD_ROOT}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
     BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID=com.lillard.boundless.annual \
@@ -68,8 +62,8 @@ function test_build_app_when_requested_then_builds_test_dmg_app {
     [[ "${build_call}" == build\ * ]]
     [[ "${build_call}" == *'-scheme BoundlessTranslator-Direct'* ]]
     [[ "${build_call}" == *'-configuration DirectRelease'* ]]
-    [[ "${build_call}" == *'MARKETING_VERSION=1.2.3'* ]]
-    [[ "${build_call}" == *'CURRENT_PROJECT_VERSION=42'* ]]
+    [[ "${build_call}" != *MARKETING_VERSION=* ]]
+    [[ "${build_call}" != *CURRENT_PROJECT_VERSION=* ]]
     [[ "${build_call}" != *SUBSCRIPTION_REQUIRED* ]]
     [[ "$(sed -n '2p' "${CALL_LOG}")" == verify\ *'/Boundless Translator.app' ]]
 }

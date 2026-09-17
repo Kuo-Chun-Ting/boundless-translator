@@ -68,7 +68,7 @@ cd boundless-translator
 Scripts/Tools/build_app.sh
 ```
 
-This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator.app`, with App Sandbox enabled and no subscription required. Direct DMG releases use this build path; the App Store release uses an Xcode archive.
+This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator.app`, with App Sandbox enabled and no subscription required. Test DMG releases use this build path; the App Store release uses an Xcode archive.
 
 Launch that `.app` when testing product behavior. App Sandbox is applied through the signed app's entitlements and enforced when it runs. Running the raw SwiftPM executable does not exercise the same sandboxed app environment. SwiftPM's `--disable-sandbox` option controls its build subprocesses, independently of the shipped App Sandbox entitlement.
 
@@ -80,7 +80,7 @@ Scripts/verify_subscription.sh
 Scripts/verify.sh
 ```
 
-`verify_features.sh` checks free-mode code, GUI behavior, Xcode project settings, and release-script logic. `verify_subscription.sh` checks subscription-mode code, local StoreKit transactions, and App Store release/upload workflow logic. `verify.sh` runs both in that order before code review. These commands build only test targets and test hosts; they do not build the production App or create a DMG, archive, or PKG.
+`verify_features.sh` checks free-mode code, GUI behavior, Xcode project settings, and DMG release-script logic. `verify_subscription.sh` checks subscription-mode code and local StoreKit transactions. `verify.sh` runs both in that order before code review. These commands build only test targets and test hosts; they do not build the production App or create a DMG, archive, or PKG.
 
 On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the three local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/Tests/test_storekit.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
 
@@ -116,30 +116,18 @@ Quit other copies of the App, then install from this DMG. Test permission setup,
 
 The App Store edition uses the same Xcode App target, Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. Direct distribution currently produces only the subscription-free test DMG.
 
-Complete the account, signing, product and public privacy-policy setup in the [App Store implementation plan](app-store/implementation-plan.md). Then provide the configuration as environment variables in your terminal:
+Complete the account, signing, product and public privacy-policy setup in the [App Store implementation plan](app-store/implementation-plan.md).
 
 Sign in once under **Xcode → Settings → Apple Accounts** with the Apple Account that belongs to the App Store Connect team. Xcode stores that session in the macOS Keychain and uses it to manage signing certificates and provisioning profiles; do not put an Apple Account password in this repository or a shell script.
 
-```bash
-export BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID="<team-id>"
-export BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID="<annual-product-id>"
-export BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL="<published-https-privacy-policy-url>"
-export BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT="<copyright notice with the actual rights holder>"
-Scripts/release_app_store.sh 1.0 1
-```
+The `AppStoreRelease` build configuration contains the developer team, subscription product ID, privacy-policy URL and copyright used by the App Store edition. Before archiving, set the intended **Version** and a **Build** number higher than every previously uploaded build in the Xcode target settings.
 
-Use your intended public version and a build number higher than any previously uploaded build. Xcode automatic signing creates `Build/AppStore/BoundlessTranslator-1.0-1.xcarchive` and exports `Build/AppStore/BoundlessTranslator-1.0-1.pkg`, without modifying `Resources/Info.plist` or uploading. Before publishing those files, the script verifies the real archived App and exported PKG. The release stops if either output already exists. The first Store edition targets Apple silicon (`arm64`), not Intel. Its bundle ID is `com.lillard.BoundlessTranslator`; the App Store Connect record and signing team must match it.
+1. Select the **BoundlessTranslator-AppStore** scheme and **Any Mac (Apple Silicon)** destination.
+2. Choose **Product → Archive**. Xcode builds the subscription-enabled App, signs it with automatic signing and opens the archive in Organizer.
+3. In Organizer, choose **Validate App** and resolve every reported issue.
+4. Choose **Distribute App → App Store Connect**. Xcode creates the App Store package and uploads it to App Store Connect.
+5. Wait for Apple processing, then verify the exact build in TestFlight before submitting it for review.
 
-Uploading additionally requires App Store Connect API key authentication:
+The first Store edition targets Apple silicon (`arm64`). Its bundle ID is `com.lillard.BoundlessTranslator`; the App Store Connect record and signing team must match it. Uploading a build does not submit it for review or publish it.
 
-```bash
-cp .env.example .env.local
-# Fill the Key ID and Issuer ID in .env.local.
-Scripts/upload_app_store.sh Build/AppStore/BoundlessTranslator-1.0-1.pkg
-```
-
-`.env.local` is ignored by Git, and values already exported in the shell take precedence over it. Keep the API private key outside this repository in `~/.appstoreconnect/private_keys/`; do not put passwords or private keys in project files. The upload script validates and uploads the existing signed PKG with Xcode's `altool`; it does not rebuild or sign the App. Uploading makes the build available for processing in App Store Connect; it does not submit for review or publish it.
-
-The upload script does not modify the local archive or PKG.
-
-Each App Store archive, exported PKG and TestFlight build must be verified as the exact release artifact. Track the remaining App Store Connect and TestFlight work in the [App Store implementation plan](app-store/implementation-plan.md).
+Treat the Xcode Archive, generated App Store package and processed TestFlight build as one release chain. Test the exact uploaded build before submission. Track the remaining App Store Connect and TestFlight work in the [App Store implementation plan](app-store/implementation-plan.md).

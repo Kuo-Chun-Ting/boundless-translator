@@ -62,12 +62,29 @@ function test_xcode_project_when_release_configuration_changes_then_subscription
     ! grep -Eq '^ *SWIFT_ACTIVE_COMPILATION_CONDITIONS = .*SUBSCRIPTION_REQUIRED' "${direct_settings}"
     grep -Eq '^ *CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO$' "${direct_settings}"
     grep -Eq '^ *OTHER_CODE_SIGN_FLAGS = --timestamp$' "${direct_settings}"
+    grep -Eq '^ *INFOPLIST_FILE = Resources/Info.plist$' "${direct_settings}"
+    [[ ! -e "${PROJECT_ROOT}/Resources/AppInfo.plist" ]]
     grep -Eq '^ *CODE_SIGN_STYLE = Automatic$' "${app_store_settings}"
+    grep -Eq '^ *DEBUG_INFORMATION_FORMAT = dwarf-with-dsym$' "${app_store_settings}"
     ! grep -Eq '^ *CODE_SIGN_IDENTITY = Apple Distribution$' "${app_store_settings}"
     grep -Eq '^ *SWIFT_ACTIVE_COMPILATION_CONDITIONS = .*SUBSCRIPTION_REQUIRED' "${app_store_settings}"
+    grep -Eq '^ *DEVELOPMENT_TEAM = 3S9ZKKJ6PW$' "${app_store_settings}"
+    grep -Eq '^ *BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID = 3S9ZKKJ6PW$' "${app_store_settings}"
+    grep -Eq '^ *BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID = com\.lillard\.boundless\.annual$' "${app_store_settings}"
+    grep -Fq 'BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL = https://kuo-chun-ting.github.io/boundless-translator/en/privacy/' "${app_store_settings}"
+    grep -Fq 'BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT = Copyright © 2026 Chun Ting Kuo. All rights reserved.' "${app_store_settings}"
+}
+
+function test_xcode_project_when_app_store_release_is_configured_then_uses_xcode_instead_of_manual_scripts {
+    # Arrange
+
+    # Act & Assert
+    [[ ! -e "${PROJECT_ROOT}/Scripts/release_app_store.sh" ]]
+    [[ ! -e "${PROJECT_ROOT}/Scripts/upload_app_store.sh" ]]
 }
 
 test_xcode_project_when_listed_then_exposes_release_schemes_and_configurations
 test_xcode_project_when_sources_or_dependencies_change_then_configuration_stays_in_sync
 test_xcode_project_when_release_configuration_changes_then_subscription_flag_stays_separated
+test_xcode_project_when_app_store_release_is_configured_then_uses_xcode_instead_of_manual_scripts
 print 'Xcode project tests passed.'

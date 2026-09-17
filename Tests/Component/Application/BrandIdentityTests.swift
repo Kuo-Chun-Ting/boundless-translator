@@ -5,22 +5,21 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
-func test_infoPlist_when_readingPublicNames_then_usesBoundlessTranslator() throws {
+func test_infoPlistTemplate_when_readingPublicNames_then_usesBoundlessTranslator() throws {
     // Arrange
     let infoPlistURL = projectRootURL
         .appending(path: "Resources")
         .appending(path: "Info.plist")
 
     // Act
-    let data = try Data(contentsOf: infoPlistURL)
-    let appInfo = try PropertyListDecoder().decode(AppInfo.self, from: data)
+    let infoPlist = try String(contentsOf: infoPlistURL, encoding: .utf8)
 
     // Assert
-    #expect(appInfo.displayName == "Boundless Translator")
-    #expect(appInfo.bundleName == "Boundless Translator")
-    #expect(appInfo.executableName == "BoundlessTranslator")
-    #expect(appInfo.bundleIdentifier == "com.lillard.BoundlessTranslator")
-    #expect(appInfo.iconFile == "AppIcon.icns")
+    #expect(infoPlist.contains("<key>CFBundleDisplayName</key>\n\t<string>Boundless Translator</string>"))
+    #expect(infoPlist.contains("<key>CFBundleName</key>\n\t<string>Boundless Translator</string>"))
+    #expect(infoPlist.contains("<key>CFBundleExecutable</key>\n\t<string>$(EXECUTABLE_NAME)</string>"))
+    #expect(infoPlist.contains("<key>CFBundleIdentifier</key>\n\t<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>"))
+    #expect(infoPlist.contains("<key>CFBundleIconFile</key>\n\t<string>AppIcon.icns</string>"))
 }
 
 @Test
@@ -86,22 +85,6 @@ func test_menuBarIconRenderingMode_when_renderingBrandIcon_then_preservesOrigina
 
     // Assert
     #expect(renderingMode == .original)
-}
-
-private struct AppInfo: Decodable {
-    let displayName: String
-    let bundleName: String
-    let executableName: String
-    let bundleIdentifier: String
-    let iconFile: String
-
-    private enum CodingKeys: String, CodingKey {
-        case displayName = "CFBundleDisplayName"
-        case bundleName = "CFBundleName"
-        case executableName = "CFBundleExecutable"
-        case bundleIdentifier = "CFBundleIdentifier"
-        case iconFile = "CFBundleIconFile"
-    }
 }
 
 private let projectRootURL = URL(fileURLWithPath: #filePath)

@@ -313,7 +313,7 @@
 				ENABLE_HARDENED_RUNTIME = "YES";
 				EXECUTABLE_NAME = "BoundlessTranslator";
 				GENERATE_INFOPLIST_FILE = "NO";
-				INFOPLIST_FILE = "Resources/AppInfo.plist";
+				INFOPLIST_FILE = "Resources/Info.plist";
 				INFOPLIST_PREPROCESS = "YES";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = "15.0";
@@ -341,7 +341,7 @@
 				ENABLE_HARDENED_RUNTIME = "YES";
 				EXECUTABLE_NAME = "BoundlessTranslator";
 				GENERATE_INFOPLIST_FILE = "NO";
-				INFOPLIST_FILE = "Resources/AppInfo.plist";
+				INFOPLIST_FILE = "Resources/Info.plist";
 				INFOPLIST_PREPROCESS = "YES";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = "15.0";
@@ -359,15 +359,20 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = "NO";
 				ARCHS = "arm64";
+				BOUNDLESS_TRANSLATOR_APP_STORE_COPYRIGHT = "Copyright © 2026 Chun Ting Kuo. All rights reserved.";
+				BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID = 3S9ZKKJ6PW;
+				BOUNDLESS_TRANSLATOR_PRIVACY_POLICY_URL = "https://kuo-chun-ting.github.io/boundless-translator/en/privacy/";
+				BOUNDLESS_TRANSLATOR_SUBSCRIPTION_PRODUCT_ID = com.lillard.boundless.annual;
 				CODE_SIGN_ENTITLEMENTS = "Resources/Sandbox.entitlements";
 				CODE_SIGN_STYLE = "Automatic";
 				COMBINE_HIDPI_IMAGES = "YES";
 				CURRENT_PROJECT_VERSION = "10";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "$(BOUNDLESS_TRANSLATOR_APP_STORE_TEAM_ID)";
 				ENABLE_HARDENED_RUNTIME = "YES";
 				EXECUTABLE_NAME = "BoundlessTranslator";
 				GENERATE_INFOPLIST_FILE = "NO";
-				INFOPLIST_FILE = "Resources/AppInfo.plist";
+				INFOPLIST_FILE = "Resources/Info.plist";
 				INFOPLIST_PREPROCESS = "YES";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "APP_STORE=1";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

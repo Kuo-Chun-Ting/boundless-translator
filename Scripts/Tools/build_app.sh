@@ -8,7 +8,6 @@ source "${PROJECT_ROOT}/Scripts/Tools/code_signing.conf"
 readonly XCODE_PROJECT="${PROJECT_ROOT}/BoundlessTranslator.xcodeproj"
 readonly XCODEBUILD_EXECUTABLE="${BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE:-xcodebuild}"
 readonly VERIFY_EXECUTABLE="${BOUNDLESS_TRANSLATOR_APP_VERIFY_EXECUTABLE:-${PROJECT_ROOT}/Scripts/Tools/verify_app.sh}"
-readonly INFO_PLIST="${BOUNDLESS_TRANSLATOR_BUILD_INFO_PLIST:-${PROJECT_ROOT}/Resources/Info.plist}"
 readonly BUILD_ROOT="${BOUNDLESS_TRANSLATOR_BUILD_ROOT:-${PROJECT_ROOT}/Build}"
 readonly APP_PATH="${BUILD_ROOT}/Boundless Translator.app"
 
@@ -18,9 +17,6 @@ function fail {
 }
 
 [[ "$#" -eq 0 ]] || fail 'Usage: build_app.sh'
-
-readonly VERSION="$(plutil -extract CFBundleShortVersionString raw "${INFO_PLIST}")"
-readonly BUILD_NUMBER="$(plutil -extract CFBundleVersion raw "${INFO_PLIST}")"
 
 mkdir -p "${BUILD_ROOT}"
 readonly TEMP_ROOT="$(mktemp -d "${BUILD_ROOT}/.boundless-translator-build.XXXXXX")"
@@ -36,8 +32,6 @@ command=(
     -configuration DirectRelease
     -destination 'platform=macOS,arch=arm64'
     -derivedDataPath "${DERIVED_DATA_PATH}"
-    "MARKETING_VERSION=${VERSION}"
-    "CURRENT_PROJECT_VERSION=${BUILD_NUMBER}"
     'CODE_SIGN_STYLE=Manual'
     "CODE_SIGN_IDENTITY=${BOUNDLESS_TRANSLATOR_DEVELOPER_ID_IDENTITY:-${DEFAULT_SIGNING_IDENTITY}}"
 )
