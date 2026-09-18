@@ -8,7 +8,7 @@ enum TranslationTextViewFactory {
         textView.isSelectable = true
         textView.isRichText = false
         textView.drawsBackground = false
-        textView.font = TranslationPanelStyle.contentFont
+        textView.font = TranslationWindowStyle.contentFont
         textView.textColor = .labelColor
         textView.textContainerInset = .zero
         textView.isHorizontallyResizable = false

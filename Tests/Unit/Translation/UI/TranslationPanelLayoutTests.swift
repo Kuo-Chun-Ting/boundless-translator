@@ -5,7 +5,7 @@ import Testing
 @Test
 func test_metrics_when_translation_is_short_then_uses_only_regular_spacing_above_cards() {
     // Arrange
-    let layout = TranslationPanelLayout()
+    let layout = TranslationWindowLayout()
     let status = TranslationStatus.translated(
         TranslationOutput(
             translatedText: "火車",
@@ -29,7 +29,7 @@ func test_metrics_when_translation_is_short_then_uses_only_regular_spacing_above
 @Test
 func test_metrics_when_translation_is_long_then_grows_vertically() {
     // Arrange
-    let layout = TranslationPanelLayout()
+    let layout = TranslationWindowLayout()
     let shortStatus = TranslationStatus.translated(
         TranslationOutput(
             translatedText: "短句。",
@@ -65,7 +65,7 @@ func test_metrics_when_translation_is_long_then_grows_vertically() {
 @Test
 func test_metrics_when_both_columns_are_long_then_uses_tallest_column_height() {
     // Arrange
-    let layout = TranslationPanelLayout(maximumHeight: 1_000)
+    let layout = TranslationWindowLayout(maximumHeight: 1_000)
     let longText = String(repeating: "A sentence with enough text to wrap. ", count: 12)
     let shortStatus = TranslationStatus.translated(
         TranslationOutput(
@@ -101,7 +101,7 @@ func test_metrics_when_both_columns_are_long_then_uses_tallest_column_height() {
 @Test
 func test_metrics_when_translation_exceeds_available_space_then_caps_height() {
     // Arrange
-    let layout = TranslationPanelLayout()
+    let layout = TranslationWindowLayout()
     let status = TranslationStatus.translated(
         TranslationOutput(
             translatedText: String(repeating: "很長的翻譯內容。", count: 300),

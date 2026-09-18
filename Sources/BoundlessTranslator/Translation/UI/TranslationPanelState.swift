@@ -1,7 +1,7 @@
 import Combine
 
 @MainActor
-final class TranslationPanelState: ObservableObject {
+final class TranslationWindowState: ObservableObject {
     @Published private(set) var isPinned = false
 
     func togglePin() {

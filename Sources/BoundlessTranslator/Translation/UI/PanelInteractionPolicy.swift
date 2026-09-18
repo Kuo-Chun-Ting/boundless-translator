@@ -1,11 +1,11 @@
-enum TranslationPanelKind {
+enum TranslationWindowKind {
     case translation
     case error
     case sourceLanguageSelection
 }
 
-struct PanelInteractionPolicy {
-    let kind: TranslationPanelKind
+struct WindowInteractionPolicy {
+    let kind: TranslationWindowKind
 
     func shouldDismissForOutsideClick(isPinned: Bool) -> Bool {
         switch kind {

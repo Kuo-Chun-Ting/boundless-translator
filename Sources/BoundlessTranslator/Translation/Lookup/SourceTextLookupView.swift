@@ -72,7 +72,7 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 
         NotificationCenter.default.removeObserver(
             self,
-            name: .translationPanelFirstResponderDidChange,
+            name: .translationWindowFirstResponderDidChange,
             object: nil
         )
 
@@ -83,8 +83,8 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(translationPanelFirstResponderDidChange(_:)),
-            name: .translationPanelFirstResponderDidChange,
+            selector: #selector(translationWindowFirstResponderDidChange(_:)),
+            name: .translationWindowFirstResponderDidChange,
             object: window
         )
 
@@ -147,19 +147,19 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
-                constant: TranslationPanelStyle.cardContentPadding
+                constant: TranslationWindowStyle.cardContentPadding
             ),
             scrollView.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
-                constant: -TranslationPanelStyle.cardContentPadding
+                constant: -TranslationWindowStyle.cardContentPadding
             ),
             scrollView.topAnchor.constraint(
                 equalTo: topAnchor,
-                constant: TranslationPanelStyle.cardContentPadding
+                constant: TranslationWindowStyle.cardContentPadding
             ),
             scrollView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
-                constant: -TranslationPanelStyle.cardContentPadding
+                constant: -TranslationWindowStyle.cardContentPadding
             )
         ])
     }
@@ -184,7 +184,7 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     }
 
     @objc
-    private func translationPanelFirstResponderDidChange(
+    private func translationWindowFirstResponderDidChange(
         _ notification: Notification
     ) {
         let sourceIsActive = window?.firstResponder === textView

@@ -43,7 +43,10 @@ final class DictionaryLookupCursorGUITests: XCTestCase {
             moveAway.hover()
             _ = try waitForCursor(isPointingHand: false)
             lookupAction.hover()
-            let cursorState = try waitForCursor(isPointingHand: true)
+            let cursorState = try waitForCursor(
+                isPointingHand: true,
+                lookupButtonOwnsHitTest: true
+            )
 
             // Assert
             XCTAssertTrue(
@@ -54,7 +57,8 @@ final class DictionaryLookupCursorGUITests: XCTestCase {
     }
 
     private func waitForCursor(
-        isPointingHand: Bool
+        isPointingHand: Bool,
+        lookupButtonOwnsHitTest: Bool? = nil
     ) throws -> CursorHostState {
         let deadline = Date(timeIntervalSinceNow: 2)
         var latestState: CursorHostState?
@@ -62,7 +66,10 @@ final class DictionaryLookupCursorGUITests: XCTestCase {
         while Date() < deadline {
             if let state: CursorHostState = try? decodeJSON(named: "cursor.json") {
                 latestState = state
-                if state.isPointingHand == isPointingHand {
+                let hitTestMatches = lookupButtonOwnsHitTest.map {
+                    state.lookupButtonOwnsHitTest == $0
+                } ?? true
+                if state.isPointingHand == isPointingHand && hitTestMatches {
                     return state
                 }
             }
@@ -71,6 +78,7 @@ final class DictionaryLookupCursorGUITests: XCTestCase {
 
         throw CursorGUITestError.cursorTimedOut(
             expectedPointingHand: isPointingHand,
+            expectedLookupButtonOwnsHitTest: lookupButtonOwnsHitTest,
             latestState: latestState
         )
     }
@@ -111,6 +119,7 @@ private enum CursorGUITestError: Error {
     case fileTimedOut(String)
     case cursorTimedOut(
         expectedPointingHand: Bool,
+        expectedLookupButtonOwnsHitTest: Bool?,
         latestState: CursorHostState?
     )
 }

@@ -4,7 +4,7 @@ import SwiftUI
 
 @MainActor
 private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
-    private let panel = TranslationPanel(
+    private let window = TranslationWindow(
         contentSize: NSSize(width: 520, height: 420)
     )
     private let sourceView = SourceTextLookupView(
@@ -21,18 +21,18 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        configurePanel()
+        configureWindow()
         configureSourceView()
         waitForStableLayout()
     }
 
-    private func configurePanel() {
-        panel.contentView = TranslationPanelContentView(
+    private func configureWindow() {
+        window.contentView = TranslationWindowContentView(
             rootView: CursorSourceHostView(sourceView: sourceView)
         )
-        panel.center()
-        panel.isReleasedWhenClosed = false
-        panel.orderFrontRegardless()
+        window.center()
+        window.isReleasedWhenClosed = false
+        window.orderFrontRegardless()
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
 
@@ -49,7 +49,7 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
             ].joined(separator: "\n")
         )
         sourceView.updateSelection(NSRange(location: 46, length: 10))
-        panel.contentView?.layoutSubtreeIfNeeded()
+        window.contentView?.layoutSubtreeIfNeeded()
         sourceView.layoutSubtreeIfNeeded()
     }
 
@@ -61,7 +61,7 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
                     return
                 }
 
-                self.panel.contentView?.layoutSubtreeIfNeeded()
+                self.window.contentView?.layoutSubtreeIfNeeded()
                 let frameIsStable = self.previousButtonFrame == button.frame
                 self.previousButtonFrame = button.frame
                 self.stableFrameSampleCount = frameIsStable
@@ -81,7 +81,7 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func findLookupButton() -> PointingHandButton? {
-        panel.contentView?.subviews
+        window.contentView?.subviews
             .compactMap { $0 as? PointingHandButton }
             .first
     }
@@ -110,10 +110,10 @@ private final class CursorTestHostDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func hitViewAtMouseLocation() -> NSView? {
-        guard let contentView = panel.contentView else {
+        guard let contentView = window.contentView else {
             return nil
         }
-        let windowPoint = panel.convertPoint(fromScreen: NSEvent.mouseLocation)
+        let windowPoint = window.convertPoint(fromScreen: NSEvent.mouseLocation)
         return contentView.hitTest(windowPoint)
     }
 

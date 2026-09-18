@@ -23,7 +23,7 @@ func test_show_when_engine_is_injected_then_hosts_its_task_and_uses_its_language
         }
     )
     let catalog = SupportedLanguageCatalog(loadLanguages: engine.loadLanguages)
-    let controller = TranslationPanelController(
+    let controller = TranslationWindowController(
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
         engine: engine,
         windowPresenter: ForegroundWindowPresenterSpy()

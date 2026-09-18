@@ -34,7 +34,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Close an unpinned translation when the user clicks outside it, activates another app, or presses Escape.
 - Keep a pinned translation visible until the user closes or unpins it.
 - Preserve the window's top-left position when its content-driven size changes.
-- When a shortcut presents a translation-related window, make that panel Boundless Translator's main and key window before activating the app so other open windows remain behind it.
+- When a shortcut presents a translation-related window, make that window Boundless Translator's main and key window before activating the app so other open windows remain behind it.
 
 ## Screenshot Workspace
 

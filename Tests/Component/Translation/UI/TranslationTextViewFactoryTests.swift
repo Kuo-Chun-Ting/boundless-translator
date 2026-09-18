@@ -5,7 +5,7 @@ import Testing
 @Test @MainActor
 func test_make_when_creating_translation_text_view_then_applies_shared_configuration() throws {
     // Arrange
-    let expectedFont = TranslationPanelStyle.contentFont
+    let expectedFont = TranslationWindowStyle.contentFont
 
     // Act
     let textView = TranslationTextViewFactory.make()

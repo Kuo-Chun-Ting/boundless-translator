@@ -1,24 +1,24 @@
 import AppKit
 
-struct TranslationPanelMetrics: Equatable {
+struct TranslationWindowMetrics: Equatable {
     let size: CGSize
     let contentHeight: CGFloat
     let idealContentHeight: CGFloat
 }
 
-struct TranslationPanelLayout {
-    private let panelWidth: CGFloat
+struct TranslationWindowLayout {
+    private let windowWidth: CGFloat
     private let compactHeight: CGFloat
     private let maximumHeight: CGFloat
     private let translationNonContentHeight: CGFloat
 
     init(
-        panelWidth: CGFloat = 560,
+        windowWidth: CGFloat = 560,
         compactHeight: CGFloat = 211,
         maximumHeight: CGFloat = 440,
-        translationNonContentHeight: CGFloat = TranslationPanelStyle.nonContentHeight
+        translationNonContentHeight: CGFloat = TranslationWindowStyle.nonContentHeight
     ) {
-        self.panelWidth = panelWidth
+        self.windowWidth = windowWidth
         self.compactHeight = compactHeight
         self.maximumHeight = maximumHeight
         self.translationNonContentHeight = translationNonContentHeight
@@ -28,7 +28,7 @@ struct TranslationPanelLayout {
         sourceText: String,
         status: TranslationStatus,
         localization: AppLocalization
-    ) -> TranslationPanelMetrics {
+    ) -> TranslationWindowMetrics {
         let idealContentHeight = max(
             measuredHeight(for: sourceText),
             resultHeight(for: status, localization: localization)
@@ -42,19 +42,19 @@ struct TranslationPanelLayout {
     private func makeMetrics(
         idealContentHeight: CGFloat,
         nonContentHeight: CGFloat
-    ) -> TranslationPanelMetrics {
+    ) -> TranslationWindowMetrics {
         let desiredHeight = nonContentHeight + idealContentHeight
-        let panelHeight = min(
+        let windowHeight = min(
             max(desiredHeight, compactHeight),
             maximumHeight
         )
         let contentHeight = max(
-            panelHeight - nonContentHeight,
-            TranslationPanelStyle.contentFont.pointSize
+            windowHeight - nonContentHeight,
+            TranslationWindowStyle.contentFont.pointSize
         )
 
-        return TranslationPanelMetrics(
-            size: CGSize(width: panelWidth, height: panelHeight),
+        return TranslationWindowMetrics(
+            size: CGSize(width: windowWidth, height: windowHeight),
             contentHeight: contentHeight,
             idealContentHeight: idealContentHeight
         )
@@ -68,7 +68,7 @@ struct TranslationPanelLayout {
         case .idle:
             measuredHeight(for: localization.string("panel.idle"))
         case .translating:
-            TranslationPanelStyle.contentFont.pointSize
+            TranslationWindowStyle.contentFont.pointSize
         case .translated(let output):
             measuredHeight(for: output.translatedText)
         case .failed(let failure):
@@ -77,18 +77,18 @@ struct TranslationPanelLayout {
     }
 
     private func measuredHeight(for text: String) -> CGFloat {
-        let availableWidth = panelWidth
-            - TranslationPanelStyle.horizontalPadding * 2
-            - TranslationPanelStyle.columnSpacing
+        let availableWidth = windowWidth
+            - TranslationWindowStyle.horizontalPadding * 2
+            - TranslationWindowStyle.columnSpacing
         let contentWidth = availableWidth / 2
-            - TranslationPanelStyle.cardContentPadding * 2
+            - TranslationWindowStyle.cardContentPadding * 2
         return measuredHeight(for: text, width: contentWidth)
     }
 
     private func measuredHeight(
         for text: String,
         width: CGFloat,
-        font: NSFont = TranslationPanelStyle.contentFont
+        font: NSFont = TranslationWindowStyle.contentFont
     ) -> CGFloat {
         let bounds = (text as NSString).boundingRect(
             with: CGSize(

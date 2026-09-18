@@ -4,30 +4,16 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_panel_when_presented_then_canBecomeMainAndKey() {
-    // Arrange
-    let panel = TranslationPanel()
-
-    // Act
-    let canBecomeMain = panel.canBecomeMain
-    let canBecomeKey = panel.canBecomeKey
-
-    // Assert
-    #expect(canBecomeMain)
-    #expect(canBecomeKey)
-}
-
-@Test @MainActor
 func test_cancelOperation_when_handlerIsConfigured_thenForwardsRequest() {
     // Arrange
-    let panel = TranslationPanel()
+    let window = TranslationWindow()
     var forwardedSender: String?
-    panel.cancelOperationHandler = { sender in
+    window.cancelOperationHandler = { sender in
         forwardedSender = sender as? String
     }
 
     // Act
-    panel.cancelOperation("escape")
+    window.cancelOperation("escape")
 
     // Assert
     #expect(forwardedSender == "escape")
@@ -36,58 +22,58 @@ func test_cancelOperation_when_handlerIsConfigured_thenForwardsRequest() {
 @Test @MainActor
 func test_configureChrome_when_translation_is_presented_then_keeps_resizable_native_title_bar() {
     // Arrange
-    let panel = TranslationPanel()
-    let toolbar = NSToolbar(identifier: "TranslationPanelTests")
-    panel.toolbar = toolbar
+    let window = TranslationWindow()
+    let toolbar = NSToolbar(identifier: "TranslationWindowTests")
+    window.toolbar = toolbar
 
     // Act
-    panel.configureChrome(for: .translation)
+    window.configureChrome(for: .translation)
 
     // Assert
-    #expect(panel.styleMask.contains(.titled))
-    #expect(panel.styleMask.contains(.closable))
-    #expect(panel.styleMask.contains(.miniaturizable))
-    #expect(panel.styleMask.contains(.resizable))
-    #expect(!panel.styleMask.contains(.nonactivatingPanel))
-    #expect(panel.isOpaque)
-    #expect(panel.backgroundColor == .windowBackgroundColor)
+    #expect(window.styleMask.contains(.titled))
+    #expect(window.styleMask.contains(.closable))
+    #expect(window.styleMask.contains(.miniaturizable))
+    #expect(window.styleMask.contains(.resizable))
+    #expect(!window.styleMask.contains(.nonactivatingPanel))
+    #expect(window.isOpaque)
+    #expect(window.backgroundColor == .windowBackgroundColor)
     #expect(toolbar.isVisible)
-    #expect(panel.toolbarStyle == .unifiedCompact)
-    #expect(panel.titlebarSeparatorStyle == .none)
+    #expect(window.toolbarStyle == .unifiedCompact)
+    #expect(window.titlebarSeparatorStyle == .none)
 }
 
 @Test @MainActor
 func test_configureChrome_when_auxiliary_content_follows_translation_then_restores_title_bar() {
     // Arrange
-    let panel = TranslationPanel()
-    let toolbar = NSToolbar(identifier: "TranslationPanelTests")
-    panel.toolbar = toolbar
-    panel.configureChrome(for: .translation)
+    let window = TranslationWindow()
+    let toolbar = NSToolbar(identifier: "TranslationWindowTests")
+    window.toolbar = toolbar
+    window.configureChrome(for: .translation)
 
     // Act
-    panel.configureChrome(for: .error)
+    window.configureChrome(for: .error)
 
     // Assert
-    #expect(panel.styleMask.contains(.titled))
-    #expect(panel.styleMask.contains(.closable))
-    #expect(!panel.styleMask.contains(.nonactivatingPanel))
-    #expect(panel.isOpaque)
-    #expect(panel.backgroundColor == .windowBackgroundColor)
+    #expect(window.styleMask.contains(.titled))
+    #expect(window.styleMask.contains(.closable))
+    #expect(!window.styleMask.contains(.nonactivatingPanel))
+    #expect(window.isOpaque)
+    #expect(window.backgroundColor == .windowBackgroundColor)
     #expect(!toolbar.isVisible)
 }
 
 @Test @MainActor
-func test_pinItem_when_action_is_sent_then_toggles_panel_pin_state() throws {
+func test_pinItem_when_action_is_sent_then_toggles_window_pin_state() throws {
     // Arrange
-    let state = TranslationPanelState()
-    let controller = TranslationPanelToolbarController(
-        panelState: state,
+    let state = TranslationWindowState()
+    let controller = TranslationWindowToolbarController(
+        windowState: state,
         interfaceLanguageSettings: makeTestInterfaceLanguageSettings()
     )
     let item = try #require(
         controller.toolbar(
             controller.toolbar,
-            itemForItemIdentifier: .pinPanel,
+            itemForItemIdentifier: .pinWindow,
             willBeInsertedIntoToolbar: true
         )
     )
@@ -107,7 +93,7 @@ func test_pinItem_when_action_is_sent_then_toggles_panel_pin_state() throws {
 }
 
 @Test
-func test_init_when_panelIsUnpinned_then_usesDiagonalOutlinePin() {
+func test_init_when_windowIsUnpinned_then_usesDiagonalOutlinePin() {
     // Arrange & Act
     let presentation = PinButtonPresentation(
         isPinned: false,
@@ -121,7 +107,7 @@ func test_init_when_panelIsUnpinned_then_usesDiagonalOutlinePin() {
 }
 
 @Test
-func test_init_when_panelIsPinned_then_usesUprightFilledPin() {
+func test_init_when_windowIsPinned_then_usesUprightFilledPin() {
     // Arrange & Act
     let presentation = PinButtonPresentation(
         isPinned: true,
@@ -143,17 +129,17 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
-    let layout = TranslationPanelLayout()
+    let layout = TranslationWindowLayout()
     let metrics = layout.metrics(
         sourceText: "train",
         status: coordinator.status,
         localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
-        rootView: TranslationPanelView(
+        rootView: TranslationWindowView(
             coordinator: coordinator,
             speechController: TranslationSpeechController(
-                player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
+                player: WindowSpeechPlayerMock(supportedLanguageIdentifiers: [])
             ),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
@@ -178,17 +164,17 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
-    let layout = TranslationPanelLayout()
+    let layout = TranslationWindowLayout()
     let metrics = layout.metrics(
         sourceText: "coding",
         status: coordinator.status,
         localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
-        rootView: TranslationPanelView(
+        rootView: TranslationWindowView(
             coordinator: coordinator,
             speechController: TranslationSpeechController(
-                player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: [])
+                player: WindowSpeechPlayerMock(supportedLanguageIdentifiers: [])
             ),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             supportedLanguages: [],
@@ -213,7 +199,7 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
 @Test @MainActor
 func test_body_when_rendering_equal_card_roles_then_uses_matching_fill_luminance() throws {
     // Arrange
-    let fixture = try makeRenderedTranslationPanel()
+    let fixture = try makeRenderedTranslationWindow()
     let leftCard = fixture.cardRect(column: 0).insetBy(dx: 24, dy: 24)
     let rightCard = fixture.cardRect(column: 1).insetBy(dx: 24, dy: 24)
 
@@ -228,7 +214,7 @@ func test_body_when_rendering_equal_card_roles_then_uses_matching_fill_luminance
 @Test @MainActor
 func test_body_when_rendering_equal_card_roles_then_uses_matching_border_luminance() throws {
     // Arrange
-    let fixture = try makeRenderedTranslationPanel()
+    let fixture = try makeRenderedTranslationWindow()
     let leftCard = fixture.cardRect(column: 0)
     let rightCard = fixture.cardRect(column: 1)
     let leftBorder = NSRect(
@@ -255,7 +241,7 @@ func test_body_when_rendering_equal_card_roles_then_uses_matching_border_luminan
 @Test @MainActor
 func test_body_when_rendering_cards_then_uses_subtle_edges() throws {
     // Arrange
-    let fixture = try makeRenderedTranslationPanel()
+    let fixture = try makeRenderedTranslationWindow()
     let edgeAndInteriorLuminance = [0, 1].map { column in
         let card = fixture.cardRect(column: column)
         let edge = NSRect(
@@ -288,13 +274,13 @@ func test_body_when_rendering_cards_then_uses_subtle_edges() throws {
 @Test @MainActor
 func test_body_when_rendering_cards_then_uses_lighter_fill_than_window() throws {
     // Arrange
-    let fixture = try makeRenderedTranslationPanel()
+    let fixture = try makeRenderedTranslationWindow()
     let card = fixture.cardRect(column: 0)
     let fill = card.insetBy(dx: 24, dy: 24)
     let windowBackground = NSRect(
         x: card.maxX + 3,
         y: card.midY - 20,
-        width: TranslationPanelStyle.columnSpacing - 6,
+        width: TranslationWindowStyle.columnSpacing - 6,
         height: 40
     )
 
@@ -319,7 +305,7 @@ func test_body_when_translation_is_available_then_exposes_two_selectable_text_vi
         targetLanguageIdentifier: "zh-Hant"
     )
     let request = try #require(coordinator.request)
-    let stub_runner = PanelTranslationRunner(
+    let stub_runner = WindowTranslationRunner(
         output: TranslationOutput(
             translatedText: "編碼",
             sourceLanguageIdentifier: "en",
@@ -342,7 +328,7 @@ func test_body_when_translation_is_available_then_exposes_two_selectable_text_vi
 @Test @MainActor
 func test_sourceSpeechButton_when_clicked_then_readsSourceText() throws {
     // Arrange
-    let speechPlayer = PanelSpeechPlayerMock(
+    let speechPlayer = WindowSpeechPlayerMock(
         supportedLanguageIdentifiers: ["en"]
     )
     let speechController = TranslationSpeechController(player: speechPlayer)
@@ -410,7 +396,7 @@ func test_translationSpeechButton_when_idle_then_usesSpeakerWaveTwoFillSymbol() 
 func test_translationSpeechButton_when_playing_then_usesStopFillSymbol() throws {
     // Arrange
     let speechController = TranslationSpeechController(
-        player: PanelSpeechPlayerMock(supportedLanguageIdentifiers: ["en"])
+        player: WindowSpeechPlayerMock(supportedLanguageIdentifiers: ["en"])
     )
     speechController.togglePlayback(
         role: .source,
@@ -450,7 +436,7 @@ func test_translationSpeechButton_when_playing_then_usesStopFillSymbol() throws 
 @Test @MainActor
 func test_targetSpeechButton_when_translationIsAvailable_then_readsTranslatedText() async throws {
     // Arrange
-    let speechPlayer = PanelSpeechPlayerMock(
+    let speechPlayer = WindowSpeechPlayerMock(
         supportedLanguageIdentifiers: ["zh-Hant"]
     )
     let speechController = TranslationSpeechController(player: speechPlayer)
@@ -463,7 +449,7 @@ func test_targetSpeechButton_when_translationIsAvailable_then_readsTranslatedTex
     let request = try #require(coordinator.request)
     await coordinator.translate(
         request,
-        using: PanelTranslationRunner(
+        using: WindowTranslationRunner(
             output: TranslationOutput(
                 translatedText: "你好",
                 sourceLanguageIdentifier: "en",
@@ -499,7 +485,7 @@ func test_targetSpeechButton_when_translationIsAvailable_then_readsTranslatedTex
 func test_targetSpeechButton_when_translationIsUnavailable_then_keepsHiddenSlot() throws {
     // Arrange
     let speechController = TranslationSpeechController(
-        player: PanelSpeechPlayerMock(
+        player: WindowSpeechPlayerMock(
             supportedLanguageIdentifiers: ["en", "zh-Hant"]
         )
     )
@@ -529,9 +515,9 @@ func test_targetSpeechButton_when_translationIsUnavailable_then_keepsHiddenSlot(
 }
 
 @Test @MainActor
-func test_languageControls_when_panelWidens_then_speechButtonsKeepFixedMenuGap() throws {
+func test_languageControls_when_windowWidens_then_speechButtonsKeepFixedMenuGap() throws {
     // Arrange
-    let speechPlayer = PanelSpeechPlayerMock(
+    let speechPlayer = WindowSpeechPlayerMock(
         supportedLanguageIdentifiers: ["en", "zh-Hant"]
     )
     let speechController = TranslationSpeechController(player: speechPlayer)
@@ -561,9 +547,9 @@ func test_languageControls_when_panelWidens_then_speechButtonsKeepFixedMenuGap()
     #expect(
         abs(
             buttonFrame.minX
-                - TranslationPanelStyle.horizontalPadding
-                - TranslationPanelStyle.languageMenuWidth
-                - TranslationPanelStyle.speechControlSpacing
+                - TranslationWindowStyle.horizontalPadding
+                - TranslationWindowStyle.languageMenuWidth
+                - TranslationWindowStyle.speechControlSpacing
         ) < 4
     )
 }
@@ -583,19 +569,19 @@ private func descendants<ViewType: NSView>(
 private func makeTranslationHostingView(
     coordinator: TranslationCoordinator,
     speechController: TranslationSpeechController = TranslationSpeechController(
-        player: PanelSpeechPlayerMock(
+        player: WindowSpeechPlayerMock(
             supportedLanguageIdentifiers: ["en", "zh-Hant"]
         )
     )
-) -> NSHostingView<TranslationPanelView> {
-    let layout = TranslationPanelLayout()
+) -> NSHostingView<TranslationWindowView> {
+    let layout = TranslationWindowLayout()
     let metrics = layout.metrics(
         sourceText: coordinator.request?.text ?? "",
         status: coordinator.status,
         localization: testEnglishLocalization
     )
     let hostingView = NSHostingView(
-        rootView: TranslationPanelView(
+        rootView: TranslationWindowView(
             coordinator: coordinator,
             speechController: speechController,
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
@@ -623,7 +609,7 @@ private func view(
 }
 
 @MainActor
-private func makeRenderedTranslationPanel() throws -> TranslationPanelRenderFixture {
+private func makeRenderedTranslationWindow() throws -> TranslationWindowRenderFixture {
     let coordinator = TranslationCoordinator()
     coordinator.submit(
         try SelectedText("coding"),
@@ -637,7 +623,7 @@ private func makeRenderedTranslationPanel() throws -> TranslationPanelRenderFixt
     )
     hostingView.cacheDisplay(in: hostingView.bounds, to: image)
     try captureImageIfRequested(image)
-    return TranslationPanelRenderFixture(image: image, size: hostingView.bounds.size)
+    return TranslationWindowRenderFixture(image: image, size: hostingView.bounds.size)
 }
 
 private func captureImageIfRequested(_ image: NSBitmapImageRep) throws {
@@ -679,31 +665,31 @@ private func averageLuminance(
     return count == 0 ? 0 : total / CGFloat(count)
 }
 
-private struct TranslationPanelRenderFixture {
+private struct TranslationWindowRenderFixture {
     let image: NSBitmapImageRep
     let size: CGSize
 
     func cardRect(column: Int) -> NSRect {
         let width = (
             size.width
-                - TranslationPanelStyle.horizontalPadding * 2
-                - TranslationPanelStyle.columnSpacing
+                - TranslationWindowStyle.horizontalPadding * 2
+                - TranslationWindowStyle.columnSpacing
         ) / 2
         let height = size.height
-            - TranslationPanelStyle.languageRowHeight
-            - TranslationPanelStyle.contentSpacing
-            - TranslationPanelStyle.bottomPadding
+            - TranslationWindowStyle.languageRowHeight
+            - TranslationWindowStyle.contentSpacing
+            - TranslationWindowStyle.bottomPadding
         return NSRect(
-            x: TranslationPanelStyle.horizontalPadding
-                + CGFloat(column) * (width + TranslationPanelStyle.columnSpacing),
-            y: TranslationPanelStyle.bottomPadding,
+            x: TranslationWindowStyle.horizontalPadding
+                + CGFloat(column) * (width + TranslationWindowStyle.columnSpacing),
+            y: TranslationWindowStyle.bottomPadding,
             width: width,
             height: height
         )
     }
 }
 
-private struct PanelTranslationRunner: TranslationRunning {
+private struct WindowTranslationRunner: TranslationRunning {
     let output: TranslationOutput
 
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
@@ -712,7 +698,7 @@ private struct PanelTranslationRunner: TranslationRunning {
 }
 
 @MainActor
-private final class PanelSpeechPlayerMock: SpeechPlaying {
+private final class WindowSpeechPlayerMock: SpeechPlaying {
     struct Request: Equatable {
         let text: String
         let languageIdentifier: String

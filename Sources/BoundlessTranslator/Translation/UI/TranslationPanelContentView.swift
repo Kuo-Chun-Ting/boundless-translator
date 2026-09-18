@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 @MainActor
-final class TranslationPanelContentView<Content: View>: NSView {
+final class TranslationWindowContentView<Content: View>: NSView {
     init(rootView: Content) {
         super.init(frame: .zero)
 

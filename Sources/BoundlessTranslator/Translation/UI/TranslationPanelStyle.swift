@@ -1,6 +1,6 @@
 import AppKit
 
-enum TranslationPanelStyle {
+enum TranslationWindowStyle {
     static var contentFont: NSFont {
         let systemFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
         guard

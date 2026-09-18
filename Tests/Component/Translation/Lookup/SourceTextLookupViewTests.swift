@@ -346,7 +346,7 @@ func test_updateSelection_when_selection_is_empty_then_hides_lookup_action() {
 func test_makeFirstResponder_when_focusMovesToTranslationText_then_hidesLookupAction() throws {
     // Arrange
     let view = SourceTextLookupView()
-    let window = makeTranslationPanel(hosting: view)
+    let window = makeTranslationWindow(hosting: view)
     view.updateText("She felt strong emotions.")
     view.layoutSubtreeIfNeeded()
     let scrollView = try #require(
@@ -409,8 +409,8 @@ func test_layout_when_lookup_action_is_hidden_then_uses_card_content_padding() t
     #expect(
         scrollView.frame
             == view.bounds.insetBy(
-                dx: TranslationPanelStyle.cardContentPadding,
-                dy: TranslationPanelStyle.cardContentPadding
+                dx: TranslationWindowStyle.cardContentPadding,
+                dy: TranslationWindowStyle.cardContentPadding
             )
     )
 }
@@ -545,15 +545,15 @@ private func makeWindow(hosting view: SourceTextLookupView) -> NSWindow {
 }
 
 @MainActor
-private func makeTranslationPanel(
+private func makeTranslationWindow(
     hosting view: SourceTextLookupView
-) -> TranslationPanel {
+) -> TranslationWindow {
     let contentView = NSView(
         frame: NSRect(x: 0, y: 0, width: 400, height: 240)
     )
-    let panel = TranslationPanel(contentSize: contentView.bounds.size)
-    panel.contentView = contentView
+    let window = TranslationWindow(contentSize: contentView.bounds.size)
+    window.contentView = contentView
     view.frame = NSRect(x: 20, y: 20, width: 200, height: 100)
     contentView.addSubview(view)
-    return panel
+    return window
 }

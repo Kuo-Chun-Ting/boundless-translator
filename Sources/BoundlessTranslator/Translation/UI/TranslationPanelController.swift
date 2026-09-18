@@ -2,23 +2,23 @@ import AppKit
 import SwiftUI
 
 @MainActor
-final class TranslationPanelController: NSObject, NSWindowDelegate {
-    private let auxiliaryPanelSize = CGSize(width: 420, height: 260)
-    private let translationLayout = TranslationPanelLayout()
-    private let positioner = PanelPositioner(pointerOffset: 12)
-    private let panelState: TranslationPanelState
-    private let panel: TranslationPanel
+final class TranslationWindowController: NSObject, NSWindowDelegate {
+    private let auxiliaryWindowSize = CGSize(width: 420, height: 260)
+    private let translationLayout = TranslationWindowLayout()
+    private let positioner = WindowPositioner(pointerOffset: 12)
+    private let windowState: TranslationWindowState
+    private let window: TranslationWindow
     private let speechController: TranslationSpeechController
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let engine: TranslationEngine
     private let windowPresenter: any ForegroundWindowPresenting
     private let applicationNotificationCenter: NotificationCenter
-    private lazy var toolbarController = TranslationPanelToolbarController(
-        panelState: panelState,
+    private lazy var toolbarController = TranslationWindowToolbarController(
+        windowState: windowState,
         interfaceLanguageSettings: interfaceLanguageSettings
     )
-    private var interactionPolicy = PanelInteractionPolicy(kind: .translation)
-    private var presentedKind = TranslationPanelKind.translation
+    private var interactionPolicy = WindowInteractionPolicy(kind: .translation)
+    private var presentedKind = TranslationWindowKind.translation
     private var mouseDownMonitor: MouseDownMonitor?
 
     init(
@@ -28,22 +28,21 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         engine: TranslationEngine,
         windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared
     ) {
-        panelState = TranslationPanelState()
-        panel = TranslationPanel(contentSize: auxiliaryPanelSize)
+        windowState = TranslationWindowState()
+        window = TranslationWindow(contentSize: auxiliaryWindowSize)
         speechController = TranslationSpeechController(player: speechPlayer)
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.engine = engine
         self.windowPresenter = windowPresenter
         self.applicationNotificationCenter = applicationNotificationCenter
         super.init()
-        panel.delegate = self
-        panel.toolbar = toolbarController.toolbar
-        panel.isFloatingPanel = true
-        panel.level = .floating
-        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        panel.hidesOnDeactivate = false
-        panel.isReleasedWhenClosed = false
-        panel.cancelOperationHandler = { [weak self] sender in
+        window.delegate = self
+        window.toolbar = toolbarController.toolbar
+        window.level = .floating
+        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        window.hidesOnDeactivate = false
+        window.isReleasedWhenClosed = false
+        window.cancelOperationHandler = { [weak self] sender in
             self?.dismissForCancelOperation(sender)
         }
         configureDismissalTriggers()
@@ -64,7 +63,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             localization: localization
         ).size
         present(
-            TranslationPanelView(
+            TranslationWindowView(
                 coordinator: coordinator,
                 speechController: speechController,
                 interfaceLanguageSettings: interfaceLanguageSettings,
@@ -72,12 +71,12 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
                 engine: engine,
                 layout: translationLayout,
                 onPreferredSizeChange: { [weak self] size in
-                    self?.resizeTranslationPanel(to: size)
+                    self?.resizeTranslationWindow(to: size)
                 }
             ),
             kind: .translation,
             pointerLocation: pointerLocation,
-            panelSize: initialSize
+            windowSize: initialSize
         )
     }
 
@@ -92,7 +91,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             ),
             kind: .error,
             pointerLocation: pointerLocation,
-            panelSize: auxiliaryPanelSize
+            windowSize: auxiliaryWindowSize
         )
     }
 
@@ -116,87 +115,87 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
             ),
             kind: .sourceLanguageSelection,
             pointerLocation: pointerLocation,
-            panelSize: auxiliaryPanelSize
+            windowSize: auxiliaryWindowSize
         )
     }
 
     private func present<Content: View>(
         _ content: Content,
-        kind: TranslationPanelKind,
+        kind: TranslationWindowKind,
         pointerLocation: CGPoint,
-        panelSize: CGSize
+        windowSize: CGSize
     ) {
         speechController.stopPlayback()
-        panelState.reset()
+        windowState.reset()
         toolbarController.synchronize()
-        interactionPolicy = PanelInteractionPolicy(kind: kind)
+        interactionPolicy = WindowInteractionPolicy(kind: kind)
         presentedKind = kind
-        panel.contentView = TranslationPanelContentView(rootView: content)
-        panel.setContentSize(panelSize)
+        window.contentView = TranslationWindowContentView(rootView: content)
+        window.setContentSize(windowSize)
         configureWindowControls(for: kind)
 
-        positionPanel(size: panelSize, pointerLocation: pointerLocation)
+        positionWindow(size: windowSize, pointerLocation: pointerLocation)
 
-        windowPresenter.present(panel)
+        windowPresenter.present(window)
     }
 
-    private func resizeTranslationPanel(to size: CGSize) {
+    private func resizeTranslationWindow(to size: CGSize) {
         guard case .translation = presentedKind else {
             return
         }
-        guard panel.contentLayoutRect.size != size else {
+        guard window.contentLayoutRect.size != size else {
             return
         }
 
-        let currentFrame = panel.frame
-        panel.setContentSize(size)
-        preservePanelPosition(from: currentFrame)
+        let currentFrame = window.frame
+        window.setContentSize(size)
+        preserveWindowPosition(from: currentFrame)
     }
 
-    private func preservePanelPosition(from currentFrame: CGRect) {
-        guard let visibleFrame = (panel.screen ?? NSScreen.main)?.visibleFrame else {
-            panel.setFrameTopLeftPoint(
+    private func preserveWindowPosition(from currentFrame: CGRect) {
+        guard let visibleFrame = (window.screen ?? NSScreen.main)?.visibleFrame else {
+            window.setFrameTopLeftPoint(
                 CGPoint(x: currentFrame.minX, y: currentFrame.maxY)
             )
             return
         }
 
-        panel.setFrameOrigin(
+        window.setFrameOrigin(
             positioner.resizedOrigin(
                 currentFrame: currentFrame,
-                newPanelSize: panel.frame.size,
+                newWindowSize: window.frame.size,
                 visibleFrame: visibleFrame
             )
         )
     }
 
-    private func positionPanel(size: CGSize, pointerLocation: CGPoint) {
+    private func positionWindow(size: CGSize, pointerLocation: CGPoint) {
         let screen = NSScreen.screens.first {
             $0.frame.contains(pointerLocation)
         } ?? NSScreen.main
         if let visibleFrame = screen?.visibleFrame {
-            panel.setFrameOrigin(
+            window.setFrameOrigin(
                 positioner.origin(
                     pointer: pointerLocation,
-                    panelSize: size,
+                    windowSize: size,
                     visibleFrame: visibleFrame
                 )
             )
         }
     }
 
-    private func configureWindowControls(for kind: TranslationPanelKind) {
-        panel.configureChrome(for: kind)
+    private func configureWindowControls(for kind: TranslationWindowKind) {
+        window.configureChrome(for: kind)
 
         switch kind {
         case .translation:
-            panel.standardWindowButton(.closeButton)?.isHidden = false
-            panel.standardWindowButton(.miniaturizeButton)?.isHidden = false
-            panel.standardWindowButton(.zoomButton)?.isHidden = false
+            window.standardWindowButton(.closeButton)?.isHidden = false
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = false
+            window.standardWindowButton(.zoomButton)?.isHidden = false
         case .error, .sourceLanguageSelection:
-            panel.standardWindowButton(.closeButton)?.isHidden = false
-            panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
-            panel.standardWindowButton(.zoomButton)?.isHidden = true
+            window.standardWindowButton(.closeButton)?.isHidden = false
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
         }
     }
 
@@ -208,7 +207,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
 
     private func dismissForCancelOperation(_ sender: Any?) {
         guard interactionPolicy.shouldDismissForCancelOperation(
-            isPinned: panelState.isPinned
+            isPinned: windowState.isPinned
         ) else {
             return
         }
@@ -231,14 +230,14 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
     }
 
     func dismissForMouseDown(at screenLocation: CGPoint) {
-        guard panel.isVisible else {
+        guard window.isVisible else {
             return
         }
-        guard !panel.frame.contains(screenLocation) else {
+        guard !window.frame.contains(screenLocation) else {
             return
         }
         guard interactionPolicy.shouldDismissForOutsideClick(
-            isPinned: panelState.isPinned
+            isPinned: windowState.isPinned
         ) else {
             return
         }
@@ -250,11 +249,11 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
         guard processIdentifier != ProcessInfo.processInfo.processIdentifier else {
             return
         }
-        guard panel.isVisible else {
+        guard window.isVisible else {
             return
         }
         guard interactionPolicy.shouldDismissForOutsideClick(
-            isPinned: panelState.isPinned
+            isPinned: windowState.isPinned
         ) else {
             return
         }
@@ -281,7 +280,7 @@ final class TranslationPanelController: NSObject, NSWindowDelegate {
 
     private func dismiss(_ sender: Any?) {
         speechController.stopPlayback()
-        panel.orderOut(sender)
+        window.orderOut(sender)
     }
 }
 

@@ -3,37 +3,51 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_windowDidResignKey_when_translationTemporarilyLosesFocus_then_keepsPanelVisible() throws {
+func test_windowDidResignKey_when_translationTemporarilyLosesFocus_then_keepsWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
+    let fixture = try makeTranslationWindowFixture()
 
     // Act
-    fixture.panel.delegate?.windowDidResignKey?(
+    fixture.window.delegate?.windowDidResignKey?(
         Notification(
             name: NSWindow.didResignKeyNotification,
-            object: fixture.panel
+            object: fixture.window
         )
     )
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
 func test_show_whenTranslationIsPresented_then_requestsForegroundWindowPresentation() throws {
     // Arrange & Act
-    let fixture = try makeTranslationPanelFixture()
+    let fixture = try makeTranslationWindowFixture()
 
     // Assert
-    #expect(fixture.windowPresenter.presentedWindows.last === fixture.panel)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.windowPresenter.presentedWindows.last === fixture.window)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslationIsUnpinned_then_closesPanel() throws {
+func test_show_whenTranslationIsPresented_then_preservesOwnedWindowConfiguration() throws {
+    // Arrange & Act
+    let fixture = try makeTranslationWindowFixture()
+
+    // Assert
+    #expect(fixture.window.level == .floating)
+    #expect(fixture.window.collectionBehavior.contains(.canJoinAllSpaces))
+    #expect(fixture.window.collectionBehavior.contains(.fullScreenAuxiliary))
+    #expect(!fixture.window.hidesOnDeactivate)
+    #expect(!fixture.window.isReleasedWhenClosed)
+    fixture.window.orderOut(nil)
+}
+
+@Test @MainActor
+func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslationIsUnpinned_then_closesWindow() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
+    let fixture = try makeTranslationWindowFixture()
     let externalProcessIdentifier = ProcessInfo.processInfo.processIdentifier + 1
 
     // Act
@@ -42,14 +56,14 @@ func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslatio
     )
 
     // Assert
-    #expect(!fixture.panel.isVisible)
+    #expect(!fixture.window.isVisible)
 }
 
 @Test @MainActor
-func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslationIsPinned_then_keepsPanelVisible() throws {
+func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslationIsPinned_then_keepsWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
-    try pinPanel(fixture.panel)
+    let fixture = try makeTranslationWindowFixture()
+    try pinWindow(fixture.window)
     let externalProcessIdentifier = ProcessInfo.processInfo.processIdentifier + 1
 
     // Act
@@ -58,14 +72,14 @@ func test_dismissForApplicationActivation_when_externalAppActivatesAndTranslatio
     )
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_dismissForApplicationActivation_when_boundlessTranslatorActivates_then_keepsUnpinnedPanelVisible() throws {
+func test_dismissForApplicationActivation_when_boundlessTranslatorActivates_then_keepsUnpinnedWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
+    let fixture = try makeTranslationWindowFixture()
 
     // Act
     fixture.controller.dismissForApplicationActivation(
@@ -73,103 +87,103 @@ func test_dismissForApplicationActivation_when_boundlessTranslatorActivates_then
     )
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_dismissForMouseDown_when_pointIsInsidePanel_then_keepsPanelVisible() throws {
+func test_dismissForMouseDown_when_pointIsInsideWindow_then_keepsWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
-    let pointInsidePanel = CGPoint(
-        x: fixture.panel.frame.midX,
-        y: fixture.panel.frame.midY
+    let fixture = try makeTranslationWindowFixture()
+    let pointInsideWindow = CGPoint(
+        x: fixture.window.frame.midX,
+        y: fixture.window.frame.midY
     )
 
     // Act
-    fixture.controller.dismissForMouseDown(at: pointInsidePanel)
+    fixture.controller.dismissForMouseDown(at: pointInsideWindow)
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_dismissForMouseDown_when_pointIsOutsidePanel_then_closesUnpinnedPanel() throws {
+func test_dismissForMouseDown_when_pointIsOutsideWindow_then_closesUnpinnedWindow() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
-    let pointOutsidePanel = CGPoint(
-        x: fixture.panel.frame.maxX + 100,
-        y: fixture.panel.frame.maxY + 100
+    let fixture = try makeTranslationWindowFixture()
+    let pointOutsideWindow = CGPoint(
+        x: fixture.window.frame.maxX + 100,
+        y: fixture.window.frame.maxY + 100
     )
 
     // Act
-    fixture.controller.dismissForMouseDown(at: pointOutsidePanel)
+    fixture.controller.dismissForMouseDown(at: pointOutsideWindow)
 
     // Assert
-    #expect(!fixture.panel.isVisible)
+    #expect(!fixture.window.isVisible)
 }
 
 @Test @MainActor
 func test_dismissForMouseDown_when_translationCloses_then_stopsSpeech() throws {
     // Arrange
-    let speechPlayer = PanelControllerSpeechPlayerMock()
-    let fixture = try makeTranslationPanelFixture(speechPlayer: speechPlayer)
+    let speechPlayer = WindowControllerSpeechPlayerMock()
+    let fixture = try makeTranslationWindowFixture(speechPlayer: speechPlayer)
     let stopCountAfterPresentation = speechPlayer.stopCallCount
-    let pointOutsidePanel = CGPoint(
-        x: fixture.panel.frame.maxX + 100,
-        y: fixture.panel.frame.maxY + 100
+    let pointOutsideWindow = CGPoint(
+        x: fixture.window.frame.maxX + 100,
+        y: fixture.window.frame.maxY + 100
     )
 
     // Act
-    fixture.controller.dismissForMouseDown(at: pointOutsidePanel)
+    fixture.controller.dismissForMouseDown(at: pointOutsideWindow)
 
     // Assert
     #expect(speechPlayer.stopCallCount == stopCountAfterPresentation + 1)
 }
 
 @Test @MainActor
-func test_dismissForMouseDown_when_pointIsOutsidePanelAndTranslationIsPinned_then_keepsPanelVisible() throws {
+func test_dismissForMouseDown_when_pointIsOutsideWindowAndTranslationIsPinned_then_keepsWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
-    try pinPanel(fixture.panel)
-    let pointOutsidePanel = CGPoint(
-        x: fixture.panel.frame.maxX + 100,
-        y: fixture.panel.frame.maxY + 100
+    let fixture = try makeTranslationWindowFixture()
+    try pinWindow(fixture.window)
+    let pointOutsideWindow = CGPoint(
+        x: fixture.window.frame.maxX + 100,
+        y: fixture.window.frame.maxY + 100
     )
 
     // Act
-    fixture.controller.dismissForMouseDown(at: pointOutsidePanel)
+    fixture.controller.dismissForMouseDown(at: pointOutsideWindow)
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_cancelOperation_when_translationIsUnpinned_then_closesPanel() throws {
+func test_cancelOperation_when_translationIsUnpinned_then_closesWindow() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
+    let fixture = try makeTranslationWindowFixture()
 
     // Act
-    fixture.panel.cancelOperation(nil)
+    fixture.window.cancelOperation(nil)
 
     // Assert
-    #expect(!fixture.panel.isVisible)
+    #expect(!fixture.window.isVisible)
 }
 
 @Test @MainActor
-func test_cancelOperation_when_translationIsPinned_then_keepsPanelVisible() throws {
+func test_cancelOperation_when_translationIsPinned_then_keepsWindowVisible() throws {
     // Arrange
-    let fixture = try makeTranslationPanelFixture()
-    try pinPanel(fixture.panel)
+    let fixture = try makeTranslationWindowFixture()
+    try pinWindow(fixture.window)
 
     // Act
-    fixture.panel.cancelOperation(nil)
+    fixture.window.cancelOperation(nil)
 
     // Assert
-    #expect(fixture.panel.isVisible)
-    fixture.panel.orderOut(nil)
+    #expect(fixture.window.isVisible)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
@@ -182,8 +196,8 @@ func test_show_when_fifthLineLookupActionOverlapsSourceText_then_buttonOwnsHitTe
         "Fourth line",
         "Fifth line",
     ].joined(separator: "\n")
-    let fixture = try makeTranslationPanelFixture(sourceText: sourceText)
-    let contentView = try #require(fixture.panel.contentView)
+    let fixture = try makeTranslationWindowFixture(sourceText: sourceText)
+    let contentView = try #require(fixture.window.contentView)
     contentView.layoutSubtreeIfNeeded()
     let sourceView = try #require(
         firstSubview(of: SourceTextLookupView.self, in: contentView)
@@ -203,7 +217,7 @@ func test_show_when_fifthLineLookupActionOverlapsSourceText_then_buttonOwnsHitTe
 
     // Assert
     #expect(hitView === lookupButton)
-    fixture.panel.orderOut(nil)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
@@ -216,8 +230,8 @@ func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCurs
         "Fourth line",
         "Fifth line",
     ].joined(separator: "\n")
-    let fixture = try makeTranslationPanelFixture(sourceText: sourceText)
-    let contentView = try #require(fixture.panel.contentView)
+    let fixture = try makeTranslationWindowFixture(sourceText: sourceText)
+    let contentView = try #require(fixture.window.contentView)
     contentView.layoutSubtreeIfNeeded()
     let sourceView = try #require(
         firstSubview(of: SourceTextLookupView.self, in: contentView)
@@ -236,7 +250,7 @@ func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCurs
             ),
             modifierFlags: [],
             timestamp: ProcessInfo.processInfo.systemUptime,
-            windowNumber: fixture.panel.windowNumber,
+            windowNumber: fixture.window.windowNumber,
             context: nil,
             eventNumber: 0,
             clickCount: 0,
@@ -246,17 +260,17 @@ func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCurs
     NSCursor.arrow.set()
 
     // Act
-    fixture.panel.sendEvent(event)
+    fixture.window.sendEvent(event)
 
     // Assert
     #expect(NSCursor.current === NSCursor.pointingHand)
-    fixture.panel.orderOut(nil)
+    fixture.window.orderOut(nil)
 }
 
 @Test @MainActor
-func test_languageIdentifier_when_changed_then_updatesOpenTranslationPanelToolbar() throws {
+func test_languageIdentifier_when_changed_then_updatesOpenTranslationWindowToolbar() throws {
     // Arrange
-    let suiteName = "TranslationPanelLanguageTests.\(UUID().uuidString)"
+    let suiteName = "TranslationWindowLanguageTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)
     defer { defaults.removePersistentDomain(forName: suiteName) }
@@ -264,12 +278,12 @@ func test_languageIdentifier_when_changed_then_updatesOpenTranslationPanelToolba
         defaults: defaults,
         preferredLanguageIdentifiers: { ["en"] }
     )
-    let fixture = try makeTranslationPanelFixture(
+    let fixture = try makeTranslationWindowFixture(
         interfaceLanguageSettings: interfaceLanguageSettings
     )
     let pinButton = try #require(
-        fixture.panel.toolbar?.items.first {
-            $0.itemIdentifier == .pinPanel
+        fixture.window.toolbar?.items.first {
+            $0.itemIdentifier == .pinWindow
         }?.view as? NSButton
     )
     #expect(pinButton.toolTip == "Pin Window")
@@ -279,22 +293,22 @@ func test_languageIdentifier_when_changed_then_updatesOpenTranslationPanelToolba
 
     // Assert
     #expect(pinButton.toolTip == "釘選視窗")
-    fixture.panel.orderOut(nil)
+    fixture.window.orderOut(nil)
 }
 
-private struct TranslationPanelTestFixture {
+private struct TranslationWindowTestFixture {
     let application: NSApplication
     let applicationNotificationCenter: NotificationCenter
-    let controller: TranslationPanelController
-    let panel: TranslationPanel
+    let controller: TranslationWindowController
+    let window: TranslationWindow
     let windowPresenter: ForegroundWindowPresenterSpy
 }
 
 @MainActor
-private func pinPanel(_ panel: TranslationPanel) throws {
+private func pinWindow(_ window: TranslationWindow) throws {
     let pinButton = try #require(
-        panel.toolbar?.items.first {
-            $0.itemIdentifier == .pinPanel
+        window.toolbar?.items.first {
+            $0.itemIdentifier == .pinWindow
         }?.view as? NSButton
     )
     let action = try #require(pinButton.action)
@@ -302,16 +316,16 @@ private func pinPanel(_ panel: TranslationPanel) throws {
 }
 
 @MainActor
-private func makeTranslationPanelFixture(
+private func makeTranslationWindowFixture(
     sourceText: String = "Hello",
-    speechPlayer: any SpeechPlaying = PanelControllerSpeechPlayerMock(),
+    speechPlayer: any SpeechPlaying = WindowControllerSpeechPlayerMock(),
     interfaceLanguageSettings: InterfaceLanguageSettings? = nil
-) throws -> TranslationPanelTestFixture {
+) throws -> TranslationWindowTestFixture {
     let application = NSApplication.shared
     let applicationNotificationCenter = NotificationCenter()
-    let existingPanels = Set(
+    let existingWindows = Set(
         application.windows.compactMap { window in
-            (window as? TranslationPanel).map(ObjectIdentifier.init)
+            (window as? TranslationWindow).map(ObjectIdentifier.init)
         }
     )
     let coordinator = TranslationCoordinator()
@@ -321,7 +335,7 @@ private func makeTranslationPanelFixture(
         sourceLanguageIdentifier: "en",
         targetLanguageIdentifier: "zh-Hant"
     )
-    let controller = TranslationPanelController(
+    let controller = TranslationWindowController(
         applicationNotificationCenter: applicationNotificationCenter,
         speechPlayer: speechPlayer,
         interfaceLanguageSettings: interfaceLanguageSettings
@@ -337,22 +351,22 @@ private func makeTranslationPanelFixture(
         ],
         pointerLocation: .zero
     )
-    let panel = try #require(
-        application.windows.compactMap { $0 as? TranslationPanel }.first {
-            !existingPanels.contains(ObjectIdentifier($0))
+    let window = try #require(
+        application.windows.compactMap { $0 as? TranslationWindow }.first {
+            !existingWindows.contains(ObjectIdentifier($0))
         }
     )
-    return TranslationPanelTestFixture(
+    return TranslationWindowTestFixture(
         application: application,
         applicationNotificationCenter: applicationNotificationCenter,
         controller: controller,
-        panel: panel,
+        window: window,
         windowPresenter: windowPresenter
     )
 }
 
 @MainActor
-private final class PanelControllerSpeechPlayerMock: SpeechPlaying {
+private final class WindowControllerSpeechPlayerMock: SpeechPlaying {
     private(set) var stopCallCount = 0
 
     func supports(languageIdentifier: String) -> Bool {

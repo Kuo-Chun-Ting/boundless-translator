@@ -13,7 +13,7 @@ final class AppController {
     private lazy var coordinator = TranslationCoordinator { [weak self] in
         self?.authorizeFeature() ?? false
     }
-    private lazy var panelController = TranslationPanelController(
+    private lazy var windowController = TranslationWindowController(
         interfaceLanguageSettings: interfaceLanguageSettings,
         engine: translationEngine
     )
@@ -120,7 +120,7 @@ final class AppController {
             targetLanguageIdentifier: settings.targetLanguageIdentifier,
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
-        panelController.show(
+        windowController.show(
             coordinator: coordinator,
             supportedLanguages: supportedLanguageCatalog.languages,
             pointerLocation: NSEvent.mouseLocation
@@ -210,7 +210,7 @@ final class AppController {
     }
 
     private func showError(_ message: SelectionErrorMessage) {
-        panelController.showError(
+        windowController.showError(
             message: message,
             pointerLocation: NSEvent.mouseLocation
         )
@@ -239,7 +239,7 @@ final class AppController {
                 return
             }
 
-            panelController.showSourceLanguageSelection(
+            windowController.showSourceLanguageSelection(
                 selectedText: selectedText,
                 selection: selection,
                 supportedLanguages: supportedLanguages,

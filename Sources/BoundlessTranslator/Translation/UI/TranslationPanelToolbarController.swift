@@ -2,8 +2,8 @@ import AppKit
 @preconcurrency import Combine
 
 extension NSToolbarItem.Identifier {
-    static let pinPanel = NSToolbarItem.Identifier(
-        "com.boundlesstranslator.toolbar.pin-panel"
+    static let pinWindow = NSToolbarItem.Identifier(
+        "com.boundlesstranslator.toolbar.pin-window"
     )
 }
 
@@ -30,44 +30,44 @@ struct PinButtonPresentation {
 }
 
 @MainActor
-final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
-    let toolbar = NSToolbar(identifier: "BoundlessTranslatorPanelToolbar")
+final class TranslationWindowToolbarController: NSObject, NSToolbarDelegate {
+    let toolbar = NSToolbar(identifier: "BoundlessTranslatorWindowToolbar")
 
-    private let panelState: TranslationPanelState
+    private let windowState: TranslationWindowState
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let pinButton = NSButton()
-    private let pinItem = NSToolbarItem(itemIdentifier: .pinPanel)
+    private let pinItem = NSToolbarItem(itemIdentifier: .pinWindow)
     private var cancellables: Set<AnyCancellable> = []
 
     init(
-        panelState: TranslationPanelState,
+        windowState: TranslationWindowState,
         interfaceLanguageSettings: InterfaceLanguageSettings
     ) {
-        self.panelState = panelState
+        self.windowState = windowState
         self.interfaceLanguageSettings = interfaceLanguageSettings
         super.init()
 
         configureToolbar()
         configurePinItem()
-        observePanelState()
+        observeWindowState()
         observeInterfaceLanguage()
         synchronize()
     }
 
     func synchronize() {
-        updatePinButton(isPinned: panelState.isPinned)
+        updatePinButton(isPinned: windowState.isPinned)
     }
 
     func toolbarAllowedItemIdentifiers(
         _ toolbar: NSToolbar
     ) -> [NSToolbarItem.Identifier] {
-        [.flexibleSpace, .pinPanel]
+        [.flexibleSpace, .pinWindow]
     }
 
     func toolbarDefaultItemIdentifiers(
         _ toolbar: NSToolbar
     ) -> [NSToolbarItem.Identifier] {
-        [.flexibleSpace, .pinPanel]
+        [.flexibleSpace, .pinWindow]
     }
 
     func toolbar(
@@ -76,7 +76,7 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
         willBeInsertedIntoToolbar flag: Bool
     ) -> NSToolbarItem? {
         switch itemIdentifier {
-        case .pinPanel:
+        case .pinWindow:
             pinItem
         default:
             nil
@@ -106,8 +106,8 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
         pinItem.visibilityPriority = .high
     }
 
-    private func observePanelState() {
-        panelState.$isPinned
+    private func observeWindowState() {
+        windowState.$isPinned
             .sink { [weak self] isPinned in
                 Task { @MainActor [weak self] in
                     self?.updatePinButton(isPinned: isPinned)
@@ -125,7 +125,7 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
                 let resolvedIdentifier = interfaceLanguageSettings
                     .resolvedLanguageIdentifier(for: languageIdentifier)
                 updatePinButton(
-                    isPinned: panelState.isPinned,
+                    isPinned: windowState.isPinned,
                     localization: AppLocalization(
                         languageIdentifier: resolvedIdentifier
                     )
@@ -136,7 +136,7 @@ final class TranslationPanelToolbarController: NSObject, NSToolbarDelegate {
 
     @objc
     private func togglePin(_ sender: Any?) {
-        panelState.togglePin()
+        windowState.togglePin()
         synchronize()
     }
 

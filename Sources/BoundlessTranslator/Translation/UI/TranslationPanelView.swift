@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct TranslationPanelView: View {
+struct TranslationWindowView: View {
     @ObservedObject var coordinator: TranslationCoordinator
     @ObservedObject var speechController: TranslationSpeechController
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
 
     let supportedLanguages: [Locale.Language]
     let engine: TranslationEngine
-    let layout: TranslationPanelLayout
+    let layout: TranslationWindowLayout
     let onPreferredSizeChange: @MainActor (CGSize) -> Void
 
     init(
@@ -16,7 +16,7 @@ struct TranslationPanelView: View {
         interfaceLanguageSettings: InterfaceLanguageSettings,
         supportedLanguages: [Locale.Language],
         engine: TranslationEngine,
-        layout: TranslationPanelLayout = TranslationPanelLayout(),
+        layout: TranslationWindowLayout = TranslationWindowLayout(),
         onPreferredSizeChange: @escaping @MainActor (CGSize) -> Void = { _ in }
     ) {
         self.coordinator = coordinator
@@ -54,22 +54,22 @@ struct TranslationPanelView: View {
     }
 
     private var translationContent: some View {
-        VStack(spacing: TranslationPanelStyle.contentSpacing) {
-            HStack(spacing: TranslationPanelStyle.columnSpacing) {
+        VStack(spacing: TranslationWindowStyle.contentSpacing) {
+            HStack(spacing: TranslationWindowStyle.columnSpacing) {
                 languageControls(role: .source)
                 languageControls(role: .target)
             }
 
             HStack(
                 alignment: .top,
-                spacing: TranslationPanelStyle.columnSpacing
+                spacing: TranslationWindowStyle.columnSpacing
             ) {
                 sourceContent
                 targetContent
             }
         }
-        .padding(.horizontal, TranslationPanelStyle.horizontalPadding)
-        .padding(.bottom, TranslationPanelStyle.bottomPadding)
+        .padding(.horizontal, TranslationWindowStyle.horizontalPadding)
+        .padding(.bottom, TranslationWindowStyle.bottomPadding)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
@@ -80,14 +80,14 @@ struct TranslationPanelView: View {
     private func languageControls(
         role: TranslationLanguageRole
     ) -> some View {
-        HStack(spacing: TranslationPanelStyle.speechControlSpacing) {
+        HStack(spacing: TranslationWindowStyle.speechControlSpacing) {
             TranslationLanguageMenu(
                 coordinator: coordinator,
                 supportedLanguages: supportedLanguages,
                 role: role,
                 localization: localization
             )
-            .frame(width: TranslationPanelStyle.languageMenuWidth)
+            .frame(width: TranslationWindowStyle.languageMenuWidth)
 
             let speechContent = speechContent(for: role)
             TranslationSpeechButton(
@@ -98,13 +98,13 @@ struct TranslationPanelView: View {
                 localization: localization
             )
             .frame(
-                width: TranslationPanelStyle.speechControlSize,
-                height: TranslationPanelStyle.languageRowHeight
+                width: TranslationWindowStyle.speechControlSize,
+                height: TranslationWindowStyle.languageRowHeight
             )
         }
         .frame(
             maxWidth: .infinity,
-            minHeight: TranslationPanelStyle.languageRowHeight,
+            minHeight: TranslationWindowStyle.languageRowHeight,
             alignment: .leading
         )
     }
@@ -188,10 +188,10 @@ struct TranslationPanelView: View {
 
     private var cardSurfaceHeight: CGFloat {
         metrics.contentHeight
-            + TranslationPanelStyle.cardContentPadding * 2
+            + TranslationWindowStyle.cardContentPadding * 2
     }
 
-    private var metrics: TranslationPanelMetrics {
+    private var metrics: TranslationWindowMetrics {
         layout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status,
@@ -214,7 +214,7 @@ private extension View {
             maxHeight: .infinity,
             alignment: .topLeading
         )
-        .padding(TranslationPanelStyle.cardContentPadding)
+        .padding(TranslationWindowStyle.cardContentPadding)
     }
 
     func translationCardSurface() -> some View {
@@ -225,9 +225,9 @@ private extension View {
 private struct TranslationCardSurface: View {
     var body: some View {
         RoundedRectangle(
-            cornerRadius: TranslationPanelStyle.cardCornerRadius,
+            cornerRadius: TranslationWindowStyle.cardCornerRadius,
             style: .continuous
         )
-        .fill(Color(nsColor: TranslationPanelStyle.cardBackgroundColor))
+        .fill(Color(nsColor: TranslationWindowStyle.cardBackgroundColor))
     }
 }

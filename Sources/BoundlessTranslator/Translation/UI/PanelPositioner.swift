@@ -1,47 +1,47 @@
 import CoreGraphics
 
-struct PanelPositioner {
+struct WindowPositioner {
     let pointerOffset: CGFloat
 
     func origin(
         pointer: CGPoint,
-        panelSize: CGSize,
+        windowSize: CGSize,
         visibleFrame: CGRect
     ) -> CGPoint {
         let preferredOrigin = CGPoint(
             x: pointer.x + pointerOffset,
-            y: pointer.y - panelSize.height - pointerOffset
+            y: pointer.y - windowSize.height - pointerOffset
         )
         return clampedOrigin(
             preferredOrigin,
-            panelSize: panelSize,
+            windowSize: windowSize,
             visibleFrame: visibleFrame
         )
     }
 
     func resizedOrigin(
         currentFrame: CGRect,
-        newPanelSize: CGSize,
+        newWindowSize: CGSize,
         visibleFrame: CGRect
     ) -> CGPoint {
         let preferredOrigin = CGPoint(
             x: currentFrame.minX,
-            y: currentFrame.maxY - newPanelSize.height
+            y: currentFrame.maxY - newWindowSize.height
         )
         return clampedOrigin(
             preferredOrigin,
-            panelSize: newPanelSize,
+            windowSize: newWindowSize,
             visibleFrame: visibleFrame
         )
     }
 
     private func clampedOrigin(
         _ preferredOrigin: CGPoint,
-        panelSize: CGSize,
+        windowSize: CGSize,
         visibleFrame: CGRect
     ) -> CGPoint {
-        let maximumX = max(visibleFrame.minX, visibleFrame.maxX - panelSize.width)
-        let maximumY = max(visibleFrame.minY, visibleFrame.maxY - panelSize.height)
+        let maximumX = max(visibleFrame.minX, visibleFrame.maxX - windowSize.width)
+        let maximumY = max(visibleFrame.minY, visibleFrame.maxY - windowSize.height)
 
         return CGPoint(
             x: min(max(preferredOrigin.x, visibleFrame.minX), maximumX),

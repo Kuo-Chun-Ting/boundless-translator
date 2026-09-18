@@ -1,13 +1,13 @@
 import AppKit
 
 extension Notification.Name {
-    static let translationPanelFirstResponderDidChange = Notification.Name(
-        "TranslationPanelFirstResponderDidChange"
+    static let translationWindowFirstResponderDidChange = Notification.Name(
+        "TranslationWindowFirstResponderDidChange"
     )
 }
 
 @MainActor
-final class TranslationPanel: NSPanel {
+final class TranslationWindow: NSWindow {
     var cancelOperationHandler: ((Any?) -> Void)?
 
     init(contentSize: CGSize = CGSize(width: 420, height: 260)) {
@@ -25,19 +25,11 @@ final class TranslationPanel: NSPanel {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var canBecomeKey: Bool {
-        true
-    }
-
-    override var canBecomeMain: Bool {
-        true
-    }
-
     override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
         let didChangeFirstResponder = super.makeFirstResponder(responder)
         if didChangeFirstResponder {
             NotificationCenter.default.post(
-                name: .translationPanelFirstResponderDidChange,
+                name: .translationWindowFirstResponderDidChange,
                 object: self
             )
         }
@@ -66,7 +58,7 @@ final class TranslationPanel: NSPanel {
         }
     }
 
-    func configureChrome(for kind: TranslationPanelKind) {
+    func configureChrome(for kind: TranslationWindowKind) {
         switch kind {
         case .translation:
             styleMask = [
