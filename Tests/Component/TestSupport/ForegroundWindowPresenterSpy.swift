@@ -7,6 +7,7 @@ final class ForegroundWindowPresenterSpy: ForegroundWindowPresenting {
 
     func present(_ window: NSWindow) {
         presentedWindows.append(window)
-        window.orderFront(nil)
+        window.makeKeyAndOrderFront(nil)
+        window.makeMain()
     }
 }

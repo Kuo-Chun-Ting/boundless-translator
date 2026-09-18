@@ -29,6 +29,10 @@ final class TranslationPanel: NSPanel {
         true
     }
 
+    override var canBecomeMain: Bool {
+        true
+    }
+
     override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
         let didChangeFirstResponder = super.makeFirstResponder(responder)
         if didChangeFirstResponder {

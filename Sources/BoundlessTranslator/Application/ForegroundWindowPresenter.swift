@@ -43,27 +43,29 @@ final class ForegroundWindowPresenter: NSObject, ForegroundWindowPresenting {
 
     func present(_ window: NSWindow) {
         pendingWindow = window
-        window.orderFront(nil)
+        makePendingWindowMainAndKey()
 
         if isApplicationActive() {
-            makePendingWindowKey()
             return
         }
 
         activateApplication()
         if isApplicationActive() {
-            makePendingWindowKey()
+            makePendingWindowMainAndKey()
         }
     }
 
     @objc
     private func applicationDidBecomeActive(_ notification: Notification) {
-        makePendingWindowKey()
+        makePendingWindowMainAndKey()
     }
 
-    private func makePendingWindowKey() {
-        guard isApplicationActive() else { return }
-        pendingWindow?.makeKeyAndOrderFront(nil)
-        pendingWindow = nil
+    private func makePendingWindowMainAndKey() {
+        guard let pendingWindow else { return }
+        pendingWindow.makeKeyAndOrderFront(nil)
+        pendingWindow.makeMain()
+        if isApplicationActive() {
+            self.pendingWindow = nil
+        }
     }
 }

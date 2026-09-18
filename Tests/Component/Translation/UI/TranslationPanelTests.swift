@@ -4,14 +4,16 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_canBecomeKey_when_panel_isPresented_then_returns_true() {
+func test_panel_when_presented_then_canBecomeMainAndKey() {
     // Arrange
     let panel = TranslationPanel()
 
     // Act
+    let canBecomeMain = panel.canBecomeMain
     let canBecomeKey = panel.canBecomeKey
 
     // Assert
+    #expect(canBecomeMain)
     #expect(canBecomeKey)
 }
 
@@ -68,6 +70,7 @@ func test_configureChrome_when_auxiliary_content_follows_translation_then_restor
     // Assert
     #expect(panel.styleMask.contains(.titled))
     #expect(panel.styleMask.contains(.closable))
+    #expect(!panel.styleMask.contains(.nonactivatingPanel))
     #expect(panel.isOpaque)
     #expect(panel.backgroundColor == .windowBackgroundColor)
     #expect(!toolbar.isVisible)

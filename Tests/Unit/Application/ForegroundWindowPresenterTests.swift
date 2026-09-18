@@ -3,7 +3,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_present_whenApplicationIsInactive_then_makesWindowKeyAfterActivation() {
+func test_present_whenApplicationIsInactive_then_selectsTargetBeforeActivation() {
     // Arrange
     let application = ApplicationActivationState(isActive: false)
     var calls: [String] = []
@@ -23,18 +23,24 @@ func test_present_whenApplicationIsInactive_then_makesWindowKeyAfterActivation()
     presenter.present(window)
 
     // Assert
-    #expect(calls == ["front", "activate"])
+    #expect(calls == ["keyAndFront", "main", "activate"])
 
     // Act
     application.isActive = true
     notificationCenter.post(name: NSApplication.didBecomeActiveNotification, object: nil)
 
     // Assert
-    #expect(calls == ["front", "activate", "keyAndFront"])
+    #expect(calls == [
+        "keyAndFront",
+        "main",
+        "activate",
+        "keyAndFront",
+        "main",
+    ])
 }
 
 @Test @MainActor
-func test_present_whenApplicationIsActive_then_makesWindowKeyImmediately() {
+func test_present_whenApplicationIsActive_then_makesTargetMainAndKeyImmediately() {
     // Arrange
     var calls: [String] = []
     let window = WindowPresentationSpy { action in
@@ -52,11 +58,11 @@ func test_present_whenApplicationIsActive_then_makesWindowKeyImmediately() {
     presenter.present(window)
 
     // Assert
-    #expect(calls == ["front", "keyAndFront"])
+    #expect(calls == ["keyAndFront", "main"])
 }
 
 @Test @MainActor
-func test_present_whenMultipleWindowsAwaitActivation_then_lastWindowBecomesKey() {
+func test_present_whenMultipleWindowsAwaitActivation_then_lastWindowBecomesMainAndKey() {
     // Arrange
     let application = ApplicationActivationState(isActive: false)
     var activationCount = 0
@@ -81,30 +87,37 @@ func test_present_whenMultipleWindowsAwaitActivation_then_lastWindowBecomesKey()
 
     // Assert
     #expect(activationCount == 2)
-    #expect(firstCalls == ["front"])
-    #expect(secondCalls == ["front", "keyAndFront"])
+    #expect(firstCalls == ["keyAndFront", "main"])
+    #expect(secondCalls == [
+        "keyAndFront",
+        "main",
+        "keyAndFront",
+        "main",
+    ])
 }
 
 @MainActor
 private final class WindowPresentationSpy: NSWindow {
     private let record: (String) -> Void
 
-    init(record: @escaping (String) -> Void) {
+    init(
+        record: @escaping (String) -> Void
+    ) {
         self.record = record
         super.init(
             contentRect: .zero,
-            styleMask: [],
+            styleMask: [.titled],
             backing: .buffered,
             defer: false
         )
     }
 
-    override func orderFront(_ sender: Any?) {
-        record("front")
-    }
-
     override func makeKeyAndOrderFront(_ sender: Any?) {
         record("keyAndFront")
+    }
+
+    override func makeMain() {
+        record("main")
     }
 }
 
