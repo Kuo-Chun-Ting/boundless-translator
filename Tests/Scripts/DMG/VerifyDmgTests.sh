@@ -35,13 +35,14 @@ while [[ "$#" -gt 0 ]]; do
 done
 mkdir -p "${mount_point}"
 [[ "${TEST_MOUNT_CONTENTS_COMPLETE:-true}" == true ]] || exit 0
-mkdir -p "${mount_point}/Boundless Translator.app" "${mount_point}/.background"
+product_name="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
+mkdir -p "${mount_point}/${product_name}.app" "${mount_point}/.background"
 ln -s /Applications "${mount_point}/Applications"
 touch "${mount_point}/.DS_Store" "${mount_point}/.background/DMGBackground.png"
 STUB
-    cat > "${MOCK_BIN}/verify-app" <<'STUB'
+cat > "${MOCK_BIN}/verify-app" <<'STUB'
 #!/bin/zsh
-print -r -- "verify-app $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+print -r -- "verify-app ${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-} $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 STUB
     chmod +x "${MOCK_BIN}/codesign" "${MOCK_BIN}/hdiutil" "${MOCK_BIN}/verify-app"
 }
@@ -95,8 +96,24 @@ function test_verify_dmg_when_mounted_contents_are_incomplete_then_detaches_and_
     [[ "$(<"${CALL_LOG}")" == *$'hdiutil detach '* ]]
 }
 
+function test_verify_dmg_when_e2e_identity_is_expected_then_verifies_e2e_app {
+    # Arrange
+    print image > "${DMG_PATH}"
+    : > "${CALL_LOG}"
+
+    # Act
+    BOUNDLESS_TRANSLATOR_PRODUCT_NAME='Boundless Translator E2E' \
+    BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER='com.lillard.BoundlessTranslator.e2e' \
+        run_verifier "${DMG_PATH}"
+
+    # Assert
+    grep -Fq 'verify-app com.lillard.BoundlessTranslator.e2e ' "${CALL_LOG}"
+    grep -Fq '/Boundless Translator E2E.app' "${CALL_LOG}"
+}
+
 create_tool_stubs
 test_verify_dmg_when_path_is_missing_then_stops_before_verification
 test_verify_dmg_when_image_is_complete_then_checks_image_and_contained_app
+test_verify_dmg_when_e2e_identity_is_expected_then_verifies_e2e_app
 test_verify_dmg_when_mounted_contents_are_incomplete_then_detaches_and_fails
 print 'DMG verification tests passed.'

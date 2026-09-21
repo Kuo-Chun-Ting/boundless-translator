@@ -14,6 +14,7 @@ struct PermissionGuideView: View {
 
             Text(verbatim: localization.string(configuration.titleKey))
                 .font(.title.bold())
+                .accessibilityIdentifier("permissionGuide.title")
 
             permissionCard
 
@@ -52,6 +53,7 @@ struct PermissionGuideView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .keyboardShortcut(.defaultAction)
+            .accessibilityIdentifier("permissionGuide.continueButton")
         }
         .padding(20)
         .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 18))

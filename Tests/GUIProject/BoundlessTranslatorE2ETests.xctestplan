@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "6B1A34B3-99AC-4BBE-B775-A41C87EA05EE",
+      "name" : "Default",
+      "options" : {
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "BOUNDLESS_TRANSLATOR_E2E_APP_PATH",
+        "value" : "$(BOUNDLESS_TRANSLATOR_E2E_APP_PATH)"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BoundlessTranslatorGUITests.xcodeproj",
+      "identifier" : "D50000000000000000000001",
+      "name" : "E2ETestHost"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "skipped" : false,
+      "target" : {
+        "containerPath" : "container:BoundlessTranslatorGUITests.xcodeproj",
+        "identifier" : "D50000000000000000000002",
+        "name" : "BoundlessTranslatorE2ETests"
+      }
+    }
+  ],
+  "version" : 1
+}

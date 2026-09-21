@@ -96,9 +96,27 @@ function test_package_dmg_when_signing_fails_then_preserves_existing_image {
     [[ "$(<"${output_dmg}")" == 'existing image' ]]
 }
 
+function test_package_dmg_when_e2e_app_is_given_then_uses_e2e_volume_and_app_name {
+    # Arrange
+    local e2e_app="${TEMP_ROOT}/Boundless Translator E2E.app"
+    local output_dmg="${TEMP_ROOT}/Boundless Translator E2E-test.dmg"
+    mkdir -p "${e2e_app}"
+    : > "${CALL_LOG}"
+
+    # Act
+    run_packager "${e2e_app}" "${output_dmg}"
+
+    # Assert
+    local calls="$(<"${CALL_LOG}")"
+    [[ "${calls}" == *'--volname Boundless Translator E2E'* ]]
+    [[ "${calls}" == *'--icon Boundless Translator E2E.app 170 180'* ]]
+    [[ "${calls}" == *'--hide-extension Boundless Translator E2E.app'* ]]
+}
+
 create_tool_stubs
 test_package_dmg_when_paths_are_missing_then_stops_before_packaging
 test_package_dmg_when_source_app_is_missing_then_preserves_existing_image
 test_package_dmg_when_inputs_are_valid_then_creates_and_signs_image_without_verifying_it
+test_package_dmg_when_e2e_app_is_given_then_uses_e2e_volume_and_app_name
 test_package_dmg_when_signing_fails_then_preserves_existing_image
 print 'DMG packaging tests passed.'

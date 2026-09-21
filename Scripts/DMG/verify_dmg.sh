@@ -3,7 +3,9 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly EXPECTED_TEAM_ID="3S9ZKKJ6PW"
+readonly EXPECTED_TEAM_ID="${BOUNDLESS_TRANSLATOR_TEAM_ID:-3S9ZKKJ6PW}"
+readonly PRODUCT_NAME="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
+readonly APP_NAME="${PRODUCT_NAME}.app"
 readonly VERIFY_APP_EXECUTABLE="${BOUNDLESS_TRANSLATOR_VERIFY_APP_EXECUTABLE:-${PROJECT_ROOT}/Scripts/DMG/verify_app.sh}"
 
 function fail {
@@ -40,15 +42,15 @@ mkdir -p "${MOUNT_POINT}"
 hdiutil attach -readonly -nobrowse -mountpoint "${MOUNT_POINT}" "${DMG_PATH}" >/dev/null
 active_mount_point="${MOUNT_POINT}"
 
-[[ -d "${MOUNT_POINT}/Boundless Translator.app" ]] ||
-    fail 'DMG does not contain Boundless Translator.app.'
+[[ -d "${MOUNT_POINT}/${APP_NAME}" ]] ||
+    fail "DMG does not contain ${APP_NAME}."
 [[ -L "${MOUNT_POINT}/Applications" && "$(readlink "${MOUNT_POINT}/Applications")" == /Applications ]] ||
     fail 'DMG does not contain the Applications shortcut.'
 [[ -f "${MOUNT_POINT}/.DS_Store" ]] ||
     fail 'DMG does not contain its Finder layout.'
 [[ -f "${MOUNT_POINT}/.background/DMGBackground.png" ]] ||
     fail 'DMG does not contain its background image.'
-"${VERIFY_APP_EXECUTABLE}" "${MOUNT_POINT}/Boundless Translator.app"
+"${VERIFY_APP_EXECUTABLE}" "${MOUNT_POINT}/${APP_NAME}"
 
 hdiutil detach "${MOUNT_POINT}" >/dev/null
 active_mount_point=""

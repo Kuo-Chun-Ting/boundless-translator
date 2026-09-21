@@ -11,7 +11,7 @@ trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
 function create_app_fixture {
     local resources_path="${APP_PATH}/Contents/Resources"
-    local executable_path="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
+    local executable_path="${APP_PATH}/Contents/MacOS/Boundless Translator"
     local info_plist="${APP_PATH}/Contents/Info.plist"
 
     mkdir -p "${APP_PATH}/Contents/MacOS"
@@ -20,6 +20,7 @@ function create_app_fixture {
         mkdir -p "${resources_path}/${localization_path:t}"
     done
     plutil -create xml1 "${info_plist}"
+    plutil -insert CFBundleExecutable -string 'Boundless Translator' "${info_plist}"
     plutil -insert LSMinimumSystemVersion -string 15.0 "${info_plist}"
     cp "${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy" "${resources_path}/PrivacyInfo.xcprivacy"
     cat > "${executable_path}" <<'EOF'
@@ -33,6 +34,7 @@ function create_tool_stubs {
     mkdir -p "${MOCK_BIN}"
     cat > "${MOCK_BIN}/codesign" <<'EOF'
 #!/bin/zsh
+print -r -- "codesign $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 if [[ "$*" == *--verify* && "${TEST_CODESIGN_VERIFY_FAIL:-false}" == true ]]; then
     exit 1
 fi
@@ -61,6 +63,7 @@ EOF
 
 function run_verifier {
     PATH="${MOCK_BIN}:${PATH}" \
+    BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${TEMP_ROOT}/calls.log" \
     BOUNDLESS_TRANSLATOR_APP_LAUNCH_WAIT_SECONDS=0.05 \
         zsh "${VERIFIER}" "${APP_PATH}"
 }
@@ -106,7 +109,7 @@ function test_verify_app_when_required_framework_is_missing_then_fails {
 
 function test_verify_app_when_executable_exits_immediately_then_fails {
     # Arrange
-    local executable_path="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
+    local executable_path="${APP_PATH}/Contents/MacOS/Boundless Translator"
     cat > "${executable_path}" <<'EOF'
 #!/bin/zsh
 exit 0
@@ -155,6 +158,18 @@ function test_verify_app_when_signature_is_invalid_then_fails {
     fi
 }
 
+function test_verify_app_when_e2e_identity_is_expected_then_verifies_e2e_bundle {
+    # Arrange
+    : > "${TEMP_ROOT}/calls.log"
+
+    # Act
+    BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER='com.lillard.BoundlessTranslator.e2e' \
+        run_verifier
+
+    # Assert
+    grep -Fq 'identifier "com.lillard.BoundlessTranslator.e2e"' "${TEMP_ROOT}/calls.log"
+}
+
 create_app_fixture
 create_tool_stubs
 test_verify_app_when_privacy_manifest_is_missing_then_fails
@@ -164,6 +179,7 @@ test_verify_app_when_executable_exits_immediately_then_fails
 test_verify_app_when_signature_lacks_sandbox_then_fails
 test_verify_app_when_signature_lacks_network_access_then_fails
 test_verify_app_when_signature_is_invalid_then_fails
+test_verify_app_when_e2e_identity_is_expected_then_verifies_e2e_bundle
 test_verify_app_when_app_contract_is_complete_then_succeeds
 
 print 'App verification tests passed.'

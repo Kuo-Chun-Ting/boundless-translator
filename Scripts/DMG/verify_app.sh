@@ -3,8 +3,8 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly BUNDLE_IDENTIFIER="com.lillard.BoundlessTranslator"
-readonly EXPECTED_TEAM_ID="3S9ZKKJ6PW"
+readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator}"
+readonly EXPECTED_TEAM_ID="${BOUNDLESS_TRANSLATOR_TEAM_ID:-3S9ZKKJ6PW}"
 readonly EXPECTED_MINIMUM_OS_VERSION="15.0"
 readonly EXPECTED_PRIVACY_MANIFEST="${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy"
 readonly EXPECTED_LOCALIZATIONS_ROOT="${PROJECT_ROOT}/Sources/BoundlessTranslator/Resources"
@@ -109,10 +109,11 @@ function verify_launch {
 
 [[ "$#" -eq 1 ]] || fail "Usage: verify_app.sh <app-path>"
 readonly APP_PATH="$1"
-readonly EXECUTABLE="${APP_PATH}/Contents/MacOS/BoundlessTranslator"
 
 [[ -d "${APP_PATH}" ]] || fail "App does not exist: ${APP_PATH}"
 verify_signature "${APP_PATH}"
 verify_bundle_contents "${APP_PATH}"
+readonly EXECUTABLE_NAME="$(plutil -extract CFBundleExecutable raw "${APP_PATH}/Contents/Info.plist")"
+readonly EXECUTABLE="${APP_PATH}/Contents/MacOS/${EXECUTABLE_NAME}"
 verify_executable "${EXECUTABLE}"
 verify_launch "${EXECUTABLE}"

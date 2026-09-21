@@ -9,6 +9,8 @@ readonly VERIFY_DMG_EXECUTABLE="${BOUNDLESS_TRANSLATOR_VERIFY_DMG_EXECUTABLE:-${
 readonly NOTARIZE_EXECUTABLE="${BOUNDLESS_TRANSLATOR_NOTARIZE_EXECUTABLE:-${PROJECT_ROOT}/Scripts/DMG/notarize_dmg.sh}"
 readonly MV_EXECUTABLE="${BOUNDLESS_TRANSLATOR_MV_EXECUTABLE:-mv}"
 readonly BUILD_ROOT="${BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT:-${PROJECT_ROOT}/Build}"
+readonly PRODUCT_NAME="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
+readonly DMG_NAME="${PRODUCT_NAME}-test.dmg"
 
 if [[ "$#" -ne 0 ]]; then
     print -u2 'Usage: release_dmg.sh'
@@ -17,9 +19,9 @@ fi
 
 mkdir -p "${BUILD_ROOT}"
 readonly TEMP_ROOT="$(mktemp -d "${BUILD_ROOT}/.boundless-translator-test.XXXXXX")"
-readonly APP_PATH="${TEMP_ROOT}/Boundless Translator.app"
-readonly STAGED_DMG_PATH="${TEMP_ROOT}/Boundless Translator-test.dmg"
-readonly FINAL_DMG_PATH="${BUILD_ROOT}/Boundless Translator-test.dmg"
+readonly APP_PATH="${TEMP_ROOT}/${PRODUCT_NAME}.app"
+readonly STAGED_DMG_PATH="${TEMP_ROOT}/${DMG_NAME}"
+readonly FINAL_DMG_PATH="${BUILD_ROOT}/${DMG_NAME}"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
 BOUNDLESS_TRANSLATOR_BUILD_ROOT="${TEMP_ROOT}" "${BUILD_APP_EXECUTABLE}"

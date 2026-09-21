@@ -166,6 +166,7 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 
     private func configureTextView() {
         textView.delegate = self
+        textView.setAccessibilityIdentifier("translation.sourceText")
     }
 
     private func observeScrolling() {

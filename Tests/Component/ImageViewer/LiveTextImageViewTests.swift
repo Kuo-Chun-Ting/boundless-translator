@@ -39,6 +39,7 @@ func test_init_whenViewIsCreated_then_composesNativeLiveTextOverlay() {
     #expect(view.imageView.imageScaling == .scaleProportionallyUpOrDown)
     #expect(view.overlayView.trackingImageView === view.imageView)
     #expect(view.overlayView.preferredInteractionTypes == .textSelection)
+    #expect(view.imageView.accessibilityIdentifier() == "imageWorkspace.loading")
 }
 
 @Test @MainActor
@@ -75,6 +76,7 @@ func test_display_whenImageChanges_then_analyzesLatestImageAndReplacesDisplayedI
 
     // Assert
     #expect(view.imageView.image === secondImage)
+    #expect(view.imageView.accessibilityIdentifier() == "imageWorkspace.unavailable")
     #expect(analyzedSizes == [firstImage.size, secondImage.size])
     #expect(!view.hasActiveTextSelection)
     #expect(view.selectedText.isEmpty)

@@ -14,6 +14,7 @@ func test_init_when_configuring_source_text_then_uses_primary_label_color() thro
     // Assert
     #expect(textView.textColor == .labelColor)
     #expect(textView.textContainer?.lineFragmentPadding == 0)
+    #expect(textView.accessibilityIdentifier() == "translation.sourceText")
 }
 
 @Test @MainActor

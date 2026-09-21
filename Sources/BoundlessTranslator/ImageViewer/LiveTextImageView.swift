@@ -74,6 +74,7 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         overlayView.resetSelection()
         overlayView.analysis = nil
         imageView.image = image
+        imageView.setAccessibilityIdentifier("imageWorkspace.loading")
         overlayView.setContentsRectNeedsUpdate()
 
         analysisTask = Task { @MainActor [weak self] in
@@ -89,11 +90,17 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
                     return
                 }
                 overlayView.analysis = analysis
+                imageView.setAccessibilityIdentifier(
+                    analysis == nil
+                        ? "imageWorkspace.unavailable"
+                        : "imageWorkspace.liveText"
+                )
             } catch {
                 guard generation == imageGeneration else {
                     return
                 }
                 overlayView.analysis = nil
+                imageView.setAccessibilityIdentifier("imageWorkspace.unavailable")
             }
         }
     }
@@ -115,6 +122,7 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
 
         imageView.imageScaling = .scaleProportionallyUpOrDown
         imageView.imageAlignment = .alignCenter
+        imageView.setAccessibilityIdentifier("imageWorkspace.loading")
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         overlayView.delegate = self

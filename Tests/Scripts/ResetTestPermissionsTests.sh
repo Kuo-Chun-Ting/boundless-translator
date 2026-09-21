@@ -6,6 +6,7 @@ readonly PROJECT_ROOT="${0:A:h:h:h}"
 readonly RESETTER="${PROJECT_ROOT}/Scripts/reset_test_permissions.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-permission-reset-tests.XXXXXX)"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
+readonly APP_PATH="${TEMP_ROOT}/Boundless Translator E2E.app"
 readonly PKILL_STUB="${TEMP_ROOT}/mock-pkill"
 readonly TCCUTIL_STUB="${TEMP_ROOT}/mock-tccutil"
 
@@ -32,13 +33,30 @@ EOF
     chmod +x "${PKILL_STUB}" "${TCCUTIL_STUB}"
 }
 
+function create_app_fixture {
+    local info_plist="${APP_PATH}/Contents/Info.plist"
+    mkdir -p "${APP_PATH}/Contents/MacOS"
+    plutil -create xml1 "${info_plist}"
+    plutil -insert CFBundleExecutable -string 'Boundless Translator E2E' "${info_plist}"
+}
+
 function run_resetter {
     BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER="com.example.BoundlessTranslator" \
-    BOUNDLESS_TRANSLATOR_EXECUTABLE_NAME="BoundlessTranslator" \
+    BOUNDLESS_TRANSLATOR_APP_PATH="${APP_PATH}" \
     BOUNDLESS_TRANSLATOR_PKILL_EXECUTABLE="${PKILL_STUB}" \
     BOUNDLESS_TRANSLATOR_TCCUTIL_EXECUTABLE="${TCCUTIL_STUB}" \
     BOUNDLESS_TRANSLATOR_TEST_CALL_LOG="${CALL_LOG}" \
         zsh "${RESETTER}"
+}
+
+function test_reset_test_permissions_when_no_app_is_specified_then_defaults_to_production_app {
+    # Arrange
+    local script_contents="$(<"${RESETTER}")"
+
+    # Act & Assert
+    [[ "${script_contents}" == *'${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator}'* ]]
+    [[ "${script_contents}" == *'${BOUNDLESS_TRANSLATOR_APP_PATH:-/Applications/Boundless Translator.app}'* ]]
+    [[ "${script_contents}" != *'readonly PROJECT_ROOT='* ]]
 }
 
 function test_reset_test_permissions_when_app_is_running_then_quits_app_and_resets_both_permissions {
@@ -49,7 +67,7 @@ function test_reset_test_permissions_when_app_is_running_then_quits_app_and_rese
     run_resetter >/dev/null
 
     # Assert
-    [[ "$(<"${CALL_LOG}")" == $'pkill -f /BoundlessTranslator([[:space:]]|$)\ntccutil reset Accessibility com.example.BoundlessTranslator\ntccutil reset ScreenCapture com.example.BoundlessTranslator' ]]
+    [[ "$(<"${CALL_LOG}")" == "pkill -f ^${APP_PATH}/Contents/MacOS/Boundless Translator E2E([[:space:]]|$)"$'\n''tccutil reset Accessibility com.example.BoundlessTranslator'$'\n''tccutil reset ScreenCapture com.example.BoundlessTranslator' ]]
 }
 
 function test_reset_test_permissions_when_app_is_not_running_then_still_resets_both_permissions {
@@ -60,7 +78,7 @@ function test_reset_test_permissions_when_app_is_not_running_then_still_resets_b
     BOUNDLESS_TRANSLATOR_TEST_PKILL_EXIT_CODE=1 run_resetter >/dev/null
 
     # Assert
-    [[ "$(<"${CALL_LOG}")" == $'pkill -f /BoundlessTranslator([[:space:]]|$)\ntccutil reset Accessibility com.example.BoundlessTranslator\ntccutil reset ScreenCapture com.example.BoundlessTranslator' ]]
+    [[ "$(<"${CALL_LOG}")" == "pkill -f ^${APP_PATH}/Contents/MacOS/Boundless Translator E2E([[:space:]]|$)"$'\n''tccutil reset Accessibility com.example.BoundlessTranslator'$'\n''tccutil reset ScreenCapture com.example.BoundlessTranslator' ]]
 }
 
 function test_reset_test_permissions_when_accessibility_reset_fails_then_stops_before_screen_capture_reset {
@@ -72,10 +90,12 @@ function test_reset_test_permissions_when_accessibility_reset_fails_then_stops_b
         print -u2 "Expected an Accessibility reset failure to stop the script."
         return 1
     fi
-    [[ "$(<"${CALL_LOG}")" == $'pkill -f /BoundlessTranslator([[:space:]]|$)\ntccutil reset Accessibility com.example.BoundlessTranslator' ]]
+    [[ "$(<"${CALL_LOG}")" == "pkill -f ^${APP_PATH}/Contents/MacOS/Boundless Translator E2E([[:space:]]|$)"$'\n''tccutil reset Accessibility com.example.BoundlessTranslator' ]]
 }
 
 create_command_stubs
+create_app_fixture
+test_reset_test_permissions_when_no_app_is_specified_then_defaults_to_production_app
 test_reset_test_permissions_when_app_is_running_then_quits_app_and_resets_both_permissions
 test_reset_test_permissions_when_app_is_not_running_then_still_resets_both_permissions
 test_reset_test_permissions_when_accessibility_reset_fails_then_stops_before_screen_capture_reset

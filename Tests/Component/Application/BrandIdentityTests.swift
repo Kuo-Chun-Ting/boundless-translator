@@ -15,8 +15,8 @@ func test_infoPlistTemplate_when_readingPublicNames_then_usesBoundlessTranslator
     let infoPlist = try String(contentsOf: infoPlistURL, encoding: .utf8)
 
     // Assert
-    #expect(infoPlist.contains("<key>CFBundleDisplayName</key>\n\t<string>Boundless Translator</string>"))
-    #expect(infoPlist.contains("<key>CFBundleName</key>\n\t<string>Boundless Translator</string>"))
+    #expect(infoPlist.contains("<key>CFBundleDisplayName</key>\n\t<string>$(PRODUCT_NAME)</string>"))
+    #expect(infoPlist.contains("<key>CFBundleName</key>\n\t<string>$(PRODUCT_NAME)</string>"))
     #expect(infoPlist.contains("<key>CFBundleExecutable</key>\n\t<string>$(EXECUTABLE_NAME)</string>"))
     #expect(infoPlist.contains("<key>CFBundleIdentifier</key>\n\t<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>"))
     #expect(infoPlist.contains("<key>CFBundleIconFile</key>\n\t<string>AppIcon.icns</string>"))

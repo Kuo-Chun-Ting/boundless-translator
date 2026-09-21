@@ -3,21 +3,14 @@
 set -euo pipefail
 
 readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator}"
-readonly EXECUTABLE_NAME="${BOUNDLESS_TRANSLATOR_EXECUTABLE_NAME:-BoundlessTranslator}"
+readonly APP_PATH="${BOUNDLESS_TRANSLATOR_APP_PATH:-/Applications/Boundless Translator.app}"
 readonly PKILL_EXECUTABLE="${BOUNDLESS_TRANSLATOR_PKILL_EXECUTABLE:-/usr/bin/pkill}"
 readonly TCCUTIL_EXECUTABLE="${BOUNDLESS_TRANSLATOR_TCCUTIL_EXECUTABLE:-/usr/bin/tccutil}"
+readonly INFO_PLIST="${APP_PATH}/Contents/Info.plist"
+readonly EXECUTABLE_NAME="$(plutil -extract CFBundleExecutable raw "${INFO_PLIST}")"
+readonly EXECUTABLE_PATH="${APP_PATH}/Contents/MacOS/${EXECUTABLE_NAME}"
 
-function fail {
-    print -u2 -- "$1"
-    exit 1
-}
-
-[[ -x "${PKILL_EXECUTABLE}" ]] || fail "pkill is not executable: ${PKILL_EXECUTABLE}"
-[[ -x "${TCCUTIL_EXECUTABLE}" ]] || fail "tccutil is not executable: ${TCCUTIL_EXECUTABLE}"
-[[ -n "${BUNDLE_IDENTIFIER}" ]] || fail "Boundless Translator bundle identifier is empty."
-[[ -n "${EXECUTABLE_NAME}" ]] || fail "Boundless Translator executable name is empty."
-
-"${PKILL_EXECUTABLE}" -f "/${EXECUTABLE_NAME}([[:space:]]|$)" 2>/dev/null || true
+"${PKILL_EXECUTABLE}" -f "^${EXECUTABLE_PATH}([[:space:]]|$)" 2>/dev/null || true
 "${TCCUTIL_EXECUTABLE}" reset Accessibility "${BUNDLE_IDENTIFIER}"
 "${TCCUTIL_EXECUTABLE}" reset ScreenCapture "${BUNDLE_IDENTIFIER}"
 
