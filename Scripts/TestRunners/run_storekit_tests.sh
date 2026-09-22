@@ -12,7 +12,7 @@ function skip_known_affected_environment {
 
     if [[ "${macos_version}" == 26.5.2 && "${macos_build}" == 25F84 \
         && "${xcode_version}" == $'Xcode 26.6\nBuild version 17F113' ]]; then
-        print -u2 'SKIPPED: 3 local StoreKit integration tests on macOS 26.5.2 (25F84) + Xcode 26.6 (17F113).'
+        print -u2 'SKIPPED: 5 local StoreKit integration tests on macOS 26.5.2 (25F84) + Xcode 26.6 (17F113).'
         print -u2 'Locally reproduced StoreKit entitlement lookup failure; integration coverage is incomplete.'
         print -u2 'Tests automatically run when macOS or Xcode changes. Use Scripts/TestRunners/run_storekit_tests.sh --force for diagnostics.'
         exit 78

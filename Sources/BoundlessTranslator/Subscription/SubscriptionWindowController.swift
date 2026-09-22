@@ -12,17 +12,21 @@ final class SubscriptionWindowController: NSWindowController {
     ) {
         self.windowPresenter = windowPresenter
         let window = NSWindow(
-            contentRect: CGRect(x: 0, y: 0, width: 500, height: 650),
-            styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false
+            contentRect: CGRect(x: 0, y: 0, width: 480, height: 300),
+            styleMask: [.titled, .closable], backing: .buffered, defer: false
         )
         window.title = AppBrand.displayName
         window.isReleasedWhenClosed = false
         window.collectionBehavior = [.moveToActiveSpace]
-        window.contentMinSize = NSSize(width: 460, height: 540)
+        let configuration = SubscriptionConfiguration.current
+        let storeProvider = StoreKitSubscriptionProvider(productID: configuration?.productID ?? "")
+        let store = SubscriptionStoreController(access: access, storeProvider: storeProvider)
         window.contentView = NSHostingView(rootView: SubscriptionView(
             access: access,
+            store: store,
             interfaceLanguageSettings: interfaceLanguageSettings,
-            configuration: .current
+            configuration: configuration,
+            onContentSizeChange: { [weak window] size in window?.setContentSize(size) }
         ))
         super.init(window: window)
     }

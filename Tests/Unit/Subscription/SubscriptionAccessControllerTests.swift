@@ -3,6 +3,28 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
+func test_activeEntitlement_when_multipleTransactionsExist_thenDisplaysLatestValidSubscription() async {
+    // Arrange
+    let stub_store = SubscriptionProviderStub()
+    stub_store.result = .success([
+        .init(productID: "annual", expiresAt: Date(timeIntervalSince1970: 200)),
+        .init(productID: "other", expiresAt: .distantFuture),
+        .init(productID: "annual", expiresAt: .distantFuture, isRevoked: true),
+        .init(productID: "annual", expiresAt: Date(timeIntervalSince1970: 300), renewsAutomatically: false)
+    ])
+    let controller = SubscriptionAccessController(
+        productID: "annual", provider: stub_store, now: { Date(timeIntervalSince1970: 100) }
+    )
+
+    // Act
+    await controller.refresh()
+
+    // Assert
+    #expect(controller.activeEntitlement?.expiresAt == Date(timeIntervalSince1970: 300))
+    #expect(controller.activeEntitlement?.renewsAutomatically == false)
+}
+
+@Test @MainActor
 func test_refresh_when_verified_subscription_is_active_then_allows_access_until_expiry() async {
     // Arrange
     var now = Date(timeIntervalSince1970: 100)

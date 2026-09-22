@@ -11,7 +11,7 @@
     "_developerTeamID" : "",
     "_failTransactionsEnabled" : false,
     "_locale" : "en_US",
-    "_storefront" : "USA",
+    "_storefront" : "TWN",
     "_storeKitErrors" : [
 
     ]
@@ -31,7 +31,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "24.99",
+          "displayPrice" : "199",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "1234567891",

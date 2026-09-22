@@ -6,6 +6,9 @@ struct SubscriptionEntitlement: Equatable, Sendable {
     let expiresAt: Date
     var isRevoked = false
     var isUpgraded = false
+    var renewsAutomatically: Bool? = nil
+    var renewalPrice: Decimal? = nil
+    var currencyCode: String? = nil
 }
 
 @MainActor
@@ -31,9 +34,13 @@ final class SubscriptionAccessController: ObservableObject {
     private var loadingWaiters: [CheckedContinuation<Void, Never>] = []
 
     var hasAccess: Bool {
-        !requiresSubscription || entitlements.contains {
+        !requiresSubscription || activeEntitlement != nil
+    }
+
+    var activeEntitlement: SubscriptionEntitlement? {
+        entitlements.filter {
             $0.productID == productID && !$0.isRevoked && !$0.isUpgraded && $0.expiresAt > now()
-        }
+        }.max { $0.expiresAt < $1.expiresAt }
     }
 
     init(
@@ -77,6 +84,12 @@ final class SubscriptionAccessController: ObservableObject {
                 }
             }
         }
+    }
+
+    func refreshAndWait() async {
+        await refresh()
+        guard isRefreshing else { return }
+        await withCheckedContinuation { loadingWaiters.append($0) }
     }
 
     func refresh() async {

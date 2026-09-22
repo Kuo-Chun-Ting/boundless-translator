@@ -26,17 +26,66 @@ final class StoreKitSubscriptionIntegrationTests: XCTestCase {
     func test_storeKitPurchase_whenVerified_thenGrantsAccess() async throws {
         let controller = await Self.makeController()
 
-        try await Self.purchaseAndAwaitAccess(controller)
+        try await purchaseAndAwaitAccess(controller)
 
         XCTAssertTrue(controller.hasAccess)
         XCTAssertEqual(controller.entitlements.map(\.productID), [Self.productID])
+        XCTAssertEqual(controller.activeEntitlement?.renewsAutomatically, true)
+        XCTAssertEqual(controller.activeEntitlement?.renewalPrice, Decimal(199))
+        XCTAssertEqual(controller.activeEntitlement?.currencyCode, "TWD")
+    }
+
+    @MainActor
+    func test_purchaseCompleted_when_verifiedNativeResultArrives_thenGrantsAccessAndFinishesTransaction() async throws {
+        // Arrange
+        _ = try await session.buyProduct(identifier: Self.productID)
+        let latest = await Transaction.latest(for: Self.productID)
+        let verification = try XCTUnwrap(latest)
+        let provider = StoreKitSubscriptionProvider(productID: Self.productID)
+        let access = SubscriptionAccessController(productID: Self.productID, provider: provider)
+        let store = SubscriptionStoreController(access: access, storeProvider: provider)
+        store.purchaseStarted()
+
+        // Act
+        await store.purchaseCompleted(.success(.success(verification)))
+
+        // Assert
+        XCTAssertTrue(access.hasAccess)
+        XCTAssertFalse(store.isBusy)
+        XCTAssertNil(store.messageKey)
+        for await unfinished in Transaction.unfinished {
+            if case .verified(let transaction) = unfinished {
+                XCTAssertNotEqual(transaction.productID, Self.productID)
+            }
+        }
+    }
+
+    @MainActor
+    @available(macOS 15.2, *)
+    func test_storeKitRestore_whenRenewalIsCancelled_thenRestoresAccessUntilExpiration() async throws {
+        let controller = await Self.makeController()
+        try await purchaseAndAwaitAccess(controller)
+        let transaction = try XCTUnwrap(session.allTransactions().last)
+        try session.disableAutoRenewForTransaction(identifier: transaction.identifier)
+        let provider = StoreKitSubscriptionProvider(productID: Self.productID)
+        let restored = SubscriptionAccessController(productID: Self.productID, provider: provider)
+        let store = SubscriptionStoreController(access: restored, storeProvider: provider)
+
+        await store.restore()
+
+        XCTAssertTrue(restored.hasAccess)
+        XCTAssertNil(store.messageKey)
+        try await Self.assertEventually("cancelled renewal retains access until expiration") {
+            await restored.refresh()
+            return restored.activeEntitlement?.renewsAutomatically == false
+        }
     }
 
     @MainActor
     @available(macOS 15.2, *)
     func test_storeKitExpiration_whenSubscriptionExpires_thenRemovesAccess() async throws {
         let controller = await Self.makeController()
-        try await Self.purchaseAndAwaitAccess(controller)
+        try await purchaseAndAwaitAccess(controller)
 
         try session.expireSubscription(productIdentifier: Self.productID)
         try await Self.assertEventually("expiration removes access") {
@@ -51,7 +100,7 @@ final class StoreKitSubscriptionIntegrationTests: XCTestCase {
     @available(macOS 15.2, *)
     func test_storeKitRefund_whenTransactionRefunded_thenRemovesAccess() async throws {
         let controller = await Self.makeController()
-        try await Self.purchaseAndAwaitAccess(controller)
+        try await purchaseAndAwaitAccess(controller)
 
         let testTransaction = try XCTUnwrap(session.allTransactions().last)
         try session.refundTransaction(identifier: testTransaction.identifier)
@@ -73,30 +122,9 @@ final class StoreKitSubscriptionIntegrationTests: XCTestCase {
     }
 
     @MainActor
-    @available(macOS 15.2, *)
-    private static func purchaseAndAwaitAccess(_ controller: SubscriptionAccessController) async throws {
-        try await purchaseProduct()
-        try await assertEventually("purchase becomes active") {
-            await controller.refresh()
-            return controller.hasAccess
-        }
-    }
-
-    @MainActor
-    @available(macOS 15.2, *)
-    private static func purchaseProduct() async throws {
-        let products = try await Product.products(for: [productID])
-        let product = try XCTUnwrap(products.first { $0.id == productID })
-        let window = NSWindow()
-        let result = try await product.purchase(confirmIn: window)
-        guard case .success(.verified(let transaction)) = result else {
-            XCTFail("Local StoreKit purchase did not return a verified transaction")
-            return
-        }
-        XCTAssertEqual(transaction.productID, productID)
-        XCTAssertEqual(transaction.productType, .autoRenewable)
-        XCTAssertNotNil(transaction.expirationDate)
-        await transaction.finish()
+    private func purchaseAndAwaitAccess(_ controller: SubscriptionAccessController) async throws {
+        _ = try await session.buyProduct(identifier: Self.productID)
+        try await Self.assertEventually("transaction update grants access") { controller.hasAccess }
     }
 
     @MainActor

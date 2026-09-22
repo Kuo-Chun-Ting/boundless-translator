@@ -80,7 +80,7 @@ function test_test_storekit_when_exact_affected_environment_then_reports_skip_wi
     fi
     [[ "$(<"${CALL_LOG}")" == 'xcodebuild -version' ]]
     local output="$(<"${OUTPUT_LOG}")"
-    [[ "${output}" == *'SKIPPED: 3 local StoreKit integration tests'* ]]
+    [[ "${output}" == *'SKIPPED: 5 local StoreKit integration tests'* ]]
     [[ "${output}" == *'macOS 26.5.2 (25F84)'*'Xcode 26.6 (17F113)'* ]]
     [[ "${output}" == *'--force'* ]]
 }
