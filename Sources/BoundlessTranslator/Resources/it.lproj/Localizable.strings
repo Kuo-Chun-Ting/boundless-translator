@@ -11,6 +11,8 @@
 "shortcut.recording" = "Digita abbreviazione";
 "shortcut.tooltip" = "Fai clic, quindi digita una nuova abbreviazione da tastiera.";
 "shortcut.accessibilityLabel" = "Abbreviazione da tastiera";
+"shortcut.selectedTextTranslation" = "Traduzione del testo selezionato";
+"shortcut.screenshotTranslation" = "Traduzione di istantanee";
 "usage.label" = "Utilizzo";
 "usage.show" = "Mostra utilizzo";
 "usage.languageSupport.title" = "Supporto lingue";

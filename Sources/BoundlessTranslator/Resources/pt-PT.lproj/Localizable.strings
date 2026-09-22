@@ -11,6 +11,8 @@
 "shortcut.recording" = "Introduzir atalho";
 "shortcut.tooltip" = "Clique e introduza um novo atalho de teclado.";
 "shortcut.accessibilityLabel" = "Atalho de teclado";
+"shortcut.selectedTextTranslation" = "Tradução do texto selecionado";
+"shortcut.screenshotTranslation" = "Tradução de captura de ecrã";
 "usage.label" = "Utilização";
 "usage.show" = "Mostrar utilização";
 "usage.languageSupport.title" = "Suporte de idiomas";

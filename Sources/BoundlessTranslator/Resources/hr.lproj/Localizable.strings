@@ -11,6 +11,8 @@
 "shortcut.recording" = "Unesite prečac";
 "shortcut.tooltip" = "Kliknite, a zatim unesite novi tipkovni prečac.";
 "shortcut.accessibilityLabel" = "Tipkovni prečac";
+"shortcut.selectedTextTranslation" = "Prijevod odabranog teksta";
+"shortcut.screenshotTranslation" = "Prijevod snimke zaslona";
 "usage.label" = "Uporaba";
 "usage.show" = "Prikaži uporabu";
 "usage.languageSupport.title" = "Podrška za jezike";

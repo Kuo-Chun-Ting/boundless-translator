@@ -25,13 +25,13 @@ struct PreferencesView: View {
                 Section {
                     ShortcutPreferencesView(
                         controller: translationShortcutController,
-                        titleKey: "shortcut.accessibilityLabel",
+                        titleKey: "shortcut.selectedTextTranslation",
                         accessibilityIdentifier: "shortcutRecorder",
                         localization: localization
                     )
                     ShortcutPreferencesView(
                         controller: screenshotShortcutController,
-                        titleKey: "imageWorkspace.windowTitle",
+                        titleKey: "shortcut.screenshotTranslation",
                         accessibilityIdentifier: "screenshotShortcutRecorder",
                         localization: localization
                     )

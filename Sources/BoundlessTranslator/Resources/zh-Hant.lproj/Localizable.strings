@@ -11,6 +11,8 @@
 "shortcut.recording" = "輸入快速鍵";
 "shortcut.tooltip" = "按一下，然後輸入新的鍵盤快速鍵。";
 "shortcut.accessibilityLabel" = "鍵盤快速鍵";
+"shortcut.selectedTextTranslation" = "選字翻譯";
+"shortcut.screenshotTranslation" = "截圖翻譯";
 "usage.label" = "使用方式";
 "usage.show" = "顯示使用方式";
 "usage.languageSupport.title" = "語言支援";

@@ -11,6 +11,8 @@
 "shortcut.recording" = "Nhập phím tắt";
 "shortcut.tooltip" = "Bấm, sau đó nhập phím tắt mới.";
 "shortcut.accessibilityLabel" = "Phím tắt";
+"shortcut.selectedTextTranslation" = "Dịch văn bản đã chọn";
+"shortcut.screenshotTranslation" = "Dịch ảnh chụp màn hình";
 "usage.label" = "Cách sử dụng";
 "usage.show" = "Hiển thị cách sử dụng";
 "usage.languageSupport.title" = "Hỗ trợ ngôn ngữ";

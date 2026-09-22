@@ -11,6 +11,8 @@
 "shortcut.recording" = "Введіть скорочення";
 "shortcut.tooltip" = "Клацніть і введіть нове клавіатурне скорочення.";
 "shortcut.accessibilityLabel" = "Клавіатурне скорочення";
+"shortcut.selectedTextTranslation" = "Переклад виділеного тексту";
+"shortcut.screenshotTranslation" = "Переклад знімка екрана";
 "usage.label" = "Використання";
 "usage.show" = "Показати інструкції";
 "usage.languageSupport.title" = "Підтримка мов";

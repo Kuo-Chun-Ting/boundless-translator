@@ -11,6 +11,8 @@
 "shortcut.recording" = "Kestirmeyi Girin";
 "shortcut.tooltip" = "Tıklayın, ardından yeni bir klavye kestirmesi girin.";
 "shortcut.accessibilityLabel" = "Klavye kestirmesi";
+"shortcut.selectedTextTranslation" = "Seçili Metin Çevirisi";
+"shortcut.screenshotTranslation" = "Ekran Görüntüsü Çevirisi";
 "usage.label" = "Kullanım";
 "usage.show" = "Kullanımı Göster";
 "usage.languageSupport.title" = "Dil Desteği";

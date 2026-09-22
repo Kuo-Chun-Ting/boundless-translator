@@ -11,6 +11,8 @@
 "shortcut.recording" = "اكتب الاختصار";
 "shortcut.tooltip" = "انقر، ثم اكتب اختصار لوحة مفاتيح جديدًا.";
 "shortcut.accessibilityLabel" = "اختصار لوحة المفاتيح";
+"shortcut.selectedTextTranslation" = "ترجمة النص المحدد";
+"shortcut.screenshotTranslation" = "ترجمة لقطة الشاشة";
 "usage.label" = "الاستخدام";
 "usage.show" = "إظهار طريقة الاستخدام";
 "usage.languageSupport.title" = "دعم اللغات";

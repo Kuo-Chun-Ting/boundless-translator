@@ -3,7 +3,7 @@ import ImageIO
 import VisionKit
 
 @MainActor
-final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
+final class LiveTextImageView: NSView {
     typealias AnalysisProvider = @MainActor (NSImage) async throws -> ImageAnalysis?
 
     let imageView = NSImageView()
@@ -57,11 +57,6 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         analysisTask?.cancel()
     }
 
-    override func layout() {
-        super.layout()
-        overlayView.setContentsRectNeedsUpdate()
-    }
-
     override func viewDidChangeEffectiveAppearance() {
         super.viewDidChangeEffectiveAppearance()
         updateBackgroundColor()
@@ -75,7 +70,6 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         overlayView.analysis = nil
         imageView.image = image
         imageView.setAccessibilityIdentifier("imageWorkspace.loading")
-        overlayView.setContentsRectNeedsUpdate()
 
         analysisTask = Task { @MainActor [weak self] in
             guard let self else {
@@ -109,13 +103,6 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         overlayView.resetSelection()
     }
 
-    func contentsRect(for overlayView: ImageAnalysisOverlayView) -> CGRect {
-        guard let image = imageView.image else {
-            return bounds
-        }
-        return Self.aspectFitRect(imageSize: image.size, in: bounds)
-    }
-
     private func configureSubviews() {
         wantsLayer = true
         updateBackgroundColor()
@@ -125,7 +112,6 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         imageView.setAccessibilityIdentifier("imageWorkspace.loading")
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        overlayView.delegate = self
         overlayView.trackingImageView = imageView
         overlayView.preferredInteractionTypes = .textSelection
         overlayView.translatesAutoresizingMaskIntoConstraints = false
@@ -150,32 +136,4 @@ final class LiveTextImageView: NSView, ImageAnalysisOverlayViewDelegate {
         }
     }
 
-    private static func aspectFitRect(
-        imageSize: CGSize,
-        in bounds: CGRect
-    ) -> CGRect {
-        guard
-            imageSize.width > 0,
-            imageSize.height > 0,
-            bounds.width > 0,
-            bounds.height > 0
-        else {
-            return bounds
-        }
-
-        let scale = min(
-            bounds.width / imageSize.width,
-            bounds.height / imageSize.height
-        )
-        let fittedSize = CGSize(
-            width: imageSize.width * scale,
-            height: imageSize.height * scale
-        )
-        return CGRect(
-            x: bounds.midX - fittedSize.width / 2,
-            y: bounds.midY - fittedSize.height / 2,
-            width: fittedSize.width,
-            height: fittedSize.height
-        )
-    }
 }

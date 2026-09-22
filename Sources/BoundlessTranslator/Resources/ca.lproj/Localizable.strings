@@ -11,6 +11,8 @@
 "shortcut.recording" = "Introdueix la drecera";
 "shortcut.tooltip" = "Fes clic i introdueix una drecera de teclat nova.";
 "shortcut.accessibilityLabel" = "Drecera de teclat";
+"shortcut.selectedTextTranslation" = "Traducció del text seleccionat";
+"shortcut.screenshotTranslation" = "Traducció de captures de pantalla";
 "usage.label" = "Ús";
 "usage.show" = "Mostra l’ús";
 "usage.languageSupport.title" = "Compatibilitat d’idiomes";

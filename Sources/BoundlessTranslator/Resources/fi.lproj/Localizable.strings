@@ -11,6 +11,8 @@
 "shortcut.recording" = "Syötä oikotie";
 "shortcut.tooltip" = "Klikkaa ja syötä sitten uusi näppäinoikotie.";
 "shortcut.accessibilityLabel" = "Näppäinoikotie";
+"shortcut.selectedTextTranslation" = "Valitun tekstin käännös";
+"shortcut.screenshotTranslation" = "Kuvakaappauksen käännös";
 "usage.label" = "Käyttö";
 "usage.show" = "Näytä käyttöohje";
 "usage.languageSupport.title" = "Kielituki";

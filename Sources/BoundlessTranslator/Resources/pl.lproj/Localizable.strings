@@ -11,6 +11,8 @@
 "shortcut.recording" = "Wprowadź skrót";
 "shortcut.tooltip" = "Kliknij, a następnie wprowadź nowy skrót klawiszowy.";
 "shortcut.accessibilityLabel" = "Skrót klawiszowy";
+"shortcut.selectedTextTranslation" = "Tłumaczenie zaznaczonego tekstu";
+"shortcut.screenshotTranslation" = "Tłumaczenie zrzutu ekranu";
 "usage.label" = "Sposób użycia";
 "usage.show" = "Pokaż sposób użycia";
 "usage.languageSupport.title" = "Obsługa języków";

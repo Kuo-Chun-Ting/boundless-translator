@@ -11,6 +11,8 @@
 "shortcut.recording" = "Kurzbefehl eingeben";
 "shortcut.tooltip" = "Klicke und gib dann einen neuen Tastaturkurzbefehl ein.";
 "shortcut.accessibilityLabel" = "Tastaturkurzbefehl";
+"shortcut.selectedTextTranslation" = "Übersetzung ausgewählten Texts";
+"shortcut.screenshotTranslation" = "Übersetzung von Screenshots";
 "usage.label" = "Verwendung";
 "usage.show" = "Verwendung anzeigen";
 "usage.languageSupport.title" = "Sprachunterstützung";

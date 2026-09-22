@@ -11,6 +11,8 @@
 "shortcut.recording" = "Saisir le raccourci";
 "shortcut.tooltip" = "Cliquez, puis saisissez un nouveau raccourci clavier.";
 "shortcut.accessibilityLabel" = "Raccourci clavier";
+"shortcut.selectedTextTranslation" = "Traduction du texte sélectionné";
+"shortcut.screenshotTranslation" = "Traduction de capture d’écran";
 "usage.label" = "Utilisation";
 "usage.show" = "Afficher l’utilisation";
 "usage.languageSupport.title" = "Prise en charge des langues";

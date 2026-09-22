@@ -11,6 +11,8 @@
 "shortcut.recording" = "ป้อนปุ่มลัด";
 "shortcut.tooltip" = "คลิก แล้วป้อนปุ่มลัดแป้นพิมพ์ใหม่";
 "shortcut.accessibilityLabel" = "ปุ่มลัดแป้นพิมพ์";
+"shortcut.selectedTextTranslation" = "การแปลข้อความที่เลือก";
+"shortcut.screenshotTranslation" = "การแปลภาพหน้าจอ";
 "usage.label" = "วิธีใช้";
 "usage.show" = "แสดงวิธีใช้";
 "usage.languageSupport.title" = "การรองรับภาษา";

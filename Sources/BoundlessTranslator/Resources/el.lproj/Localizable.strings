@@ -11,6 +11,8 @@
 "shortcut.recording" = "Πληκτρολογήστε συντόμευση";
 "shortcut.tooltip" = "Κάντε κλικ και πληκτρολογήστε μια νέα συντόμευση πληκτρολογίου.";
 "shortcut.accessibilityLabel" = "Συντόμευση πληκτρολογίου";
+"shortcut.selectedTextTranslation" = "Μετάφραση επιλεγμένου κειμένου";
+"shortcut.screenshotTranslation" = "Μετάφραση στιγμιότυπου οθόνης";
 "usage.label" = "Χρήση";
 "usage.show" = "Εμφάνιση χρήσης";
 "usage.languageSupport.title" = "Υποστήριξη γλωσσών";

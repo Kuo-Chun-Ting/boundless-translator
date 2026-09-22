@@ -11,6 +11,8 @@
 "shortcut.recording" = "Vnesite bližnjico";
 "shortcut.tooltip" = "Kliknite in vnesite novo tipkovno bližnjico.";
 "shortcut.accessibilityLabel" = "Tipkovna bližnjica";
+"shortcut.selectedTextTranslation" = "Prevod izbranega besedila";
+"shortcut.screenshotTranslation" = "Prevod posnetka zaslona";
 "usage.label" = "Uporaba";
 "usage.show" = "Pokaži uporabo";
 "usage.languageSupport.title" = "Jezikovna podpora";

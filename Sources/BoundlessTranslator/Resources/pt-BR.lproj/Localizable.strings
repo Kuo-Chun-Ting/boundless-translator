@@ -11,6 +11,8 @@
 "shortcut.recording" = "Digitar Atalho";
 "shortcut.tooltip" = "Clique e digite um novo atalho de teclado.";
 "shortcut.accessibilityLabel" = "Atalho de teclado";
+"shortcut.selectedTextTranslation" = "Tradução do texto selecionado";
+"shortcut.screenshotTranslation" = "Tradução de captura de tela";
 "usage.label" = "Uso";
 "usage.show" = "Mostrar Como Usar";
 "usage.languageSupport.title" = "Suporte a idiomas";

@@ -11,6 +11,8 @@
 "shortcut.recording" = "단축키 입력";
 "shortcut.tooltip" = "클릭한 다음 새 키보드 단축키를 입력하십시오.";
 "shortcut.accessibilityLabel" = "키보드 단축키";
+"shortcut.selectedTextTranslation" = "선택한 텍스트 번역";
+"shortcut.screenshotTranslation" = "스크린샷 번역";
 "usage.label" = "사용 방법";
 "usage.show" = "사용 방법 보기";
 "usage.languageSupport.title" = "언어 지원";

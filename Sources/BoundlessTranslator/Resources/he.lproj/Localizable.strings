@@ -11,6 +11,8 @@
 "shortcut.recording" = "הקלדת קיצור";
 "shortcut.tooltip" = "יש ללחוץ ואז להקליד קיצור מקלדת חדש.";
 "shortcut.accessibilityLabel" = "קיצור מקלדת";
+"shortcut.selectedTextTranslation" = "תרגום טקסט נבחר";
+"shortcut.screenshotTranslation" = "תרגום צילום מסך";
 "usage.label" = "שימוש";
 "usage.show" = "הצגת אופן השימוש";
 "usage.languageSupport.title" = "תמיכה בשפות";

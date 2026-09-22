@@ -11,6 +11,8 @@
 "shortcut.recording" = "Zadejte zkratku";
 "shortcut.tooltip" = "Klikněte a zadejte novou klávesovou zkratku.";
 "shortcut.accessibilityLabel" = "Klávesová zkratka";
+"shortcut.selectedTextTranslation" = "Překlad vybraného textu";
+"shortcut.screenshotTranslation" = "Překlad snímku obrazovky";
 "usage.label" = "Použití";
 "usage.show" = "Zobrazit použití";
 "usage.languageSupport.title" = "Podpora jazyků";

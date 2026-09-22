@@ -11,6 +11,8 @@
 "shortcut.recording" = "Billentyűparancs megadása";
 "shortcut.tooltip" = "Kattintson, majd adjon meg egy új billentyűparancsot.";
 "shortcut.accessibilityLabel" = "Billentyűparancs";
+"shortcut.selectedTextTranslation" = "Kijelölt szöveg fordítása";
+"shortcut.screenshotTranslation" = "Képernyőkép fordítása";
 "usage.label" = "Használat";
 "usage.show" = "Használat megjelenítése";
 "usage.languageSupport.title" = "Nyelvi támogatás";

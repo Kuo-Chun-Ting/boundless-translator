@@ -11,6 +11,8 @@
 "shortcut.recording" = "Type Shortcut";
 "shortcut.tooltip" = "Click, then type a new keyboard shortcut.";
 "shortcut.accessibilityLabel" = "Keyboard shortcut";
+"shortcut.selectedTextTranslation" = "Selected Text Translation";
+"shortcut.screenshotTranslation" = "Screenshot Translation";
 "usage.label" = "Usage";
 "usage.show" = "Show Usage";
 "usage.languageSupport.title" = "Language Support";

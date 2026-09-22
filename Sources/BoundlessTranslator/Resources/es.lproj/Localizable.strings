@@ -11,6 +11,8 @@
 "shortcut.recording" = "Introducir función rápida";
 "shortcut.tooltip" = "Haz clic y, a continuación, introduce una nueva función rápida de teclado.";
 "shortcut.accessibilityLabel" = "Función rápida de teclado";
+"shortcut.selectedTextTranslation" = "Traducción de texto seleccionado";
+"shortcut.screenshotTranslation" = "Traducción de capturas de pantalla";
 "usage.label" = "Uso";
 "usage.show" = "Mostrar uso";
 "usage.languageSupport.title" = "Compatibilidad de idiomas";

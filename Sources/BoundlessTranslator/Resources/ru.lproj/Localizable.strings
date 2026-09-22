@@ -11,6 +11,8 @@
 "shortcut.recording" = "Введите сочетание";
 "shortcut.tooltip" = "Нажмите и введите новое сочетание клавиш.";
 "shortcut.accessibilityLabel" = "Сочетание клавиш";
+"shortcut.selectedTextTranslation" = "Перевод выделенного текста";
+"shortcut.screenshotTranslation" = "Перевод снимка экрана";
 "usage.label" = "Использование";
 "usage.show" = "Показать инструкции";
 "usage.languageSupport.title" = "Поддержка языков";

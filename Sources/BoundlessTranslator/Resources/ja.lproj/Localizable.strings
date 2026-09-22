@@ -11,6 +11,8 @@
 "shortcut.recording" = "ショートカットを入力";
 "shortcut.tooltip" = "クリックしてから、新しいキーボードショートカットを入力します。";
 "shortcut.accessibilityLabel" = "キーボードショートカット";
+"shortcut.selectedTextTranslation" = "選択テキストの翻訳";
+"shortcut.screenshotTranslation" = "スクリーンショット翻訳";
 "usage.label" = "使い方";
 "usage.show" = "使い方を表示";
 "usage.languageSupport.title" = "言語サポート";

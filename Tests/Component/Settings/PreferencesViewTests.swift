@@ -259,6 +259,39 @@ func test_preferencesView_when_rendered_then_containsCurrentShortcutRecorder() t
 }
 
 @Test @MainActor
+func test_preferencesView_when_rendered_then_labelsShortcutFunctions() throws {
+    // Arrange
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(),
+        interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
+        translationShortcutController: makeTestTranslationShortcutController(),
+        screenshotShortcutController: makeTestScreenshotShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
+    )
+    let contentView = try #require(controller.window?.contentView)
+
+    // Act
+    contentView.layoutSubtreeIfNeeded()
+    let translationRecorder = try #require(
+        findViews(in: contentView, accessibilityIdentifier: "shortcutRecorder")
+            .compactMap { $0 as? NSButton }
+            .first
+    )
+    let screenshotRecorder = try #require(
+        findViews(
+            in: contentView,
+            accessibilityIdentifier: "screenshotShortcutRecorder"
+        )
+        .compactMap { $0 as? NSButton }
+        .first
+    )
+
+    // Assert
+    #expect(translationRecorder.accessibilityLabel() == "Selected Text Translation")
+    #expect(screenshotRecorder.accessibilityLabel() == "Screenshot Translation")
+}
+
+@Test @MainActor
 func test_quitButton_when_clicked_then_requests_application_termination() throws {
     // Arrange
     let terminationSpy = TerminationSpy()

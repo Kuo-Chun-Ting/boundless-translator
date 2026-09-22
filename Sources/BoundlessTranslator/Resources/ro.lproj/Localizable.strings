@@ -11,6 +11,8 @@
 "shortcut.recording" = "Tastează scurtătura";
 "shortcut.tooltip" = "Fă clic, apoi tastează o nouă scurtătură din tastatură.";
 "shortcut.accessibilityLabel" = "Scurtătură din tastatură";
+"shortcut.selectedTextTranslation" = "Traducerea textului selectat";
+"shortcut.screenshotTranslation" = "Traducerea capturii de ecran";
 "usage.label" = "Utilizare";
 "usage.show" = "Arată modul de utilizare";
 "usage.languageSupport.title" = "Compatibilitate lingvistică";

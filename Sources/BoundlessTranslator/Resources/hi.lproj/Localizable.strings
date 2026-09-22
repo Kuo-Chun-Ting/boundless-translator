@@ -11,6 +11,8 @@
 "shortcut.recording" = "शॉर्टकट टाइप करें";
 "shortcut.tooltip" = "क्लिक करें, फिर नया कीबोर्ड शॉर्टकट टाइप करें।";
 "shortcut.accessibilityLabel" = "कीबोर्ड शॉर्टकट";
+"shortcut.selectedTextTranslation" = "चुने हुए टेक्स्ट का अनुवाद";
+"shortcut.screenshotTranslation" = "स्क्रीनशॉट का अनुवाद";
 "usage.label" = "उपयोग";
 "usage.show" = "उपयोग दिखाएँ";
 "usage.languageSupport.title" = "भाषा समर्थन";

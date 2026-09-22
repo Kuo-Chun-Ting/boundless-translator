@@ -11,6 +11,8 @@
 "shortcut.recording" = "Indtast genvej";
 "shortcut.tooltip" = "Klik, og indtast derefter en ny tastaturgenvej.";
 "shortcut.accessibilityLabel" = "Tastaturgenvej";
+"shortcut.selectedTextTranslation" = "Oversættelse af valgt tekst";
+"shortcut.screenshotTranslation" = "Oversættelse af skærmbillede";
 "usage.label" = "Brug";
 "usage.show" = "Vis brug";
 "usage.languageSupport.title" = "Sprogunderstøttelse";

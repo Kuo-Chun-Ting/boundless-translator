@@ -11,6 +11,8 @@
 "shortcut.recording" = "输入快捷键";
 "shortcut.tooltip" = "点按后输入新的键盘快捷键。";
 "shortcut.accessibilityLabel" = "键盘快捷键";
+"shortcut.selectedTextTranslation" = "选字翻译";
+"shortcut.screenshotTranslation" = "截图翻译";
 "usage.label" = "使用方法";
 "usage.show" = "显示使用方法";
 "usage.languageSupport.title" = "语言支持";

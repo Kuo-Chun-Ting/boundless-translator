@@ -41,6 +41,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Open the captured image in a standard, resizable macOS window titled Screenshot.
 - Fit the initial window to the image and the active screen while preserving the image aspect ratio.
 - Use VisionKit Live Text for native text recognition and selection.
+- After recognition completes, moving the pointer over recognized text shows the I-beam and enables text selection.
 - Keep the workspace open across app deactivation and translation-window presentation.
 - Replace the displayed image after a successful capture; keep the existing image when capture is cancelled or fails.
 - After every successful capture, make the workspace Boundless Translator's main and key window before activating the app so other open windows remain behind it, including when the workspace was closed, covered, or minimized.
@@ -59,7 +60,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the screen containing the pointer, make it Boundless Translator's main and key window before activating the app so other open windows remain behind it and Command-W closes it immediately.
 - Present Preferences as one level of labeled rows without section headings.
-- Order Preferences as Translate From, Translate To, Keyboard Shortcut, Screenshot, Language, then Usage.
+- Order Preferences as Translate From, Translate To, Selected Text Translation, Screenshot Translation, Language, then Usage.
 - Group Translate From and Translate To in the first settings card, then both shortcuts and Language in the second.
 - Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
 - Fit all settings without scrolling or unused vertical space. Size the window to accommodate localized labels.

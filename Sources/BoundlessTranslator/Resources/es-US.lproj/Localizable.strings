@@ -11,6 +11,8 @@
 "shortcut.recording" = "Ingresar atajo";
 "shortcut.tooltip" = "Haz clic y luego ingresa un nuevo atajo de teclado.";
 "shortcut.accessibilityLabel" = "Atajo de teclado";
+"shortcut.selectedTextTranslation" = "Traducción de texto seleccionado";
+"shortcut.screenshotTranslation" = "Traducción de capturas de pantalla";
 "usage.label" = "Uso";
 "usage.show" = "Mostrar uso";
 "usage.languageSupport.title" = "Compatibilidad de idiomas";

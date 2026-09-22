@@ -11,6 +11,8 @@
 "shortcut.recording" = "Taip Pintasan";
 "shortcut.tooltip" = "Klik, kemudian taip pintasan papan kekunci baharu.";
 "shortcut.accessibilityLabel" = "Pintasan papan kekunci";
+"shortcut.selectedTextTranslation" = "Terjemahan Teks Dipilih";
+"shortcut.screenshotTranslation" = "Terjemahan Tangkapan Skrin";
 "usage.label" = "Penggunaan";
 "usage.show" = "Tunjukkan Penggunaan";
 "usage.languageSupport.title" = "Sokongan Bahasa";

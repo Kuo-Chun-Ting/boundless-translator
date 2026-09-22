@@ -11,6 +11,8 @@
 "shortcut.recording" = "Voer toetscombinatie in";
 "shortcut.tooltip" = "Klik en voer vervolgens een nieuwe toetscombinatie in.";
 "shortcut.accessibilityLabel" = "Toetscombinatie";
+"shortcut.selectedTextTranslation" = "Vertaling van geselecteerde tekst";
+"shortcut.screenshotTranslation" = "Vertaling van schermafbeelding";
 "usage.label" = "Gebruik";
 "usage.show" = "Toon gebruik";
 "usage.languageSupport.title" = "Taalondersteuning";

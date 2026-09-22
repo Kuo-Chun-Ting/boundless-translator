@@ -11,6 +11,8 @@
 "shortcut.recording" = "Ange kortkommando";
 "shortcut.tooltip" = "Klicka och ange sedan ett nytt kortkommando.";
 "shortcut.accessibilityLabel" = "Kortkommando";
+"shortcut.selectedTextTranslation" = "Översättning av markerad text";
+"shortcut.screenshotTranslation" = "Översättning av skärmavbild";
 "usage.label" = "Användning";
 "usage.show" = "Visa användning";
 "usage.languageSupport.title" = "Språkstöd";

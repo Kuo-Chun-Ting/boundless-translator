@@ -43,21 +43,6 @@ func test_init_whenViewIsCreated_then_composesNativeLiveTextOverlay() {
 }
 
 @Test @MainActor
-func test_contentsRect_whenImageIsAspectFit_then_matchesDisplayedImageBounds() {
-    // Arrange
-    let view = LiveTextImageView(analysisProvider: { _ in nil })
-    view.frame = NSRect(x: 0, y: 0, width: 400, height: 300)
-    view.layoutSubtreeIfNeeded()
-    view.display(NSImage(size: NSSize(width: 400, height: 200)))
-
-    // Act
-    let contentsRect = view.contentsRect(for: view.overlayView)
-
-    // Assert
-    #expect(contentsRect == NSRect(x: 0, y: 50, width: 400, height: 200))
-}
-
-@Test @MainActor
 func test_display_whenImageChanges_then_analyzesLatestImageAndReplacesDisplayedImage() async {
     // Arrange
     var analyzedSizes: [NSSize] = []
