@@ -15,7 +15,7 @@
       }
     ],
     "targetForVariableExpansion" : {
-      "containerPath" : "container:BoundlessTranslatorGUITests.xcodeproj",
+      "containerPath" : "container:BoundlessTranslatorTests.xcodeproj",
       "identifier" : "D50000000000000000000001",
       "name" : "E2ETestHost"
     }
@@ -25,7 +25,7 @@
       "parallelizable" : false,
       "skipped" : false,
       "target" : {
-        "containerPath" : "container:BoundlessTranslatorGUITests.xcodeproj",
+        "containerPath" : "container:BoundlessTranslatorTests.xcodeproj",
         "identifier" : "D50000000000000000000002",
         "name" : "BoundlessTranslatorE2ETests"
       }

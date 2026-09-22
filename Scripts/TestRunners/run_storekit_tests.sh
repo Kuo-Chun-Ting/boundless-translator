@@ -56,7 +56,7 @@ trap interrupt INT TERM
 cd "${repository_root}"
 
 xcodebuild test \
-    -project Tests/GUIProject/BoundlessTranslatorGUITests.xcodeproj \
+    -project Tests/Infrastructure/BoundlessTranslatorTests.xcodeproj \
     -scheme BoundlessTranslatorStoreKitTests \
     -destination 'platform=macOS' \
     -derivedDataPath "${derived_data_path}" \

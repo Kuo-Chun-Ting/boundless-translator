@@ -3,10 +3,10 @@
   <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES">
     <BuildActionEntries>
       <BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="NO" buildForArchiving="NO" buildForAnalyzing="YES">
-        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorGUITests.xcodeproj"/>
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorTests.xcodeproj"/>
       </BuildActionEntry>
       <BuildActionEntry buildForTesting="YES" buildForRunning="NO" buildForProfiling="NO" buildForArchiving="NO" buildForAnalyzing="NO">
-        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000002" BuildableName="BoundlessTranslatorE2ETests.xctest" BlueprintName="BoundlessTranslatorE2ETests" ReferencedContainer="container:BoundlessTranslatorGUITests.xcodeproj"/>
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000002" BuildableName="BoundlessTranslatorE2ETests.xctest" BlueprintName="BoundlessTranslatorE2ETests" ReferencedContainer="container:BoundlessTranslatorTests.xcodeproj"/>
       </BuildActionEntry>
     </BuildActionEntries>
   </BuildAction>
@@ -15,12 +15,12 @@
       <TestPlanReference reference="container:BoundlessTranslatorE2ETests.xctestplan" default="YES"/>
     </TestPlans>
     <MacroExpansion>
-      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorGUITests.xcodeproj"/>
+      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorTests.xcodeproj"/>
     </MacroExpansion>
   </TestAction>
   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES">
     <BuildableProductRunnable runnableDebuggingMode="0">
-      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorGUITests.xcodeproj"/>
+      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="D50000000000000000000001" BuildableName="BoundlessTranslatorE2ETestHost.app" BlueprintName="E2ETestHost" ReferencedContainer="container:BoundlessTranslatorTests.xcodeproj"/>
     </BuildableProductRunnable>
   </LaunchAction>
   <ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES"/>

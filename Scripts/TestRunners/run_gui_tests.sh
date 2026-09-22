@@ -13,7 +13,7 @@ trap clean_up EXIT
 cd "$repository_root"
 
 xcodebuild test \
-    -project Tests/GUIProject/BoundlessTranslatorGUITests.xcodeproj \
+    -project Tests/Infrastructure/BoundlessTranslatorTests.xcodeproj \
     -scheme BoundlessTranslatorGUITests \
     -destination 'platform=macOS' \
     -derivedDataPath "${derived_data_path}" \

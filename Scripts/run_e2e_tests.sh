@@ -101,7 +101,7 @@ function run_xcuitest_phase {
     rm -rf "${result_path}"
 
     "${XCODEBUILD_EXECUTABLE}" test \
-        -project "${PROJECT_ROOT}/Tests/GUIProject/BoundlessTranslatorGUITests.xcodeproj" \
+        -project "${PROJECT_ROOT}/Tests/Infrastructure/BoundlessTranslatorTests.xcodeproj" \
         -scheme BoundlessTranslatorE2ETests \
         -testPlan BoundlessTranslatorE2ETests \
         -destination 'platform=macOS' \

@@ -4,6 +4,7 @@
 
 - 除非使用者明確要求，否則不得建立或使用 Git worktree；直接在目前分支修改。
 - 完成程式碼修改後，先執行 `Scripts/verify.sh`，再執行 `Scripts/run_e2e_tests.sh`，兩者通過後交付使用者 code review。E2E 測試會建立並安裝新的 Test DMG，並沿用現有權限。
+- 每次交付修改前檢查 `TODO.md`，勾選本次已完成的項目；未完成的項目維持未勾選。
 - 只有需要驗證首次權限設定流程時，執行 `Scripts/run_e2e_tests.sh --from-permission-setup`。此模式會自行重設權限，等待使用者完成 macOS 授權，再繼續功能測試。
 - 不要在其他流程自動執行 `Scripts/reset_test_permissions.sh`；只有使用者要求單獨重設測試權限時才執行。
 
