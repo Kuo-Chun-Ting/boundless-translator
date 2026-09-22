@@ -149,7 +149,10 @@ func test_present_whenPointerScreenIsKnown_then_placesWindowInsideVisibleFrame()
     )
 
     // Assert
-    #expect(visibleFrame.contains(window.frame))
+    let frameBeforePresentation = try #require(
+        fixture.windowPresenter.framesBeforePresentation.last
+    )
+    #expect(visibleFrame.contains(frameBeforePresentation))
     window.orderOut(nil)
 }
 

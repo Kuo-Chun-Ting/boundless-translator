@@ -60,13 +60,9 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
 }
 
 @Test @MainActor
-func test_present_when_pointerScreenChanges_then_centersWindowOnPointerScreen() throws {
+func test_present_when_pointerScreenFrameIsProvided_then_centersWindowInThatFrame() throws {
     // Arrange
-    let screenFrame = try #require(NSScreen.main).visibleFrame
-    let stub_visibleFrame = CGRect(
-        origin: screenFrame.origin,
-        size: CGSize(width: screenFrame.width * 0.8, height: screenFrame.height * 0.85)
-    )
+    let visibleFrame = CGRect(x: 100, y: 100, width: 1_200, height: 800)
     var visibleFrameRequestCount = 0
     let windowPresenter = ForegroundWindowPresenterSpy()
     let controller = PreferencesWindowController(
@@ -76,7 +72,7 @@ func test_present_when_pointerScreenChanges_then_centersWindowOnPointerScreen() 
         supportedLanguageCatalog: makeStubLanguageCatalog(),
         pointerScreenVisibleFrame: {
             visibleFrameRequestCount += 1
-            return stub_visibleFrame
+            return visibleFrame
         },
         windowPresenter: windowPresenter
     )
@@ -89,8 +85,11 @@ func test_present_when_pointerScreenChanges_then_centersWindowOnPointerScreen() 
     // Assert
     #expect(visibleFrameRequestCount == 1)
     #expect(windowPresenter.presentedWindows.last === window)
-    #expect(abs(window.frame.midX - stub_visibleFrame.midX) < 1)
-    #expect(abs(window.frame.midY - stub_visibleFrame.midY) < 1)
+    let frameBeforePresentation = try #require(
+        windowPresenter.framesBeforePresentation.last
+    )
+    #expect(abs(frameBeforePresentation.midX - visibleFrame.midX) < 1)
+    #expect(abs(frameBeforePresentation.midY - visibleFrame.midY) < 1)
 }
 
 @Test @MainActor
