@@ -70,6 +70,7 @@ final class ImageViewerWindowController: NSWindowController,
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
+        window.acceptsMouseMovedEvents = true
         window.contentMinSize = CGSize(width: 420, height: 300)
         window.contentView = content.view
 
@@ -151,12 +152,16 @@ final class ImageViewerWindowController: NSWindowController,
 }
 
 private final class ImageViewerWindow: NSWindow {
+    private var pendingTextDrag = false
+
     override func sendEvent(_ event: NSEvent) {
         if event.type == .keyDown, event.keyCode == 53,
            event.modifierFlags.intersection([.command, .option, .control, .shift]).isEmpty {
             cancelOperation(nil)
             return
         }
+        defer { updateTextCursor(for: event) }
+        if handlePendingTextDrag(event) { return }
         super.sendEvent(event)
     }
 
@@ -172,4 +177,54 @@ private final class ImageViewerWindow: NSWindow {
         }
         return super.performKeyEquivalent(with: event)
     }
+
+    private func handlePendingTextDrag(_ event: NSEvent) -> Bool {
+        guard let textView = contentView as? LiveTextImageView else { return false }
+        switch event.type {
+        case .leftMouseDown:
+            pendingTextDrag = textView.canBeginSelection(at: event.locationInWindow)
+                && !textView.containsText(at: event.locationInWindow)
+            guard pendingTextDrag else { return false }
+            makeKeyAndOrderFront(nil)
+            textView.clearSelection()
+            // Own the blank-space gesture until it reaches text. Sending this
+            // down to VisionKit would start a competing native tracking loop.
+            return true
+        case .leftMouseDragged:
+            guard pendingTextDrag else { return false }
+            guard textView.containsText(at: event.locationInWindow) else { return true }
+            pendingTextDrag = false
+            beginNativeTextDrag(with: event)
+            return false
+        case .leftMouseUp:
+            let wasPending = pendingTextDrag
+            pendingTextDrag = false
+            return wasPending
+        default:
+            return false
+        }
+    }
+
+    private func beginNativeTextDrag(with event: NSEvent) {
+        // Hand off once, at the first text hit. Subsequent drag/up events follow
+        // normal AppKit dispatch; nothing is posted to the system event queue.
+        guard let start = NSEvent.mouseEvent(
+            with: .leftMouseDown, location: event.locationInWindow,
+            modifierFlags: event.modifierFlags, timestamp: event.timestamp,
+            windowNumber: windowNumber, context: nil,
+            eventNumber: event.eventNumber, clickCount: 1, pressure: 1
+        ) else { return }
+        super.sendEvent(start)
+    }
+
+    private func updateTextCursor(for event: NSEvent) {
+        switch event.type {
+        case .mouseMoved, .leftMouseDown, .leftMouseDragged, .leftMouseUp, .cursorUpdate:
+            (contentView as? LiveTextImageView)?.updateCursor(at: event.locationInWindow)
+        default:
+            break
+        }
+    }
+
+
 }

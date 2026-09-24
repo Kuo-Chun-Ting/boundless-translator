@@ -10,6 +10,14 @@
   "defaultOptions" : {
     "environmentVariableEntries" : [
       {
+        "key" : "BOUNDLESS_TRANSLATOR_LIVE_TEXT_OUTPUT_ROOT",
+        "value" : "$(SRCROOT)/../../Build/LiveTextTestState"
+      },
+      {
+        "key" : "BOUNDLESS_TRANSLATOR_LIVE_TEXT_FIXTURE_APP_PATH",
+        "value" : "$(BUILT_PRODUCTS_DIR)/BoundlessTranslatorCursorTestHost.app"
+      },
+      {
         "key" : "BOUNDLESS_TRANSLATOR_E2E_APP_PATH",
         "value" : "$(BOUNDLESS_TRANSLATOR_E2E_APP_PATH)"
       }

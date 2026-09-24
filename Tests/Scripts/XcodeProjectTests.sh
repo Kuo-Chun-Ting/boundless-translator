@@ -29,19 +29,27 @@ function test_xcode_project_when_listed_then_exposes_release_schemes_and_configu
 }
 
 function test_xcode_project_when_sources_or_dependencies_change_then_configuration_stays_in_sync {
-    # Arrange
-    local source_path
+    # Arrange: parse the project so Xcode's optional quotes and formatting do not matter.
+    local project_json="${TEMP_ROOT}/project.json"
+    plutil -convert json -o "${project_json}" "${PROJECT_FILE}"
 
     # Act & Assert
     cmp "${PACKAGE_RESOLVED}" "${XCODE_PACKAGE_RESOLVED}"
-    while IFS= read -r source_path; do
-        local relative_path="${source_path#${PROJECT_ROOT}/}"
-        grep -Fq "path = \"${relative_path}\";" "${PROJECT_FILE}"
-    done < <(find "${PROJECT_ROOT}/Sources/BoundlessTranslator" -type f -name '*.swift' | sort)
-    while IFS= read -r localization_path; do
-        local relative_path="${localization_path#${PROJECT_ROOT}/}"
-        grep -Fq "path = \"${relative_path}/Localizable.strings\";" "${PROJECT_FILE}"
-    done < <(find "${PROJECT_ROOT}/Sources/BoundlessTranslator/Resources" -type d -name '*.lproj' | sort)
+    python3 - "${PROJECT_ROOT}" "${project_json}" <<'PYTHON'
+import json
+import pathlib
+import sys
+
+root = pathlib.Path(sys.argv[1])
+with open(sys.argv[2]) as project_file:
+    objects = json.load(project_file)["objects"].values()
+references = {entry.get("path") for entry in objects if entry.get("isa") == "PBXFileReference"}
+sources = root / "Sources/BoundlessTranslator"
+localizations = [path / "Localizable.strings" for path in (sources / "Resources").rglob("*.lproj") if path.is_dir()]
+expected = list(sources.rglob("*.swift")) + localizations
+missing = [str(path.relative_to(root)) for path in expected if str(path.relative_to(root)) not in references]
+assert not missing, "Files missing from Xcode project: " + ", ".join(missing)
+PYTHON
 }
 
 function test_xcode_project_when_release_configuration_changes_then_subscription_flag_stays_separated {

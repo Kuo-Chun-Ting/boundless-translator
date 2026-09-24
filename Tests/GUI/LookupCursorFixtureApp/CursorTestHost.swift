@@ -175,7 +175,9 @@ private enum CursorTestHost {
     @MainActor
     static func main() {
         let application = NSApplication.shared
-        let delegate = CursorTestHostDelegate()
+        let delegate: NSApplicationDelegate = ProcessInfo.processInfo.environment[
+            "BOUNDLESS_TRANSLATOR_LIVE_TEXT_FIXTURE_OUTPUT"
+        ] == nil ? CursorTestHostDelegate() : LiveTextFixtureDelegate()
         application.setActivationPolicy(.accessory)
         application.delegate = delegate
         application.run()

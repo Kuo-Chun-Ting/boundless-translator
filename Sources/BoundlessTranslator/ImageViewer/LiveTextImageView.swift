@@ -103,6 +103,29 @@ final class LiveTextImageView: NSView {
         overlayView.resetSelection()
     }
 
+    func canBeginSelection(at windowPoint: NSPoint) -> Bool {
+        bounds.contains(convert(windowPoint, from: nil))
+            && !overlayView.hasSupplementaryInterface(at: analysisPoint(for: windowPoint))
+    }
+
+    func containsText(at windowPoint: NSPoint) -> Bool {
+        canBeginSelection(at: windowPoint)
+            && overlayView.analysisHasText(at: analysisPoint(for: windowPoint))
+    }
+
+    func updateCursor(at windowPoint: NSPoint) {
+        guard canBeginSelection(at: windowPoint) else { return }
+        (containsText(at: windowPoint) ? NSCursor.iBeam : NSCursor.arrow).set()
+    }
+
+    private func analysisPoint(for windowPoint: NSPoint) -> NSPoint {
+        let point = overlayView.convert(windowPoint, from: nil)
+        // VisionKit's analysis queries use a top-left origin, even in an
+        // unflipped AppKit image view.
+        return overlayView.isFlipped ? point
+            : NSPoint(x: point.x, y: overlayView.bounds.maxY - point.y)
+    }
+
     private func configureSubviews() {
         wantsLayer = true
         updateBackgroundColor()
