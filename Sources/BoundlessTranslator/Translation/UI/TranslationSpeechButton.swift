@@ -1,8 +1,10 @@
 import AppKit
 import SwiftUI
+import Symbols
 
 struct TranslationSpeechButton: NSViewRepresentable {
     @ObservedObject var controller: TranslationSpeechController
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let role: TranslationSpeechRole
     let text: String
@@ -27,18 +29,14 @@ struct TranslationSpeechButton: NSViewRepresentable {
         Coordinator(parent: self)
     }
 
-    func makeNSView(context: Context) -> NSButton {
-        let button = NSButton()
-        button.title = ""
-        button.imagePosition = .imageOnly
-        button.bezelStyle = .circular
-        button.controlSize = .small
+    func makeNSView(context: Context) -> SpeechPlaybackButton {
+        let button = SpeechPlaybackButton()
         button.target = context.coordinator
         button.action = #selector(Coordinator.togglePlayback)
         return button
     }
 
-    func updateNSView(_ button: NSButton, context: Context) {
+    func updateNSView(_ button: SpeechPlaybackButton, context: Context) {
         context.coordinator.parent = self
 
         let isPlaying = controller.activeRole == role
@@ -47,15 +45,7 @@ struct TranslationSpeechButton: NSViewRepresentable {
             languageIdentifier: languageIdentifier
         )
         let label = accessibilityLabel(isPlaying: isPlaying)
-        let symbolName = isPlaying ? "stop.fill" : "speaker.wave.2.fill"
-
-        button.image = NSImage(
-            systemSymbolName: symbolName,
-            accessibilityDescription: label
-        )
-        button.contentTintColor = isPlaying
-            ? .controlAccentColor
-            : .secondaryLabelColor
+        button.updatePlayback(isPlaying: isPlaying, reduceMotion: reduceMotion)
         button.toolTip = label
         button.isHidden = !isAvailable
         button.isEnabled = isAvailable
@@ -98,5 +88,64 @@ struct TranslationSpeechButton: NSViewRepresentable {
                 ? "speech.readSource"
                 : "speech.readTranslation"
         )
+    }
+}
+
+@MainActor
+final class SpeechPlaybackButton: NSButton {
+    private let speakerView = NSImageView()
+    private var isAnimating = false
+
+    override var intrinsicContentSize: NSSize {
+        NSSize(
+            width: TranslationWindowStyle.speechButtonSize,
+            height: TranslationWindowStyle.speechButtonSize
+        )
+    }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        title = ""
+        bezelStyle = .rounded
+        if #available(macOS 26.0, *) {
+            borderShape = .circle
+        }
+        controlSize = .large
+        speakerView.image = NSImage(
+            systemSymbolName: "speaker.wave.2",
+            accessibilityDescription: nil
+        )
+        speakerView.symbolConfiguration = NSImage.SymbolConfiguration(
+            pointSize: 17, weight: .regular
+        )
+        speakerView.setAccessibilityElement(false)
+        speakerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(speakerView)
+        NSLayoutConstraint.activate([
+            speakerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            speakerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            speakerView.widthAnchor.constraint(equalToConstant: 24),
+            speakerView.heightAnchor.constraint(equalToConstant: 22),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        super.hitTest(point) == nil ? nil : self
+    }
+
+    func updatePlayback(isPlaying: Bool, reduceMotion: Bool) {
+        speakerView.contentTintColor = isPlaying ? .controlAccentColor : .secondaryLabelColor
+        let shouldAnimate = isPlaying && !reduceMotion
+        guard shouldAnimate != isAnimating else { return }
+        isAnimating = shouldAnimate
+        if shouldAnimate {
+            speakerView.addSymbolEffect(.variableColor.cumulative)
+        } else {
+            speakerView.removeSymbolEffect(ofType: .variableColor, animated: false)
+        }
     }
 }

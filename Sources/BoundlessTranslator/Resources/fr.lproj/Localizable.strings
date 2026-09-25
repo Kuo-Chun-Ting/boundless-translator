@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Réglage par défaut du système";
-"interfaceLanguage.label" = "Langue";
+"interfaceLanguage.label" = "Langue de l’app";
 "menu.preferences" = "Réglages…";
 "menu.quitApplication" = "Quitter %@";
 "preferences.windowTitle" = "Réglages de Boundless Translator";
+"preferences.quit" = "Quitter";
 "preferences.translateFrom" = "Traduire depuis";
 "preferences.translateTo" = "Traduire vers";
 "translation.from" = "De";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "La prise en charge des langues de l’interface correspond à celle de macOS. macOS détermine les langues entre lesquelles la traduction est possible.";
 "usage.translateText.title" = "Traduire du texte";
 "usage.translateText.description" = "Sélectionnez du texte et appuyez sur %@.";
-"usage.translateImageText.title" = "Traduire le texte d’une image";
 "usage.translateImageText.description" = "Appuyez sur %@, sélectionnez une zone de l’écran, puis du texte dans l’image, et appuyez sur %@ pour traduire.";
 "usage.lookUp.title" = "Rechercher";
 "usage.lookUp.description" = "Sélectionnez du texte dans le panneau de traduction, puis cliquez sur le livre.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Cliquez sur le haut-parleur à côté de l’une des langues.";
 "usage.pinWindow.title" = "Épingler la fenêtre";
 "usage.pinWindow.description" = "Cliquez sur l’épingle pour garder la traduction visible.";
-"imageWorkspace.windowTitle" = "Capture d’écran";
 "screenshot.permissionRequired" = "Autorisez l’enregistrement de l’écran pour Boundless Translator dans Réglages Système > Confidentialité et sécurité, puis réessayez. Vous devrez peut-être quitter et rouvrir l’app.";
 "screenshot.failed" = "Impossible de capturer la zone de l’écran. Réessayez.";
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";

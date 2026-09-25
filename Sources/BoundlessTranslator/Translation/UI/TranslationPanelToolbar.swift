@@ -20,6 +20,15 @@ struct TranslationLanguageMenu: View {
     }
 
     var body: some View {
+        if #available(macOS 26, *) {
+            languagePicker
+                .controlSize(.large)
+        } else {
+            languagePicker
+        }
+    }
+
+    private var languagePicker: some View {
         Picker(accessibilityLabel, selection: selection) {
             ForEach(options) { option in
                 Text(verbatim: optionTitle(option))

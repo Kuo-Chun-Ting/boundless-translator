@@ -410,8 +410,8 @@ func test_layout_when_lookup_action_is_hidden_then_uses_card_content_padding() t
     #expect(
         scrollView.frame
             == view.bounds.insetBy(
-                dx: TranslationWindowStyle.cardContentPadding,
-                dy: TranslationWindowStyle.cardContentPadding
+                dx: TranslationWindowStyle.contentPadding,
+                dy: TranslationWindowStyle.contentPadding
             )
     )
 }

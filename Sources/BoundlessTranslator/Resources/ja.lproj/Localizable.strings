@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "システムデフォルト";
-"interfaceLanguage.label" = "言語";
+"interfaceLanguage.label" = "アプリの言語";
 "menu.preferences" = "設定…";
 "menu.quitApplication" = "%@を終了";
 "preferences.windowTitle" = "Boundless Translator設定";
+"preferences.quit" = "終了";
 "preferences.translateFrom" = "翻訳元";
 "preferences.translateTo" = "翻訳先";
 "translation.from" = "翻訳元";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "インターフェイス言語の対応範囲はmacOSと同じです。どの言語間で翻訳できるかはmacOSによって決まります。";
 "usage.translateText.title" = "テキストを翻訳";
 "usage.translateText.description" = "テキストを選択して%@を押します。";
-"usage.translateImageText.title" = "画像内のテキストを翻訳";
 "usage.translateImageText.description" = "%@ を押して画面の範囲を選択し、画像内のテキストを選択してから %@ を押すと翻訳できます。";
 "usage.lookUp.title" = "調べる";
 "usage.lookUp.description" = "翻訳パネルでテキストを選択してから、本のアイコンをクリックします。";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "いずれかの言語の横にあるスピーカーをクリックします。";
 "usage.pinWindow.title" = "ウインドウを固定";
 "usage.pinWindow.description" = "ピンをクリックすると翻訳が表示されたままになります。";
-"imageWorkspace.windowTitle" = "スクリーンショット";
 "screenshot.permissionRequired" = "「システム設定」>「プライバシーとセキュリティ」で Boundless Translator の画面収録を許可してから、もう一度お試しください。アプリを終了して開き直す必要がある場合があります。";
 "screenshot.failed" = "画面の範囲を撮影できませんでした。もう一度お試しください。";
 "screenshot.errorTitle" = "スクリーンショットを撮影できませんでした";

@@ -147,19 +147,19 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
-                constant: TranslationWindowStyle.cardContentPadding
+                constant: TranslationWindowStyle.contentPadding
             ),
             scrollView.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
-                constant: -TranslationWindowStyle.cardContentPadding
+                constant: -TranslationWindowStyle.contentPadding
             ),
             scrollView.topAnchor.constraint(
                 equalTo: topAnchor,
-                constant: TranslationWindowStyle.cardContentPadding
+                constant: TranslationWindowStyle.contentPadding
             ),
             scrollView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
-                constant: -TranslationWindowStyle.cardContentPadding
+                constant: -TranslationWindowStyle.contentPadding
             )
         ])
     }

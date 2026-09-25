@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Padrão do Sistema";
-"interfaceLanguage.label" = "Idioma";
+"interfaceLanguage.label" = "Idioma do app";
 "menu.preferences" = "Ajustes…";
 "menu.quitApplication" = "Encerrar %@";
 "preferences.windowTitle" = "Ajustes do Boundless Translator";
+"preferences.quit" = "Sair";
 "preferences.translateFrom" = "Traduzir de";
 "preferences.translateTo" = "Traduzir para";
 "translation.from" = "De";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "O suporte a idiomas da interface corresponde ao macOS. O macOS determina entre quais idiomas é possível traduzir.";
 "usage.translateText.title" = "Traduzir Texto";
 "usage.translateText.description" = "Selecione um texto e pressione %@.";
-"usage.translateImageText.title" = "Traduzir Texto de Imagem";
 "usage.translateImageText.description" = "Pressione %@, selecione uma área da tela, selecione o texto na imagem e pressione %@ para traduzir.";
 "usage.lookUp.title" = "Buscar";
 "usage.lookUp.description" = "Selecione um texto no painel de tradução e clique no livro.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Clique no alto-falante ao lado de um dos idiomas.";
 "usage.pinWindow.title" = "Fixar Janela";
 "usage.pinWindow.description" = "Clique no alfinete para manter a tradução visível.";
-"imageWorkspace.windowTitle" = "Captura de Tela";
 "screenshot.permissionRequired" = "Permita a gravação de tela para o Boundless Translator em Ajustes do Sistema > Privacidade e Segurança e tente novamente. Talvez seja necessário encerrar e reabrir o app.";
 "screenshot.failed" = "Não foi possível capturar a área da tela. Tente novamente.";
 "screenshot.errorTitle" = "Não foi possível fazer a captura de tela";

@@ -156,7 +156,7 @@ func test_fittingSize_when_translation_is_compact_then_matches_layout_height() t
 }
 
 @Test @MainActor
-func test_body_when_rendering_translation_then_source_card_is_visible() throws {
+func test_body_when_rendering_translation_then_source_text_is_visible() throws {
     // Arrange
     let coordinator = TranslationCoordinator()
     coordinator.submit(
@@ -197,102 +197,18 @@ func test_body_when_rendering_translation_then_source_card_is_visible() throws {
 }
 
 @Test @MainActor
-func test_body_when_rendering_equal_card_roles_then_uses_matching_fill_luminance() throws {
+func test_body_when_rendering_text_columns_then_uses_matching_reading_backgrounds() throws {
     // Arrange
     let fixture = try makeRenderedTranslationWindow()
-    let leftCard = fixture.cardRect(column: 0).insetBy(dx: 24, dy: 24)
-    let rightCard = fixture.cardRect(column: 1).insetBy(dx: 24, dy: 24)
+    let leftColumn = fixture.columnRect(column: 0).insetBy(dx: 24, dy: 48)
+    let rightColumn = fixture.columnRect(column: 1).insetBy(dx: 24, dy: 48)
 
     // Act
-    let leftLuminance = averageLuminance(in: leftCard, image: fixture.image)
-    let rightLuminance = averageLuminance(in: rightCard, image: fixture.image)
+    let leftLuminance = averageLuminance(in: leftColumn, image: fixture.image)
+    let rightLuminance = averageLuminance(in: rightColumn, image: fixture.image)
 
     // Assert
     #expect(abs(leftLuminance - rightLuminance) < 0.01)
-}
-
-@Test @MainActor
-func test_body_when_rendering_equal_card_roles_then_uses_matching_border_luminance() throws {
-    // Arrange
-    let fixture = try makeRenderedTranslationWindow()
-    let leftCard = fixture.cardRect(column: 0)
-    let rightCard = fixture.cardRect(column: 1)
-    let leftBorder = NSRect(
-        x: leftCard.minX,
-        y: leftCard.minY + 24,
-        width: 2,
-        height: leftCard.height - 48
-    )
-    let rightBorder = NSRect(
-        x: rightCard.minX,
-        y: rightCard.minY + 24,
-        width: 2,
-        height: rightCard.height - 48
-    )
-
-    // Act
-    let leftLuminance = averageLuminance(in: leftBorder, image: fixture.image)
-    let rightLuminance = averageLuminance(in: rightBorder, image: fixture.image)
-
-    // Assert
-    #expect(abs(leftLuminance - rightLuminance) < 0.01)
-}
-
-@Test @MainActor
-func test_body_when_rendering_cards_then_uses_subtle_edges() throws {
-    // Arrange
-    let fixture = try makeRenderedTranslationWindow()
-    let edgeAndInteriorLuminance = [0, 1].map { column in
-        let card = fixture.cardRect(column: column)
-        let edge = NSRect(
-            x: card.minX,
-            y: card.minY + 24,
-            width: 2,
-            height: card.height - 48
-        )
-        let interior = NSRect(
-            x: card.minX + 4,
-            y: card.minY + 24,
-            width: 2,
-            height: card.height - 48
-        )
-        return (
-            averageLuminance(in: edge, image: fixture.image),
-            averageLuminance(in: interior, image: fixture.image)
-        )
-    }
-
-    // Act
-    let edgeContrasts = edgeAndInteriorLuminance.map { edge, interior in
-        abs(edge - interior)
-    }
-
-    // Assert
-    #expect(edgeContrasts.allSatisfy { $0 < 0.04 })
-}
-
-@Test @MainActor
-func test_body_when_rendering_cards_then_uses_lighter_fill_than_window() throws {
-    // Arrange
-    let fixture = try makeRenderedTranslationWindow()
-    let card = fixture.cardRect(column: 0)
-    let fill = card.insetBy(dx: 24, dy: 24)
-    let windowBackground = NSRect(
-        x: card.maxX + 3,
-        y: card.midY - 20,
-        width: TranslationWindowStyle.columnSpacing - 6,
-        height: 40
-    )
-
-    // Act
-    let fillLuminance = averageLuminance(in: fill, image: fixture.image)
-    let windowLuminance = averageLuminance(
-        in: windowBackground,
-        image: fixture.image
-    )
-
-    // Assert
-    #expect(fillLuminance - windowLuminance > 0.01)
 }
 
 @Test @MainActor
@@ -363,7 +279,7 @@ func test_sourceSpeechButton_when_clicked_then_readsSourceText() throws {
 }
 
 @Test @MainActor
-func test_translationSpeechButton_when_idle_then_usesSpeakerWaveTwoFillSymbol() throws {
+func test_translationSpeechButton_when_idle_then_usesSpeakerWaveTwoSymbol() throws {
     // Arrange
     let coordinator = TranslationCoordinator()
     coordinator.submit(
@@ -383,17 +299,19 @@ func test_translationSpeechButton_when_idle_then_usesSpeakerWaveTwoFillSymbol() 
     )
 
     // Assert
+    let speaker = try #require(descendants(of: NSImageView.self, in: button).first)
     #expect(
-        button.image?.tiffRepresentation
+        speaker.image?.tiffRepresentation
             == NSImage(
-                systemSymbolName: "speaker.wave.2.fill",
-                accessibilityDescription: "Read Source Text Aloud"
+                systemSymbolName: "speaker.wave.2",
+                accessibilityDescription: nil
             )?.tiffRepresentation
     )
+    #expect(button.accessibilityLabel() == "Read Source Text Aloud")
 }
 
 @Test @MainActor
-func test_translationSpeechButton_when_playing_then_usesStopFillSymbol() throws {
+func test_translationSpeechButton_when_playing_then_keepsSpeakerAndAllowsStopping() throws {
     // Arrange
     let speechController = TranslationSpeechController(
         player: WindowSpeechPlayerMock(supportedLanguageIdentifiers: ["en"])
@@ -424,13 +342,22 @@ func test_translationSpeechButton_when_playing_then_usesStopFillSymbol() throws 
     )
 
     // Assert
+    let speaker = try #require(descendants(of: NSImageView.self, in: button).first)
     #expect(
-        button.image?.tiffRepresentation
+        speaker.image?.tiffRepresentation
             == NSImage(
-                systemSymbolName: "stop.fill",
-                accessibilityDescription: "Stop Reading Source Text"
+                systemSymbolName: "speaker.wave.2",
+                accessibilityDescription: nil
             )?.tiffRepresentation
     )
+    #expect(speaker.contentTintColor == .controlAccentColor)
+    #expect(button.accessibilityLabel() == "Stop Reading Source Text")
+
+    // Act
+    button.sendAction(button.action, to: button.target)
+
+    // Assert
+    #expect(speechController.activeRole == nil)
 }
 
 @Test @MainActor
@@ -514,8 +441,10 @@ func test_targetSpeechButton_when_translationIsUnavailable_then_keepsHiddenSlot(
     #expect(button.frame.width > 0)
 }
 
-@Test @MainActor
-func test_languageControls_when_windowWidens_then_speechButtonsKeepFixedMenuGap() throws {
+@Test(arguments: [560.0, 900.0]) @MainActor
+func test_languageControls_when_windowResizes_then_speechButtonsAlignWithTheirColumns(
+    width: Double
+) throws {
     // Arrange
     let speechPlayer = WindowSpeechPlayerMock(
         supportedLanguageIdentifiers: ["en", "zh-Hant"]
@@ -531,27 +460,41 @@ func test_languageControls_when_windowWidens_then_speechButtonsKeepFixedMenuGap(
         coordinator: coordinator,
         speechController: speechController
     )
-    hostingView.frame.size.width = 900
+    hostingView.frame.size.width = width
 
     // Act
     hostingView.layoutSubtreeIfNeeded()
-    let button = try #require(
+    let sourceButton = try #require(
         view(
             in: hostingView,
             accessibilityIdentifier: "sourceSpeechButton"
         )
     )
-    let buttonFrame = button.convert(button.bounds, to: hostingView)
+    let targetButton = try #require(
+        view(
+            in: hostingView,
+            accessibilityIdentifier: "targetSpeechButton"
+        )
+    )
+    let sourceFrame = sourceButton.convert(sourceButton.bounds, to: hostingView)
+    let targetFrame = targetButton.convert(targetButton.bounds, to: hostingView)
+    let languageMenus = descendants(of: NSPopUpButton.self, in: hostingView)
+    let controlRowCenter = hostingView.isFlipped ? 26 : hostingView.bounds.height - 26
 
     // Assert
-    #expect(
-        abs(
-            buttonFrame.minX
-                - TranslationWindowStyle.horizontalPadding
-                - TranslationWindowStyle.languageMenuWidth
-                - TranslationWindowStyle.speechControlSpacing
-        ) < 4
-    )
+    // Each button is centered in a 32-point slot, 18 points from its column edge.
+    #expect(abs(sourceFrame.midX - (width / 2 - 34)) < 1)
+    #expect(abs(targetFrame.midX - (width - 34)) < 1)
+    #expect(abs(sourceFrame.midY - targetFrame.midY) < 1)
+    #expect(abs(sourceFrame.width - targetFrame.width) < 1)
+    #expect(abs(sourceFrame.height - 28) < 1)
+    #expect(abs(sourceFrame.width - 28) < 1)
+    #expect(abs(sourceFrame.midY - controlRowCenter) < 1)
+    #expect(languageMenus.count == 2)
+    for menu in languageMenus {
+        let frame = menu.convert(menu.bounds, to: hostingView)
+        #expect(abs(frame.midY - controlRowCenter) < 1)
+    }
 }
 
 @MainActor
@@ -669,20 +612,14 @@ private struct TranslationWindowRenderFixture {
     let image: NSBitmapImageRep
     let size: CGSize
 
-    func cardRect(column: Int) -> NSRect {
-        let width = (
-            size.width
-                - TranslationWindowStyle.horizontalPadding * 2
-                - TranslationWindowStyle.columnSpacing
-        ) / 2
+    func columnRect(column: Int) -> NSRect {
+        let width = size.width / 2
         let height = size.height
             - TranslationWindowStyle.languageRowHeight
-            - TranslationWindowStyle.contentSpacing
-            - TranslationWindowStyle.bottomPadding
+            - TranslationWindowStyle.controlsVerticalPadding * 2
         return NSRect(
-            x: TranslationWindowStyle.horizontalPadding
-                + CGFloat(column) * (width + TranslationWindowStyle.columnSpacing),
-            y: TranslationWindowStyle.bottomPadding,
+            x: CGFloat(column) * width,
+            y: size.height - height,
             width: width,
             height: height
         )

@@ -38,7 +38,7 @@ struct SourceLanguageSelectionView: View {
             Divider()
             languageSelection
         }
-        .padding(18)
+        .padding(24)
         .frame(minWidth: 420, minHeight: 260, alignment: .topLeading)
         .interfaceLanguage(interfaceLanguageSettings)
     }
@@ -90,11 +90,13 @@ struct SourceLanguageSelectionView: View {
                     onCancel()
                 }
                 .keyboardShortcut(.cancelAction)
+                .appControlStyle()
 
                 Button(localization.string("common.translate")) {
                     onSelect(selectedLanguageIdentifier)
                 }
                 .keyboardShortcut(.defaultAction)
+                .appControlStyle(prominent: true)
                 .disabled(selectedLanguageIdentifier.isEmpty)
             }
         }

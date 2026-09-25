@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "الإعداد الافتراضي للنظام";
-"interfaceLanguage.label" = "اللغة";
+"interfaceLanguage.label" = "لغة التطبيق";
 "menu.preferences" = "الإعدادات…";
 "menu.quitApplication" = "إنهاء %@";
 "preferences.windowTitle" = "إعدادات Boundless Translator";
+"preferences.quit" = "إنهاء";
 "preferences.translateFrom" = "الترجمة من";
 "preferences.translateTo" = "الترجمة إلى";
 "translation.from" = "من";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "يتوافق دعم لغات الواجهة مع macOS. يحدد macOS اللغات التي يمكن الترجمة بينها.";
 "usage.translateText.title" = "ترجمة النص";
 "usage.translateText.description" = "حدد نصًا واضغط على %@.";
-"usage.translateImageText.title" = "ترجمة نص الصورة";
 "usage.translateImageText.description" = "اضغط على %@، وحدد منطقة من الشاشة، ثم حدد النص في الصورة واضغط على %@ للترجمة.";
 "usage.lookUp.title" = "بحث";
 "usage.lookUp.description" = "حدد نصًا في لوحة الترجمة، ثم انقر على الكتاب.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "انقر على مكبر الصوت بجانب إحدى اللغتين.";
 "usage.pinWindow.title" = "تثبيت النافذة";
 "usage.pinWindow.description" = "انقر على الدبوس لإبقاء الترجمة ظاهرة.";
-"imageWorkspace.windowTitle" = "لقطة شاشة";
 "screenshot.permissionRequired" = "اسمح بتسجيل الشاشة لتطبيق Boundless Translator في إعدادات النظام > الخصوصية والأمن، ثم حاول مرة أخرى. قد تحتاج إلى إنهاء التطبيق وفتحه من جديد.";
 "screenshot.failed" = "تعذر التقاط منطقة الشاشة. حاول مرة أخرى.";
 "screenshot.errorTitle" = "تعذر التقاط لقطة شاشة";

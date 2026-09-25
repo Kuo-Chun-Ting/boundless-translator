@@ -39,7 +39,7 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
     ]
     let expectedTitles = [
         "Translate Text",
-        "Translate Image Text",
+        "Screenshot Translation",
         "Look Up",
         "Listen",
         "Pin Window",
@@ -49,7 +49,7 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
         .systemSymbol(name: "text.cursor", clockwiseRotationDegrees: 0),
         .systemSymbol(name: "photo", clockwiseRotationDegrees: 0),
         .text("📖"),
-        .systemSymbol(name: "speaker.wave.2.fill", clockwiseRotationDegrees: 0),
+        .systemSymbol(name: "speaker.wave.2", clockwiseRotationDegrees: 0),
         .systemSymbol(name: "pin", clockwiseRotationDegrees: 45),
         .systemSymbol(name: "globe", clockwiseRotationDegrees: 0),
     ]

@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Lalai Sistem";
-"interfaceLanguage.label" = "Bahasa";
+"interfaceLanguage.label" = "Bahasa Aplikasi";
 "menu.preferences" = "Seting…";
 "menu.quitApplication" = "Keluar daripada %@";
 "preferences.windowTitle" = "Seting Boundless Translator";
+"preferences.quit" = "Keluar";
 "preferences.translateFrom" = "Terjemah daripada";
 "preferences.translateTo" = "Terjemah kepada";
 "translation.from" = "Daripada";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Sokongan bahasa antara muka sepadan dengan macOS. macOS menentukan bahasa yang boleh diterjemahkan antara satu sama lain.";
 "usage.translateText.title" = "Terjemah Teks";
 "usage.translateText.description" = "Pilih teks dan tekan %@.";
-"usage.translateImageText.title" = "Terjemah Teks Imej";
 "usage.translateImageText.description" = "Tekan %@, pilih kawasan skrin, pilih teks dalam imej, kemudian tekan %@ untuk menterjemah.";
 "usage.lookUp.title" = "Cari";
 "usage.lookUp.description" = "Pilih teks dalam panel terjemahan, kemudian klik buku.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Klik pembesar suara di sebelah salah satu bahasa.";
 "usage.pinWindow.title" = "Pin Tetingkap";
 "usage.pinWindow.description" = "Klik pin supaya terjemahan kekal kelihatan.";
-"imageWorkspace.windowTitle" = "Tangkapan Skrin";
 "screenshot.permissionRequired" = "Benarkan rakaman skrin untuk Boundless Translator dalam Seting Sistem > Privasi & Keselamatan, kemudian cuba lagi. Anda mungkin perlu keluar dan membuka semula app.";
 "screenshot.failed" = "Tidak dapat menangkap kawasan skrin. Cuba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";

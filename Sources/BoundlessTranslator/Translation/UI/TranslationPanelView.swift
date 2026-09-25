@@ -37,7 +37,6 @@ struct TranslationWindowView: View {
             maxHeight: .infinity,
             alignment: .topLeading
         )
-        .background(Color(nsColor: .windowBackgroundColor))
         .onChange(of: coordinator.request?.id) {
             speechController.stopPlayback()
         }
@@ -54,22 +53,27 @@ struct TranslationWindowView: View {
     }
 
     private var translationContent: some View {
-        VStack(spacing: TranslationWindowStyle.contentSpacing) {
-            HStack(spacing: TranslationWindowStyle.columnSpacing) {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
                 languageControls(role: .source)
                 languageControls(role: .target)
             }
+            .padding(.vertical, TranslationWindowStyle.controlsVerticalPadding)
+            .appControlSurface()
 
-            HStack(
-                alignment: .top,
-                spacing: TranslationWindowStyle.columnSpacing
-            ) {
+            HStack(alignment: .top, spacing: 0) {
                 sourceContent
                 targetContent
             }
+            .background(Color(nsColor: .textBackgroundColor))
+            .overlay {
+                HStack(spacing: 0) { Divider() }
+                    .allowsHitTesting(false)
+            }
+            .overlay(alignment: .top) {
+                Divider().allowsHitTesting(false)
+            }
         }
-        .padding(.horizontal, TranslationWindowStyle.horizontalPadding)
-        .padding(.bottom, TranslationWindowStyle.bottomPadding)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
@@ -87,7 +91,7 @@ struct TranslationWindowView: View {
                 role: role,
                 localization: localization
             )
-            .frame(width: TranslationWindowStyle.languageMenuWidth)
+            .frame(maxWidth: .infinity)
 
             let speechContent = speechContent(for: role)
             TranslationSpeechButton(
@@ -97,6 +101,7 @@ struct TranslationWindowView: View {
                 languageIdentifier: speechContent.languageIdentifier,
                 localization: localization
             )
+            .frame(width: TranslationWindowStyle.speechButtonSize, height: TranslationWindowStyle.speechButtonSize)
             .frame(
                 width: TranslationWindowStyle.speechControlSize,
                 height: TranslationWindowStyle.languageRowHeight
@@ -107,6 +112,7 @@ struct TranslationWindowView: View {
             minHeight: TranslationWindowStyle.languageRowHeight,
             alignment: .leading
         )
+        .padding(.horizontal, TranslationWindowStyle.contentPadding)
     }
 
     private func speechContent(
@@ -139,17 +145,16 @@ struct TranslationWindowView: View {
         )
             .frame(
                 maxWidth: .infinity,
-                minHeight: cardSurfaceHeight,
+                minHeight: metrics.contentHeight
+                    + TranslationWindowStyle.contentPadding * 2,
                 maxHeight: .infinity,
                 alignment: .topLeading
             )
-            .translationCardSurface()
     }
 
     private var targetContent: some View {
         targetBody
             .columnFrame(height: metrics.contentHeight)
-            .translationCardSurface()
     }
 
     @ViewBuilder
@@ -181,14 +186,10 @@ struct TranslationWindowView: View {
                     Button(localization.string("panel.tryAgain")) {
                         coordinator.retry()
                     }
+                    .appControlStyle()
                 }
             }
         }
-    }
-
-    private var cardSurfaceHeight: CGFloat {
-        metrics.contentHeight
-            + TranslationWindowStyle.cardContentPadding * 2
     }
 
     private var metrics: TranslationWindowMetrics {
@@ -214,20 +215,6 @@ private extension View {
             maxHeight: .infinity,
             alignment: .topLeading
         )
-        .padding(TranslationWindowStyle.cardContentPadding)
-    }
-
-    func translationCardSurface() -> some View {
-        background(TranslationCardSurface())
-    }
-}
-
-private struct TranslationCardSurface: View {
-    var body: some View {
-        RoundedRectangle(
-            cornerRadius: TranslationWindowStyle.cardCornerRadius,
-            style: .continuous
-        )
-        .fill(Color(nsColor: TranslationWindowStyle.cardBackgroundColor))
+        .padding(TranslationWindowStyle.contentPadding)
     }
 }

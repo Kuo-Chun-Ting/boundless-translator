@@ -50,7 +50,7 @@ struct SelectionErrorView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .padding(18)
+        .padding(24)
         .frame(minWidth: 420, minHeight: 260, alignment: .topLeading)
         .interfaceLanguage(interfaceLanguageSettings)
     }

@@ -6,15 +6,17 @@ struct SubscribedView: View {
     let locale: Locale
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             SubscriptionAppIcon()
             VStack(alignment: .leading, spacing: 16) {
                 planDetails
-                Link(
-                    localization.string("subscription.manage"),
-                    destination: URL(string: "https://apps.apple.com/account/subscriptions")!
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                Link(destination: URL(string: "https://apps.apple.com/account/subscriptions")!) {
+                    Text(verbatim: localization.string("subscription.manage"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
+                }
+                .appControlStyle()
+                .controlSize(.large)
             }
         }
         .padding(.horizontal, 30)
@@ -40,8 +42,8 @@ struct SubscribedView: View {
                 value: entitlement.expiresAt.formatted(.dateTime.year().month().day().locale(locale))
             )
         }
-        .padding(18)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
+        .padding(20)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 16))
     }
 
     private var planName: some View {

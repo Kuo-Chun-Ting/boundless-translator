@@ -45,7 +45,6 @@ struct SubscriptionView: View {
             .fixedSize(horizontal: false, vertical: true)
             .onGeometryChange(for: CGSize.self) { $0.size } action: { onContentSizeChange($0) }
         }
-        .background(Color(nsColor: .windowBackgroundColor))
         .task { await access.refresh() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             Task { await access.refresh() }
@@ -58,6 +57,7 @@ struct SubscriptionView: View {
             ProgressView().controlSize(.small)
             messageText("subscription.loading")
         }
+        .frame(maxWidth: .infinity)
     }
 
     private func messageText(_ key: String, arguments: CVarArg...) -> some View {

@@ -23,11 +23,13 @@ final class PermissionGuideWindowController: NSWindowController, NSWindowDelegat
         window.collectionBehavior = [.moveToActiveSpace]
         super.init(window: window)
         window.delegate = self
-        window.contentView = NSHostingView(rootView: PermissionGuideView(
+        let contentView = NSHostingView(rootView: PermissionGuideView(
             configuration: configuration,
             localization: localization,
             onContinue: { [weak self] in self?.finish(continuing: true) }
         ))
+        window.contentView = contentView
+        window.setContentSize(contentView.fittingSize)
     }
 
     @available(*, unavailable)

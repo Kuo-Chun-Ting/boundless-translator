@@ -3,7 +3,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
-func test_metrics_when_translation_is_short_then_uses_only_regular_spacing_above_cards() {
+func test_metrics_when_translation_is_short_then_fits_controls_and_text_in_compact_window() {
     // Arrange
     let layout = TranslationWindowLayout()
     let status = TranslationStatus.translated(
@@ -23,7 +23,7 @@ func test_metrics_when_translation_is_short_then_uses_only_regular_spacing_above
 
     // Assert
     #expect(metrics.size == CGSize(width: 560, height: 211))
-    #expect(metrics.contentHeight == 133)
+    #expect(metrics.contentHeight == 123)
 }
 
 @Test

@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Rendszer alapértelmezése";
-"interfaceLanguage.label" = "Nyelv";
+"interfaceLanguage.label" = "Alkalmazás nyelve";
 "menu.preferences" = "Beállítások…";
 "menu.quitApplication" = "Kilépés a(z) %@ alkalmazásból";
 "preferences.windowTitle" = "A Boundless Translator beállításai";
+"preferences.quit" = "Kilépés";
 "preferences.translateFrom" = "Fordítás erről";
 "preferences.translateTo" = "Fordítás erre";
 "translation.from" = "Forrás";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "A kezelőfelület nyelvi támogatása megegyezik a macOS-éval. A macOS határozza meg, mely nyelvek között lehet fordítani.";
 "usage.translateText.title" = "Szöveg fordítása";
 "usage.translateText.description" = "Jelölje ki a szöveget, majd nyomja meg: %@.";
-"usage.translateImageText.title" = "Képszöveg fordítása";
 "usage.translateImageText.description" = "Nyomja meg a %@ billentyűkombinációt, jelöljön ki egy képernyőterületet, majd szöveget a képen, és nyomja meg a %@ billentyűkombinációt a fordításhoz.";
 "usage.lookUp.title" = "Keresés";
 "usage.lookUp.description" = "Jelöljön ki szöveget a fordítási panelen, majd kattintson a könyvre.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Kattintson az egyik nyelv melletti hangszóróra.";
 "usage.pinWindow.title" = "Ablak rögzítése";
 "usage.pinWindow.description" = "Kattintson a rajzszögre, hogy a fordítás látható maradjon.";
-"imageWorkspace.windowTitle" = "Képernyőfotó";
 "screenshot.permissionRequired" = "Engedélyezze a képernyő rögzítését a Boundless Translator számára a Rendszerbeállítások > Adatvédelem és biztonság menüpontban, majd próbálja újra. Lehet, hogy ki kell lépnie az appból, és újra meg kell nyitnia.";
 "screenshot.failed" = "Nem sikerült rögzíteni a képernyőterületet. Próbálja újra.";
 "screenshot.errorTitle" = "Nem sikerült képernyőfotót készíteni";

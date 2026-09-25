@@ -77,11 +77,8 @@ struct TranslationWindowLayout {
     }
 
     private func measuredHeight(for text: String) -> CGFloat {
-        let availableWidth = windowWidth
-            - TranslationWindowStyle.horizontalPadding * 2
-            - TranslationWindowStyle.columnSpacing
-        let contentWidth = availableWidth / 2
-            - TranslationWindowStyle.cardContentPadding * 2
+        let contentWidth = windowWidth / 2
+            - TranslationWindowStyle.contentPadding * 2
         return measuredHeight(for: text, width: contentWidth)
     }
 

@@ -94,6 +94,7 @@
 		F4E2AF64C11C50FDB3482D6F /* Sources/BoundlessTranslator/Settings/LanguageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E7CE35EB19348D50FD79A2 /* Sources/BoundlessTranslator/Settings/LanguageOption.swift */; };
 		F6C807E035DF3284A5EBFDEF /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47141CA41D31B1166BD0BEB7 /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift */; };
 		FCB11566AEB3F50AEC0D0193 /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BB108ACB53B771D2492F46 /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutDefinition.swift */; };
+		E64036AFB7FFEEF07E4DCE7C /* AppControlStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CC03C9BCB48488089A9EE9; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -232,6 +233,7 @@
 		FB7A8AB92556C4B24EA9E775 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "Sources/BoundlessTranslator/Resources/en-GB.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		FD3666BE2E9285FFE4F85BF5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = Sources/BoundlessTranslator/Resources/vi.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		FD3DFD9CA7AC9C641249D11D /* Sources/BoundlessTranslator/Translation/Speech/TranslationSpeechController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/Speech/TranslationSpeechController.swift; sourceTree = SOURCE_ROOT; };
+		40CC03C9BCB48488089A9EE9 /* AppControlStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/AppControlStyle.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +269,7 @@
 		8309DD304D804F9D7F6302F5 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				40CC03C9BCB48488089A9EE9 /* AppControlStyle.swift */,
 				AE9956D17D86815BB7C30066 /* Sources/BoundlessTranslator/Application/AppController.swift */,
 				043A5FB33203FD8EC61FEF2F /* Sources/BoundlessTranslator/Application/AppDelegate.swift */,
 				4E56FFCD7180A850FA2EF63E /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift */,
@@ -496,6 +499,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E64036AFB7FFEEF07E4DCE7C /* AppControlStyle.swift in Sources */,
 				29EC1FEDE045C99581AC25B7 /* Sources/BoundlessTranslator/Application/AppController.swift in Sources */,
 				E02A10F40359FAC98596F09C /* Sources/BoundlessTranslator/Application/AppDelegate.swift in Sources */,
 				799D4C537E1435B6EF4751D6 /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift in Sources */,

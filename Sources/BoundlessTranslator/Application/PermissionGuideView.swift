@@ -14,6 +14,7 @@ struct PermissionGuideView: View {
 
             Text(verbatim: localization.string(configuration.titleKey))
                 .font(.title.bold())
+                .multilineTextAlignment(.center)
                 .accessibilityIdentifier("permissionGuide.title")
 
             permissionCard
@@ -35,27 +36,29 @@ struct PermissionGuideView: View {
     }
 
     private var permissionCard: some View {
-        HStack(spacing: 18) {
-            Image(systemName: configuration.symbolName)
-                .font(.system(size: 36))
-                .foregroundStyle(.tint)
-                .frame(width: 56, height: 56)
+        VStack(spacing: 20) {
+            HStack(alignment: .center, spacing: 18) {
+                Image(systemName: configuration.symbolName)
+                    .font(.system(size: 32))
+                    .foregroundStyle(.tint)
+                    .frame(width: 48, height: 48)
 
-            Text(verbatim: localization.string(configuration.messageKey))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer(minLength: 8)
+                Text(verbatim: localization.string(configuration.messageKey))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             Button(action: onContinue) {
                 Text(verbatim: localization.string(configuration.buttonKey))
+                    .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
+            .appControlStyle(prominent: true)
             .controlSize(.large)
             .keyboardShortcut(.defaultAction)
             .accessibilityIdentifier("permissionGuide.continueButton")
         }
         .padding(20)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 18))
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 16))
     }
 }

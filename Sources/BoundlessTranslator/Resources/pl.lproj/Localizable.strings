@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Ustawienie domyślne systemu";
-"interfaceLanguage.label" = "Język";
+"interfaceLanguage.label" = "Język aplikacji";
 "menu.preferences" = "Ustawienia…";
 "menu.quitApplication" = "Zakończ %@";
 "preferences.windowTitle" = "Ustawienia Boundless Translator";
+"preferences.quit" = "Zakończ";
 "preferences.translateFrom" = "Tłumacz z";
 "preferences.translateTo" = "Tłumacz na";
 "translation.from" = "Z";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Obsługa języków interfejsu odpowiada systemowi macOS. macOS określa, między którymi językami można tłumaczyć.";
 "usage.translateText.title" = "Tłumacz tekst";
 "usage.translateText.description" = "Zaznacz tekst i naciśnij %@.";
-"usage.translateImageText.title" = "Tłumacz tekst z obrazu";
 "usage.translateImageText.description" = "Naciśnij %@, wybierz obszar ekranu, zaznacz tekst na obrazie, a następnie naciśnij %@, aby przetłumaczyć.";
 "usage.lookUp.title" = "Sprawdź";
 "usage.lookUp.description" = "Zaznacz tekst w panelu tłumaczenia, a następnie kliknij książkę.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Kliknij głośnik obok jednego z języków.";
 "usage.pinWindow.title" = "Przypnij okno";
 "usage.pinWindow.description" = "Kliknij pinezkę, aby tłumaczenie pozostało widoczne.";
-"imageWorkspace.windowTitle" = "Zrzut ekranu";
 "screenshot.permissionRequired" = "Zezwól na nagrywanie ekranu aplikacji Boundless Translator w Ustawieniach systemowych > Prywatność i ochrona, a następnie spróbuj ponownie. Konieczne może być zamknięcie i ponowne otwarcie aplikacji.";
 "screenshot.failed" = "Nie udało się zrobić zrzutu obszaru ekranu. Spróbuj ponownie.";
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";

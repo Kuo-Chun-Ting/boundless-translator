@@ -56,6 +56,8 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
     #expect(window.canBecomeKey)
     #expect(!window.hidesOnDeactivate)
     #expect(window.title == "Boundless Translator Settings")
+    #expect(window.titleVisibility == .hidden)
+    #expect(window.titlebarAccessoryViewControllers.count == 1)
     #expect(window.contentLayoutRect.size == PreferencesWindowStyle.contentSize)
 }
 

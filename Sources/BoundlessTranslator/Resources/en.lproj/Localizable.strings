@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "System Default";
-"interfaceLanguage.label" = "Language";
+"interfaceLanguage.label" = "App Language";
 "menu.preferences" = "Preferences…";
 "menu.quitApplication" = "Quit %@";
 "preferences.windowTitle" = "Boundless Translator Settings";
+"preferences.quit" = "Quit";
 "preferences.translateFrom" = "Translate From";
 "preferences.translateTo" = "Translate To";
 "translation.from" = "From";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Interface language support matches macOS. macOS determines which languages can be translated between.";
 "usage.translateText.title" = "Translate Text";
 "usage.translateText.description" = "Select text and press %@.";
-"usage.translateImageText.title" = "Translate Image Text";
 "usage.translateImageText.description" = "Press %@, select a screen region, select text in the image, then press %@ to translate.";
 "usage.lookUp.title" = "Look Up";
 "usage.lookUp.description" = "Select text in the translation panel, then click the book.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Click the speaker beside either language.";
 "usage.pinWindow.title" = "Pin Window";
 "usage.pinWindow.description" = "Click the pin to keep the translation visible.";
-"imageWorkspace.windowTitle" = "Screenshot";
 "screenshot.permissionRequired" = "Allow screen recording for Boundless Translator in System Settings > Privacy & Security, then try again. You may need to quit and reopen the app.";
 "screenshot.failed" = "Could not capture the screen region. Try again.";
 "screenshot.errorTitle" = "Could not capture screenshot";

@@ -24,14 +24,16 @@ struct SubscriptionProductView: View {
                 .onInAppPurchaseStart { _ in store.purchaseStarted() }
                 .onInAppPurchaseCompletion { _, result in await store.purchaseCompleted(result) }
             } else {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(spacing: 20) {
                     SubscriptionIntroductionView(localization: localization)
                     if case .loading = productState {
                         ProgressView(localization.string("subscription.loading"))
                     } else {
                         Text(verbatim: localization.string("subscription.loadFailed"))
                             .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
                         Button(localization.string("subscription.retry")) { reloadCount += 1 }
+                            .appControlStyle()
                     }
                 }
                 .padding(.horizontal, 30)
@@ -49,11 +51,13 @@ struct SubscriptionIntroductionView: View {
     let localization: AppLocalization
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(spacing: 16) {
             SubscriptionAppIcon()
             Text(verbatim: localization.string("subscription.features"))
-                .font(.system(size: 22, weight: .semibold))
+                .font(.title2.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
         }
     }
 }
@@ -95,9 +99,9 @@ struct UnsubscribedView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .padding(18)
+            .padding(20)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
+            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 16))
             VStack(spacing: 10) {
                 Button(action: subscribe) {
                     HStack {
@@ -108,7 +112,7 @@ struct UnsubscribedView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
                 }
-                .buttonStyle(.borderedProminent)
+                .appControlStyle(prominent: true)
                 .controlSize(.large)
                 .disabled(store.isBusy)
                 Text(verbatim: localization.string("subscription.autoRenewal"))

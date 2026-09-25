@@ -131,7 +131,7 @@ struct UsageGuideItem: Identifiable {
                     name: "photo",
                     clockwiseRotationDegrees: 0
                 ),
-                title: localization.string("usage.translateImageText.title"),
+                title: localization.string("shortcut.screenshotTranslation"),
                 description: localization.string(
                     "usage.translateImageText.description",
                     arguments: screenshotShortcutName, translationShortcutName
@@ -146,7 +146,7 @@ struct UsageGuideItem: Identifiable {
             UsageGuideItem(
                 id: "listen",
                 icon: .systemSymbol(
-                    name: "speaker.wave.2.fill",
+                    name: "speaker.wave.2",
                     clockwiseRotationDegrees: 0
                 ),
                 title: localization.string("usage.listen.title"),

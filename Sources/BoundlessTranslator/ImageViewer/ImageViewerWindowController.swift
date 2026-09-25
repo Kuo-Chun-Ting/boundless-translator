@@ -129,7 +129,7 @@ final class ImageViewerWindowController: NSWindowController,
             .resolvedLanguageIdentifier(for: languageIdentifier)
         window?.title = AppLocalization(
             languageIdentifier: resolvedIdentifier
-        ).string("imageWorkspace.windowTitle")
+        ).string("shortcut.screenshotTranslation")
     }
 
     private static func aspectFitSize(

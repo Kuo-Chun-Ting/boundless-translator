@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "ค่าเริ่มต้นของระบบ";
-"interfaceLanguage.label" = "ภาษา";
+"interfaceLanguage.label" = "ภาษาของแอป";
 "menu.preferences" = "การตั้งค่า…";
 "menu.quitApplication" = "ออกจาก %@";
 "preferences.windowTitle" = "การตั้งค่า Boundless Translator";
+"preferences.quit" = "ออก";
 "preferences.translateFrom" = "แปลจาก";
 "preferences.translateTo" = "แปลเป็น";
 "translation.from" = "จาก";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "การรองรับภาษาของอินเทอร์เฟซตรงกับ macOS โดย macOS จะเป็นผู้กำหนดว่าสามารถแปลระหว่างภาษาใดได้บ้าง";
 "usage.translateText.title" = "แปลข้อความ";
 "usage.translateText.description" = "เลือกข้อความแล้วกด %@";
-"usage.translateImageText.title" = "แปลข้อความในภาพ";
 "usage.translateImageText.description" = "กด %@ เลือกพื้นที่หน้าจอ เลือกข้อความในภาพ แล้วกด %@ เพื่อแปล";
 "usage.lookUp.title" = "ค้นหา";
 "usage.lookUp.description" = "เลือกข้อความในแผงการแปล แล้วคลิกรูปหนังสือ";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "คลิกรูปลำโพงข้างภาษาใดภาษาหนึ่ง";
 "usage.pinWindow.title" = "ปักหมุดหน้าต่าง";
 "usage.pinWindow.description" = "คลิกรูปหมุดเพื่อให้คำแปลแสดงค้างไว้";
-"imageWorkspace.windowTitle" = "ภาพหน้าจอ";
 "screenshot.permissionRequired" = "อนุญาตการบันทึกหน้าจอให้ Boundless Translator ในการตั้งค่าระบบ > ความเป็นส่วนตัวและความปลอดภัย แล้วลองอีกครั้ง คุณอาจต้องออกจากแอปแล้วเปิดใหม่";
 "screenshot.failed" = "ไม่สามารถจับภาพพื้นที่หน้าจอได้ ลองอีกครั้ง";
 "screenshot.errorTitle" = "ไม่สามารถจับภาพหน้าจอได้";

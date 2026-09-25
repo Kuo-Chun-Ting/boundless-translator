@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Sistemska privzeta nastavitev";
-"interfaceLanguage.label" = "Jezik";
+"interfaceLanguage.label" = "Jezik aplikacije";
 "menu.preferences" = "Nastavitve…";
 "menu.quitApplication" = "Končaj %@";
 "preferences.windowTitle" = "Nastavitve za Boundless Translator";
+"preferences.quit" = "Končaj";
 "preferences.translateFrom" = "Prevedi iz";
 "preferences.translateTo" = "Prevedi v";
 "translation.from" = "Iz";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Podpora jezikov vmesnika je enaka kot v sistemu macOS. macOS določa, med katerimi jeziki je mogoče prevajati.";
 "usage.translateText.title" = "Prevedi besedilo";
 "usage.translateText.description" = "Izberite besedilo in pritisnite %@.";
-"usage.translateImageText.title" = "Prevedi besedilo na sliki";
 "usage.translateImageText.description" = "Pritisnite %@, izberite območje zaslona, izberite besedilo na sliki in nato pritisnite %@ za prevod.";
 "usage.lookUp.title" = "Poišči";
 "usage.lookUp.description" = "Izberite besedilo v podoknu za prevod in kliknite knjigo.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Kliknite zvočnik ob enem od jezikov.";
 "usage.pinWindow.title" = "Pripni okno";
 "usage.pinWindow.description" = "Kliknite žebljiček, da prevod ostane viden.";
-"imageWorkspace.windowTitle" = "Posnetek zaslona";
 "screenshot.permissionRequired" = "Dovolite snemanje zaslona za Boundless Translator v sistemskih nastavitvah > Zasebnost in varnost, nato poskusite znova. Morda boste morali aplikacijo zapreti in znova odpreti.";
 "screenshot.failed" = "Območja zaslona ni bilo mogoče zajeti. Poskusite znova.";
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";

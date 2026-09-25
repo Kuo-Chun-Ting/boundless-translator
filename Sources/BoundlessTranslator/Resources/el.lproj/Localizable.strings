@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Προεπιλογή συστήματος";
-"interfaceLanguage.label" = "Γλώσσα";
+"interfaceLanguage.label" = "Γλώσσα εφαρμογής";
 "menu.preferences" = "Ρυθμίσεις…";
 "menu.quitApplication" = "Τερματισμός %@";
 "preferences.windowTitle" = "Ρυθμίσεις Boundless Translator";
+"preferences.quit" = "Τερματισμός";
 "preferences.translateFrom" = "Μετάφραση από";
 "preferences.translateTo" = "Μετάφραση σε";
 "translation.from" = "Από";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Η υποστήριξη γλωσσών διεπαφής αντιστοιχεί στο macOS. Το macOS καθορίζει μεταξύ ποιων γλωσσών είναι δυνατή η μετάφραση.";
 "usage.translateText.title" = "Μετάφραση κειμένου";
 "usage.translateText.description" = "Επιλέξτε κείμενο και πατήστε %@.";
-"usage.translateImageText.title" = "Μετάφραση κειμένου εικόνας";
 "usage.translateImageText.description" = "Πατήστε %@, επιλέξτε μια περιοχή της οθόνης, επιλέξτε κείμενο στην εικόνα και πατήστε %@ για μετάφραση.";
 "usage.lookUp.title" = "Αναζήτηση";
 "usage.lookUp.description" = "Επιλέξτε κείμενο στον πίνακα μετάφρασης και κάντε κλικ στο βιβλίο.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Κάντε κλικ στο ηχείο δίπλα σε μία από τις γλώσσες.";
 "usage.pinWindow.title" = "Καρφίτσωμα παραθύρου";
 "usage.pinWindow.description" = "Κάντε κλικ στην καρφίτσα για να παραμείνει ορατή η μετάφραση.";
-"imageWorkspace.windowTitle" = "Στιγμιότυπο οθόνης";
 "screenshot.permissionRequired" = "Επιτρέψτε την εγγραφή οθόνης για το Boundless Translator στις Ρυθμίσεις συστήματος > Απόρρητο και ασφάλεια και δοκιμάστε ξανά. Ίσως χρειαστεί να τερματίσετε και να ανοίξετε ξανά την εφαρμογή.";
 "screenshot.failed" = "Δεν ήταν δυνατή η λήψη της περιοχής οθόνης. Δοκιμάστε ξανά.";
 "screenshot.errorTitle" = "Δεν ήταν δυνατή η λήψη στιγμιότυπου οθόνης";

@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Systemstandard";
-"interfaceLanguage.label" = "Språk";
+"interfaceLanguage.label" = "Appspråk";
 "menu.preferences" = "Inställningar…";
 "menu.quitApplication" = "Avsluta %@";
 "preferences.windowTitle" = "Inställningar för Boundless Translator";
+"preferences.quit" = "Avsluta";
 "preferences.translateFrom" = "Översätt från";
 "preferences.translateTo" = "Översätt till";
 "translation.from" = "Från";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Stödet för gränssnittsspråk motsvarar macOS. macOS avgör vilka språk som kan översättas sinsemellan.";
 "usage.translateText.title" = "Översätt text";
 "usage.translateText.description" = "Markera text och tryck på %@.";
-"usage.translateImageText.title" = "Översätt text i bild";
 "usage.translateImageText.description" = "Tryck på %@, välj ett skärmområde, markera text i bilden och tryck sedan på %@ för att översätta.";
 "usage.lookUp.title" = "Slå upp";
 "usage.lookUp.description" = "Markera text i översättningspanelen och klicka sedan på boken.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Klicka på högtalaren bredvid något av språken.";
 "usage.pinWindow.title" = "Fäst fönster";
 "usage.pinWindow.description" = "Klicka på nålen för att hålla översättningen synlig.";
-"imageWorkspace.windowTitle" = "Skärmavbild";
 "screenshot.permissionRequired" = "Tillåt skärminspelning för Boundless Translator i Systeminställningar > Integritet och säkerhet och försök igen. Du kan behöva avsluta och öppna appen igen.";
 "screenshot.failed" = "Det gick inte att ta en bild av skärmområdet. Försök igen.";
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";

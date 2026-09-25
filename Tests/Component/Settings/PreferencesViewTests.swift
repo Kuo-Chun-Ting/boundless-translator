@@ -2,6 +2,76 @@ import AppKit
 import Testing
 @testable import BoundlessTranslator
 
+@Test(arguments: InterfaceLanguageCatalog.languageIdentifiers, [
+    (subscription: false, overrideLanguage: false),
+    (subscription: true, overrideLanguage: false),
+    (subscription: false, overrideLanguage: true),
+    (subscription: true, overrideLanguage: true),
+]) @MainActor
+func test_preferencesView_when_localized_then_footerActionsFitOnOneRow(
+    languageIdentifier: String,
+    configuration: (subscription: Bool, overrideLanguage: Bool)
+) throws {
+    // Arrange
+    let suite = "PreferencesLayout.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let language = InterfaceLanguageSettings(
+        defaults: defaults, preferredLanguageIdentifiers: { [languageIdentifier] }
+    )
+    if configuration.overrideLanguage {
+        language.languageIdentifier = languageIdentifier
+    }
+    var subscriptionAction: (@MainActor () -> Void)?
+    if configuration.subscription {
+        subscriptionAction = {}
+    }
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(defaults: defaults),
+        interfaceLanguageSettings: language,
+        translationShortcutController: makeTestTranslationShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog(),
+        onShowSubscription: subscriptionAction
+    )
+    let content = try #require(controller.window?.contentView)
+
+    // Act
+    content.layoutSubtreeIfNeeded()
+    let quit = try #require(findViews(in: content, accessibilityIdentifier: "quitButton").first as? NSButton)
+    let help = try #require(findViews(in: content, accessibilityIdentifier: "usageHelpButton").first as? NSButton)
+    let subscriptions = findViews(in: content, accessibilityIdentifier: "subscriptionButton").compactMap { $0 as? NSButton }
+    let quitFrame = quit.convert(quit.bounds, to: content)
+    let helpFrame = help.convert(help.bounds, to: content)
+    let scroll = try #require(findViews(in: content, ofType: NSScrollView.self).max {
+        ($0.documentView?.bounds.height ?? 0) < ($1.documentView?.bounds.height ?? 0)
+    })
+    let documentHeight = try #require(scroll.documentView?.bounds.height)
+
+    // Assert
+    #expect(subscriptions.count == (configuration.subscription ? 1 : 0))
+    #expect(documentHeight <= scroll.contentView.bounds.height + 1)
+    #expect(abs(quitFrame.midY - helpFrame.midY) < 3)
+    #expect(abs(language.isRightToLeft ? quitFrame.maxX - content.bounds.maxX : quitFrame.minX - content.bounds.minX) < 25)
+    #expect(abs(language.isRightToLeft ? helpFrame.minX - content.bounds.minX : helpFrame.maxX - content.bounds.maxX) < 25)
+    for button in [quit, help] + subscriptions {
+        let frame = button.convert(button.bounds, to: content)
+        #expect(content.bounds.contains(frame))
+        #expect(button.bounds.width >= button.fittingSize.width - 1)
+    }
+    if let subscription = subscriptions.first {
+        let frame = subscription.convert(subscription.bounds, to: content)
+        #expect(!frame.intersects(helpFrame))
+        #expect(!frame.intersects(quitFrame))
+        #expect(abs(frame.midY - helpFrame.midY) < 3)
+        #expect(language.isRightToLeft ? frame.minX > helpFrame.maxX : frame.maxX < helpFrame.minX)
+    }
+    for picker in findViews(in: content, ofType: NSPopUpButton.self) {
+        let textWidth = (picker.title as NSString).size(withAttributes: [.font: picker.font ?? NSFont.systemFont(ofSize: 13)]).width
+        let titleRect = try #require(picker.cell?.titleRect(forBounds: picker.bounds))
+        #expect(titleRect.width >= textWidth - 0.5)
+    }
+}
+
 @Test @MainActor
 func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() throws {
     // Arrange
@@ -28,6 +98,53 @@ func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() t
 
     // Assert
     #expect(languagePickers.count == 1)
+}
+
+@Test @MainActor
+func test_languageIdentifier_when_longLanguageSelected_then_openWindowResizesWithoutClipping() async throws {
+    // Arrange
+    let language = makeTestInterfaceLanguageSettings()
+    let controller = PreferencesWindowController(
+        settings: TranslationSettings(),
+        interfaceLanguageSettings: language,
+        translationShortcutController: makeTestTranslationShortcutController(),
+        supportedLanguageCatalog: makeStubLanguageCatalog()
+    )
+    let window = try #require(controller.window)
+    let content = try #require(window.contentView)
+    window.orderFront(nil)
+    defer { window.orderOut(nil) }
+    content.layoutSubtreeIfNeeded()
+    let originalWidth = window.contentLayoutRect.width
+
+    // Act
+    language.languageIdentifier = "en-ZA"
+    for _ in 0..<50 {
+        if findViews(in: content, ofType: NSPopUpButton.self).contains(where: { $0.title.contains("South Africa") }) {
+            break
+        }
+        try await Task.sleep(for: .milliseconds(10))
+        content.layoutSubtreeIfNeeded()
+    }
+    content.layoutSubtreeIfNeeded()
+    let picker = try #require(findViews(in: content, ofType: NSPopUpButton.self).first {
+        $0.title.contains("South Africa")
+    })
+    let textWidth = (picker.title as NSString).size(withAttributes: [.font: picker.font ?? NSFont.systemFont(ofSize: 13)]).width
+
+    // Assert
+    #expect(window.contentLayoutRect.width > originalWidth)
+    let titleRect = try #require(picker.cell?.titleRect(forBounds: picker.bounds))
+    #expect(titleRect.width >= textWidth - 0.5)
+    #expect(content.bounds.contains(picker.convert(picker.bounds, to: content)))
+
+    // Act
+    language.languageIdentifier = "zh-Hant"
+    await Task.yield()
+    content.layoutSubtreeIfNeeded()
+
+    // Assert
+    #expect(window.contentLayoutRect.width == originalWidth)
 }
 
 @Test @MainActor
@@ -89,7 +206,7 @@ func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
 }
 
 @Test @MainActor
-func test_preferencesView_when_rendered_then_placesQuitLeftOfUsageHelp() throws {
+func test_preferencesView_when_rendered_then_placesQuitOppositeUsageHelp() throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
@@ -117,7 +234,7 @@ func test_preferencesView_when_rendered_then_placesQuitLeftOfUsageHelp() throws 
     let usageFrame = usageButton.convert(usageButton.bounds, to: contentView)
 
     // Assert
-    #expect(abs(quitFrame.midY - usageFrame.midY) < 1)
+    #expect(abs(quitFrame.midY - usageFrame.midY) < 3)
     #expect(quitFrame.maxX < usageFrame.minX)
 }
 
@@ -160,26 +277,21 @@ func test_preferencesView_when_shortcutRegistrationFails_then_errorAndFooterDoNo
 
     // Act
     contentView.layoutSubtreeIfNeeded()
-    let languagePicker = try #require(
-        findViews(in: contentView, ofType: NSPopUpButton.self)
-            .first { $0.title == "System Default — English" }
-    )
+    let scrollView = try #require(findViews(in: contentView, ofType: NSScrollView.self).max {
+        ($0.documentView?.bounds.height ?? 0) < ($1.documentView?.bounds.height ?? 0)
+    })
     let quitButton = try #require(
         findViews(
             in: contentView,
             accessibilityIdentifier: "quitButton"
         ).first
     )
-    let languageFrame = languagePicker.convert(
-        languagePicker.bounds,
-        to: contentView
-    )
+    let visibleFormFrame = scrollView.convert(scrollView.contentView.bounds, to: contentView)
     let quitFrame = quitButton.convert(quitButton.bounds, to: contentView)
-    let verticalGap = abs(languageFrame.midY - quitFrame.midY)
-        - ((languageFrame.height + quitFrame.height) / 2)
 
     // Assert
-    #expect(verticalGap >= 8)
+    #expect((scrollView.documentView?.bounds.height ?? 0) > scrollView.contentView.bounds.height)
+    #expect(!visibleFormFrame.intersects(quitFrame))
 }
 
 @Test @MainActor
@@ -214,7 +326,7 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesContent() a
     )
 
     // Assert
-    #expect(quitButton.title == "結束 Boundless Translator")
+    #expect(quitButton.title == "結束")
 }
 
 @MainActor
@@ -318,7 +430,7 @@ func test_quitButton_when_clicked_then_requests_application_termination() throws
     #expect(NSApplication.shared.sendAction(action, to: quitButton.target, from: quitButton))
 
     // Assert
-    #expect(quitButton.title == "Quit Boundless Translator")
+    #expect(quitButton.title == "Quit")
     #expect(terminationSpy.didRequestTermination)
 }
 

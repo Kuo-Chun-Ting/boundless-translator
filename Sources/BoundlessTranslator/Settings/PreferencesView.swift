@@ -1,7 +1,29 @@
 import SwiftUI
 
 enum PreferencesWindowStyle {
-    static let contentSize = CGSize(width: 430, height: 322)
+    static let contentSize = CGSize(width: 430, height: 304)
+
+    @MainActor
+    static func contentSize(
+        settings: InterfaceLanguageSettings,
+        languageIdentifier: String?
+    ) -> CGSize {
+        let resolved = settings.resolvedLanguageIdentifier(for: languageIdentifier)
+        let localization = AppLocalization(languageIdentifier: resolved)
+        let names = InterfaceLanguageDisplayNameFormatter(displayLocale: Locale(identifier: resolved))
+        let value = languageIdentifier.map { names.name(for: $0) }
+            ?? names.systemDefaultName(
+                label: localization.string("interfaceLanguage.followMacOS"),
+                languageIdentifier: resolved
+            )
+        let font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
+        let labelWidth = (localization.string("interfaceLanguage.label") as NSString)
+            .size(withAttributes: [.font: font]).width
+        let valueWidth = (value as NSString).size(withAttributes: [.font: font]).width
+        // Grouped Form insets and spacing (80), plus native popup chrome (48).
+        let width = max(contentSize.width, ceil(labelWidth + valueWidth + 128))
+        return CGSize(width: width, height: contentSize.height)
+    }
 }
 
 struct PreferencesView: View {
@@ -35,6 +57,8 @@ struct PreferencesView: View {
                         accessibilityIdentifier: "screenshotShortcutRecorder",
                         localization: localization
                     )
+                }
+                Section {
                     InterfaceLanguagePreferencesView(
                         settings: interfaceLanguageSettings
                     )
@@ -43,21 +67,18 @@ struct PreferencesView: View {
             .formStyle(.grouped)
             .scrollContentBackground(.hidden)
 
-            HStack {
+            Divider()
+
+            HStack(spacing: 8) {
                 PreferencesActionButton(
                     style: .standard(
-                        title: localization.string(
-                            "menu.quitApplication",
-                            arguments: AppBrand.displayName
-                        )
+                        title: localization.string("preferences.quit")
                     ),
                     accessibilityIdentifier: "quitButton",
                     action: quitApplication
                 )
                 .fixedSize()
-
-                Spacer()
-
+                Spacer(minLength: 8)
                 if let onShowSubscription {
                     PreferencesActionButton(
                         style: .standard(title: localization.string("subscription.title")),
@@ -66,7 +87,6 @@ struct PreferencesView: View {
                     )
                     .fixedSize()
                 }
-
                 UsagePreferencesView(
                     translationShortcut: translationShortcutController.definition,
                     screenshotShortcut: screenshotShortcutController.definition,
@@ -74,12 +94,15 @@ struct PreferencesView: View {
                 )
             }
             .padding(.horizontal, 20)
-            .padding(.top, 4)
-            .padding(.bottom, 16)
+            .padding(.vertical, 12)
+            .appControlSurface()
         }
         .background(Color(nsColor: .windowBackgroundColor))
         .frame(
-            width: PreferencesWindowStyle.contentSize.width,
+            width: PreferencesWindowStyle.contentSize(
+                settings: interfaceLanguageSettings,
+                languageIdentifier: interfaceLanguageSettings.languageIdentifier
+            ).width,
             height: PreferencesWindowStyle.contentSize.height
         )
         .interfaceLanguage(interfaceLanguageSettings)

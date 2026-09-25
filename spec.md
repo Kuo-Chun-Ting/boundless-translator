@@ -1,5 +1,10 @@
 # Boundless Translator Spec
 
+## Appearance
+
+- Use native macOS controls and window chrome. On macOS 26, reserve prominent Liquid Glass buttons for primary actions such as subscribing and continuing permission setup; use native bordered fallbacks on macOS 15. Use a shared system glass surface for the translation controls and Preferences footer on macOS 26, with a native bar material fallback on macOS 15. Keep language menus native and speech actions bordered with outline speaker symbols. Help popovers, menu-bar menus and screenshot window chrome remain system-provided.
+- Keep text, screenshots and subscription details on readable content surfaces. Use matching column insets, vertically centered control rows and equal spacing above and below actions. Preserve all existing actions, keyboard shortcuts, selection and window behavior.
+
 ## Product
 
 Boundless Translator is a macOS 15 menu bar app for translating selected text and text recognized in screenshots. It presents translations in a compact floating window and provides configurable shortcuts for translation and direct screenshot capture.
@@ -26,8 +31,10 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 ## Translation Window
 
 - Show source and translated text in two equal, selectable panels.
+- Use the existing system serif font on a continuous native text background with a subtle central divider. Align each language menu and speech button with its text column using matching insets. On macOS 26, use native Liquid Glass controls; retain native controls on macOS 15.
 - Grow the initial window height with content up to 440 points, then scroll overflowing text. The translation window remains resizable.
 - Keep language menus and speech controls aligned with their respective panels when resized.
+- Give speech buttons the same visible height and native background style as the language menus. During playback, keep the speaker symbol and animate its sound waves; clicking again stops reading. With Reduce Motion enabled, show a static accent-colored speaker instead. Keep the pin unbordered, diagonal when unpinned and upright blue when pinned.
 - Read the source or translated text with a system voice that supports its language.
 - Selecting source text reveals the book action. Activating it opens the macOS Lookup overlay for that exact selection.
 - Position the window on the screen containing the pointer.
@@ -38,7 +45,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 
 ## Screenshot Workspace
 
-- Open the captured image in a standard, resizable macOS window titled Screenshot.
+- Open the captured image in a standard, resizable macOS window titled Screenshot Translation, using the same localized feature name as Preferences and Help.
 - Fit the initial window to the image and the active screen while preserving the image aspect ratio.
 - Use VisionKit Live Text for native text recognition and selection.
 - After recognition completes, the pointer shows an I-beam over recognized text and an arrow over blank image space, whether or not text is selected. An I-beam permits starting a new selection immediately.
@@ -62,8 +69,9 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Open Preferences on first launch and whenever the running app is opened again through Spotlight or Finder.
 - Present Preferences on the screen containing the pointer, make it Boundless Translator's main and key window before activating the app so other open windows remain behind it and Command-W closes it immediately.
 - Present Preferences as one level of labeled rows without section headings.
-- Order Preferences as Translate From, Translate To, Selected Text Translation, Screenshot Translation, Language, then Usage.
-- Group Translate From and Translate To in the first settings card, then both shortcuts and Language in the second.
+- Use the App icon and localized Boundless Translator Settings title in the title bar.
+- Order Preferences as Translate From, Translate To, Selected Text Translation, Screenshot Translation, then App Language.
+- Group translation languages in the first settings card, both shortcuts in the second, and App Language in the third.
 - Use the macOS window background and native grouped-form cards in light and dark appearances, including when appearance changes while Preferences is open.
 - Fit all settings without scrolling or unused vertical space. Size the window to accommodate localized labels.
 - Configure the interface language independently from translation languages.
@@ -77,7 +85,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
-- Provide a low-emphasis Quit action at the bottom left when the menu bar item is unavailable.
+- Place a concise Quit action at the leading edge below the settings, with Subscription… and Help together at the trailing edge on the same row. Mirror this layout for right-to-left languages.
 - Subscription-required builds expose Subscription from Preferences and the menu bar, including when feature access has expired. Free-testing builds do not show purchase controls.
 
 ## Architecture

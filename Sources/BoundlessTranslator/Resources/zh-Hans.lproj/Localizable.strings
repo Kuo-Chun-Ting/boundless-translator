@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "系统默认";
-"interfaceLanguage.label" = "语言";
+"interfaceLanguage.label" = "界面语言";
 "menu.preferences" = "设置…";
 "menu.quitApplication" = "退出 %@";
 "preferences.windowTitle" = "Boundless Translator 设置";
+"preferences.quit" = "退出";
 "preferences.translateFrom" = "翻译来源";
 "preferences.translateTo" = "翻译目标";
 "translation.from" = "源语言";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "界面语言支持范围与 macOS 相同。哪些语言可以互相翻译，则由 macOS 决定。";
 "usage.translateText.title" = "翻译文本";
 "usage.translateText.description" = "选择文本，然后按下 %@。";
-"usage.translateImageText.title" = "翻译图片文字";
 "usage.translateImageText.description" = "按下 %@，选择屏幕区域，再选择图像中的文本，然后按下 %@ 翻译。";
 "usage.lookUp.title" = "查询";
 "usage.lookUp.description" = "选择翻译面板中的文本，然后点按书本图标。";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "点按任一语言旁边的扬声器。";
 "usage.pinWindow.title" = "固定窗口";
 "usage.pinWindow.description" = "点按图钉以保持显示翻译。";
-"imageWorkspace.windowTitle" = "截屏";
 "screenshot.permissionRequired" = "请在“系统设置”>“隐私与安全性”中允许 Boundless Translator 录制屏幕，然后重试。你可能需要退出并重新打开 App。";
 "screenshot.failed" = "无法截取屏幕区域。请重试。";
 "screenshot.errorTitle" = "无法截屏";

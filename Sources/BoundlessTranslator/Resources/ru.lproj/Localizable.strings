@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Системное значение по умолчанию";
-"interfaceLanguage.label" = "Язык";
+"interfaceLanguage.label" = "Язык приложения";
 "menu.preferences" = "Настройки…";
 "menu.quitApplication" = "Завершить %@";
 "preferences.windowTitle" = "Настройки Boundless Translator";
+"preferences.quit" = "Завершить";
 "preferences.translateFrom" = "Перевести с";
 "preferences.translateTo" = "Перевести на";
 "translation.from" = "С";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Поддержка языков интерфейса соответствует macOS. macOS определяет, между какими языками возможен перевод.";
 "usage.translateText.title" = "Перевести текст";
 "usage.translateText.description" = "Выделите текст и нажмите %@.";
-"usage.translateImageText.title" = "Перевести текст на изображении";
 "usage.translateImageText.description" = "Нажмите %@, выберите область экрана, выделите текст на изображении и нажмите %@ для перевода.";
 "usage.lookUp.title" = "Найти";
 "usage.lookUp.description" = "Выделите текст на панели перевода и нажмите значок книги.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Нажмите значок динамика рядом с одним из языков.";
 "usage.pinWindow.title" = "Закрепить окно";
 "usage.pinWindow.description" = "Нажмите значок булавки, чтобы перевод оставался на экране.";
-"imageWorkspace.windowTitle" = "Снимок экрана";
 "screenshot.permissionRequired" = "Разрешите запись экрана для Boundless Translator в разделе «Системные настройки» > «Конфиденциальность и безопасность», затем повторите попытку. Возможно, потребуется завершить приложение и открыть его снова.";
 "screenshot.failed" = "Не удалось снять область экрана. Повторите попытку.";
 "screenshot.errorTitle" = "Не удалось сделать снимок экрана";

@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Default di sistema";
-"interfaceLanguage.label" = "Lingua";
+"interfaceLanguage.label" = "Lingua dell’app";
 "menu.preferences" = "Impostazioni…";
 "menu.quitApplication" = "Esci da %@";
 "preferences.windowTitle" = "Impostazioni di Boundless Translator";
+"preferences.quit" = "Esci";
 "preferences.translateFrom" = "Traduci da";
 "preferences.translateTo" = "Traduci in";
 "translation.from" = "Da";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Il supporto delle lingue dell’interfaccia corrisponde a quello di macOS. macOS determina tra quali lingue è possibile tradurre.";
 "usage.translateText.title" = "Traduci testo";
 "usage.translateText.description" = "Seleziona il testo e premi %@.";
-"usage.translateImageText.title" = "Traduci testo nell’immagine";
 "usage.translateImageText.description" = "Premi %@, seleziona un’area dello schermo, seleziona il testo nell’immagine, quindi premi %@ per tradurre.";
 "usage.lookUp.title" = "Cerca";
 "usage.lookUp.description" = "Seleziona il testo nel pannello di traduzione, quindi fai clic sul libro.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Fai clic sull’altoparlante accanto a una delle lingue.";
 "usage.pinWindow.title" = "Fissa finestra";
 "usage.pinWindow.description" = "Fai clic sulla puntina per mantenere visibile la traduzione.";
-"imageWorkspace.windowTitle" = "Istantanea";
 "screenshot.permissionRequired" = "Consenti la registrazione dello schermo per Boundless Translator in Impostazioni di Sistema > Privacy e sicurezza, quindi riprova. Potrebbe essere necessario chiudere e riaprire l’app.";
 "screenshot.failed" = "Impossibile acquisire l’area dello schermo. Riprova.";
 "screenshot.errorTitle" = "Impossibile acquisire l’istantanea";

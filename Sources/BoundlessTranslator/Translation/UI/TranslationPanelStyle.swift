@@ -15,28 +15,16 @@ enum TranslationWindowStyle {
         return serifFont
     }
 
-    static let horizontalPadding: CGFloat = 14
-    static let bottomPadding: CGFloat = 14
-    static let columnSpacing: CGFloat = 12
-    static let languageRowHeight: CGFloat = 26
-    static let contentSpacing: CGFloat = 10
-    static let languageMenuWidth: CGFloat = 210
+    static let contentPadding: CGFloat = 18
+    static let languageRowHeight: CGFloat = 32
+    static let controlsVerticalPadding: CGFloat = 10
     static let speechControlSpacing: CGFloat = 8
-    static let speechControlSize: CGFloat = 26
-    static let cardContentPadding: CGFloat = 14
-    static let cardCornerRadius: CGFloat = 12
-    static let cardBackgroundColor = NSColor(
-        name: nil,
-        dynamicProvider: { appearance in
-            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            return NSColor(calibratedWhite: isDark ? 0.16 : 0.97, alpha: 1)
-        }
-    )
+    static let speechControlSize: CGFloat = 32
+    static let speechButtonSize: CGFloat = 28
 
     static var nonContentHeight: CGFloat {
         languageRowHeight
-            + contentSpacing
-            + cardContentPadding * 2
-            + bottomPadding
+            + controlsVerticalPadding * 2
+            + contentPadding * 2
     }
 }

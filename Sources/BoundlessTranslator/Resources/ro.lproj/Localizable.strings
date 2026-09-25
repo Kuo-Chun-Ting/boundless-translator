@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Valoare implicită a sistemului";
-"interfaceLanguage.label" = "Limbă";
+"interfaceLanguage.label" = "Limba aplicației";
 "menu.preferences" = "Configurări…";
 "menu.quitApplication" = "Închide %@";
 "preferences.windowTitle" = "Configurări Boundless Translator";
+"preferences.quit" = "Închide";
 "preferences.translateFrom" = "Traduce din";
 "preferences.translateTo" = "Traduce în";
 "translation.from" = "Din";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Compatibilitatea cu limbile interfeței corespunde sistemului macOS. macOS stabilește între ce limbi se poate traduce.";
 "usage.translateText.title" = "Tradu text";
 "usage.translateText.description" = "Selectează textul și apasă %@.";
-"usage.translateImageText.title" = "Tradu textul din imagine";
 "usage.translateImageText.description" = "Apăsați %@, selectați o regiune a ecranului, selectați textul din imagine, apoi apăsați %@ pentru a traduce.";
 "usage.lookUp.title" = "Caută";
 "usage.lookUp.description" = "Selectează text în panoul de traducere, apoi fă clic pe carte.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Fă clic pe difuzorul de lângă oricare dintre limbi.";
 "usage.pinWindow.title" = "Fixează fereastra";
 "usage.pinWindow.description" = "Fă clic pe piuneză pentru a păstra traducerea vizibilă.";
-"imageWorkspace.windowTitle" = "Captură de ecran";
 "screenshot.permissionRequired" = "Permiteți înregistrarea ecranului pentru Boundless Translator în Configurări sistem > Intimitate și securitate, apoi încercați din nou. Este posibil să fie necesar să închideți și să redeschideți aplicația.";
 "screenshot.failed" = "Nu s-a putut captura regiunea ecranului. Încercați din nou.";
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";

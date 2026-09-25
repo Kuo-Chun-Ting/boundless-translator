@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Sistem Varsayılanı";
-"interfaceLanguage.label" = "Dil";
+"interfaceLanguage.label" = "Uygulama Dili";
 "menu.preferences" = "Ayarlar…";
 "menu.quitApplication" = "%@ Uygulamasından Çık";
 "preferences.windowTitle" = "Boundless Translator Ayarları";
+"preferences.quit" = "Çık";
 "preferences.translateFrom" = "Şu dilden çevir";
 "preferences.translateTo" = "Şu dile çevir";
 "translation.from" = "Kaynak";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Arayüz dili desteği macOS ile aynıdır. Hangi diller arasında çeviri yapılabileceğini macOS belirler.";
 "usage.translateText.title" = "Metni Çevir";
 "usage.translateText.description" = "Metni seçip %@ tuşlarına basın.";
-"usage.translateImageText.title" = "Görüntüdeki Metni Çevir";
 "usage.translateImageText.description" = "%@ tuşlarına basın, ekranın bir bölümünü seçin, görüntüdeki metni seçin ve çevirmek için %@ tuşlarına basın.";
 "usage.lookUp.title" = "Ara";
 "usage.lookUp.description" = "Çeviri panelinde metni seçin, ardından kitap simgesini tıklayın.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Dillerden birinin yanındaki hoparlörü tıklayın.";
 "usage.pinWindow.title" = "Pencereyi Sabitle";
 "usage.pinWindow.description" = "Çeviriyi görünür tutmak için raptiyeyi tıklayın.";
-"imageWorkspace.windowTitle" = "Ekran Resmi";
 "screenshot.permissionRequired" = "Sistem Ayarları > Gizlilik ve Güvenlik bölümünde Boundless Translator için ekran kaydına izin verin, sonra yeniden deneyin. Uygulamadan çıkıp uygulamayı yeniden açmanız gerekebilir.";
 "screenshot.failed" = "Ekranın seçilen bölümü yakalanamadı. Yeniden deneyin.";
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";

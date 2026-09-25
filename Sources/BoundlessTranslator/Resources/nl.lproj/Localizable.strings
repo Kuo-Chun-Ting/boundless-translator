@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Systeemstandaard";
-"interfaceLanguage.label" = "Taal";
+"interfaceLanguage.label" = "Apptaal";
 "menu.preferences" = "Instellingen…";
 "menu.quitApplication" = "Stop %@";
 "preferences.windowTitle" = "Instellingen voor Boundless Translator";
+"preferences.quit" = "Stop";
 "preferences.translateFrom" = "Vertalen uit";
 "preferences.translateTo" = "Vertalen naar";
 "translation.from" = "Van";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "De ondersteuning voor interfacetalen komt overeen met macOS. macOS bepaalt tussen welke talen kan worden vertaald.";
 "usage.translateText.title" = "Vertaal tekst";
 "usage.translateText.description" = "Selecteer tekst en druk op %@.";
-"usage.translateImageText.title" = "Vertaal tekst in afbeelding";
 "usage.translateImageText.description" = "Druk op %@, selecteer een schermgebied, selecteer tekst in de afbeelding en druk op %@ om te vertalen.";
 "usage.lookUp.title" = "Zoek op";
 "usage.lookUp.description" = "Selecteer tekst in het vertaalpaneel en klik vervolgens op het boek.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Klik op de luidspreker naast een van de talen.";
 "usage.pinWindow.title" = "Zet venster vast";
 "usage.pinWindow.description" = "Klik op de punaise om de vertaling zichtbaar te houden.";
-"imageWorkspace.windowTitle" = "Schermafbeelding";
 "screenshot.permissionRequired" = "Sta schermopname voor Boundless Translator toe in Systeeminstellingen > Privacy en beveiliging en probeer het opnieuw. Mogelijk moet je de app stoppen en opnieuw openen.";
 "screenshot.failed" = "Het schermgebied kon niet worden vastgelegd. Probeer het opnieuw.";
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";

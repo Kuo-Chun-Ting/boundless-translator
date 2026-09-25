@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Predvolené nastavenie systému";
-"interfaceLanguage.label" = "Jazyk";
+"interfaceLanguage.label" = "Jazyk apky";
 "menu.preferences" = "Nastavenia…";
 "menu.quitApplication" = "Ukončiť %@";
 "preferences.windowTitle" = "Nastavenia Boundless Translator";
+"preferences.quit" = "Ukončiť";
 "preferences.translateFrom" = "Preložiť z";
 "preferences.translateTo" = "Preložiť do";
 "translation.from" = "Z";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Podpora jazykov rozhrania zodpovedá systému macOS. macOS určuje, medzi ktorými jazykmi možno prekladať.";
 "usage.translateText.title" = "Preložiť text";
 "usage.translateText.description" = "Vyberte text a stlačte %@.";
-"usage.translateImageText.title" = "Preložiť text v obrázku";
 "usage.translateImageText.description" = "Stlačte %@, vyberte oblasť obrazovky, vyberte text na obrázku a stlačením %@ ho preložte.";
 "usage.lookUp.title" = "Vyhľadať";
 "usage.lookUp.description" = "Vyberte text na paneli prekladu a kliknite na knihu.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Kliknite na reproduktor vedľa jedného z jazykov.";
 "usage.pinWindow.title" = "Pripnúť okno";
 "usage.pinWindow.description" = "Kliknutím na špendlík ponecháte preklad zobrazený.";
-"imageWorkspace.windowTitle" = "Snímka obrazovky";
 "screenshot.permissionRequired" = "Povoľte nahrávanie obrazovky pre Boundless Translator v Systémových nastaveniach > Súkromie a bezpečnosť a skúste to znova. Možno bude potrebné apku ukončiť a znova otvoriť.";
 "screenshot.failed" = "Oblasť obrazovky sa nepodarilo zachytiť. Skúste to znova.";
 "screenshot.errorTitle" = "Snímku obrazovky sa nepodarilo vytvoriť";

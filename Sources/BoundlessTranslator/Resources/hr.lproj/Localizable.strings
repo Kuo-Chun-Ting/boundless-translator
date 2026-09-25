@@ -1,8 +1,9 @@
 "interfaceLanguage.followMacOS" = "Zadano sustavom";
-"interfaceLanguage.label" = "Jezik";
+"interfaceLanguage.label" = "Jezik aplikacije";
 "menu.preferences" = "Postavke…";
 "menu.quitApplication" = "Zatvori %@";
 "preferences.windowTitle" = "Postavke za Boundless Translator";
+"preferences.quit" = "Zatvori";
 "preferences.translateFrom" = "Prevedi s";
 "preferences.translateTo" = "Prevedi na";
 "translation.from" = "Iz";
@@ -19,7 +20,6 @@
 "usage.languageSupport.description" = "Podrška za jezike sučelja odgovara sustavu macOS. macOS određuje između kojih je jezika moguće prevoditi.";
 "usage.translateText.title" = "Prevedi tekst";
 "usage.translateText.description" = "Odaberite tekst i pritisnite %@.";
-"usage.translateImageText.title" = "Prevedi tekst na slici";
 "usage.translateImageText.description" = "Pritisnite %@, odaberite područje zaslona, odaberite tekst na slici, zatim pritisnite %@ za prijevod.";
 "usage.lookUp.title" = "Potraži";
 "usage.lookUp.description" = "Odaberite tekst na ploči za prijevod, a zatim kliknite knjigu.";
@@ -27,7 +27,6 @@
 "usage.listen.description" = "Kliknite zvučnik pored jednog od jezika.";
 "usage.pinWindow.title" = "Prikvači prozor";
 "usage.pinWindow.description" = "Kliknite pribadaču da prijevod ostane vidljiv.";
-"imageWorkspace.windowTitle" = "Snimka zaslona";
 "screenshot.permissionRequired" = "Dopustite snimanje zaslona za Boundless Translator u Postavkama sustava > Privatnost i sigurnost pa pokušajte ponovno. Možda ćete morati zatvoriti i ponovno otvoriti aplikaciju.";
 "screenshot.failed" = "Nije moguće snimiti područje zaslona. Pokušajte ponovno.";
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
