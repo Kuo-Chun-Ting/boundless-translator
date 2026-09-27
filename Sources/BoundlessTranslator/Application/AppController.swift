@@ -120,7 +120,6 @@ final class AppController {
             targetLanguageIdentifier: settings.targetLanguageIdentifier,
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
-        TranslationPerformanceLog.record("request_submitted", id: coordinator.request?.id)
         windowController.show(
             coordinator: coordinator,
             supportedLanguages: supportedLanguageCatalog.languages,
@@ -129,11 +128,8 @@ final class AppController {
     }
 
     func handleTranslationShortcut() {
-        let traceID = UUID()
-        TranslationPerformanceLog.record("shortcut_received", id: traceID)
         if subscriptionAccess.hasLoaded, !authorizeFeature() { return }
         guard shortcutTask == nil, !isCapturingScreenshot else {
-            TranslationPerformanceLog.record("shortcut_ignored_busy", id: traceID)
             return
         }
 
@@ -142,10 +138,8 @@ final class AppController {
             await subscriptionAccess.loadIfNeeded()
             guard !Task.isCancelled, authorizeFeature() else { return }
             do {
-                TranslationPerformanceLog.record("selection_read_begin", id: traceID)
                 let selectedText = try await selectedTextReader.readSelectedText()
                 try Task.checkCancellation()
-                TranslationPerformanceLog.record("selection_read_returned", id: traceID, detail: "utf8_bytes=\(selectedText.value.utf8.count)")
                 await resolveSourceLanguage(for: selectedText)
             } catch is CancellationError {
                 return

@@ -100,7 +100,6 @@ final class TranslationCoordinator: ObservableObject {
             let output = try await translateChunks(request, using: runner)
             try ensureCurrent(request)
             status = .translated(output)
-            TranslationPerformanceLog.record("result_published", id: request.id)
         } catch is CancellationError {
             guard self.request?.id == request.id else { return }
             status = .idle
@@ -184,35 +183,5 @@ final class TranslationCoordinator: ObservableObject {
         )
         partialOutput = nil
         status = .translating
-    }
-}
-
-// Temporary diagnostics for the large-translation cancellation investigation.
-// Remove after diagnosis. Never record source text, translated text, or error descriptions.
-enum TranslationPerformanceLog {
-    private static let queue = DispatchQueue(label: "translation-performance-log", qos: .utility)
-
-    static func record(_ event: String, id: UUID? = nil, detail: String = "") {
-        let elapsed = ProcessInfo.processInfo.systemUptime
-        let timestamp = Date().timeIntervalSince1970
-        let pid = ProcessInfo.processInfo.processIdentifier
-        let line = "epoch=\(timestamp) uptime=\(elapsed) pid=\(pid) id=\(id?.uuidString ?? "none") event=\(event) \(detail)\n"
-        queue.async {
-            do {
-                let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
-                    .appendingPathComponent("Logs/BoundlessTranslator", isDirectory: true)
-                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-                let file = directory.appendingPathComponent("translation-performance.log")
-                if !FileManager.default.fileExists(atPath: file.path) {
-                    FileManager.default.createFile(atPath: file.path, contents: nil)
-                }
-                let handle = try FileHandle(forWritingTo: file)
-                defer { try? handle.close() }
-                try handle.seekToEnd()
-                try handle.write(contentsOf: Data(line.utf8))
-            } catch {
-                NSLog("Translation performance log write failed: %@", String(describing: type(of: error)))
-            }
-        }
     }
 }

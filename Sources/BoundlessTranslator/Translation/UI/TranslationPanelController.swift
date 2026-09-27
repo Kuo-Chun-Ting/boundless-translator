@@ -59,13 +59,11 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         pointerLocation: CGPoint
     ) {
         translationCoordinator = coordinator
-        TranslationPerformanceLog.record("window_measure_begin", id: coordinator.request?.id)
         let initialSize = translationLayout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status,
             localization: localization
         ).size
-        TranslationPerformanceLog.record("window_measure_end", id: coordinator.request?.id)
         present(
             TranslationWindowView(
                 coordinator: coordinator,
@@ -143,7 +141,6 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         positionWindow(size: windowSize, pointerLocation: pointerLocation)
 
         windowPresenter.present(window)
-        TranslationPerformanceLog.record("window_present_returned", id: translationCoordinator?.request?.id)
     }
 
     private func resizeTranslationWindow(to size: CGSize) {
@@ -293,7 +290,6 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     }
 
     private func endTranslation() {
-        TranslationPerformanceLog.record("window_end_translation", id: translationCoordinator?.request?.id)
         translationCoordinator?.cancel()
         translationCoordinator = nil
         window.contentView = nil
