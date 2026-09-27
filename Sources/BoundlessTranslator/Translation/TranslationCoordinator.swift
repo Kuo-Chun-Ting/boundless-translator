@@ -5,9 +5,16 @@ import Foundation
 final class TranslationCoordinator: ObservableObject {
     @Published private(set) var request: TranslationRequest?
     @Published private(set) var status: TranslationStatus = .idle
+    @Published private(set) var partialOutput: TranslationOutput?
+    private let splitter: TranslationTextSplitter
     private let authorize: @MainActor () -> Bool
+    private var activeTranslation: (id: UUID, cancel: @MainActor () -> Void)?
 
-    init(authorize: @escaping @MainActor () -> Bool = { true }) {
+    init(
+        splitter: TranslationTextSplitter = TranslationTextSplitter(),
+        authorize: @escaping @MainActor () -> Bool = { true }
+    ) {
+        self.splitter = splitter
         self.authorize = authorize
     }
 
@@ -18,12 +25,14 @@ final class TranslationCoordinator: ObservableObject {
         sourceLanguageWasDetected: Bool = false
     ) {
         guard authorize() else { return }
+        cancelActiveTranslation()
         request = TranslationRequest(
             text: selectedText.value,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
             targetLanguageIdentifier: targetLanguageIdentifier,
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
+        partialOutput = nil
         status = .translating
     }
 
@@ -68,7 +77,8 @@ final class TranslationCoordinator: ObservableObject {
 
     func translate(
         _ request: TranslationRequest,
-        using runner: any TranslationRunning
+        using runner: any TranslationRunning,
+        onCancel: @escaping @MainActor () -> Void = {}
     ) async {
         guard self.request?.id == request.id else {
             return
@@ -79,18 +89,83 @@ final class TranslationCoordinator: ObservableObject {
             return
         }
 
-        do {
-            let output = try await runner.translate(request)
-            guard self.request?.id == request.id else {
-                return
+        activeTranslation = (request.id, onCancel)
+        defer {
+            if activeTranslation?.id == request.id {
+                activeTranslation = nil
             }
+        }
+
+        do {
+            let output = try await translateChunks(request, using: runner)
+            try ensureCurrent(request)
             status = .translated(output)
+            TranslationPerformanceLog.record("result_published", id: request.id)
+        } catch is CancellationError {
+            guard self.request?.id == request.id else { return }
+            status = .idle
         } catch {
             guard self.request?.id == request.id else {
                 return
             }
             status = .failed(TranslationFailure(error: error))
         }
+    }
+
+    func cancel() {
+        request = nil
+        partialOutput = nil
+        status = .idle
+        cancelActiveTranslation()
+    }
+
+    private func translateChunks(
+        _ request: TranslationRequest,
+        using runner: any TranslationRunning
+    ) async throws -> TranslationOutput {
+        let splitting = Task.detached { [splitter] in
+            try splitter.split(request.text, languageIdentifier: request.sourceLanguageIdentifier)
+        }
+        let chunks = try await withTaskCancellationHandler {
+            try await splitting.value
+        } onCancel: {
+            splitting.cancel()
+        }
+        var translatedText = ""
+        var separator = ""
+        var output = TranslationOutput(
+            translatedText: "",
+            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
+            targetLanguageIdentifier: request.targetLanguageIdentifier
+        )
+        for chunk in chunks {
+            try ensureCurrent(request)
+            let response = try await runner.translate(request.replacingText(with: chunk))
+            try ensureCurrent(request)
+            let translatedChunk = chunks.count > 1
+                ? response.translatedText.trimmingCharacters(in: .whitespacesAndNewlines)
+                : response.translatedText
+            translatedText += separator + translatedChunk
+            separator = String(chunk.reversed().prefix(while: { $0.isWhitespace }).reversed())
+            output = TranslationOutput(
+                translatedText: translatedText,
+                sourceLanguageIdentifier: response.sourceLanguageIdentifier,
+                targetLanguageIdentifier: response.targetLanguageIdentifier
+            )
+            partialOutput = output
+        }
+        return output
+    }
+
+    private func ensureCurrent(_ request: TranslationRequest) throws {
+        try Task.checkCancellation()
+        guard self.request?.id == request.id else { throw CancellationError() }
+    }
+
+    private func cancelActiveTranslation() {
+        let cancel = activeTranslation?.cancel
+        activeTranslation = nil
+        cancel?()
     }
 
     private func resubmit(
@@ -100,12 +175,44 @@ final class TranslationCoordinator: ObservableObject {
         sourceLanguageWasDetected: Bool
     ) {
         guard authorize() else { return }
+        cancelActiveTranslation()
         self.request = TranslationRequest(
             text: request.text,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
             targetLanguageIdentifier: targetLanguageIdentifier,
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
+        partialOutput = nil
         status = .translating
+    }
+}
+
+// Temporary diagnostics for the large-translation cancellation investigation.
+// Remove after diagnosis. Never record source text, translated text, or error descriptions.
+enum TranslationPerformanceLog {
+    private static let queue = DispatchQueue(label: "translation-performance-log", qos: .utility)
+
+    static func record(_ event: String, id: UUID? = nil, detail: String = "") {
+        let elapsed = ProcessInfo.processInfo.systemUptime
+        let timestamp = Date().timeIntervalSince1970
+        let pid = ProcessInfo.processInfo.processIdentifier
+        let line = "epoch=\(timestamp) uptime=\(elapsed) pid=\(pid) id=\(id?.uuidString ?? "none") event=\(event) \(detail)\n"
+        queue.async {
+            do {
+                let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
+                    .appendingPathComponent("Logs/BoundlessTranslator", isDirectory: true)
+                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                let file = directory.appendingPathComponent("translation-performance.log")
+                if !FileManager.default.fileExists(atPath: file.path) {
+                    FileManager.default.createFile(atPath: file.path, contents: nil)
+                }
+                let handle = try FileHandle(forWritingTo: file)
+                defer { try? handle.close() }
+                try handle.seekToEnd()
+                try handle.write(contentsOf: Data(line.utf8))
+            } catch {
+                NSLog("Translation performance log write failed: %@", String(describing: type(of: error)))
+            }
+        }
     }
 }

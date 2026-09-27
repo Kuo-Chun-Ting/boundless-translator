@@ -20,6 +20,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     private var interactionPolicy = WindowInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationWindowKind.translation
     private var mouseDownMonitor: MouseDownMonitor?
+    private weak var translationCoordinator: TranslationCoordinator?
 
     init(
         applicationNotificationCenter: NotificationCenter = NSWorkspace.shared.notificationCenter,
@@ -57,11 +58,14 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         supportedLanguages: [Locale.Language],
         pointerLocation: CGPoint
     ) {
+        translationCoordinator = coordinator
+        TranslationPerformanceLog.record("window_measure_begin", id: coordinator.request?.id)
         let initialSize = translationLayout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status,
             localization: localization
         ).size
+        TranslationPerformanceLog.record("window_measure_end", id: coordinator.request?.id)
         present(
             TranslationWindowView(
                 coordinator: coordinator,
@@ -84,6 +88,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         message: SelectionErrorMessage,
         pointerLocation: CGPoint
     ) {
+        endTranslation()
         present(
             SelectionErrorView(
                 message: message,
@@ -102,6 +107,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         pointerLocation: CGPoint,
         onSelect: @escaping @MainActor (String) -> Void
     ) {
+        endTranslation()
         present(
             SourceLanguageSelectionView(
                 selectedText: selectedText,
@@ -137,6 +143,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         positionWindow(size: windowSize, pointerLocation: pointerLocation)
 
         windowPresenter.present(window)
+        TranslationPerformanceLog.record("window_present_returned", id: translationCoordinator?.request?.id)
     }
 
     private func resizeTranslationWindow(to size: CGSize) {
@@ -276,11 +283,20 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         speechController.stopPlayback()
+        endTranslation()
     }
 
     private func dismiss(_ sender: Any?) {
         speechController.stopPlayback()
+        endTranslation()
         window.orderOut(sender)
+    }
+
+    private func endTranslation() {
+        TranslationPerformanceLog.record("window_end_translation", id: translationCoordinator?.request?.id)
+        translationCoordinator?.cancel()
+        translationCoordinator = nil
+        window.contentView = nil
     }
 }
 

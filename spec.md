@@ -17,11 +17,16 @@ When the user presses the translation shortcut (default `Command-Shift-1`):
 2. Otherwise, read selected text from the active app through Accessibility. Use the clipboard fallback only when Accessibility cannot read the selection.
 3. Translate the selected text. No selection or cancellation stops quietly. Missing Accessibility permission opens permission guidance; unexpected errors are reported without starting screenshot capture.
 
-The screenshot shortcut (default `Command-Shift-2`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for Live Text selection; the user can then select text and press the translation shortcut. Only one shortcut request runs at a time. Pause each global shortcut while it is being recorded.
+The screenshot shortcut (default `Command-Shift-2`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for Live Text selection; the user can then select text and press the translation shortcut. Only one current shortcut request runs at a time. Pause each global shortcut while it is being recorded.
+
+Read selected text through Accessibility in the background and run language detection and splitting outside the main actor. Do not show a separate loading window or cancellation button before the translation window opens. No selection stops quietly. Measure only enough text layout to determine the capped window height.
 
 ## Translation
 
 - Translate with Apple's Translation framework.
+- `TranslationTextSplitter` divides the entire source into contiguous chunks targeting 10,000 Swift characters (including whitespace). Preserve complete paragraphs where possible; split oversized paragraphs at Natural Language sentence boundaries. Keep an oversized single sentence intact. Concatenating the source chunks must reproduce the original exactly. There is no whole-document input limit.
+- `TranslationCoordinator` obtains chunks from the splitter and sends them sequentially to the existing `TranslationRunning` interface. The Apple runner translates one chunk. Publish each completed chunk immediately, retaining prior output; show a small native spinner before the localized Translating… text, vertically centered on the same row, below partial output until completion. Preserve source whitespace at joins without repeating it. Keep partial output on failure and show the existing failure/retry controls; retry starts the whole request again.
+- Cancel stops unsent chunks and invalidates all results for that request. A new request starts independently with a new session, without waiting for the old call or a cancellation acknowledgment. Apple may still finish the already-submitted chunk. Check cancellation and request identity before each call and before publishing its result. Translated speech remains available after the complete translation, as before.
 - Use the configured source language or detect it automatically.
 - Ask the user to choose a source language when detection confidence is insufficient.
 - Use the configured target language by default.
@@ -40,6 +45,7 @@ The screenshot shortcut (default `Command-Shift-2`) starts native region capture
 - Position the window on the screen containing the pointer.
 - Close an unpinned translation when the user clicks outside it, activates another app, or presses Escape.
 - Keep a pinned translation visible until the user closes or unpins it.
+- Dismissing a translation window clears its request and removes its translation task host. On macOS 26 or later, also call `TranslationSession.cancel()` while the session is active; macOS 15 relies on task-host removal. Starting a replacement request also cancels the active session. Cancellation is not displayed as a translation failure, and late results cannot update a cancelled or replaced request. Apple does not guarantee immediate termination of translation work.
 - Preserve the window's top-left position when its content-driven size changes.
 - When a shortcut presents a translation-related window, make that window Boundless Translator's main and key window before activating the app so other open windows remain behind it.
 
@@ -177,7 +183,7 @@ These directories belong to one executable target, not separate Swift packages. 
   - Keep source version numbers unchanged.
 - Fixes before public distribution can reuse the public version. Fixes after distribution use a new public version.
 - The App Store release uses the `BoundlessTranslator-AppStore` scheme and `AppStoreRelease` configuration. It does not produce or notarize a DMG.
-- Use Xcode Organizer to create the Archive, validate it, create the App Store package and upload it to App Store Connect. Xcode automatic signing uses the configured developer team and the Apple Account signed in under Xcode Settings. The repository contains no separate App Store archive, package, verification or upload shell workflow.
+- Use Xcode Organizer or the standalone shell scripts `Scripts/AppStore/archive_app_store.sh`, `Scripts/AppStore/validate_app_store.sh`, and `Scripts/AppStore/distribute_app_store.sh`. `Scripts/AppStore/release_app_store.sh` runs these sequentially and stops on failure. They share `Build/AppStore/BoundlessTranslator.xcarchive`; validation uses xcodebuild export method `validation`, and distribution uses `app-store-connect` with destination `upload`. Xcode automatic signing uses the configured developer team and the Apple Account signed in under Xcode Settings; Xcode manages the uploaded build number. These scripts do not create or notarize a DMG.
 - Set the intended version and a build number higher than every previously uploaded build before archiving. Validate the uploaded build through TestFlight before submitting it for App Review.
 
 ## Test Layers

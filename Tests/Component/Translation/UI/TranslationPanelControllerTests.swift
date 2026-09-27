@@ -296,7 +296,33 @@ func test_languageIdentifier_when_changed_then_updatesOpenTranslationWindowToolb
     fixture.window.orderOut(nil)
 }
 
+@Test(arguments: ["outsideClick", "escape", "closeButton", "otherApp"]) @MainActor
+func test_dismiss_when_translationIsOpen_then_clearsRequestAndRemovesTaskHost(method: String) throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    defer { fixture.window.orderOut(nil) }
+
+    // Act
+    switch method {
+    case "outsideClick":
+        fixture.controller.dismissForMouseDown(at: CGPoint(x: fixture.window.frame.maxX + 10, y: fixture.window.frame.maxY + 10))
+    case "escape":
+        fixture.window.cancelOperation(nil)
+    case "closeButton":
+        fixture.window.performClose(nil)
+    default:
+        fixture.controller.dismissForApplicationActivation(processIdentifier: ProcessInfo.processInfo.processIdentifier + 1)
+    }
+
+    // Assert
+    #expect(fixture.coordinator.request == nil)
+    #expect(fixture.coordinator.status == .idle)
+    #expect(fixture.window.contentView == nil)
+    #expect(!fixture.window.isVisible)
+}
+
 private struct TranslationWindowTestFixture {
+    let coordinator: TranslationCoordinator
     let application: NSApplication
     let applicationNotificationCenter: NotificationCenter
     let controller: TranslationWindowController
@@ -357,6 +383,7 @@ private func makeTranslationWindowFixture(
         }
     )
     return TranslationWindowTestFixture(
+        coordinator: coordinator,
         application: application,
         applicationNotificationCenter: applicationNotificationCenter,
         controller: controller,

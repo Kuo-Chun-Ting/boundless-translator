@@ -22,8 +22,16 @@ struct AppleTranslationRunner: TranslationRunning {
 
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
         do {
-            return try await translateText(request.text)
+            TranslationPerformanceLog.record("apple_translate_begin", id: request.id, detail: "utf8_bytes=\(request.text.utf8.count)")
+            let output = try await translateText(request.text)
+            TranslationPerformanceLog.record("apple_translate_returned", id: request.id)
+            return output
+        } catch is CancellationError {
+            TranslationPerformanceLog.record("apple_translate_cancelled_error", id: request.id)
+            throw CancellationError()
         } catch {
+            let failure = error as NSError
+            TranslationPerformanceLog.record("apple_translate_error", id: request.id, detail: "domain=\(failure.domain) code=\(failure.code)")
             throw AppleTranslationErrorMapper.map(error)
         }
     }

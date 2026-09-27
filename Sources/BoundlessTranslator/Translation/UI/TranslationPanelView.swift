@@ -153,8 +153,14 @@ struct TranslationWindowView: View {
     }
 
     private var targetContent: some View {
-        targetBody
-            .columnFrame(height: metrics.contentHeight)
+        VStack(alignment: .leading, spacing: 10) {
+            if let output = coordinator.partialOutput {
+                SelectableTranslationTextView(text: output.translatedText)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            targetBody
+        }
+        .columnFrame(height: metrics.contentHeight)
     }
 
     @ViewBuilder
@@ -170,8 +176,8 @@ struct TranslationWindowView: View {
                 Text(verbatim: localization.string("panel.translating"))
                     .foregroundStyle(.secondary)
             }
-        case .translated(let output):
-            SelectableTranslationTextView(text: output.translatedText)
+        case .translated:
+            EmptyView()
         case .failed(let failure):
             VStack(alignment: .leading, spacing: 8) {
                 Label(
@@ -196,6 +202,7 @@ struct TranslationWindowView: View {
         layout.metrics(
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status,
+            partialOutput: coordinator.partialOutput,
             localization: localization
         )
     }

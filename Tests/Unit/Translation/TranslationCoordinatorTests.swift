@@ -272,6 +272,107 @@ func test_translate_when_runner_reports_domain_failure_then_preserves_failure_an
     #expect(coordinator.status == .failed(.unsupportedLanguagePairing))
 }
 
+@Test @MainActor
+func test_cancel_when_translationIsRunning_then_requestsCancellationAndDiscardsLateResult() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    let stub_runner = SuspendedTranslationRunner()
+    var cancellationCount = 0
+    coordinator.submit(try SelectedText("First"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let request = try #require(coordinator.request)
+    let task = Task { @MainActor in
+        await coordinator.translate(request, using: stub_runner, onCancel: { cancellationCount += 1 })
+    }
+    await stub_runner.waitUntilRequestArrives()
+
+    // Act
+    coordinator.cancel()
+    coordinator.cancel()
+    stub_runner.complete(with: TranslationOutput(
+        translatedText: "Late result", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant"
+    ))
+    await task.value
+
+    // Assert
+    #expect(cancellationCount == 1)
+    #expect(coordinator.request == nil)
+    #expect(coordinator.status == .idle)
+}
+
+@Test @MainActor
+func test_submit_when_previousTranslationFinishesLate_then_nextTranslationCanStillBeCancelled() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    let stub_firstRunner = SuspendedTranslationRunner()
+    let stub_secondRunner = SuspendedTranslationRunner()
+    var firstCancellationCount = 0
+    var secondCancellationCount = 0
+    coordinator.submit(try SelectedText("First"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let firstRequest = try #require(coordinator.request)
+    let firstTask = Task { @MainActor in
+        await coordinator.translate(firstRequest, using: stub_firstRunner, onCancel: { firstCancellationCount += 1 })
+    }
+    await stub_firstRunner.waitUntilRequestArrives()
+
+    // Act
+    coordinator.submit(try SelectedText("Second"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let secondRequest = try #require(coordinator.request)
+    let secondTask = Task { @MainActor in
+        await coordinator.translate(secondRequest, using: stub_secondRunner, onCancel: { secondCancellationCount += 1 })
+    }
+    await stub_secondRunner.waitUntilRequestArrives()
+    let lateOutput = TranslationOutput(
+        translatedText: "Late result", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant"
+    )
+    stub_firstRunner.complete(with: lateOutput)
+    await firstTask.value
+    coordinator.cancel()
+    stub_secondRunner.complete(with: lateOutput)
+    await secondTask.value
+
+    // Assert
+    #expect(firstCancellationCount == 1)
+    #expect(secondCancellationCount == 1)
+    #expect(coordinator.request == nil)
+    #expect(coordinator.status == .idle)
+}
+
+@Test @MainActor
+func test_translate_when_runnerIsCancelled_then_doesNotPublishFailure() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(try SelectedText("Hello"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let request = try #require(coordinator.request)
+    let stub_runner = ImmediateTranslationRunner(result: .failure(CancellationError()))
+
+    // Act
+    await coordinator.translate(request, using: stub_runner)
+
+    // Assert
+    #expect(coordinator.status == .idle)
+}
+
+@Test @MainActor
+func test_cancel_when_translationAlreadyFinished_then_doesNotCallExpiredSession() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator()
+    var cancellationCount = 0
+    coordinator.submit(try SelectedText("Hello"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let request = try #require(coordinator.request)
+    let stub_runner = ImmediateTranslationRunner(result: .success(TranslationOutput(
+        translatedText: "你好", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant"
+    )))
+    await coordinator.translate(request, using: stub_runner, onCancel: { cancellationCount += 1 })
+
+    // Act
+    coordinator.cancel()
+
+    // Assert
+    #expect(cancellationCount == 0)
+    #expect(coordinator.request == nil)
+    #expect(coordinator.status == .idle)
+}
+
 private struct ImmediateTranslationRunner: TranslationRunning {
     let result: Result<TranslationOutput, Error>
 

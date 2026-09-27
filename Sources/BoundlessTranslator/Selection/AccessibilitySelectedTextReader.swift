@@ -1,3 +1,4 @@
+import AppKit
 import ApplicationServices
 
 enum SelectedTextReadError: LocalizedError {
@@ -19,10 +20,10 @@ enum SelectedTextReadError: LocalizedError {
 
 @MainActor
 final class AccessibilitySelectedTextReader: SelectedTextReading {
-    typealias ReadRawSelectedText = @MainActor () throws -> String?
+    typealias ReadRawSelectedText = @Sendable () throws -> String?
 
     private let isProcessTrusted: @MainActor () -> Bool
-    private let readRawSelectedText: ReadRawSelectedText
+    private let readRawSelectedText: ReadRawSelectedText?
 
     init(
         isProcessTrusted: @escaping @MainActor () -> Bool = {
@@ -31,7 +32,7 @@ final class AccessibilitySelectedTextReader: SelectedTextReading {
         readRawSelectedText: ReadRawSelectedText? = nil
     ) {
         self.isProcessTrusted = isProcessTrusted
-        self.readRawSelectedText = readRawSelectedText ?? Self.readSystemSelectedText
+        self.readRawSelectedText = readRawSelectedText
     }
 
     func readSelectedText() async throws -> SelectedText {
@@ -39,10 +40,20 @@ final class AccessibilitySelectedTextReader: SelectedTextReading {
             throw SelectedTextReadError.accessibilityPermissionRequired
         }
 
-        guard let rawText = try readRawSelectedText() else {
-            throw SelectedTextReadError.noSelection
+        try Task.checkCancellation()
+        let processIdentifier = NSWorkspace.shared.frontmostApplication?.processIdentifier
+        let read = readRawSelectedText ?? { try Self.readSystemSelectedText(processIdentifier: processIdentifier) }
+        let selection: SelectedText = try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                continuation.resume(with: Result { try Self.readSelection(using: read) })
+            }
         }
+        try Task.checkCancellation()
+        return selection
+    }
 
+    private nonisolated static func readSelection(using read: ReadRawSelectedText) throws -> SelectedText {
+        guard let rawText = try read() else { throw SelectedTextReadError.noSelection }
         do {
             return try SelectedText(rawText)
         } catch SelectedTextError.empty {
@@ -50,8 +61,9 @@ final class AccessibilitySelectedTextReader: SelectedTextReading {
         }
     }
 
-    private static func readSystemSelectedText() throws -> String? {
-        let systemWideElement = AXUIElementCreateSystemWide()
+    private nonisolated static func readSystemSelectedText(processIdentifier: pid_t?) throws -> String? {
+        guard let processIdentifier else { throw SelectedTextReadError.readerUnavailable }
+        let systemWideElement = AXUIElementCreateApplication(processIdentifier)
         var focusedElementValue: CFTypeRef?
         let focusedElementResult = AXUIElementCopyAttributeValue(
             systemWideElement,

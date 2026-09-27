@@ -664,3 +664,49 @@ private final class WindowSpeechPlayerMock: SpeechPlaying {
 
     func stop() {}
 }
+
+@Test @MainActor
+func test_body_when_firstChunkIsVisibleAndNextIsPending_then_keepsTextSelectableWithinCappedWindow() async throws {
+    // Arrange
+    let coordinator = TranslationCoordinator(splitter: TranslationTextSplitter(targetCharacters: 7))
+    coordinator.submit(try SelectedText("First.\nSecond."), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    let request = try #require(coordinator.request)
+    let firstTranslation = String(repeating: "這是一段已完成的翻譯。", count: 100)
+    let mock_runner = PartialWindowRunner(firstTranslation: firstTranslation) {
+        // Act: render the real view while the second chunk is being translated.
+        let hostingView = makeTranslationHostingView(coordinator: coordinator)
+        let metrics = TranslationWindowLayout().metrics(
+            sourceText: request.text, status: coordinator.status,
+            partialOutput: coordinator.partialOutput, localization: testEnglishLocalization
+        )
+        hostingView.frame = NSRect(origin: .zero, size: metrics.size)
+        hostingView.layoutSubtreeIfNeeded()
+        let translatedView = try #require(descendants(of: NSTextView.self, in: hostingView).first { $0.string == firstTranslation })
+
+        // Assert
+        #expect(coordinator.status == .translating)
+        #expect(translatedView.isSelectable)
+        #expect(metrics.size.height == 440)
+        #expect(hostingView.fittingSize.height <= 440.5)
+    }
+    // Act
+    await coordinator.translate(request, using: mock_runner)
+    // Assert
+    #expect(mock_runner.callCount == 2)
+}
+
+@MainActor
+private final class PartialWindowRunner: TranslationRunning {
+    var callCount = 0
+    let firstTranslation: String
+    let onSecondCall: @MainActor () throws -> Void
+    init(firstTranslation: String, onSecondCall: @escaping @MainActor () throws -> Void) {
+        self.firstTranslation = firstTranslation
+        self.onSecondCall = onSecondCall
+    }
+    func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
+        callCount += 1
+        if callCount == 2 { try onSecondCall() }
+        return TranslationOutput(translatedText: firstTranslation, sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    }
+}

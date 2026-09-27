@@ -72,6 +72,17 @@ func test_translate_when_operation_throws_unknown_error_then_preserves_descripti
     }
 }
 
+@Test @MainActor
+func test_translate_when_operationIsCancelled_then_preservesCancellation() async {
+    // Arrange
+    let stub_runner = AppleTranslationRunner(translateText: { _ in throw CancellationError() })
+
+    // Act & Assert
+    await #expect(throws: CancellationError.self) {
+        try await stub_runner.translate(makeAppleRunnerRequest())
+    }
+}
+
 private func makeAppleRunnerRequest() -> TranslationRequest {
     TranslationRequest(text: "Hello", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
 }

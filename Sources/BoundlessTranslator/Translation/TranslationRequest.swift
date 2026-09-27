@@ -22,6 +22,18 @@ struct TranslationRequest: Equatable, Identifiable, Sendable {
     }
 }
 
+extension TranslationRequest {
+    func replacingText(with text: String) -> TranslationRequest {
+        TranslationRequest(
+            id: id,
+            text: text,
+            sourceLanguageIdentifier: sourceLanguageIdentifier,
+            targetLanguageIdentifier: targetLanguageIdentifier,
+            sourceLanguageWasDetected: sourceLanguageWasDetected
+        )
+    }
+}
+
 struct TranslationOutput: Equatable, Sendable {
     let translatedText: String
     let sourceLanguageIdentifier: String

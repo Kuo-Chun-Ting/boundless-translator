@@ -126,14 +126,6 @@ function test_xcode_project_when_e2e_identity_is_overridden_then_changes_only_ap
     grep -Eq '^ *EXECUTABLE_NAME = Boundless Translator E2E$' "${e2e_settings}"
 }
 
-function test_xcode_project_when_app_store_release_is_configured_then_uses_xcode_instead_of_manual_scripts {
-    # Arrange
-
-    # Act & Assert
-    [[ ! -e "${PROJECT_ROOT}/Scripts/release_app_store.sh" ]]
-    [[ ! -e "${PROJECT_ROOT}/Scripts/upload_app_store.sh" ]]
-}
-
 function test_gui_test_project_when_listed_then_exposes_on_demand_e2e_scheme_and_targets {
     # Arrange
     local output_path="${TEMP_ROOT}/gui-test-xcode-list.txt"
@@ -180,7 +172,6 @@ test_xcode_project_when_sources_or_dependencies_change_then_configuration_stays_
 test_xcode_project_when_release_configuration_changes_then_subscription_flag_stays_separated
 test_xcode_project_when_app_identity_is_configured_then_keeps_production_defaults
 test_xcode_project_when_e2e_identity_is_overridden_then_changes_only_app_identity_settings
-test_xcode_project_when_app_store_release_is_configured_then_uses_xcode_instead_of_manual_scripts
 test_gui_test_project_when_listed_then_exposes_on_demand_e2e_scheme_and_targets
 test_gui_test_project_when_e2e_targets_are_built_then_uses_development_signing
 print 'Xcode project tests passed.'

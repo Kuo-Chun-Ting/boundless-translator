@@ -20,6 +20,7 @@ final class SelectedTextResolver: SelectedTextReading {
         do {
             return try await primaryReader.readSelectedText()
         } catch SelectedTextReadError.readerUnavailable {
+            try Task.checkCancellation()
             return try await fallbackReader.readSelectedText()
         }
     }

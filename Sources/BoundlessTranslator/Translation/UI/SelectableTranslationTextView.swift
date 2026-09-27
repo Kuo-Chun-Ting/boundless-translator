@@ -22,6 +22,15 @@ struct SelectableTranslationTextView: NSViewRepresentable {
             return
         }
 
-        textView.string = text
+        let visibleOrigin = scrollView.contentView.bounds.origin
+        if !textView.string.isEmpty, text.hasPrefix(textView.string) {
+            let suffix = String(text.dropFirst(textView.string.count))
+            textView.textStorage?.append(NSAttributedString(string: suffix, attributes: [
+                .font: TranslationWindowStyle.contentFont, .foregroundColor: NSColor.labelColor
+            ]))
+        } else {
+            textView.string = text
+        }
+        scrollView.contentView.scroll(to: visibleOrigin)
     }
 }

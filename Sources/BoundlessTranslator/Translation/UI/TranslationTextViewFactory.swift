@@ -4,6 +4,7 @@ import AppKit
 enum TranslationTextViewFactory {
     static func make() -> NSTextView {
         let textView = NSTextView()
+        textView.layoutManager?.allowsNonContiguousLayout = true
         textView.isEditable = false
         textView.isSelectable = true
         textView.isRichText = false

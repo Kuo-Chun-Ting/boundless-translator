@@ -120,6 +120,7 @@ final class AppController {
             targetLanguageIdentifier: settings.targetLanguageIdentifier,
             sourceLanguageWasDetected: sourceLanguageWasDetected
         )
+        TranslationPerformanceLog.record("request_submitted", id: coordinator.request?.id)
         windowController.show(
             coordinator: coordinator,
             supportedLanguages: supportedLanguageCatalog.languages,
@@ -128,30 +129,39 @@ final class AppController {
     }
 
     func handleTranslationShortcut() {
+        let traceID = UUID()
+        TranslationPerformanceLog.record("shortcut_received", id: traceID)
         if subscriptionAccess.hasLoaded, !authorizeFeature() { return }
         guard shortcutTask == nil, !isCapturingScreenshot else {
+            TranslationPerformanceLog.record("shortcut_ignored_busy", id: traceID)
             return
         }
 
         shortcutTask = Task {
-            defer {
-                shortcutTask = nil
-            }
-
+            defer { shortcutTask = nil }
             await subscriptionAccess.loadIfNeeded()
             guard !Task.isCancelled, authorizeFeature() else { return }
-
             do {
+                TranslationPerformanceLog.record("selection_read_begin", id: traceID)
                 let selectedText = try await selectedTextReader.readSelectedText()
+                try Task.checkCancellation()
+                TranslationPerformanceLog.record("selection_read_returned", id: traceID, detail: "utf8_bytes=\(selectedText.value.utf8.count)")
                 await resolveSourceLanguage(for: selectedText)
-            } catch SelectedTextReadError.noSelection,
-                    is CancellationError {
+            } catch is CancellationError {
                 return
-            } catch SelectedTextReadError.accessibilityPermissionRequired {
-                AccessibilityPermission.requestIfNeeded()
             } catch {
-                showError(.verbatim(error.localizedDescription))
+                guard !Task.isCancelled else { return }
+                handleSelectionError(error)
             }
+        }
+    }
+
+    private func handleSelectionError(_ error: Error) {
+        switch error {
+        case SelectedTextReadError.noSelection: break
+        case SelectedTextReadError.accessibilityPermissionRequired:
+            AccessibilityPermission.requestIfNeeded()
+        default: showError(.verbatim(error.localizedDescription))
         }
     }
 
@@ -218,10 +228,17 @@ final class AppController {
 
     private func resolveSourceLanguage(for selectedText: SelectedText) async {
         let supportedLanguages = await supportedLanguageCatalog.load()
-        let resolution = sourceLanguageResolver.resolve(
-            text: selectedText.value,
-            configuredSource: settings.sourceLanguageIdentifier
-        )
+        guard !Task.isCancelled else { return }
+        let configuredSource = settings.sourceLanguageIdentifier
+        let detection = Task.detached { [sourceLanguageResolver] in
+            sourceLanguageResolver.resolve(text: selectedText.value, configuredSource: configuredSource)
+        }
+        let resolution = await withTaskCancellationHandler {
+            await detection.value
+        } onCancel: {
+            detection.cancel()
+        }
+        guard !Task.isCancelled else { return }
 
         switch resolution {
         case .resolved(let languageIdentifier):

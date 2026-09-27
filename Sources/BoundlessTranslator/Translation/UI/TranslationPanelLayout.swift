@@ -27,11 +27,15 @@ struct TranslationWindowLayout {
     func metrics(
         sourceText: String,
         status: TranslationStatus,
+        partialOutput: TranslationOutput? = nil,
         localization: AppLocalization
     ) -> TranslationWindowMetrics {
         let idealContentHeight = max(
             measuredHeight(for: sourceText),
-            resultHeight(for: status, localization: localization)
+            max(
+                resultHeight(for: status, localization: localization),
+                partialOutput.map { measuredHeight(for: $0.translatedText) } ?? 0
+            )
         )
         return makeMetrics(
             idealContentHeight: idealContentHeight,
@@ -87,16 +91,14 @@ struct TranslationWindowLayout {
         width: CGFloat,
         font: NSFont = TranslationWindowStyle.contentFont
     ) -> CGFloat {
-        let bounds = (text as NSString).boundingRect(
-            with: CGSize(
-                width: width,
-                height: CGFloat.greatestFiniteMagnitude
-            ),
-            options: [.usesLineFragmentOrigin, .usesFontLeading],
-            attributes: [
-                .font: font
-            ]
-        )
-        return max(ceil(bounds.height), font.pointSize)
+        // Only lay out enough lines to size the capped window, not the entire document.
+        let storage = NSTextStorage(string: text, attributes: [.font: font])
+        let manager = NSLayoutManager()
+        let container = NSTextContainer(size: CGSize(width: width, height: maximumHeight))
+        container.lineFragmentPadding = 0
+        storage.addLayoutManager(manager)
+        manager.addTextContainer(container)
+        manager.ensureLayout(for: container)
+        return max(ceil(manager.usedRect(for: container).height), font.pointSize)
     }
 }

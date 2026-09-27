@@ -18,6 +18,7 @@ final class ClipboardSelectedTextReader: SelectedTextReading {
             throw SelectedTextReadError.accessibilityPermissionRequired
         }
 
+        try Task.checkCancellation()
         let pasteboard = NSPasteboard.general
         let initialChangeCount = pasteboard.changeCount
         try postCopyShortcut()
@@ -26,6 +27,7 @@ final class ClipboardSelectedTextReader: SelectedTextReading {
         )
         let deadline = ContinuousClock.now.advanced(by: copyTimeout)
         while ContinuousClock.now < deadline {
+            try Task.checkCancellation()
             let changeCount = pasteboard.changeCount
             if let rawText = observation.copiedText(
                 currentChangeCount: changeCount,
