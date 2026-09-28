@@ -20,6 +20,7 @@ final class SelectionTranslationE2ETests: BoundlessTranslatorE2ETestCase {
         let sourceText = appElement("translation.sourceText")
         XCTAssertTrue(sourceText.waitForExistence(timeout: 10))
         XCTAssertTrue(stringValue(of: sourceText).contains("Accessibility selection sample"))
+        assertTranslationAppears()
     }
 
     func test_copyOnlySelection_whenTranslationActionRuns_thenUsesClipboardFallback() {
@@ -39,6 +40,7 @@ final class SelectionTranslationE2ETests: BoundlessTranslatorE2ETestCase {
         let sourceText = appElement("translation.sourceText")
         XCTAssertTrue(sourceText.waitForExistence(timeout: 10))
         XCTAssertTrue(stringValue(of: sourceText).contains("Clipboard fallback sample"))
+        assertTranslationAppears()
     }
 
     private func systemSelectedText() -> String? {

@@ -6,7 +6,7 @@ import Testing
 func test_readSelectedText_when_accessibility_returns_empty_text_then_reports_no_selection() async {
     // Arrange
     let reader = AccessibilitySelectedTextReader(
-        isProcessTrusted: { true },
+        hasAccessibilityPermission: { true },
         readRawSelectedText: { "" }
     )
 
@@ -25,7 +25,7 @@ func test_readSelectedText_when_accessibility_returns_empty_text_then_reports_no
 func test_readSelectedText_when_cancelledReadIsStillBlocked_then_newReadCanFinishIndependently() async throws {
     // Arrange
     let gate = BlockingSelectionRead()
-    let reader = AccessibilitySelectedTextReader(isProcessTrusted: { true }, readRawSelectedText: { gate.read() })
+    let reader = AccessibilitySelectedTextReader(hasAccessibilityPermission: { true }, readRawSelectedText: { gate.read() })
     let oldTask = Task { try await reader.readSelectedText() }
     defer { gate.release.signal() }
     for await _ in gate.started.stream { break }

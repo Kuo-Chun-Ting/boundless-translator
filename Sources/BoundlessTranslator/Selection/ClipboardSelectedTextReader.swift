@@ -4,64 +4,65 @@ import AppKit
 final class ClipboardSelectedTextReader: SelectedTextReading {
     private let pollInterval: Duration
     private let copyTimeout: Duration
+    private let pasteboard: NSPasteboard
+    private let hasAccessibilityPermission: @MainActor () -> Bool
+    private let copier: any SelectedTextCopying
 
     init(
         pollInterval: Duration = .milliseconds(20),
-        copyTimeout: Duration = .milliseconds(750)
+        copyTimeout: Duration = .milliseconds(750),
+        pasteboard: NSPasteboard = .general,
+        hasAccessibilityPermission: @escaping @MainActor () -> Bool = { AXIsProcessTrusted() },
+        copier: any SelectedTextCopying
     ) {
         self.pollInterval = pollInterval
         self.copyTimeout = copyTimeout
+        self.pasteboard = pasteboard
+        self.hasAccessibilityPermission = hasAccessibilityPermission
+        self.copier = copier
     }
 
     func readSelectedText() async throws -> SelectedText {
-        guard AXIsProcessTrusted() else {
+        guard hasAccessibilityPermission() else {
             throw SelectedTextReadError.accessibilityPermissionRequired
         }
 
         try Task.checkCancellation()
-        let pasteboard = NSPasteboard.general
+        let clipboardBackup = try PasteboardSnapshot(pasteboard: pasteboard)
         let initialChangeCount = pasteboard.changeCount
-        try postCopyShortcut()
-        let observation = PasteboardCopyObservation(
-            initialChangeCount: initialChangeCount
-        )
+        var copiedChangeCount: Int?
+        defer {
+            restoreClipboard(clipboardBackup, after: copiedChangeCount)
+        }
+        try copier.copySelection()
+        return try await readCopiedText(initialChangeCount: initialChangeCount, copiedChangeCount: &copiedChangeCount)
+    }
+
+    private func readCopiedText(
+        initialChangeCount: Int,
+        copiedChangeCount: inout Int?
+    ) async throws -> SelectedText {
         let deadline = ContinuousClock.now.advanced(by: copyTimeout)
         while ContinuousClock.now < deadline {
             try Task.checkCancellation()
             let changeCount = pasteboard.changeCount
-            if let rawText = observation.copiedText(
-                currentChangeCount: changeCount,
-                string: pasteboard.string(forType: .string)
-            ) {
-                return try makeSelectedText(rawText)
+            if changeCount != initialChangeCount {
+                if let copiedChangeCount, copiedChangeCount != changeCount {
+                    throw SelectedTextReadError.noSelection
+                }
+                copiedChangeCount = changeCount
+                if let rawText = pasteboard.string(forType: .string) {
+                    return try makeSelectedText(rawText)
+                }
             }
             try await Task.sleep(for: pollInterval)
         }
-
         throw SelectedTextReadError.noSelection
     }
 
-    private func postCopyShortcut() throws {
-        guard
-            let source = CGEventSource(stateID: .combinedSessionState),
-            let keyDown = CGEvent(
-                keyboardEventSource: source,
-                virtualKey: 8,
-                keyDown: true
-            ),
-            let keyUp = CGEvent(
-                keyboardEventSource: source,
-                virtualKey: 8,
-                keyDown: false
-            )
-        else {
-            throw SelectedTextReadError.noSelection
-        }
-
-        keyDown.flags = .maskCommand
-        keyUp.flags = .maskCommand
-        keyDown.post(tap: .cghidEventTap)
-        keyUp.post(tap: .cghidEventTap)
+    private func restoreClipboard(_ backup: PasteboardSnapshot, after changeCount: Int?) {
+        guard let changeCount else { return }
+        backup.restore(to: pasteboard, ifUnchangedSince: changeCount)
     }
 
     private func makeSelectedText(_ rawText: String) throws -> SelectedText {
@@ -73,16 +74,31 @@ final class ClipboardSelectedTextReader: SelectedTextReading {
     }
 }
 
-struct PasteboardCopyObservation {
-    let initialChangeCount: Int
+@MainActor
+struct PasteboardSnapshot {
+    private let items: [[NSPasteboard.PasteboardType: Data]]
 
-    func copiedText(
-        currentChangeCount: Int,
-        string: String?
-    ) -> String? {
-        guard currentChangeCount != initialChangeCount else {
-            return nil
+    init(pasteboard: NSPasteboard) throws {
+        items = try (pasteboard.pasteboardItems ?? []).map { item in
+            try Dictionary(uniqueKeysWithValues: item.types.map { type in
+                guard let data = item.data(forType: type) else {
+                    throw SelectedTextReadError.readerUnavailable
+                }
+                return (type, data)
+            })
         }
-        return string
+    }
+
+    func restore(to pasteboard: NSPasteboard, ifUnchangedSince changeCount: Int) {
+        let restoredItems = items.map { representations in
+            let item = NSPasteboardItem()
+            for (type, data) in representations {
+                item.setData(data, forType: type)
+            }
+            return item
+        }
+        guard pasteboard.changeCount == changeCount else { return }
+        pasteboard.clearContents()
+        if !restoredItems.isEmpty { pasteboard.writeObjects(restoredItems) }
     }
 }

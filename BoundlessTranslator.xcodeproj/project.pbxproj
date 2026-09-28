@@ -29,6 +29,7 @@
 		36D8BC4A6A56CB83C00A7051 /* Sources/BoundlessTranslator/Translation/UI/SelectionErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEC5300CAD6BA3C4048D17E /* Sources/BoundlessTranslator/Translation/UI/SelectionErrorView.swift */; };
 		3749B6EE62C3E5FA0F43E627 /* Sources/BoundlessTranslator/Translation/LanguageDetection/NaturalLanguageIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBA28D46E33AD6CC41F015F /* Sources/BoundlessTranslator/Translation/LanguageDetection/NaturalLanguageIdentifier.swift */; };
 		39F1634948E57EE01299B410 /* Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D3C7CEEB6C72D8692C6B62 /* Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift */; };
+		F0E38BE1F9224D95834512A2 /* Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E38BE1F9224D95834512A1 /* Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift */; };
 		417611ED93CE8906E6E742BB /* Sources/BoundlessTranslator/Settings/PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C898BB905F07B77AC7CE4 /* Sources/BoundlessTranslator/Settings/PreferencesWindowController.swift */; };
 		46A53DA469E1EB61759EADC1 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17353EDD401D4E87F9C6064 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbar.swift */; };
 		49E2D99B6E22D313DD5496BD /* Sources/BoundlessTranslator/Translation/Engines/Apple/AppleTranslationConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5572E8342E49B1561273E7 /* Sources/BoundlessTranslator/Translation/Engines/Apple/AppleTranslationConfigurationFactory.swift */; };
@@ -192,6 +193,7 @@
 		AE82DC91BB25A875F241DC02 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "Sources/BoundlessTranslator/Resources/pt-BR.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		AE9956D17D86815BB7C30066 /* Sources/BoundlessTranslator/Application/AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/AppController.swift; sourceTree = SOURCE_ROOT; };
 		B3D3C7CEEB6C72D8692C6B62 /* Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift; sourceTree = SOURCE_ROOT; };
+		F0E38BE1F9224D95834512A1 /* Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift; sourceTree = SOURCE_ROOT; };
 		B70FE4C3C6AC67B9F9618901 /* Sources/BoundlessTranslator/Translation/UI/SourceLanguageSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/UI/SourceLanguageSelectionView.swift; sourceTree = SOURCE_ROOT; };
 		B9C5D2DDA106755AB2BD8189 /* Sources/BoundlessTranslator/Translation/UI/TranslationSpeechButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/UI/TranslationSpeechButton.swift; sourceTree = SOURCE_ROOT; };
 		BB9633477B5E4299B6EC5BAD /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = Sources/BoundlessTranslator/Resources/hr.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
@@ -297,6 +299,7 @@
 				E48DDDF21E8505745004EC83 /* Sources/BoundlessTranslator/Selection/AccessibilityPermission.swift */,
 				66D8439DD50FAC57A7C51D25 /* Sources/BoundlessTranslator/Selection/AccessibilitySelectedTextReader.swift */,
 				B3D3C7CEEB6C72D8692C6B62 /* Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift */,
+				F0E38BE1F9224D95834512A1 /* Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift */,
 				17819FC007737D956C8AE0A9 /* Sources/BoundlessTranslator/Selection/SelectedText.swift */,
 				35614770AD7F080FEFF4EEFB /* Sources/BoundlessTranslator/Selection/SelectedTextResolver.swift */,
 				8EC9A60F5799E293AF048C1F /* Sources/BoundlessTranslator/Settings/InterfaceLanguagePreferencesView.swift */,
@@ -529,6 +532,7 @@
 				13264E860F29D989780EE760 /* Sources/BoundlessTranslator/Selection/AccessibilityPermission.swift in Sources */,
 				644CC188732409E4EF52169D /* Sources/BoundlessTranslator/Selection/AccessibilitySelectedTextReader.swift in Sources */,
 				39F1634948E57EE01299B410 /* Sources/BoundlessTranslator/Selection/ClipboardSelectedTextReader.swift in Sources */,
+				F0E38BE1F9224D95834512A2 /* Sources/BoundlessTranslator/Selection/SelectedTextCopying.swift in Sources */,
 				D90A9D2F58F3D7FFB744D432 /* Sources/BoundlessTranslator/Selection/SelectedText.swift in Sources */,
 				0B59274A5CCCB64A36257CD0 /* Sources/BoundlessTranslator/Selection/SelectedTextResolver.swift in Sources */,
 				BB85F03EF4E9E0B61FE52DC2 /* Sources/BoundlessTranslator/Settings/InterfaceLanguagePreferencesView.swift in Sources */,

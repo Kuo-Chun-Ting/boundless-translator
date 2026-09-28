@@ -22,21 +22,21 @@ enum SelectedTextReadError: LocalizedError {
 final class AccessibilitySelectedTextReader: SelectedTextReading {
     typealias ReadRawSelectedText = @Sendable () throws -> String?
 
-    private let isProcessTrusted: @MainActor () -> Bool
+    private let hasAccessibilityPermission: @MainActor () -> Bool
     private let readRawSelectedText: ReadRawSelectedText?
 
     init(
-        isProcessTrusted: @escaping @MainActor () -> Bool = {
+        hasAccessibilityPermission: @escaping @MainActor () -> Bool = {
             AXIsProcessTrusted()
         },
         readRawSelectedText: ReadRawSelectedText? = nil
     ) {
-        self.isProcessTrusted = isProcessTrusted
+        self.hasAccessibilityPermission = hasAccessibilityPermission
         self.readRawSelectedText = readRawSelectedText
     }
 
     func readSelectedText() async throws -> SelectedText {
-        guard isProcessTrusted() else {
+        guard hasAccessibilityPermission() else {
             throw SelectedTextReadError.accessibilityPermissionRequired
         }
 

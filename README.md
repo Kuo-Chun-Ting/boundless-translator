@@ -86,6 +86,18 @@ On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the five local StoreKit integr
 
 GUI and StoreKit integration tests need a macOS desktop session. They do not need the production signing certificate. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
 
+### XCTest UI Automation
+
+Allow GUI/E2E tests to enable UI Automation without repeated password prompts. This setting applies to the whole Mac.
+
+```sh
+# Remove the password requirement (run once).
+sudo automationmodetool enable-automationmode-without-authentication
+
+# Restore the password requirement.
+sudo automationmodetool disable-automationmode-without-authentication
+```
+
 ### Script Layout
 
 - `Scripts/verify.sh`, `Scripts/release_dmg.sh`, and `Scripts/reset_test_permissions.sh` are the commands run directly during normal development.

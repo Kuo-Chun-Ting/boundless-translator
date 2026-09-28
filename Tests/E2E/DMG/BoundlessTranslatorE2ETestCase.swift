@@ -75,6 +75,22 @@ class BoundlessTranslatorE2ETestCase: XCTestCase {
         return element.label
     }
 
+    func assertTranslationAppears() {
+        let translatedText = appElement("translation.targetText")
+        let hasTranslation = NSPredicate { _, _ in
+            translatedText.exists
+                && !self.stringValue(of: translatedText)
+                    .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        let expectation = XCTNSPredicateExpectation(
+            predicate: hasTranslation, object: nil
+        )
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [expectation], timeout: 60), .completed,
+            "The translation window did not show translated text."
+        )
+    }
+
     private func postGlobalShortcut(keyCode: CGKeyCode) {
         guard CGPreflightPostEventAccess() else {
             XCTFail("The E2E Test Runner cannot post system keyboard events.")

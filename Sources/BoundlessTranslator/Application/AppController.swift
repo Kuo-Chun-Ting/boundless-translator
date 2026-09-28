@@ -51,7 +51,7 @@ final class AppController {
         translationEngine: TranslationEngine = .apple,
         selectedTextReader: any SelectedTextReading = SelectedTextResolver(
             primaryReader: AccessibilitySelectedTextReader(),
-            fallbackReader: ClipboardSelectedTextReader()
+            fallbackReader: ClipboardSelectedTextReader(copier: SystemSelectedTextCopier())
         ),
         screenshotCapture: any ScreenshotCapturing = SystemScreenshotCapture(),
         imageViewerController: (any ImageViewerControlling)? = nil,

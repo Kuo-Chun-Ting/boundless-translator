@@ -6,6 +6,7 @@ struct SelectableTranslationTextView: NSViewRepresentable {
 
     func makeNSView(context: Context) -> NSScrollView {
         let textView = TranslationTextViewFactory.make()
+        textView.setAccessibilityIdentifier("translation.targetText")
         let scrollView = OverflowAwareScrollView()
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder

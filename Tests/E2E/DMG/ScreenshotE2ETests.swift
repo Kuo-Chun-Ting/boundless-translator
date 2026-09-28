@@ -19,6 +19,7 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         let sourceText = appElement("translation.sourceText")
         XCTAssertTrue(sourceText.waitForExistence(timeout: 10))
         XCTAssertFalse(stringValue(of: sourceText).isEmpty)
+        assertTranslationAppears()
     }
 
     private func captureFixtureScreenshot() {
