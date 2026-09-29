@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Engedélyezze a képernyő rögzítését a Boundless Translator számára a Rendszerbeállítások > Adatvédelem és biztonság menüpontban, majd próbálja újra. Lehet, hogy ki kell lépnie az appból, és újra meg kell nyitnia.";
 "screenshot.failed" = "Nem sikerült rögzíteni a képernyőterületet. Próbálja újra.";
 "screenshot.errorTitle" = "Nem sikerült képernyőfotót készíteni";
-"lookup.action" = "Keresés a szótárban";
+"lookup.action" = "Keresés";
+"lookup.guidance" = "Jelöljön ki egy szót vagy kifejezést";
+"lookup.dismiss" = "Bezárás";
 "panel.idle" = "Jelölje ki a szöveget, és használja a fordítási billentyűparancsot.";
 "panel.translating" = "Fordítás folyamatban…";
 "panel.failureTitle" = "A fordítás sikertelen";

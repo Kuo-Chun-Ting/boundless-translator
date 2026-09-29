@@ -31,6 +31,8 @@
 "screenshot.failed" = "Näytön alueesta ei voitu ottaa kuvaa. Yritä uudelleen.";
 "screenshot.errorTitle" = "Näyttökuvaa ei voitu ottaa";
 "lookup.action" = "Katso sanakirjasta";
+"lookup.guidance" = "Valitse sana tai ilmaus";
+"lookup.dismiss" = "Sulje";
 "panel.idle" = "Valitse teksti ja käytä käännösoikotietä.";
 "panel.translating" = "Käännetään…";
 "panel.failureTitle" = "Käännös epäonnistui";

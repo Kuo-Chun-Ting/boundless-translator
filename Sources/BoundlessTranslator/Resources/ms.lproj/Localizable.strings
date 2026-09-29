@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Benarkan rakaman skrin untuk Boundless Translator dalam Seting Sistem > Privasi & Keselamatan, kemudian cuba lagi. Anda mungkin perlu keluar dan membuka semula app.";
 "screenshot.failed" = "Tidak dapat menangkap kawasan skrin. Cuba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
-"lookup.action" = "Cari dalam Kamus";
+"lookup.action" = "Cari";
+"lookup.guidance" = "Pilih perkataan atau frasa";
+"lookup.dismiss" = "Tutup";
 "panel.idle" = "Pilih teks dan gunakan pintasan terjemahan.";
 "panel.translating" = "Menterjemah…";
 "panel.failureTitle" = "Terjemahan gagal";

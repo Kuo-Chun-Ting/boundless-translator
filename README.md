@@ -106,6 +106,14 @@ sudo automationmodetool disable-automationmode-without-authentication
 - `Scripts/Assets/` contains manual tools for regenerating App and DMG artwork.
 - `Tests/Scripts/` tests the shell workflows themselves.
 
+### Reset App Data
+
+```sh
+Scripts/reset_app_data.sh
+```
+
+Quits Boundless Translator and deletes `~/Library/Containers/com.lillard.BoundlessTranslator/Data`, including preferences and dismissed tips. The regular DMG and TestFlight editions share this folder. Reopen the App to test fresh settings; macOS permissions remain granted. Run this manually when needed. If macOS reports `Operation not permitted`, give the terminal app Full Disk Access in System Settings and reopen it.
+
 ### Create a Test DMG
 
 Run this setup once. Replace the placeholders with your Apple Account email and Developer Team ID:

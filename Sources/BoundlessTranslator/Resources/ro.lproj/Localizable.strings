@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Permiteți înregistrarea ecranului pentru Boundless Translator în Configurări sistem > Intimitate și securitate, apoi încercați din nou. Este posibil să fie necesar să închideți și să redeschideți aplicația.";
 "screenshot.failed" = "Nu s-a putut captura regiunea ecranului. Încercați din nou.";
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";
-"lookup.action" = "Caută în dicționar";
+"lookup.action" = "Caută";
+"lookup.guidance" = "Selectați un cuvânt sau o expresie";
+"lookup.dismiss" = "Închide";
 "panel.idle" = "Selectează textul și folosește scurtătura pentru traducere.";
 "panel.translating" = "Se traduce…";
 "panel.failureTitle" = "Traducerea a eșuat";

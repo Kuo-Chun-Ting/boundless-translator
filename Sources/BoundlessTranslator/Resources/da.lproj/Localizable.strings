@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Tillad skærmoptagelse for Boundless Translator i Systemindstillinger > Anonymitet & sikkerhed, og prøv igen. Du skal muligvis afslutte og åbne appen igen.";
 "screenshot.failed" = "Skærmområdet kunne ikke optages. Prøv igen.";
 "screenshot.errorTitle" = "Skærmbilledet kunne ikke tages";
-"lookup.action" = "Slå op i ordbog";
+"lookup.action" = "Slå op";
+"lookup.guidance" = "Markér et ord eller udtryk";
+"lookup.dismiss" = "Luk";
 "panel.idle" = "Vælg tekst, og brug genvejen til oversættelse.";
 "panel.translating" = "Oversætter…";
 "panel.failureTitle" = "Oversættelsen mislykkedes";

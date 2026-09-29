@@ -35,6 +35,8 @@ final class PointingHandButton: NSButton {}
 
 @MainActor
 final class LookupActionOverlay {
+    static let bookIcon = "📖"
+
     private let button = PointingHandButton()
     private let positioner = LookupActionPositioner(
         horizontalMargin: 4,
@@ -116,7 +118,7 @@ final class LookupActionOverlay {
     }
 
     private func configureButton(target: AnyObject, action: Selector) {
-        button.title = "📖"
+        button.title = Self.bookIcon
         button.image = nil
         button.font = NSFont(name: "Apple Color Emoji", size: 16)
         button.bezelStyle = .accessoryBarAction

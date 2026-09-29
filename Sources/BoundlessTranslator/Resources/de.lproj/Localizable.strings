@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Erlaube Boundless Translator die Bildschirmaufnahme unter Systemeinstellungen > Datenschutz & Sicherheit und versuche es erneut. Möglicherweise musst du die App beenden und erneut öffnen.";
 "screenshot.failed" = "Der Bildschirmbereich konnte nicht aufgenommen werden. Versuche es erneut.";
 "screenshot.errorTitle" = "Bildschirmfoto konnte nicht aufgenommen werden";
-"lookup.action" = "Im Wörterbuch nachschlagen";
+"lookup.action" = "Nachschlagen";
+"lookup.guidance" = "Wähle ein Wort oder eine Wortgruppe aus";
+"lookup.dismiss" = "Schließen";
 "panel.idle" = "Wähle Text aus und verwende den Übersetzungskurzbefehl.";
 "panel.translating" = "Übersetzen…";
 "panel.failureTitle" = "Übersetzung fehlgeschlagen";

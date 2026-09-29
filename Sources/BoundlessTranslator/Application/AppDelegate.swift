@@ -1,4 +1,5 @@
 import AppKit
+import TipKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -7,6 +8,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let applicationOpenCoordinator = ApplicationOpenCoordinator()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        do {
+            try Tips.configure()
+        } catch {
+            NSLog("Unable to configure tips: %@", error.localizedDescription)
+        }
         controller.prepare()
         applicationOpenCoordinator.handleInitialLaunch {
             controller.showPreferences()

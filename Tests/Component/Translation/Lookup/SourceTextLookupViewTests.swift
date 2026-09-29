@@ -445,6 +445,8 @@ func test_performLookup_when_selection_has_outer_whitespace_then_presents_trimme
     // Arrange
     let mock_presenter = DictionaryDefinitionPresenterMock()
     let view = SourceTextLookupView(dictionaryPresenter: mock_presenter)
+    var didLookUp = false
+    view.onLookup = { didLookUp = true }
     view.updateText("She felt  strong emotions  today.")
     view.updateSelection(NSRange(location: 8, length: 19))
 
@@ -453,6 +455,7 @@ func test_performLookup_when_selection_has_outer_whitespace_then_presents_trimme
 
     // Assert
     #expect(mock_presenter.receivedRanges == [NSRange(location: 10, length: 15)])
+    #expect(didLookUp)
 }
 
 @MainActor
@@ -557,4 +560,18 @@ private func makeTranslationWindow(
     view.frame = NSRect(x: 20, y: 20, width: 200, height: 100)
     contentView.addSubview(view)
     return window
+}
+
+@Test @MainActor
+func test_performLookup_when_noSelection_then_doesNotNotifyLookup() {
+    // Arrange
+    let view = SourceTextLookupView()
+    var didLookUp = false
+    view.onLookup = { didLookUp = true }
+
+    // Act
+    view.performLookup()
+
+    // Assert
+    #expect(!didLookUp)
 }

@@ -1,9 +1,12 @@
 import SwiftUI
+import TipKit
 
 struct TranslationWindowView: View {
     @ObservedObject var coordinator: TranslationCoordinator
     @ObservedObject var speechController: TranslationSpeechController
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
+    @State private var isShowingLookupTip = false
+    @State private var lookupTipHeight: CGFloat = 0
 
     let supportedLanguages: [Locale.Language]
     let engine: TranslationEngine
@@ -50,6 +53,13 @@ struct TranslationWindowView: View {
             }
         }
         .interfaceLanguage(interfaceLanguageSettings)
+        .task {
+            for await shouldDisplay in lookupTip.shouldDisplayUpdates {
+                guard !Task.isCancelled else { return }
+                isShowingLookupTip = shouldDisplay
+                if !shouldDisplay { lookupTipHeight = 0 }
+            }
+        }
     }
 
     private var translationContent: some View {
@@ -139,17 +149,36 @@ struct TranslationWindowView: View {
     }
 
     private var sourceContent: some View {
-        SelectableSourceTextView(
-            text: coordinator.request?.text ?? "",
-            localization: localization
-        )
-            .frame(
-                maxWidth: .infinity,
-                minHeight: metrics.contentHeight
-                    + TranslationWindowStyle.contentPadding * 2,
-                maxHeight: .infinity,
-                alignment: .topLeading
+        VStack(spacing: 0) {
+            if isShowingLookupTip {
+                LookupTipView(
+                    tip: lookupTip,
+                    width: metrics.size.width / 2 - TranslationWindowStyle.contentPadding * 2,
+                    localization: localization
+                )
+                .padding(.horizontal, TranslationWindowStyle.contentPadding)
+                .padding(.top, TranslationWindowStyle.contentPadding)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
+                    lookupTipHeight = $0
+                }
+            }
+            SelectableSourceTextView(
+                text: coordinator.request?.text ?? "",
+                localization: localization,
+                onLookup: { lookupTip.invalidate(reason: .actionPerformed) }
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(
+            maxWidth: .infinity,
+            minHeight: metrics.contentHeight + TranslationWindowStyle.contentPadding * 2,
+            maxHeight: .infinity,
+            alignment: .topLeading
+        )
+    }
+
+    private var lookupTip: LookupTip {
+        LookupTip(localization: localization)
     }
 
     private var targetContent: some View {
@@ -203,6 +232,7 @@ struct TranslationWindowView: View {
             sourceText: coordinator.request?.text ?? "",
             status: coordinator.status,
             partialOutput: coordinator.partialOutput,
+            sourceAccessoryHeight: lookupTipHeight,
             localization: localization
         )
     }

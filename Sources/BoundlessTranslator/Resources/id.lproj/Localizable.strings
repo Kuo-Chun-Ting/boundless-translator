@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Izinkan perekaman layar untuk Boundless Translator di Pengaturan Sistem > Privasi & Keamanan, lalu coba lagi. Anda mungkin perlu menutup dan membuka kembali app.";
 "screenshot.failed" = "Tidak dapat menjepret area layar. Coba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil jepretan layar";
-"lookup.action" = "Cari di Kamus";
+"lookup.action" = "Cari";
+"lookup.guidance" = "Pilih kata atau frasa";
+"lookup.dismiss" = "Tutup";
 "panel.idle" = "Pilih teks dan gunakan pintasan terjemahan.";
 "panel.translating" = "Menerjemahkan…";
 "panel.failureTitle" = "Terjemahan gagal";

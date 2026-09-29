@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "V Nastavení systému > Soukromí a zabezpečení povolte aplikaci Boundless Translator záznam obrazovky a zkuste to znovu. Možná bude nutné aplikaci ukončit a znovu otevřít.";
 "screenshot.failed" = "Oblast obrazovky se nepodařilo zachytit. Zkuste to znovu.";
 "screenshot.errorTitle" = "Snímek obrazovky se nepodařilo pořídit";
-"lookup.action" = "Vyhledat ve slovníku";
+"lookup.action" = "Vyhledat";
+"lookup.guidance" = "Vyberte slovo nebo frázi";
+"lookup.dismiss" = "Zavřít";
 "panel.idle" = "Vyberte text a použijte zkratku pro překlad.";
 "panel.translating" = "Překládání…";
 "panel.failureTitle" = "Překlad se nezdařil";

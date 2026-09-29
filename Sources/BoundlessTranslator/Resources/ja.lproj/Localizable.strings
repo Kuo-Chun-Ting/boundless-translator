@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "「システム設定」>「プライバシーとセキュリティ」で Boundless Translator の画面収録を許可してから、もう一度お試しください。アプリを終了して開き直す必要がある場合があります。";
 "screenshot.failed" = "画面の範囲を撮影できませんでした。もう一度お試しください。";
 "screenshot.errorTitle" = "スクリーンショットを撮影できませんでした";
-"lookup.action" = "辞書で調べる";
+"lookup.action" = "調べる";
+"lookup.guidance" = "単語や語句を選択";
+"lookup.dismiss" = "閉じる";
 "panel.idle" = "テキストを選択し、翻訳ショートカットを使って翻訳します。";
 "panel.translating" = "翻訳中…";
 "panel.failureTitle" = "翻訳に失敗しました";

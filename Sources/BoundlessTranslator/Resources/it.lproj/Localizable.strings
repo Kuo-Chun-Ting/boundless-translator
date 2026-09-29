@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Consenti la registrazione dello schermo per Boundless Translator in Impostazioni di Sistema > Privacy e sicurezza, quindi riprova. Potrebbe essere necessario chiudere e riaprire l’app.";
 "screenshot.failed" = "Impossibile acquisire l’area dello schermo. Riprova.";
 "screenshot.errorTitle" = "Impossibile acquisire l’istantanea";
-"lookup.action" = "Cerca nel dizionario";
+"lookup.action" = "Cerca";
+"lookup.guidance" = "Seleziona una parola o una frase";
+"lookup.dismiss" = "Chiudi";
 "panel.idle" = "Seleziona il testo e usa l’abbreviazione per la traduzione.";
 "panel.translating" = "Traduzione in corso…";
 "panel.failureTitle" = "Traduzione non riuscita";

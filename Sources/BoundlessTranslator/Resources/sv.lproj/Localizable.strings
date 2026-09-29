@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Tillåt skärminspelning för Boundless Translator i Systeminställningar > Integritet och säkerhet och försök igen. Du kan behöva avsluta och öppna appen igen.";
 "screenshot.failed" = "Det gick inte att ta en bild av skärmområdet. Försök igen.";
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";
-"lookup.action" = "Slå upp i ordlista";
+"lookup.action" = "Slå upp";
+"lookup.guidance" = "Markera ett ord eller uttryck";
+"lookup.dismiss" = "Stäng";
 "panel.idle" = "Markera text och använd kortkommandot för översättning.";
 "panel.translating" = "Översätter…";
 "panel.failureTitle" = "Översättningen misslyckades";

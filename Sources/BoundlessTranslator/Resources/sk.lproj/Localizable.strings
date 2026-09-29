@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Povoľte nahrávanie obrazovky pre Boundless Translator v Systémových nastaveniach > Súkromie a bezpečnosť a skúste to znova. Možno bude potrebné apku ukončiť a znova otvoriť.";
 "screenshot.failed" = "Oblasť obrazovky sa nepodarilo zachytiť. Skúste to znova.";
 "screenshot.errorTitle" = "Snímku obrazovky sa nepodarilo vytvoriť";
-"lookup.action" = "Vyhľadať v slovníku";
+"lookup.action" = "Vyhľadať";
+"lookup.guidance" = "Vyberte slovo alebo frázu";
+"lookup.dismiss" = "Zavrieť";
 "panel.idle" = "Vyberte text a použite skratku prekladu.";
 "panel.translating" = "Prekladá sa…";
 "panel.failureTitle" = "Preklad zlyhal";

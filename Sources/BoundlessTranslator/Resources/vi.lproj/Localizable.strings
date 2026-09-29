@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Cho phép ghi màn hình đối với Boundless Translator trong Cài đặt hệ thống > Quyền riêng tư & Bảo mật, rồi thử lại. Bạn có thể cần thoát và mở lại ứng dụng.";
 "screenshot.failed" = "Không thể chụp vùng màn hình. Hãy thử lại.";
 "screenshot.errorTitle" = "Không thể chụp ảnh màn hình";
-"lookup.action" = "Tra cứu trong từ điển";
+"lookup.action" = "Tra cứu";
+"lookup.guidance" = "Chọn một từ hoặc cụm từ";
+"lookup.dismiss" = "Đóng";
 "panel.idle" = "Chọn văn bản và sử dụng phím tắt dịch.";
 "panel.translating" = "Đang dịch…";
 "panel.failureTitle" = "Dịch không thành công";

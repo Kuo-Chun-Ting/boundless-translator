@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "Dovolite snemanje zaslona za Boundless Translator v sistemskih nastavitvah > Zasebnost in varnost, nato poskusite znova. Morda boste morali aplikacijo zapreti in znova odpreti.";
 "screenshot.failed" = "Območja zaslona ni bilo mogoče zajeti. Poskusite znova.";
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";
-"lookup.action" = "Poišči v slovarju";
+"lookup.action" = "Poišči";
+"lookup.guidance" = "Izberite besedo ali izraz";
+"lookup.dismiss" = "Zapri";
 "panel.idle" = "Izberite besedilo in uporabite bližnjico za prevod.";
 "panel.translating" = "Prevajanje…";
 "panel.failureTitle" = "Prevod ni uspel";

@@ -28,10 +28,11 @@ struct TranslationWindowLayout {
         sourceText: String,
         status: TranslationStatus,
         partialOutput: TranslationOutput? = nil,
+        sourceAccessoryHeight: CGFloat = 0,
         localization: AppLocalization
     ) -> TranslationWindowMetrics {
         let idealContentHeight = max(
-            measuredHeight(for: sourceText),
+            measuredHeight(for: sourceText) + sourceAccessoryHeight,
             max(
                 resultHeight(for: status, localization: localization),
                 partialOutput.map { measuredHeight(for: $0.translatedText) } ?? 0

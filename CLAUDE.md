@@ -4,6 +4,7 @@
 
 - 除非使用者明確要求，否則不得建立或使用 Git worktree；直接在目前分支修改。
 - 完成程式碼修改後，先執行 `Scripts/verify.sh`，再執行 `Scripts/run_e2e_tests.sh`，兩者通過後交付使用者 code review。E2E 測試會建立並安裝新的 Test DMG，並沿用現有權限。
+- 修改 UI 後，啟動修改後的 App，對照確認的設計檢查外觀，並操作受影響的功能。交付時附上實際截圖與檢查結果；無法檢查時，列出未驗證項目與原因。
 - Codex 執行上述兩支測試腳本時，第一次就以 `exec_command` 的 `sandbox_permissions: "require_escalated"` 執行；一般讀檔、改檔指令維持預設沙盒。
 - 每次交付修改前檢查 `TODO.md`，勾選本次已完成的項目；未完成的項目維持未勾選。
 - 只有需要驗證首次權限設定流程時，執行 `Scripts/run_e2e_tests.sh --from-permission-setup`。此模式會自行重設權限，等待使用者完成 macOS 授權，再繼續功能測試。

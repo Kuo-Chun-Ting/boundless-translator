@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "सिस्टम सेटिंग्ज़ > गोपनीयता और सुरक्षा में Boundless Translator के लिए स्क्रीन रिकॉर्डिंग की अनुमति दें, फिर दोबारा कोशिश करें। आपको ऐप बंद करके फिर से खोलना पड़ सकता है।";
 "screenshot.failed" = "स्क्रीन का क्षेत्र कैप्चर नहीं हो सका। दोबारा कोशिश करें।";
 "screenshot.errorTitle" = "स्क्रीनशॉट कैप्चर नहीं हो सका";
-"lookup.action" = "शब्दकोश में खोजें";
+"lookup.action" = "खोजें";
+"lookup.guidance" = "कोई शब्द या वाक्यांश चुनें";
+"lookup.dismiss" = "बंद करें";
 "panel.idle" = "टेक्स्ट चुनें और अनुवाद शॉर्टकट इस्तेमाल करें।";
 "panel.translating" = "अनुवाद हो रहा है…";
 "panel.failureTitle" = "अनुवाद विफल";

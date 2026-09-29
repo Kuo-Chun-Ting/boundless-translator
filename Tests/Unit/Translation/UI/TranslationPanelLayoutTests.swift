@@ -3,6 +3,41 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
+func test_metrics_when_sourceHintIsVisible_then_reservesItsHeightAndReclaimsItAfterDismissal() {
+    // Arrange
+    let layout = TranslationWindowLayout(compactHeight: 0, maximumHeight: 1_000)
+
+    // Act
+    let withoutHint = layout.metrics(
+        sourceText: "A word", status: .translating, localization: englishLocalization
+    )
+    let withHint = layout.metrics(
+        sourceText: "A word", status: .translating,
+        sourceAccessoryHeight: 100, localization: englishLocalization
+    )
+
+    // Assert
+    #expect(withHint.size.height == withoutHint.size.height + 100)
+    #expect(withHint.size.width == withoutHint.size.width)
+}
+
+@Test
+func test_metrics_when_sourceHintAndLongTextExceedMaximumHeight_then_keepsWindowCapped() {
+    // Arrange
+    let layout = TranslationWindowLayout()
+
+    // Act
+    let metrics = layout.metrics(
+        sourceText: String(repeating: "Long source text. ", count: 300),
+        status: .translating, sourceAccessoryHeight: 100,
+        localization: englishLocalization
+    )
+
+    // Assert
+    #expect(metrics.size.height == 440)
+}
+
+@Test
 func test_metrics_when_translation_is_short_then_fits_controls_and_text_in_compact_window() {
     // Arrange
     let layout = TranslationWindowLayout()

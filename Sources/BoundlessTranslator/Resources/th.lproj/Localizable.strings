@@ -30,7 +30,9 @@
 "screenshot.permissionRequired" = "อนุญาตการบันทึกหน้าจอให้ Boundless Translator ในการตั้งค่าระบบ > ความเป็นส่วนตัวและความปลอดภัย แล้วลองอีกครั้ง คุณอาจต้องออกจากแอปแล้วเปิดใหม่";
 "screenshot.failed" = "ไม่สามารถจับภาพพื้นที่หน้าจอได้ ลองอีกครั้ง";
 "screenshot.errorTitle" = "ไม่สามารถจับภาพหน้าจอได้";
-"lookup.action" = "ค้นหาในพจนานุกรม";
+"lookup.action" = "ค้นหา";
+"lookup.guidance" = "เลือกคำหรือวลี";
+"lookup.dismiss" = "ปิด";
 "panel.idle" = "เลือกข้อความแล้วใช้ปุ่มลัดการแปล";
 "panel.translating" = "กำลังแปล…";
 "panel.failureTitle" = "แปลไม่สำเร็จ";
