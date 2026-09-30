@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "V Nastavení systému > Soukromí a zabezpečení povolte aplikaci Boundless Translator záznam obrazovky a zkuste to znovu. Možná bude nutné aplikaci ukončit a znovu otevřít.";
 "screenshot.failed" = "Oblast obrazovky se nepodařilo zachytit. Zkuste to znovu.";
 "screenshot.errorTitle" = "Snímek obrazovky se nepodařilo pořídit";
+"screenshot.guidance" = "Vyberte text a stisknutím %@ ho přeložte.";
 "lookup.action" = "Vyhledat";
 "lookup.guidance" = "Vyberte slovo nebo frázi";
 "lookup.dismiss" = "Zavřít";

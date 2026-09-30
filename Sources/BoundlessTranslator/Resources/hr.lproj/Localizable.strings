@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Dopustite snimanje zaslona za Boundless Translator u Postavkama sustava > Privatnost i sigurnost pa pokušajte ponovno. Možda ćete morati zatvoriti i ponovno otvoriti aplikaciju.";
 "screenshot.failed" = "Nije moguće snimiti područje zaslona. Pokušajte ponovno.";
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
+"screenshot.guidance" = "Odaberite tekst pa pritisnite %@ za prijevod.";
 "lookup.action" = "Potraži";
 "lookup.guidance" = "Odaberite riječ ili izraz";
 "lookup.dismiss" = "Zatvori";

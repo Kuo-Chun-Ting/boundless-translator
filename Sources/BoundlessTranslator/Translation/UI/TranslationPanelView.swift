@@ -164,8 +164,7 @@ struct TranslationWindowView: View {
             }
             SelectableSourceTextView(
                 text: coordinator.request?.text ?? "",
-                localization: localization,
-                onLookup: { lookupTip.invalidate(reason: .actionPerformed) }
+                localization: localization
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "请在“系统设置”>“隐私与安全性”中允许 Boundless Translator 录制屏幕，然后重试。你可能需要退出并重新打开 App。";
 "screenshot.failed" = "无法截取屏幕区域。请重试。";
 "screenshot.errorTitle" = "无法截屏";
+"screenshot.guidance" = "选字后按 %@ 翻译。";
 "lookup.action" = "查询";
 "lookup.guidance" = "选取单词或短语";
 "lookup.dismiss" = "关闭";

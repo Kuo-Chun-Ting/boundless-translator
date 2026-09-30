@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Zezwól na nagrywanie ekranu aplikacji Boundless Translator w Ustawieniach systemowych > Prywatność i ochrona, a następnie spróbuj ponownie. Konieczne może być zamknięcie i ponowne otwarcie aplikacji.";
 "screenshot.failed" = "Nie udało się zrobić zrzutu obszaru ekranu. Spróbuj ponownie.";
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";
+"screenshot.guidance" = "Zaznacz tekst i naciśnij %@, aby przetłumaczyć.";
 "lookup.action" = "Sprawdź";
 "lookup.guidance" = "Zaznacz słowo lub frazę";
 "lookup.dismiss" = "Zamknij";

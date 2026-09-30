@@ -83,6 +83,11 @@ final class AppController {
             fallbackReader: selectedTextReader
         )
         self.sourceLanguageResolver = sourceLanguageResolver
+        if let viewer = resolvedImageViewerController as? ImageViewerWindowController {
+            viewer.translationShortcutName = { [weak self] in
+                self?.translationShortcutController.definition.displayName ?? ""
+            }
+        }
     }
 
     func prepare() {

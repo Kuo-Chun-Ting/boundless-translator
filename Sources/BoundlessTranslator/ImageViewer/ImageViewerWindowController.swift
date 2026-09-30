@@ -37,6 +37,9 @@ final class ImageViewerWindowController: NSWindowController,
         window?.isKeyWindow == true && content.hasActiveTextSelection
     }
 
+    var translationShortcutName: @MainActor () -> String = { "" }
+
+    private let screenshotTipController = ScreenshotTipController()
     private let content: any ImageViewerContent
     private let visibleFrameForPointer: VisibleFrameProvider
     private let windowPresenter: any ForegroundWindowPresenting
@@ -95,11 +98,30 @@ final class ImageViewerWindowController: NSWindowController,
         }
         if let window {
             windowPresenter.present(window)
+            showScreenshotTip()
         }
     }
 
     func windowWillClose(_ notification: Notification) {
+        screenshotTipController.close()
         content.clearSelection()
+    }
+
+    func windowDidMove(_ notification: Notification) { screenshotTipController.updatePosition() }
+    func windowDidResize(_ notification: Notification) { screenshotTipController.updatePosition() }
+    func windowDidMiniaturize(_ notification: Notification) { screenshotTipController.updatePosition() }
+    func windowDidDeminiaturize(_ notification: Notification) { screenshotTipController.updatePosition() }
+
+    private func showScreenshotTip() {
+        guard let window, window.isVisible else { return }
+        let localization = AppLocalization(
+            languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier(
+                for: interfaceLanguageSettings.languageIdentifier
+            )
+        )
+        screenshotTipController.present(
+            in: window, localization: localization, shortcut: translationShortcutName()
+        )
     }
 
     private func fitWindow(to imageSize: CGSize, inside visibleFrame: CGRect) {
@@ -130,6 +152,7 @@ final class ImageViewerWindowController: NSWindowController,
         window?.title = AppLocalization(
             languageIdentifier: resolvedIdentifier
         ).string("shortcut.screenshotTranslation")
+        showScreenshotTip()
     }
 
     private static func aspectFitSize(

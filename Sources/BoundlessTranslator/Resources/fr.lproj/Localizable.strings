@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Autorisez l’enregistrement de l’écran pour Boundless Translator dans Réglages Système > Confidentialité et sécurité, puis réessayez. Vous devrez peut-être quitter et rouvrir l’app.";
 "screenshot.failed" = "Impossible de capturer la zone de l’écran. Réessayez.";
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";
+"screenshot.guidance" = "Sélectionnez du texte, puis appuyez sur %@ pour le traduire.";
 "lookup.action" = "Rechercher";
 "lookup.guidance" = "Sélectionnez un mot ou une expression";
 "lookup.dismiss" = "Fermer";

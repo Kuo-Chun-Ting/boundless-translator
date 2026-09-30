@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Permet la gravació de pantalla per al Boundless Translator a Configuració del Sistema > Privacitat i seguretat i torna-ho a provar. Pot ser que hagis de sortir de l’app i tornar-la a obrir.";
 "screenshot.failed" = "No s’ha pogut capturar l’àrea de la pantalla. Torna-ho a provar.";
 "screenshot.errorTitle" = "No s’ha pogut fer la captura de pantalla";
+"screenshot.guidance" = "Selecciona text i prem %@ per traduir-lo.";
 "lookup.action" = "Consulta";
 "lookup.guidance" = "Selecciona una paraula o expressió";
 "lookup.dismiss" = "Tanca";

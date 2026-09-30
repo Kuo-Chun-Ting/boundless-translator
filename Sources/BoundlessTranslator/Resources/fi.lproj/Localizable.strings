@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Salli näytön tallennus Boundless Translatorille kohdassa Järjestelmäasetukset > Tietosuoja ja suojaus ja yritä uudelleen. Sinun on ehkä lopetettava appi ja avattava se uudelleen.";
 "screenshot.failed" = "Näytön alueesta ei voitu ottaa kuvaa. Yritä uudelleen.";
 "screenshot.errorTitle" = "Näyttökuvaa ei voitu ottaa";
+"screenshot.guidance" = "Valitse teksti ja käännä painamalla %@.";
 "lookup.action" = "Katso sanakirjasta";
 "lookup.guidance" = "Valitse sana tai ilmaus";
 "lookup.dismiss" = "Sulje";

@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Sta schermopname voor Boundless Translator toe in Systeeminstellingen > Privacy en beveiliging en probeer het opnieuw. Mogelijk moet je de app stoppen en opnieuw openen.";
 "screenshot.failed" = "Het schermgebied kon niet worden vastgelegd. Probeer het opnieuw.";
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";
+"screenshot.guidance" = "Selecteer tekst en druk op %@ om te vertalen.";
 "lookup.action" = "Zoek op";
 "lookup.guidance" = "Selecteer een woord of uitdrukking";
 "lookup.dismiss" = "Sluiten";

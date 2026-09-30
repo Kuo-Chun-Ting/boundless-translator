@@ -42,7 +42,7 @@ Read selected text through Accessibility in the background and run language dete
 - Give speech buttons the same visible height and native background style as the language menus. During playback, keep the speaker symbol and animate its sound waves; clicking again stops reading. With Reduce Motion enabled, show a static accent-colored speaker instead. Keep the pin unbordered, diagonal when unpinned and upright blue when pinned.
 - Read the source or translated text with a system voice that supports its language.
 - Selecting source text reveals the book action. Activating it opens the macOS Lookup overlay for that exact selection.
-- A localized TipKit hint sits at the top of the source-text block, below the language controls. It reserves space above the original text; closing it removes that space so the text moves up. The hint stays within the source column and does not cover text or controls. Its downward tail extends directly from the bottom-left corner toward the source text. It uses the same 📖 icon as the Lookup action, the title “Look Up”, the message “Select a word or phrase”, and a close button. Use system Liquid Glass on macOS 26 and adaptive material on older releases. TipKit preserves dismissal after closing the hint or invoking Lookup across windows and launches. Localized text wraps, and the window includes the hint height while retaining its maximum height.
+- A localized TipKit hint sits at the top of the source-text block, below the language controls. It reserves space above the original text; closing it removes that space so the text moves up. The hint stays within the source column and does not cover text or controls. Its downward tail extends directly from the bottom-left corner toward the source text. It uses the same 📖 icon as the Lookup action, the title “Look Up”, the message “Select a word or phrase”, and a close button. Use system Liquid Glass on macOS 26 and adaptive material on older releases. TipKit preserves dismissal only after closing the hint, across windows and launches. Localized text wraps, and the window includes the hint height while retaining its maximum height.
 - Position the window on the screen containing the pointer.
 - Close an unpinned translation when the user clicks outside it, activates another app, or presses Escape.
 - Keep a pinned translation visible until the user closes or unpins it.
@@ -51,6 +51,8 @@ Read selected text through Accessibility in the background and run language dete
 - When a shortcut presents a translation-related window, make that window Boundless Translator's main and key window before activating the app so other open windows remain behind it.
 
 ## Screenshot Workspace
+
+- Show a nonmodal TipKit hint outside the screenshot window, preferably on the left and otherwise on the right when space permits. Its top sits about 60 points below the window top. Keep the screenshot unobscured and interactive; defer the hint when neither side fits. Use a single localized sentence ("Select text and press [shortcut] to translate.") with the currently configured translation shortcut and a close button. Only closing the hint with its close button permanently dismisses it; selecting text, translating, or closing the workspace does not. Reposition it when the workspace moves or resizes.
 
 - Open the captured image in a standard, resizable macOS window titled Screenshot Translation, using the same localized feature name as Preferences and Help.
 - Fit the initial window to the image and the active screen while preserving the image aspect ratio.

@@ -28,7 +28,6 @@ struct AppleDictionaryDefinitionPresenter: DictionaryDefinitionPresenting {
 
 @MainActor
 final class SourceTextLookupView: NSView, NSTextViewDelegate {
-    var onLookup: @MainActor () -> Void = {}
     private let dictionaryPresenter: any DictionaryDefinitionPresenting
     private let scrollView = OverflowAwareScrollView()
     private let textView = TranslationTextViewFactory.make()
@@ -131,7 +130,6 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
             in: textView,
             selectedRange: lookupSelection.range
         )
-        onLookup()
     }
 
     func textViewDidChangeSelection(_ notification: Notification) {
@@ -218,21 +216,17 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
 struct SelectableSourceTextView: NSViewRepresentable {
     let text: String
     let localization: AppLocalization
-    let onLookup: @MainActor () -> Void
 
     init(
         text: String,
-        localization: AppLocalization,
-        onLookup: @escaping @MainActor () -> Void = {}
+        localization: AppLocalization
     ) {
-        self.onLookup = onLookup
         self.text = text
         self.localization = localization
     }
 
     func makeNSView(context: Context) -> SourceTextLookupView {
         let view = SourceTextLookupView(localization: localization)
-        view.onLookup = onLookup
         view.updateText(text)
         return view
     }
@@ -241,7 +235,6 @@ struct SelectableSourceTextView: NSViewRepresentable {
         _ nsView: SourceTextLookupView,
         context: Context
     ) {
-        nsView.onLookup = onLookup
         nsView.updateText(text)
         nsView.updateLocalization(localization)
     }

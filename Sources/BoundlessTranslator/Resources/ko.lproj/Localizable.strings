@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "시스템 설정 > 개인정보 보호 및 보안에서 Boundless Translator의 화면 기록을 허용한 다음 다시 시도하세요. 앱을 종료한 후 다시 열어야 할 수 있습니다.";
 "screenshot.failed" = "화면 영역을 캡처할 수 없습니다. 다시 시도하세요.";
 "screenshot.errorTitle" = "스크린샷을 캡처할 수 없습니다";
+"screenshot.guidance" = "텍스트를 선택한 다음 %@을 눌러 번역하세요.";
 "lookup.action" = "찾아보기";
 "lookup.guidance" = "단어나 구문을 선택하세요";
 "lookup.dismiss" = "닫기";

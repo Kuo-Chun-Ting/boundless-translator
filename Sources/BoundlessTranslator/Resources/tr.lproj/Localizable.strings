@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Sistem Ayarları > Gizlilik ve Güvenlik bölümünde Boundless Translator için ekran kaydına izin verin, sonra yeniden deneyin. Uygulamadan çıkıp uygulamayı yeniden açmanız gerekebilir.";
 "screenshot.failed" = "Ekranın seçilen bölümü yakalanamadı. Yeniden deneyin.";
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
+"screenshot.guidance" = "Metni seçin, ardından çevirmek için %@ tuşlarına basın.";
 "lookup.action" = "Ara";
 "lookup.guidance" = "Bir sözcük veya ifade seçin";
 "lookup.dismiss" = "Kapat";

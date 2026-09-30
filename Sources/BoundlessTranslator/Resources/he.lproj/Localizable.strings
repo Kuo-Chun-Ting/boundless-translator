@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "יש לאפשר הקלטת מסך עבור Boundless Translator בהגדרות המערכת > פרטיות ואבטחה, ואז לנסות שוב. ייתכן שיהיה צורך לסיים את היישום ולפתוח אותו מחדש.";
 "screenshot.failed" = "לא ניתן לצלם את האזור במסך. יש לנסות שוב.";
 "screenshot.errorTitle" = "לא ניתן לצלם צילום מסך";
+"screenshot.guidance" = "בחרו טקסט ולחצו על %@ כדי לתרגם.";
 "lookup.action" = "חיפוש";
 "lookup.guidance" = "בחרו מילה או ביטוי";
 "lookup.dismiss" = "סגירה";

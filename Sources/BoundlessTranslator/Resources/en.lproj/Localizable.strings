@@ -30,6 +30,7 @@
 "screenshot.permissionRequired" = "Allow screen recording for Boundless Translator in System Settings > Privacy & Security, then try again. You may need to quit and reopen the app.";
 "screenshot.failed" = "Could not capture the screen region. Try again.";
 "screenshot.errorTitle" = "Could not capture screenshot";
+"screenshot.guidance" = "Select text and press %@ to translate.";
 "lookup.action" = "Look Up";
 "lookup.guidance" = "Select a word or phrase";
 "lookup.dismiss" = "Close";
