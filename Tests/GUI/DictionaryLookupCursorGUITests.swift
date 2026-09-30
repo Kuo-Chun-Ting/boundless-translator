@@ -27,7 +27,7 @@ final class DictionaryLookupCursorGUITests: XCTestCase {
 
     func test_lookupAction_whenHoveringFifthLineRepeatedly_thenShowsPointingHand() throws {
         // Arrange
-        let lookupAction = app.buttons["Look Up in Dictionary"]
+        let lookupAction = app.buttons["Look Up"]
         XCTAssertTrue(lookupAction.waitForExistence(timeout: 5))
         let readyState: CursorHostReadyState = try waitForJSON(
             named: "ready.json",

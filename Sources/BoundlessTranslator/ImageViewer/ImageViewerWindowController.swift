@@ -75,7 +75,12 @@ final class ImageViewerWindowController: NSWindowController,
         window.hidesOnDeactivate = false
         window.acceptsMouseMovedEvents = true
         window.contentMinSize = CGSize(width: 420, height: 300)
-        window.contentView = content.view
+        let container = NSView(frame: window.contentLayoutRect)
+        content.view.frame = container.bounds
+        content.view.autoresizingMask = [.width, .height]
+        container.addSubview(content.view)
+        window.contentView = container
+        window.imageContent = content.view as? LiveTextImageView
 
         super.init(window: window)
         window.delegate = self
@@ -106,11 +111,6 @@ final class ImageViewerWindowController: NSWindowController,
         screenshotTipController.close()
         content.clearSelection()
     }
-
-    func windowDidMove(_ notification: Notification) { screenshotTipController.updatePosition() }
-    func windowDidResize(_ notification: Notification) { screenshotTipController.updatePosition() }
-    func windowDidMiniaturize(_ notification: Notification) { screenshotTipController.updatePosition() }
-    func windowDidDeminiaturize(_ notification: Notification) { screenshotTipController.updatePosition() }
 
     private func showScreenshotTip() {
         guard let window, window.isVisible else { return }
@@ -152,7 +152,10 @@ final class ImageViewerWindowController: NSWindowController,
         window?.title = AppLocalization(
             languageIdentifier: resolvedIdentifier
         ).string("shortcut.screenshotTranslation")
-        showScreenshotTip()
+        screenshotTipController.update(
+            localization: AppLocalization(languageIdentifier: resolvedIdentifier),
+            shortcut: translationShortcutName()
+        )
     }
 
     private static func aspectFitSize(
@@ -175,6 +178,7 @@ final class ImageViewerWindowController: NSWindowController,
 }
 
 private final class ImageViewerWindow: NSWindow {
+    weak var imageContent: LiveTextImageView?
     private var pendingTextDrag = false
 
     override func sendEvent(_ event: NSEvent) {
@@ -202,9 +206,10 @@ private final class ImageViewerWindow: NSWindow {
     }
 
     private func handlePendingTextDrag(_ event: NSEvent) -> Bool {
-        guard let textView = contentView as? LiveTextImageView else { return false }
+        guard let textView = imageContent else { return false }
         switch event.type {
         case .leftMouseDown:
+            guard isImageHit(at: event.locationInWindow) else { return false }
             pendingTextDrag = textView.canBeginSelection(at: event.locationInWindow)
                 && !textView.containsText(at: event.locationInWindow)
             guard pendingTextDrag else { return false }
@@ -215,7 +220,8 @@ private final class ImageViewerWindow: NSWindow {
             return true
         case .leftMouseDragged:
             guard pendingTextDrag else { return false }
-            guard textView.containsText(at: event.locationInWindow) else { return true }
+            guard isImageHit(at: event.locationInWindow),
+                  textView.containsText(at: event.locationInWindow) else { return true }
             pendingTextDrag = false
             beginNativeTextDrag(with: event)
             return false
@@ -243,11 +249,15 @@ private final class ImageViewerWindow: NSWindow {
     private func updateTextCursor(for event: NSEvent) {
         switch event.type {
         case .mouseMoved, .leftMouseDown, .leftMouseDragged, .leftMouseUp, .cursorUpdate:
-            (contentView as? LiveTextImageView)?.updateCursor(at: event.locationInWindow)
+            guard isImageHit(at: event.locationInWindow) else { return }
+            imageContent?.updateCursor(at: event.locationInWindow)
         default:
             break
         }
     }
 
-
+    private func isImageHit(at point: NSPoint) -> Bool {
+        guard let imageContent, let hit = contentView?.hitTest(point) else { return false }
+        return hit.isDescendant(of: imageContent)
+    }
 }

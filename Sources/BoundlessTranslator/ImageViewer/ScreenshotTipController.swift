@@ -2,79 +2,60 @@ import AppKit
 import SwiftUI
 import TipKit
 
-struct ScreenshotTip: Tip {
-    let localization: AppLocalization
-    let shortcut: String
-
-    var title: Text { Text(verbatim: instruction).font(.body) }
-
-    var instruction: String {
-        localization.string("screenshot.guidance", arguments: shortcut)
-    }
-}
-
-struct ScreenshotTipPlacement {
-    static func side(window: CGRect, screen: CGRect, width: CGFloat) -> NSRectEdge? {
-        let requiredSpace = width + 24
-        if window.minX - screen.minX >= requiredSpace { return .minX }
-        if screen.maxX - window.maxX >= requiredSpace { return .maxX }
-        return nil
-    }
-}
-
 @MainActor
 final class ScreenshotTipController {
-    private weak var window: NSWindow?
-    private var popover: TipNSPopover?
+    private var hintView: NSHostingView<HintView>?
     private var displayTask: Task<Void, Never>?
-    private var shouldDisplay = false
 
     func present(in window: NSWindow, localization: AppLocalization, shortcut: String) {
         close()
-        guard !shortcut.isEmpty else { return }
-        self.window = window
+        guard !shortcut.isEmpty, let content = window.contentView else { return }
         let tip = ScreenshotTip(localization: localization, shortcut: shortcut)
-        let popover = TipNSPopover(tip)
-        popover.behavior = .applicationDefined
-        self.popover = popover
-        displayTask = Task { [weak self] in
+        displayTask = Task { [weak self, weak content] in
             for await shouldDisplay in tip.shouldDisplayUpdates {
-                guard !Task.isCancelled else { return }
-                self?.shouldDisplay = shouldDisplay
-                self?.updatePosition()
+                guard !Task.isCancelled, let self, let content else { return }
+                if shouldDisplay {
+                    show(tip, in: content)
+                } else {
+                    hintView?.removeFromSuperview()
+                    hintView = nil
+                }
             }
         }
     }
 
-    func updatePosition() {
-        guard shouldDisplay, let window, window.isVisible,
-              !window.isMiniaturized, let content = window.contentView,
-              let screen = window.screen?.visibleFrame, let popover,
-              let side = ScreenshotTipPlacement.side(
-                window: window.frame, screen: screen, width: popover.contentSize.width
-              ) else {
-            popover?.close()
-            return
-        }
-        let anchor = CGPoint(
-            x: side == .minX ? window.frame.minX : window.frame.maxX,
-            y: window.frame.maxY - 60 - popover.contentSize.height / 2
-        )
-        let anchorInWindow = window.convertPoint(fromScreen: anchor)
-        let anchorInContent = content.convert(anchorInWindow, from: nil)
-        popover.show(
-            relativeTo: CGRect(origin: anchorInContent, size: CGSize(width: 1, height: 1)),
-            of: content, preferredEdge: side
-        )
+    func update(localization: AppLocalization, shortcut: String) {
+        hintView?.rootView = makeHint(ScreenshotTip(localization: localization, shortcut: shortcut))
     }
 
     func close() {
         displayTask?.cancel()
         displayTask = nil
-        popover?.close()
-        popover = nil
-        shouldDisplay = false
-        window = nil
+        hintView?.removeFromSuperview()
+        hintView = nil
+    }
+
+    private func show(_ tip: ScreenshotTip, in content: NSView) {
+        guard hintView == nil else { return }
+        let view = NSHostingView(rootView: makeHint(tip))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        content.addSubview(view)
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 16),
+            view.topAnchor.constraint(equalTo: content.topAnchor, constant: 16)
+        ])
+        hintView = view
+    }
+
+    private func makeHint(_ tip: ScreenshotTip) -> HintView {
+        HintView(
+            title: tip.title, message: tip.message,
+            icon: Image(nsImage: AppBrand.spriteImage), width: 340,
+            localization: tip.localization, identifier: "hint.screenshot"
+        ) { [weak self] doNotShowAgain in
+            if doNotShowAgain { tip.invalidate(reason: .tipClosed) }
+            self?.close()
+        }
     }
 
     deinit { displayTask?.cancel() }

@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "اسمح بتسجيل الشاشة لتطبيق Boundless Translator في إعدادات النظام > الخصوصية والأمن، ثم حاول مرة أخرى. قد تحتاج إلى إنهاء التطبيق وفتحه من جديد.";
 "screenshot.failed" = "تعذر التقاط منطقة الشاشة. حاول مرة أخرى.";
 "screenshot.errorTitle" = "تعذر التقاط لقطة شاشة";
+"screenshot.hintTitle" = "ترجمة النص المحدد";
 "screenshot.guidance" = "حدد نصًا، ثم اضغط على %@ للترجمة.";
 "lookup.action" = "بحث";
+"lookup.title" = "قاموس";
 "lookup.guidance" = "حدد كلمة أو عبارة";
-"lookup.dismiss" = "إغلاق";
+"hint.close" = "إغلاق";
+"hint.doNotShowAgain" = "عدم الإظهار مجددًا";
 "panel.idle" = "حدد نصًا واستخدم اختصار الترجمة.";
 "panel.translating" = "جارٍ الترجمة…";
 "panel.failureTitle" = "فشلت الترجمة";

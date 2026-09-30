@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "請在「系統設定」>「私隱與保安」允許 Boundless Translator 錄製螢幕，然後再試一次。你可能需要結束並重新開啟 App。";
 "screenshot.failed" = "無法擷取螢幕範圍。請再試一次。";
 "screenshot.errorTitle" = "無法擷取螢幕截圖";
+"screenshot.hintTitle" = "選字翻譯";
 "screenshot.guidance" = "選字後按 %@ 翻譯。";
 "lookup.action" = "查詢";
+"lookup.title" = "字典";
 "lookup.guidance" = "選取單字或詞組";
-"lookup.dismiss" = "關閉";
+"hint.close" = "關閉";
+"hint.doNotShowAgain" = "不再顯示";
 "panel.idle" = "選取文字並使用翻譯快捷鍵進行翻譯。";
 "panel.translating" = "翻譯中…";
 "panel.failureTitle" = "翻譯失敗";

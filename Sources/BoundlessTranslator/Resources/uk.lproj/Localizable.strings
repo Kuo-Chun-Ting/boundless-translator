@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Дозвольте запис екрана для Boundless Translator у розділі «Системні параметри» > «Приватність і безпека», а потім повторіть спробу. Можливо, потрібно буде завершити програму та відкрити її знову.";
 "screenshot.failed" = "Не вдалося зняти ділянку екрана. Спробуйте ще раз.";
 "screenshot.errorTitle" = "Не вдалося зробити знімок екрана";
+"screenshot.hintTitle" = "Перекласти виділений текст";
 "screenshot.guidance" = "Виділіть текст і натисніть %@, щоб перекласти.";
 "lookup.action" = "Знайти";
+"lookup.title" = "Словник";
 "lookup.guidance" = "Виділіть слово або фразу";
-"lookup.dismiss" = "Закрити";
+"hint.close" = "Закрити";
+"hint.doNotShowAgain" = "Більше не показувати";
 "panel.idle" = "Виділіть текст і скористайтеся скороченням для перекладу.";
 "panel.translating" = "Переклад…";
 "panel.failureTitle" = "Не вдалося перекласти";

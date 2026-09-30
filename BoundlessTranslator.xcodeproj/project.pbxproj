@@ -40,6 +40,7 @@
 		53DB0D4BE652ED8FCC165C4A /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FA658A1D3D983D2BCAA9FD /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift */; };
 		5581D4D08E86D801B0BA8C3C /* Sources/BoundlessTranslator/Subscription/SubscriptionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CDB3A34D034166763CD064 /* Sources/BoundlessTranslator/Subscription/SubscriptionConfiguration.swift */; };
 		5C166611CF4AD538FC899F07 /* Sources/BoundlessTranslator/Translation/UI/TranslationLanguagePairFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A22FEB9C31A46F1A2A19BB1 /* Sources/BoundlessTranslator/Translation/UI/TranslationLanguagePairFormatter.swift */; };
+		8E2391FA4A214ED98C7C483E /* Sources/BoundlessTranslator/Resources/BrandSprite.png in Resources */ = {isa = PBXBuildFile; fileRef = 3ED27857071545A88CB46404 /* Sources/BoundlessTranslator/Resources/BrandSprite.png */; };
 		5D393A4EEAFAAE7A7027F57C /* Resources/AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = DA295617FE3351C81CD46A1E /* Resources/AppIcon.icns */; };
 		5FAC04E7FC3E2D0BFBA31F93 /* Sources/BoundlessTranslator/Settings/PreferencesActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2074F701CB31EBF5A5AF38E0 /* Sources/BoundlessTranslator/Settings/PreferencesActionButton.swift */; };
 		60135284D7C1C594FFBBEA4D /* Sources/BoundlessTranslator/Translation/Lookup/LookupActionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E90EA135ED02B5DD00C45F /* Sources/BoundlessTranslator/Translation/Lookup/LookupActionOverlay.swift */; };
@@ -81,6 +82,7 @@
 		D3B1206E6C696D7A404ABFA6 /* Sources/BoundlessTranslator/Application/PermissionExplanation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C848514DBE8BC31B03298 /* Sources/BoundlessTranslator/Application/PermissionExplanation.swift */; };
 		D6C49795ADF590DAE192A356 /* Sources/BoundlessTranslator/Translation/Lookup/DictionaryLookupSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E594DBEA73807ED5C38A7C0 /* Sources/BoundlessTranslator/Translation/Lookup/DictionaryLookupSelection.swift */; };
 		D8ECBB747AB5C6668CB61D29 /* Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F879B09DCCD8DDE936ECA508 /* Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift */; };
+		7EE7C01A478A4C75AD590FA1 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC32C7465AF94956AE05D53F /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift */; };
 		FD147C18A659470980382360 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9083AB9A7B5345D581157FB5 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift */; };
 		D90A9D2F58F3D7FFB744D432 /* Sources/BoundlessTranslator/Selection/SelectedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17819FC007737D956C8AE0A9 /* Sources/BoundlessTranslator/Selection/SelectedText.swift */; };
 		D992569C607F702B26EC028F /* Sources/BoundlessTranslator/Settings/TranslationPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FFB47EE3D162AE51725B10 /* Sources/BoundlessTranslator/Settings/TranslationPreferencesView.swift */; };
@@ -98,7 +100,9 @@
 		FCB11566AEB3F50AEC0D0193 /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BB108ACB53B771D2492F46 /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutDefinition.swift */; };
 		E64036AFB7FFEEF07E4DCE7C /* AppControlStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CC03C9BCB48488089A9EE9; };
 		D28BABCC7CCA81316979D22F = {isa = PBXBuildFile; fileRef = B4BE5B5E69F82F4FC3BD9C8C; };
-		7AE38F7CA2E8E1AA5DEADAAF /* Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift */; };
+		7AE38F7CA2E8E1AA5DEADAAF /* Sources/BoundlessTranslator/Translation/UI/LookupTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTip.swift */; };
+		CB712F468DDD48C1B578D883 /* HintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C206A0EE7214E279BEA9D70; };
+		BB0F48F5D1954E8B931652B1 /* AppBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0F48F5D1954E8B931652B2; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +217,7 @@
 		D51353EFF20986B7D403CB3A /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-US"; path = "Sources/BoundlessTranslator/Resources/es-US.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		D74CE9A8C990FB49F4168FD5 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = Sources/BoundlessTranslator/Resources/cs.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		D957E19B16B69713B7749A90 /* Boundless Translator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Boundless Translator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ED27857071545A88CB46404 /* Sources/BoundlessTranslator/Resources/BrandSprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sources/BoundlessTranslator/Resources/BrandSprite.png; sourceTree = SOURCE_ROOT; };
 		DA295617FE3351C81CD46A1E /* Resources/AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Resources/AppIcon.icns; sourceTree = SOURCE_ROOT; };
 		DA2FFBE8761399174776C046 /* Sources/BoundlessTranslator/Translation/Lookup/SourceTextLookupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/Lookup/SourceTextLookupView.swift; sourceTree = SOURCE_ROOT; };
 		DAB25E750F92739FF71FE54E /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "Sources/BoundlessTranslator/Resources/fr-CA.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
@@ -235,13 +240,16 @@
 		F4857E35EEEC8925297C39D6 /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "Sources/BoundlessTranslator/Resources/en-NZ.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		F634116DB5B330D99F35CF21 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "Sources/BoundlessTranslator/Resources/en-CA.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		F879B09DCCD8DDE936ECA508 /* Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift; sourceTree = SOURCE_ROOT; };
+		BC32C7465AF94956AE05D53F /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift; sourceTree = SOURCE_ROOT; };
 		9083AB9A7B5345D581157FB5 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift; sourceTree = SOURCE_ROOT; };
 		FB7A8AB92556C4B24EA9E775 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "Sources/BoundlessTranslator/Resources/en-GB.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		FD3666BE2E9285FFE4F85BF5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = Sources/BoundlessTranslator/Resources/vi.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		FD3DFD9CA7AC9C641249D11D /* Sources/BoundlessTranslator/Translation/Speech/TranslationSpeechController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/Speech/TranslationSpeechController.swift; sourceTree = SOURCE_ROOT; };
 		40CC03C9BCB48488089A9EE9 /* AppControlStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/AppControlStyle.swift; sourceTree = SOURCE_ROOT; };
 		B4BE5B5E69F82F4FC3BD9C8C = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/BoundlessTranslator/Translation/TranslationTextSplitter.swift"; sourceTree = "<group>"; };
-		1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift; sourceTree = SOURCE_ROOT; };
+		1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/UI/LookupTip.swift; sourceTree = SOURCE_ROOT; };
+		5C206A0EE7214E279BEA9D70 /* HintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/HintView.swift; sourceTree = SOURCE_ROOT; };
+		BB0F48F5D1954E8B931652B2 /* AppBrand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/AppBrand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				7685E5B98D77688C6C67A8F1 /* Localizable.strings */,
+				3ED27857071545A88CB46404 /* Sources/BoundlessTranslator/Resources/BrandSprite.png */,
 				DA295617FE3351C81CD46A1E /* Resources/AppIcon.icns */,
 				E964F0D4B94748354C8AF7C5 /* Resources/PrivacyInfo.xcprivacy */,
 			);
@@ -278,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				40CC03C9BCB48488089A9EE9 /* AppControlStyle.swift */,
+				5C206A0EE7214E279BEA9D70 /* HintView.swift */, BB0F48F5D1954E8B931652B2,
 				AE9956D17D86815BB7C30066 /* Sources/BoundlessTranslator/Application/AppController.swift */,
 				043A5FB33203FD8EC61FEF2F /* Sources/BoundlessTranslator/Application/AppDelegate.swift */,
 				4E56FFCD7180A850FA2EF63E /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift */,
@@ -292,6 +302,7 @@
 				A2003026E7B681FD4080C4EF /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutMonitor.swift */,
 				4828A4F353656A29507B5C7A /* Sources/BoundlessTranslator/ImageViewer/ImageViewerSelectionReader.swift */,
 				F879B09DCCD8DDE936ECA508 /* Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift */,
+				BC32C7465AF94956AE05D53F /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift */,
 				9083AB9A7B5345D581157FB5 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift */,
 				02409D0738175CC51E07AF81 /* Sources/BoundlessTranslator/ImageViewer/LiveTextImageView.swift */,
 				47141CA41D31B1166BD0BEB7 /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift */,
@@ -361,7 +372,7 @@
 				1F9061A5CB5ACD94481C6418 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelStyle.swift */,
 				E17353EDD401D4E87F9C6064 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbar.swift */,
 				66B753D49194C25A66458E0F /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbarController.swift */,
-				1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift */,
+				1C97E30A15C0FD91F01B9420 /* Sources/BoundlessTranslator/Translation/UI/LookupTip.swift */,
 				56FA658A1D3D983D2BCAA9FD /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift */,
 				B9C5D2DDA106755AB2BD8189 /* Sources/BoundlessTranslator/Translation/UI/TranslationSpeechButton.swift */,
 				A5A2154269DDA853A6649E43 /* Sources/BoundlessTranslator/Translation/UI/TranslationTextViewFactory.swift */,
@@ -499,6 +510,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E307BD6D8EB4DF01935954A /* Localizable.strings in Resources */,
+				8E2391FA4A214ED98C7C483E /* Sources/BoundlessTranslator/Resources/BrandSprite.png in Resources */,
 				5D393A4EEAFAAE7A7027F57C /* Resources/AppIcon.icns in Resources */,
 				A39309C4376B4D66A5739C05 /* Resources/PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -513,6 +525,7 @@
 			files = (
 				D28BABCC7CCA81316979D22F,
 				E64036AFB7FFEEF07E4DCE7C /* AppControlStyle.swift in Sources */,
+				CB712F468DDD48C1B578D883 /* HintView.swift in Sources */, BB0F48F5D1954E8B931652B1,
 				29EC1FEDE045C99581AC25B7 /* Sources/BoundlessTranslator/Application/AppController.swift in Sources */,
 				E02A10F40359FAC98596F09C /* Sources/BoundlessTranslator/Application/AppDelegate.swift in Sources */,
 				799D4C537E1435B6EF4751D6 /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift in Sources */,
@@ -527,6 +540,7 @@
 				8EF55C0BA79764C0F24A22C0 /* Sources/BoundlessTranslator/Application/Shortcut/GlobalShortcutMonitor.swift in Sources */,
 				3521C10D6DFBA2672D264A3E /* Sources/BoundlessTranslator/ImageViewer/ImageViewerSelectionReader.swift in Sources */,
 				D8ECBB747AB5C6668CB61D29 /* Sources/BoundlessTranslator/ImageViewer/ImageViewerWindowController.swift in Sources */,
+				7EE7C01A478A4C75AD590FA1 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTip.swift in Sources */,
 				FD147C18A659470980382360 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTipController.swift in Sources */,
 				EC1E53D064BC6BA8F7BA23DA /* Sources/BoundlessTranslator/ImageViewer/LiveTextImageView.swift in Sources */,
 				F6C807E035DF3284A5EBFDEF /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift in Sources */,
@@ -595,7 +609,7 @@
 				DDF35E74381BA039C3A6ABC6 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelStyle.swift in Sources */,
 				46A53DA469E1EB61759EADC1 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbar.swift in Sources */,
 				681A29728AD3FB0B861482C0 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelToolbarController.swift in Sources */,
-				7AE38F7CA2E8E1AA5DEADAAF /* Sources/BoundlessTranslator/Translation/UI/LookupTipView.swift in Sources */,
+				7AE38F7CA2E8E1AA5DEADAAF /* Sources/BoundlessTranslator/Translation/UI/LookupTip.swift in Sources */,
 				53DB0D4BE652ED8FCC165C4A /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift in Sources */,
 				185C6B12C3E27AA8887A64BC /* Sources/BoundlessTranslator/Translation/UI/TranslationSpeechButton.swift in Sources */,
 				98D7971819EA217B073D0E9A /* Sources/BoundlessTranslator/Translation/UI/TranslationTextViewFactory.swift in Sources */,

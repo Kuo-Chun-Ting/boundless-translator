@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Permita a gravação do ecrã para o Boundless Translator em Definições do Sistema > Privacidade e Segurança e tente novamente. Poderá ter de sair da aplicação e voltar a abri-la.";
 "screenshot.failed" = "Não foi possível capturar a área do ecrã. Tente novamente.";
 "screenshot.errorTitle" = "Não foi possível efetuar a captura de ecrã";
+"screenshot.hintTitle" = "Traduzir texto selecionado";
 "screenshot.guidance" = "Selecione o texto e pressione %@ para traduzir.";
 "lookup.action" = "Consultar";
+"lookup.title" = "Dicionário";
 "lookup.guidance" = "Selecione uma palavra ou expressão";
-"lookup.dismiss" = "Fechar";
+"hint.close" = "Fechar";
+"hint.doNotShowAgain" = "Não mostrar novamente";
 "panel.idle" = "Selecione texto e use o atalho de tradução.";
 "panel.translating" = "A traduzir…";
 "panel.failureTitle" = "Falha na tradução";

@@ -168,10 +168,3 @@ private struct LiveTextFixtureState: Encodable {
     let textEnd: CGPoint
     let original: CGPoint
 }
-
-// The fixture has its own entry point, so it does not compile BoundlessTranslatorApp.swift.
-// These auxiliary views only need the app's display name.
-enum AppBrand {
-    nonisolated static let displayName = "Boundless Translator"
-    @MainActor static var iconImage: NSImage { NSApplication.shared.applicationIconImage }
-}

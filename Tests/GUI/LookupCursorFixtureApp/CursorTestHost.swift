@@ -175,9 +175,15 @@ private enum CursorTestHost {
     @MainActor
     static func main() {
         let application = NSApplication.shared
-        let delegate: NSApplicationDelegate = ProcessInfo.processInfo.environment[
-            "BOUNDLESS_TRANSLATOR_LIVE_TEXT_FIXTURE_OUTPUT"
-        ] == nil ? CursorTestHostDelegate() : LiveTextFixtureDelegate()
+        let environment = ProcessInfo.processInfo.environment
+        let delegate: NSApplicationDelegate
+        if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] != nil {
+            delegate = HintFixtureDelegate()
+        } else if environment["BOUNDLESS_TRANSLATOR_LIVE_TEXT_FIXTURE_OUTPUT"] != nil {
+            delegate = LiveTextFixtureDelegate()
+        } else {
+            delegate = CursorTestHostDelegate()
+        }
         application.setActivationPolicy(.accessory)
         application.delegate = delegate
         application.run()

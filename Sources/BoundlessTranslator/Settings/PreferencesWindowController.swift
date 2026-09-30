@@ -102,7 +102,7 @@ final class PreferencesWindowController: NSWindowController {
 
     private func configureTitlebar(_ window: NSWindow) {
         window.titleVisibility = .hidden
-        let icon = NSImageView(image: AppBrand.iconImage)
+        let icon = NSImageView(image: AppBrand.spriteImage)
         icon.imageScaling = .scaleProportionallyUpOrDown
         icon.setAccessibilityElement(false)
         titleLabel.font = .systemFont(ofSize: NSFont.systemFontSize, weight: .semibold)

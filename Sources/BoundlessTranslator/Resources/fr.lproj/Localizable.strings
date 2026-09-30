@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Autorisez l’enregistrement de l’écran pour Boundless Translator dans Réglages Système > Confidentialité et sécurité, puis réessayez. Vous devrez peut-être quitter et rouvrir l’app.";
 "screenshot.failed" = "Impossible de capturer la zone de l’écran. Réessayez.";
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";
+"screenshot.hintTitle" = "Traduire le texte sélectionné";
 "screenshot.guidance" = "Sélectionnez du texte, puis appuyez sur %@ pour le traduire.";
 "lookup.action" = "Rechercher";
+"lookup.title" = "Dictionnaire";
 "lookup.guidance" = "Sélectionnez un mot ou une expression";
-"lookup.dismiss" = "Fermer";
+"hint.close" = "Fermer";
+"hint.doNotShowAgain" = "Ne plus afficher";
 "panel.idle" = "Sélectionnez du texte et utilisez le raccourci de traduction.";
 "panel.translating" = "Traduction en cours…";
 "panel.failureTitle" = "Échec de la traduction";

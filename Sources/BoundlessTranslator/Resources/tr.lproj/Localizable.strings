@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Sistem Ayarları > Gizlilik ve Güvenlik bölümünde Boundless Translator için ekran kaydına izin verin, sonra yeniden deneyin. Uygulamadan çıkıp uygulamayı yeniden açmanız gerekebilir.";
 "screenshot.failed" = "Ekranın seçilen bölümü yakalanamadı. Yeniden deneyin.";
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
+"screenshot.hintTitle" = "Seçili Metni Çevir";
 "screenshot.guidance" = "Metni seçin, ardından çevirmek için %@ tuşlarına basın.";
 "lookup.action" = "Ara";
+"lookup.title" = "Sözlük";
 "lookup.guidance" = "Bir sözcük veya ifade seçin";
-"lookup.dismiss" = "Kapat";
+"hint.close" = "Kapat";
+"hint.doNotShowAgain" = "Bir daha gösterme";
 "panel.idle" = "Metni seçip çeviri kestirmesini kullanın.";
 "panel.translating" = "Çevriliyor…";
 "panel.failureTitle" = "Çeviri başarısız";

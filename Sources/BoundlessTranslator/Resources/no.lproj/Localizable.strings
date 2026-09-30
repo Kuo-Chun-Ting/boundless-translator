@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Tillat skjermopptak for Boundless Translator i Systeminnstillinger > Personvern og sikkerhet, og prøv igjen. Du må kanskje avslutte og åpne appen på nytt.";
 "screenshot.failed" = "Kunne ikke ta bilde av skjermområdet. Prøv igjen.";
 "screenshot.errorTitle" = "Kunne ikke ta skjermbilde";
+"screenshot.hintTitle" = "Oversett markert tekst";
 "screenshot.guidance" = "Marker tekst, og trykk på %@ for å oversette.";
 "lookup.action" = "Slå opp";
+"lookup.title" = "Ordbok";
 "lookup.guidance" = "Marker et ord eller uttrykk";
-"lookup.dismiss" = "Lukk";
+"hint.close" = "Lukk";
+"hint.doNotShowAgain" = "Ikke vis igjen";
 "panel.idle" = "Marker tekst og bruk snarveien for oversettelse.";
 "panel.translating" = "Oversetter…";
 "panel.failureTitle" = "Oversettelsen mislyktes";

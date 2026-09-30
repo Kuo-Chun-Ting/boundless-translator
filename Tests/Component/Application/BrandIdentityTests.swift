@@ -87,6 +87,25 @@ func test_menuBarIconRenderingMode_when_renderingBrandIcon_then_preservesOrigina
     #expect(renderingMode == .original)
 }
 
+@Test
+@MainActor
+func test_spriteImage_when_loaded_then_hasVisibleArtworkAndTransparentCorners() throws {
+    // Arrange
+    let image = AppBrand.spriteImage
+
+    // Act
+    let data = try #require(image.tiffRepresentation)
+    let bitmap = try #require(NSBitmapImageRep(data: data))
+
+    // Assert
+    #expect(bitmap.hasAlpha)
+    for (x, y) in [(0, 0), (bitmap.pixelsWide - 1, 0), (0, bitmap.pixelsHigh - 1),
+                   (bitmap.pixelsWide - 1, bitmap.pixelsHigh - 1)] {
+        #expect(try #require(bitmap.colorAt(x: x, y: y)).alphaComponent == 0)
+    }
+    #expect(try #require(bitmap.colorAt(x: bitmap.pixelsWide / 2, y: bitmap.pixelsHigh / 2)).alphaComponent > 0)
+}
+
 private let projectRootURL = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
     .deletingLastPathComponent()

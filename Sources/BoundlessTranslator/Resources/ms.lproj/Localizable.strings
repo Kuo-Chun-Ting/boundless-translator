@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Benarkan rakaman skrin untuk Boundless Translator dalam Seting Sistem > Privasi & Keselamatan, kemudian cuba lagi. Anda mungkin perlu keluar dan membuka semula app.";
 "screenshot.failed" = "Tidak dapat menangkap kawasan skrin. Cuba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
+"screenshot.hintTitle" = "Terjemah Teks Dipilih";
 "screenshot.guidance" = "Pilih teks, kemudian tekan %@ untuk menterjemah.";
 "lookup.action" = "Cari";
+"lookup.title" = "Kamus";
 "lookup.guidance" = "Pilih perkataan atau frasa";
-"lookup.dismiss" = "Tutup";
+"hint.close" = "Tutup";
+"hint.doNotShowAgain" = "Jangan tunjuk lagi";
 "panel.idle" = "Pilih teks dan gunakan pintasan terjemahan.";
 "panel.translating" = "Menterjemah…";
 "panel.failureTitle" = "Terjemahan gagal";

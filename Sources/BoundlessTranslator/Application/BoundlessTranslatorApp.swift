@@ -24,28 +24,6 @@ struct BoundlessTranslatorApp: App {
     }
 }
 
-enum AppBrand {
-    static let displayName = "Boundless Translator"
-    static let iconFileName = "AppIcon.icns"
-    static let menuBarIconRenderingMode: Image.TemplateRenderingMode = .original
-
-    @MainActor
-    static var iconImage: NSImage {
-        NSApplication.shared.applicationIconImage
-    }
-
-    @MainActor
-    static var menuBarIconImage: NSImage {
-        let size = NSSize(width: 24, height: 24)
-        let sourceImage = iconImage
-        let image = NSImage(size: size, flipped: false) { rect in
-            sourceImage.draw(in: rect)
-            return true
-        }
-        image.isTemplate = false
-        return image
-    }
-}
 
 private struct MenuBarView: View {
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings

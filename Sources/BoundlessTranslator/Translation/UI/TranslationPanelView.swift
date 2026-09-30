@@ -6,6 +6,7 @@ struct TranslationWindowView: View {
     @ObservedObject var speechController: TranslationSpeechController
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     @State private var isShowingLookupTip = false
+    @State private var lookupTipClosed = false
     @State private var lookupTipHeight: CGFloat = 0
 
     let supportedLanguages: [Locale.Language]
@@ -56,7 +57,7 @@ struct TranslationWindowView: View {
         .task {
             for await shouldDisplay in lookupTip.shouldDisplayUpdates {
                 guard !Task.isCancelled else { return }
-                isShowingLookupTip = shouldDisplay
+                isShowingLookupTip = shouldDisplay && !lookupTipClosed
                 if !shouldDisplay { lookupTipHeight = 0 }
             }
         }
@@ -150,23 +151,28 @@ struct TranslationWindowView: View {
 
     private var sourceContent: some View {
         VStack(spacing: 0) {
-            if isShowingLookupTip {
-                LookupTipView(
-                    tip: lookupTip,
-                    width: metrics.size.width / 2 - TranslationWindowStyle.contentPadding * 2,
-                    localization: localization
-                )
-                .padding(.horizontal, TranslationWindowStyle.contentPadding)
-                .padding(.top, TranslationWindowStyle.contentPadding)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
-                    lookupTipHeight = $0
-                }
-            }
             SelectableSourceTextView(
                 text: coordinator.request?.text ?? "",
                 localization: localization
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            if isShowingLookupTip {
+                HintView(
+                    title: lookupTip.title,
+                    message: lookupTip.message,
+                    icon: Image(nsImage: AppBrand.spriteImage),
+                    width: metrics.size.width / 2 - TranslationWindowStyle.contentPadding * 2,
+                    localization: localization,
+                    identifier: "hint.dictionary",
+                    onClose: closeLookupTip
+                )
+                .padding(.horizontal, TranslationWindowStyle.contentPadding)
+                .padding(.bottom, TranslationWindowStyle.contentPadding)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
+                    lookupTipHeight = $0
+                }
+            }
         }
         .frame(
             maxWidth: .infinity,
@@ -174,6 +180,13 @@ struct TranslationWindowView: View {
             maxHeight: .infinity,
             alignment: .topLeading
         )
+    }
+
+    private func closeLookupTip(doNotShowAgain: Bool) {
+        if doNotShowAgain { lookupTip.invalidate(reason: .tipClosed) }
+        lookupTipClosed = true
+        isShowingLookupTip = false
+        lookupTipHeight = 0
     }
 
     private var lookupTip: LookupTip {

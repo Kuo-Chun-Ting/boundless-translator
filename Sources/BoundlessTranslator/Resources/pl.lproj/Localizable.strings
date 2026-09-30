@@ -30,10 +30,13 @@
 "screenshot.permissionRequired" = "Zezwól na nagrywanie ekranu aplikacji Boundless Translator w Ustawieniach systemowych > Prywatność i ochrona, a następnie spróbuj ponownie. Konieczne może być zamknięcie i ponowne otwarcie aplikacji.";
 "screenshot.failed" = "Nie udało się zrobić zrzutu obszaru ekranu. Spróbuj ponownie.";
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";
+"screenshot.hintTitle" = "Przetłumacz zaznaczony tekst";
 "screenshot.guidance" = "Zaznacz tekst i naciśnij %@, aby przetłumaczyć.";
 "lookup.action" = "Sprawdź";
+"lookup.title" = "Słownik";
 "lookup.guidance" = "Zaznacz słowo lub frazę";
-"lookup.dismiss" = "Zamknij";
+"hint.close" = "Zamknij";
+"hint.doNotShowAgain" = "Nie pokazuj ponownie";
 "panel.idle" = "Zaznacz tekst i użyj skrótu tłumaczenia.";
 "panel.translating" = "Tłumaczenie…";
 "panel.failureTitle" = "Tłumaczenie nie powiodło się";
