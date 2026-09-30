@@ -45,6 +45,7 @@ final class ImageViewerWindowController: NSWindowController,
     private let windowPresenter: any ForegroundWindowPresenting
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private var languageCancellable: AnyCancellable?
+    private var screenshotHintHeight: CGFloat = 0
 
     init(
         content: any ImageViewerContent = LiveTextImageView(),
@@ -84,6 +85,9 @@ final class ImageViewerWindowController: NSWindowController,
 
         super.init(window: window)
         window.delegate = self
+        screenshotTipController.onHeightChange = { [weak self] height in
+            self?.reserveScreenshotHintSpace(height: height)
+        }
         updateWindowTitle(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
         languageCancellable = interfaceLanguageSettings.$languageIdentifier
             .sink { [weak self] languageIdentifier in
@@ -97,6 +101,7 @@ final class ImageViewerWindowController: NSWindowController,
     }
 
     func present(image: NSImage, pointerLocation: CGPoint) {
+        screenshotTipController.close()
         content.display(image)
         if let visibleFrame = visibleFrameForPointer(pointerLocation) {
             fitWindow(to: image.size, inside: visibleFrame)
@@ -110,6 +115,38 @@ final class ImageViewerWindowController: NSWindowController,
     func windowWillClose(_ notification: Notification) {
         screenshotTipController.close()
         content.clearSelection()
+    }
+
+    func windowDidResize(_ notification: Notification) {
+        layoutScreenshotContent()
+        if let width = window?.contentView?.bounds.width {
+            screenshotTipController.resize(to: width)
+        }
+    }
+
+    private func reserveScreenshotHintSpace(height: CGFloat) {
+        guard height != screenshotHintHeight, let window else { return }
+        let difference = height - screenshotHintHeight
+        screenshotHintHeight = height
+        var frame = window.frame
+        frame.size.height += difference
+        frame.origin.y -= difference
+        if let visibleFrame = window.screen?.visibleFrame {
+            frame.origin = WindowPositioner(pointerOffset: 0).resizedOrigin(
+                currentFrame: window.frame, newWindowSize: frame.size, visibleFrame: visibleFrame
+            )
+        }
+        window.contentMinSize = CGSize(width: 420, height: 300 + height)
+        window.setFrame(frame, display: true)
+        layoutScreenshotContent()
+    }
+
+    private func layoutScreenshotContent() {
+        guard let bounds = window?.contentView?.bounds else { return }
+        content.view.frame = CGRect(
+            x: 0, y: 0, width: bounds.width,
+            height: max(0, bounds.height - screenshotHintHeight)
+        )
     }
 
     private func showScreenshotTip() {

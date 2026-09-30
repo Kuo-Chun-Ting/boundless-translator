@@ -13,33 +13,49 @@ struct HintView: View {
     @State private var doNotShowAgain = false
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            icon
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 28)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading, spacing: 3) {
-                    title.font(.headline)
-                    message
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                Toggle(localization.string("hint.doNotShowAgain"), isOn: $doNotShowAgain)
-                    .toggleStyle(.checkbox)
-                    .font(.caption)
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 16) {
+                description.fixedSize(horizontal: true, vertical: true)
+                Spacer(minLength: 16)
+                dismissOption.fixedSize()
+                closeButton
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fixedSize(horizontal: false, vertical: true)
-            closeButton
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 12) {
+                    description
+                    dismissOption.padding(.leading, 40)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                closeButton
+            }
         }
-        .padding(12)
+        .padding(16)
         .frame(width: width)
         .fixedSize(horizontal: false, vertical: true)
-        .modifier(HintMaterial())
+        .background(Color.primary.opacity(0.06))
+        .background(Color(nsColor: .windowBackgroundColor))
+        .overlay(alignment: .bottom) { Divider().allowsHitTesting(false) }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(identifier)
+    }
+
+    private var description: some View {
+        HStack(alignment: .top, spacing: 12) {
+            icon.resizable().scaledToFit()
+                .frame(width: 28, height: 28)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                title.font(.headline)
+                message.font(.subheadline).foregroundStyle(.secondary)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var dismissOption: some View {
+        Toggle(localization.string("hint.doNotShowAgain"), isOn: $doNotShowAgain)
+            .toggleStyle(.checkbox)
+            .font(.caption)
     }
 
     private var closeButton: some View {
@@ -53,23 +69,5 @@ struct HintView: View {
         .buttonStyle(.plain)
         .help(localization.string("hint.close"))
         .accessibilityLabel(localization.string("hint.close"))
-    }
-}
-
-private struct HintMaterial: ViewModifier {
-    private var tint: Color {
-        Color(nsColor: NSColor(name: nil) { appearance in
-            let isDark = appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua
-            return NSColor(white: isDark ? 0.18 : 0.80, alpha: 0.55)
-        })
-    }
-
-    func body(content: Content) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 12)
-        if #available(macOS 26, *) {
-            content.glassEffect(.regular.tint(tint).interactive(), in: shape)
-        } else {
-            content.background(tint, in: shape).background(.regularMaterial, in: shape)
-        }
     }
 }

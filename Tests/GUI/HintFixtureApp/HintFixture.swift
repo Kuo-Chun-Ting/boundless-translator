@@ -10,7 +10,9 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         interfaceLanguageSettings: languages,
         engine: TranslationEngine(loadLanguages: { [] }, makeTaskHost: { _, _ in AnyView(EmptyView()) })
     )
-    private lazy var viewer = ImageViewerWindowController(interfaceLanguageSettings: languages)
+    private let imageView = LiveTextImageView()
+    private lazy var viewer = ImageViewerWindowController(content: imageView, interfaceLanguageSettings: languages)
+    private var observationTimer: Timer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
@@ -38,6 +40,44 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
     private func presentScreenshot() {
         viewer.translationShortcutName = { "⌥T" }
         viewer.present(image: makeImage(), pointerLocation: presentationPoint)
+        startObservingScreenshot()
+    }
+
+    private func startObservingScreenshot() {
+        guard let path = ProcessInfo.processInfo.environment["BOUNDLESS_HINT_OBSERVATIONS"] else { return }
+        let timer = Timer(timeInterval: 0.02, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.publishScreenshotState(to: URL(fileURLWithPath: path)) }
+        }
+        observationTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    private func publishScreenshotState(to url: URL) {
+        guard let window = viewer.window else { return }
+        let screenRect = window.convertToScreen(imageView.convert(imageView.bounds, to: nil))
+        let state: [String: Any] = [
+            "cursor": NSCursor.current === NSCursor.iBeam ? "ibeam"
+                : NSCursor.current === NSCursor.arrow ? "arrow" : "other",
+            "recognizedText": imageView.overlayView.text,
+            "selectedText": imageView.selectedText,
+            "imageFrame": [screenRect.minX, NSScreen.screens[0].frame.maxY - screenRect.maxY,
+                           screenRect.width, screenRect.height],
+            "textStart": screenPoint(NSPoint(x: 48, y: 150), window: window),
+            "textEnd": screenPoint(NSPoint(x: 186, y: 150), window: window)
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: state) {
+            try? data.write(to: url, options: .atomic)
+        }
+    }
+
+    private func screenPoint(_ point: NSPoint, window: NSWindow) -> [Double] {
+        let scale = min(imageView.bounds.width / 760, imageView.bounds.height / 420)
+        let local = NSPoint(
+            x: (imageView.bounds.width - 760 * scale) / 2 + point.x * scale,
+            y: (imageView.bounds.height - 420 * scale) / 2 + point.y * scale
+        )
+        let screen = window.convertPoint(toScreen: imageView.convert(local, to: nil))
+        return [screen.x, NSScreen.screens[0].frame.maxY - screen.y]
     }
 
     private var presentationPoint: CGPoint {
@@ -51,11 +91,12 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         image.lockFocus()
         NSColor.textBackgroundColor.setFill()
         NSRect(origin: .zero, size: size).fill()
-        let text = "A little curiosity goes a long way.\n\nSelect text from a screenshot to explore new ideas.\n\nSmall discoveries can become something new."
-        (text as NSString).draw(
-            in: NSRect(x: 32, y: 60, width: 696, height: 320),
-            withAttributes: [.font: NSFont.systemFont(ofSize: 26), .foregroundColor: NSColor.labelColor]
-        )
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.monospacedSystemFont(ofSize: 40, weight: .regular),
+            .foregroundColor: NSColor.labelColor
+        ]
+        ("COVERED WORDS" as NSString).draw(at: NSPoint(x: 32, y: 340), withAttributes: attributes)
+        ("TARGET" as NSString).draw(at: NSPoint(x: 40, y: 130), withAttributes: attributes)
         image.unlockFocus()
         return image
     }

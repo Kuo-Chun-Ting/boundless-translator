@@ -24,3 +24,25 @@ func test_hintView_when_measuredBeforePresentation_then_hasContentSize(language:
     #expect(size.height > 24)
     #expect(size.height < 200)
 }
+
+@Test @MainActor
+func test_hintView_whenWidthIsReduced_then_wrapsControlsWithoutClippingText() {
+    // Arrange
+    let localization = AppLocalization(languageIdentifier: "de")
+    let tip = ScreenshotTip(localization: localization, shortcut: "⇧⌘1")
+    func measure(width: CGFloat) -> CGSize {
+        NSHostingController(rootView: HintView(
+            title: tip.title, message: tip.message,
+            icon: Image(nsImage: AppBrand.spriteImage), width: width,
+            localization: localization, identifier: "hint.screenshot", onClose: { _ in }
+        )).view.fittingSize
+    }
+
+    // Act
+    let wide = measure(width: 1_000)
+    let narrow = measure(width: 256)
+
+    // Assert
+    #expect(narrow.width == 256)
+    #expect(narrow.height > wide.height)
+}

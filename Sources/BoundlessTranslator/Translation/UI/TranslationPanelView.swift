@@ -158,17 +158,16 @@ struct TranslationWindowView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             if isShowingLookupTip {
+                Divider()
                 HintView(
                     title: lookupTip.title,
                     message: lookupTip.message,
                     icon: Image(nsImage: AppBrand.spriteImage),
-                    width: metrics.size.width / 2 - TranslationWindowStyle.contentPadding * 2,
+                    width: metrics.size.width / 2,
                     localization: localization,
                     identifier: "hint.dictionary",
                     onClose: closeLookupTip
                 )
-                .padding(.horizontal, TranslationWindowStyle.contentPadding)
-                .padding(.bottom, TranslationWindowStyle.contentPadding)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
                     lookupTipHeight = $0
                 }
