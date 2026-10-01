@@ -29,6 +29,92 @@ final class HintPresentationGUITests: XCTestCase {
         }
     }
 
+    func test_settingsHint_when_firstOpened_then_appearsAtRightUntilPermanentlyDismissed() {
+        // Arrange
+        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
+        let hint = app.groups["hint.settings"].firstMatch
+
+        // Act & Assert
+        checkHintLifecycle(hint: hint, readyElement: app.buttons["usageHelpButton"]) {
+            self.assertSettingsHintPosition()
+        }
+    }
+
+    private func assertSettingsHintPosition() {
+        let hint = app.groups["hint.settings"].firstMatch
+        let settings = app.windows["Boundless Translator Settings"]
+        let help = settings.buttons["usageHelpButton"]
+        XCTAssertGreaterThan(hint.frame.minX, settings.frame.maxX)
+        XCTAssertEqual(hint.frame.maxY - 28, help.frame.midY, accuracy: 3)
+        XCTAssertTrue(hint.staticTexts["How to Use"].exists)
+        XCTAssertTrue(hint.staticTexts["Click ? to see how to translate selected text and screenshots."].exists)
+    }
+
+    func test_settingsHint_when_settingsMoves_then_followsAtRightAndHelpStillOpens() {
+        // Arrange
+        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
+        app.launch()
+        app.activate()
+        let hint = app.groups["hint.settings"].firstMatch
+        XCTAssertTrue(hint.waitForExistence(timeout: 5))
+        let settings = app.windows["Boundless Translator Settings"]
+        let before = hint.frame
+        let titlebar = settings.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: 180, dy: 12))
+
+        // Act
+        titlebar.press(forDuration: 0.1, thenDragTo: titlebar.withOffset(CGVector(dx: -60, dy: 40)))
+
+        // Assert
+        XCTAssertEqual(hint.frame.minX, before.minX - 60, accuracy: 3)
+        XCTAssertEqual(hint.frame.minY, before.minY + 40, accuracy: 3)
+        assertSettingsHintPosition()
+        settings.buttons["usageHelpButton"].click()
+        XCTAssertTrue(app.staticTexts["For selectable text, select it in another app and press ⇧⌘1 to translate."].waitForExistence(timeout: 5))
+        captureHint()
+    }
+
+    func test_settingsHint_when_localizedInLightAndDark_then_textAndControlsFitInCard() {
+        for appearance in ["light", "dark"] {
+            for language in ["en", "zh-Hant", "de", "ar"] {
+                // Arrange
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_LANGUAGE"] = language
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] = appearance
+
+                // Act
+                app.launch()
+                let hint = app.groups["hint.settings"].firstMatch
+                XCTAssertTrue(hint.waitForExistence(timeout: 5))
+
+                // Assert
+                let titles = ["en": "How to Use", "zh-Hant": "使用方式", "de": "Verwendung", "ar": "الاستخدام"]
+                XCTAssertTrue(hint.staticTexts[titles[language]!].waitForExistence(timeout: 5))
+                let texts = hint.staticTexts.allElementsBoundByIndex
+                XCTAssertGreaterThanOrEqual(texts.count, 2)
+                for text in texts {
+                    XCTAssertTrue(hint.frame.insetBy(dx: -1, dy: -1).contains(text.frame), text.label)
+                }
+                XCTAssertTrue(hint.checkBoxes.firstMatch.isHittable)
+                XCTAssertTrue(hint.buttons.firstMatch.isHittable)
+                XCTAssertFalse(hint.checkBoxes.firstMatch.frame.intersects(hint.buttons.firstMatch.frame))
+                if language == "ar" {
+                    XCTAssertLessThan(hint.buttons.firstMatch.frame.midX, hint.checkBoxes.firstMatch.frame.midX)
+                } else {
+                    XCTAssertGreaterThan(hint.buttons.firstMatch.frame.midX, hint.checkBoxes.firstMatch.frame.midX)
+                }
+                let attachment = XCTAttachment(screenshot: app.screenshot())
+                attachment.name = "Settings hint \(language) \(appearance)"
+                attachment.lifetime = .keepAlways
+                add(attachment)
+                let card = XCTAttachment(screenshot: hint.screenshot())
+                card.name = "Settings card \(language) \(appearance)"
+                card.lifetime = .keepAlways
+                add(card)
+                app.terminate()
+            }
+        }
+    }
+
     func test_screenshotHint_whenFirstUsed_then_appearsUntilUserDismisses() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"
@@ -197,7 +283,7 @@ final class HintPresentationGUITests: XCTestCase {
     }
 
     private func captureHint() {
-        let attachment = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Hint before dismissal"
         attachment.lifetime = .keepAlways
         add(attachment)

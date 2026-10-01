@@ -18,9 +18,8 @@
 "usage.show" = "使い方を表示";
 "usage.languageSupport.title" = "言語サポート";
 "usage.languageSupport.description" = "インターフェイス言語の対応範囲はmacOSと同じです。どの言語間で翻訳できるかはmacOSによって決まります。";
-"usage.translateText.title" = "テキストを翻訳";
-"usage.translateText.description" = "テキストを選択して%@を押します。";
-"usage.translateImageText.description" = "%@ を押して画面の範囲を選択し、画像内のテキストを選択してから %@ を押すと翻訳できます。";
+"usage.translateText.description" = "文字を選択できる場合は、ほかのアプリで文字を選択し、%@ を押して翻訳します。";
+"usage.translateImageText.description" = "文字を選択できない場合は、%@ を押してスクリーンショットを撮影します。画像内の文字を選択し、%@ を押して翻訳します。\n\nBoundless Translator はスクリーンショット内の文字を自動認識し、選択できるようにします。";
 "usage.lookUp.title" = "調べる";
 "usage.lookUp.description" = "翻訳パネルでテキストを選択してから、本のアイコンをクリックします。";
 "usage.listen.title" = "読み上げ";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "「？」をクリックして、選択したテキストやスクリーンショットの翻訳方法を確認できます。";

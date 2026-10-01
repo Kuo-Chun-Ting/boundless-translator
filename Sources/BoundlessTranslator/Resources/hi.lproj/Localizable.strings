@@ -18,9 +18,8 @@
 "usage.show" = "उपयोग दिखाएँ";
 "usage.languageSupport.title" = "भाषा समर्थन";
 "usage.languageSupport.description" = "इंटरफ़ेस भाषा समर्थन macOS के समान है। macOS तय करता है कि किन भाषाओं के बीच अनुवाद किया जा सकता है।";
-"usage.translateText.title" = "टेक्स्ट का अनुवाद करें";
-"usage.translateText.description" = "टेक्स्ट चुनें और %@ दबाएँ।";
-"usage.translateImageText.description" = "%@ दबाएँ, स्क्रीन का कोई क्षेत्र चुनें, इमेज में टेक्स्ट चुनें, फिर अनुवाद करने के लिए %@ दबाएँ।";
+"usage.translateText.description" = "अगर टेक्स्ट चुना जा सकता है, तो दूसरे ऐप में टेक्स्ट चुनें और अनुवाद के लिए %@ दबाएँ।";
+"usage.translateImageText.description" = "अगर टेक्स्ट चुना नहीं जा सकता है, तो स्क्रीनशॉट लेने के लिए %@ दबाएँ। फिर चित्र में टेक्स्ट चुनें और अनुवाद के लिए %@ दबाएँ।\n\nBoundless Translator स्क्रीनशॉट में टेक्स्ट को अपने आप पहचानकर उसे चुनने योग्य बनाता है।";
 "usage.lookUp.title" = "खोजें";
 "usage.lookUp.description" = "अनुवाद पैनल में टेक्स्ट चुनें, फिर किताब पर क्लिक करें।";
 "usage.listen.title" = "सुनें";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "चुने हुए टेक्स्ट और स्क्रीनशॉट का अनुवाद करने का तरीका देखने के लिए ? पर क्लिक करें।";

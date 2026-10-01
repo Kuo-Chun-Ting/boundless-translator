@@ -18,9 +18,8 @@
 "usage.show" = "Zobrazit použití";
 "usage.languageSupport.title" = "Podpora jazyků";
 "usage.languageSupport.description" = "Podpora jazyků rozhraní odpovídá systému macOS. macOS určuje, mezi kterými jazyky lze překládat.";
-"usage.translateText.title" = "Přeložit text";
-"usage.translateText.description" = "Vyberte text a stiskněte %@.";
-"usage.translateImageText.description" = "Stiskněte %@, vyberte oblast obrazovky, vyberte text v obrázku a stisknutím %@ jej přeložte.";
+"usage.translateText.description" = "Pokud lze text vybrat, vyberte ho v jiné aplikaci a stisknutím %@ ho přeložte.";
+"usage.translateImageText.description" = "Pokud text nelze vybrat, stisknutím %@ pořiďte snímek obrazovky. Poté vyberte text na snímku a stisknutím %@ ho přeložte.\n\nBoundless Translator automaticky rozpozná text na snímcích obrazovky a umožní jeho výběr.";
 "usage.lookUp.title" = "Vyhledat";
 "usage.lookUp.description" = "Vyberte text na panelu překladu a klikněte na knihu.";
 "usage.listen.title" = "Poslechnout";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Kliknutím na ? zjistíte, jak překládat vybraný text a snímky obrazovky.";

@@ -18,9 +18,8 @@
 "usage.show" = "Toon gebruik";
 "usage.languageSupport.title" = "Taalondersteuning";
 "usage.languageSupport.description" = "De ondersteuning voor interfacetalen komt overeen met macOS. macOS bepaalt tussen welke talen kan worden vertaald.";
-"usage.translateText.title" = "Vertaal tekst";
-"usage.translateText.description" = "Selecteer tekst en druk op %@.";
-"usage.translateImageText.description" = "Druk op %@, selecteer een schermgebied, selecteer tekst in de afbeelding en druk op %@ om te vertalen.";
+"usage.translateText.description" = "Als tekst selecteerbaar is, selecteer je deze in een andere app en druk je op %@ om te vertalen.";
+"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om een schermafbeelding te maken. Selecteer daarna de tekst in de afbeelding en druk op %@ om te vertalen.\n\nBoundless Translator herkent tekst in schermafbeeldingen automatisch en maakt deze selecteerbaar.";
 "usage.lookUp.title" = "Zoek op";
 "usage.lookUp.description" = "Selecteer tekst in het vertaalpaneel en klik vervolgens op het boek.";
 "usage.listen.title" = "Luister";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Klik op ? om te zien hoe je geselecteerde tekst en schermafbeeldingen vertaalt.";

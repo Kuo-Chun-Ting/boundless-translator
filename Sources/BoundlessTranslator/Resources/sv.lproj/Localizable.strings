@@ -18,9 +18,8 @@
 "usage.show" = "Visa användning";
 "usage.languageSupport.title" = "Språkstöd";
 "usage.languageSupport.description" = "Stödet för gränssnittsspråk motsvarar macOS. macOS avgör vilka språk som kan översättas sinsemellan.";
-"usage.translateText.title" = "Översätt text";
-"usage.translateText.description" = "Markera text och tryck på %@.";
-"usage.translateImageText.description" = "Tryck på %@, välj ett skärmområde, markera text i bilden och tryck sedan på %@ för att översätta.";
+"usage.translateText.description" = "Om texten går att markera, markera den i en annan app och tryck på %@ för att översätta.";
+"usage.translateImageText.description" = "Om texten inte går att markera, tryck på %@ för att ta en skärmavbild. Markera sedan texten i bilden och tryck på %@ för att översätta.\n\nBoundless Translator känner automatiskt igen text i skärmavbilder och gör den markerbar.";
 "usage.lookUp.title" = "Slå upp";
 "usage.lookUp.description" = "Markera text i översättningspanelen och klicka sedan på boken.";
 "usage.listen.title" = "Lyssna";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Klicka på ? för att se hur du översätter markerad text och skärmavbilder.";

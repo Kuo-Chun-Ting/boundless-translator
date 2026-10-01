@@ -12,6 +12,12 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
     )
     private let imageView = LiveTextImageView()
     private lazy var viewer = ImageViewerWindowController(content: imageView, interfaceLanguageSettings: languages)
+    private lazy var preferences = PreferencesWindowController(
+        settings: TranslationSettings(), interfaceLanguageSettings: languages,
+        translationShortcutController: GlobalShortcutController(handler: {}),
+        supportedLanguageCatalog: SupportedLanguageCatalog(loadLanguages: { [] }), onShowSubscription: {},
+        pointerScreenVisibleFrame: { NSScreen.screens[0].visibleFrame }
+    )
     private var observationTimer: Timer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -20,8 +26,10 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
             NSApp.appearance = NSAppearance(named: environment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] == "dark" ? .darkAqua : .aqua)
             let datastore = URL(fileURLWithPath: environment["BOUNDLESS_TRANSLATOR_HINT_DATASTORE"]!)
             try Tips.configure([.datastoreLocation(.url(datastore))])
-            languages.languageIdentifier = "en"
-            if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] == "dictionary" {
+            languages.languageIdentifier = environment["BOUNDLESS_TRANSLATOR_HINT_LANGUAGE"] ?? "en"
+            if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] == "settings" {
+                preferences.present()
+            } else if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] == "dictionary" {
                 try presentTranslation()
             } else {
                 presentScreenshot()

@@ -18,9 +18,8 @@
 "usage.show" = "Mostrar utilização";
 "usage.languageSupport.title" = "Suporte de idiomas";
 "usage.languageSupport.description" = "O suporte de idiomas da interface corresponde ao macOS. O macOS determina entre que idiomas é possível traduzir.";
-"usage.translateText.title" = "Traduzir texto";
-"usage.translateText.description" = "Selecione texto e prima %@.";
-"usage.translateImageText.description" = "Prima %@, selecione uma área do ecrã, selecione texto na imagem e prima %@ para traduzir.";
+"usage.translateText.description" = "Se o texto for selecionável, selecione-o noutra aplicação e prima %@ para traduzir.";
+"usage.translateImageText.description" = "Se o texto não for selecionável, prima %@ para capturar o ecrã. Depois, selecione o texto na imagem e prima %@ para traduzir.\n\nO Boundless Translator reconhece automaticamente o texto nas capturas e torna-o selecionável.";
 "usage.lookUp.title" = "Consultar";
 "usage.lookUp.description" = "Selecione texto no painel de tradução e clique no livro.";
 "usage.listen.title" = "Ouvir";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Clique em ? para ver como traduzir texto selecionado e capturas de ecrã.";

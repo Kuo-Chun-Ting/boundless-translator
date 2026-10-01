@@ -18,9 +18,8 @@
 "usage.show" = "Показать инструкции";
 "usage.languageSupport.title" = "Поддержка языков";
 "usage.languageSupport.description" = "Поддержка языков интерфейса соответствует macOS. macOS определяет, между какими языками возможен перевод.";
-"usage.translateText.title" = "Перевести текст";
-"usage.translateText.description" = "Выделите текст и нажмите %@.";
-"usage.translateImageText.description" = "Нажмите %@, выберите область экрана, выделите текст на изображении и нажмите %@ для перевода.";
+"usage.translateText.description" = "Если текст можно выделить, выделите его в другом приложении и нажмите %@ для перевода.";
+"usage.translateImageText.description" = "Если текст нельзя выделить, нажмите %@, чтобы сделать снимок экрана. Затем выделите текст на снимке и нажмите %@ для перевода.\n\nBoundless Translator автоматически распознаёт текст на снимках экрана и позволяет его выделять.";
 "usage.lookUp.title" = "Найти";
 "usage.lookUp.description" = "Выделите текст на панели перевода и нажмите значок книги.";
 "usage.listen.title" = "Прослушать";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Нажмите ?, чтобы узнать, как переводить выделенный текст и снимки экрана.";

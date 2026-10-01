@@ -4,6 +4,7 @@ struct UsagePreferencesView: View {
     let translationShortcut: GlobalShortcutDefinition
     let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
+    var onHelpButtonReady: (@MainActor (NSButton) -> Void)? = nil
 
     @State private var isPresentingGuide = false
 
@@ -14,7 +15,7 @@ struct UsagePreferencesView: View {
             accessibilityLabel: localization.string("usage.show"),
             action: {
                 isPresentingGuide.toggle()
-            }
+            }, onButtonReady: onHelpButtonReady
         )
         .fixedSize()
         .popover(isPresented: $isPresentingGuide, arrowEdge: .trailing) {
@@ -119,7 +120,7 @@ struct UsageGuideItem: Identifiable {
                     name: "text.cursor",
                     clockwiseRotationDegrees: 0
                 ),
-                title: localization.string("usage.translateText.title"),
+                title: localization.string("shortcut.selectedTextTranslation"),
                 description: localization.string(
                     "usage.translateText.description",
                     arguments: translationShortcutName

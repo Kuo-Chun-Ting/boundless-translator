@@ -18,9 +18,8 @@
 "usage.show" = "Pokaži uporabo";
 "usage.languageSupport.title" = "Jezikovna podpora";
 "usage.languageSupport.description" = "Podpora jezikov vmesnika je enaka kot v sistemu macOS. macOS določa, med katerimi jeziki je mogoče prevajati.";
-"usage.translateText.title" = "Prevedi besedilo";
-"usage.translateText.description" = "Izberite besedilo in pritisnite %@.";
-"usage.translateImageText.description" = "Pritisnite %@, izberite območje zaslona, izberite besedilo na sliki in nato pritisnite %@ za prevod.";
+"usage.translateText.description" = "Če je besedilo mogoče izbrati, ga izberite v drugi aplikaciji in pritisnite %@ za prevod.";
+"usage.translateImageText.description" = "Če besedila ni mogoče izbrati, pritisnite %@ za posnetek zaslona. Nato izberite besedilo na sliki in pritisnite %@ za prevod.\n\nBoundless Translator samodejno prepozna besedilo na posnetkih zaslona in omogoči njegovo izbiro.";
 "usage.lookUp.title" = "Poišči";
 "usage.lookUp.description" = "Izberite besedilo v podoknu za prevod in kliknite knjigo.";
 "usage.listen.title" = "Poslušaj";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Kliknite ?, da si ogledate, kako prevesti izbrano besedilo in posnetke zaslona.";

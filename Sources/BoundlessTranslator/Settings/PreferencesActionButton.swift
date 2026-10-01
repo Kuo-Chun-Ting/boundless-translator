@@ -11,6 +11,7 @@ struct PreferencesActionButton: NSViewRepresentable {
     let accessibilityIdentifier: String
     var accessibilityLabel: String? = nil
     let action: @MainActor @Sendable () -> Void
+    var onButtonReady: (@MainActor (NSButton) -> Void)? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(action: action)
@@ -23,12 +24,14 @@ struct PreferencesActionButton: NSViewRepresentable {
             action: #selector(Coordinator.performAction)
         )
         configure(button)
+        onButtonReady?(button)
         return button
     }
 
     func updateNSView(_ button: NSButton, context: Context) {
         context.coordinator.action = action
         configure(button)
+        onButtonReady?(button)
     }
 
     private func configure(_ button: NSButton) {

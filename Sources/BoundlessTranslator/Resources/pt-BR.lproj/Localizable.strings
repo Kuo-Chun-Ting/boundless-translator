@@ -18,9 +18,8 @@
 "usage.show" = "Mostrar Como Usar";
 "usage.languageSupport.title" = "Suporte a idiomas";
 "usage.languageSupport.description" = "O suporte a idiomas da interface corresponde ao macOS. O macOS determina entre quais idiomas é possível traduzir.";
-"usage.translateText.title" = "Traduzir Texto";
-"usage.translateText.description" = "Selecione um texto e pressione %@.";
-"usage.translateImageText.description" = "Pressione %@, selecione uma área da tela, selecione o texto na imagem e pressione %@ para traduzir.";
+"usage.translateText.description" = "Se o texto puder ser selecionado, selecione-o em outro app e pressione %@ para traduzir.";
+"usage.translateImageText.description" = "Se o texto não puder ser selecionado, pressione %@ para capturar a tela. Depois, selecione o texto na imagem e pressione %@ para traduzir.\n\nO Boundless Translator reconhece automaticamente o texto nas capturas e permite selecioná-lo.";
 "usage.lookUp.title" = "Buscar";
 "usage.lookUp.description" = "Selecione um texto no painel de tradução e clique no livro.";
 "usage.listen.title" = "Ouvir";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Clique em ? para ver como traduzir texto selecionado e capturas de tela.";

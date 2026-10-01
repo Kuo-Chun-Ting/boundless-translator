@@ -18,9 +18,8 @@
 "usage.show" = "Prikaži uporabu";
 "usage.languageSupport.title" = "Podrška za jezike";
 "usage.languageSupport.description" = "Podrška za jezike sučelja odgovara sustavu macOS. macOS određuje između kojih je jezika moguće prevoditi.";
-"usage.translateText.title" = "Prevedi tekst";
-"usage.translateText.description" = "Odaberite tekst i pritisnite %@.";
-"usage.translateImageText.description" = "Pritisnite %@, odaberite područje zaslona, odaberite tekst na slici, zatim pritisnite %@ za prijevod.";
+"usage.translateText.description" = "Ako se tekst može odabrati, odaberite ga u drugoj aplikaciji i pritisnite %@ za prijevod.";
+"usage.translateImageText.description" = "Ako se tekst ne može odabrati, pritisnite %@ za snimku zaslona. Zatim odaberite tekst na slici i pritisnite %@ za prijevod.\n\nBoundless Translator automatski prepoznaje tekst na snimkama zaslona i omogućuje njegov odabir.";
 "usage.lookUp.title" = "Potraži";
 "usage.lookUp.description" = "Odaberite tekst na ploči za prijevod, a zatim kliknite knjigu.";
 "usage.listen.title" = "Poslušaj";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Kliknite ? da biste saznali kako prevoditi odabrani tekst i snimke zaslona.";

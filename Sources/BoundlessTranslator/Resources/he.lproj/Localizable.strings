@@ -18,9 +18,8 @@
 "usage.show" = "הצגת אופן השימוש";
 "usage.languageSupport.title" = "תמיכה בשפות";
 "usage.languageSupport.description" = "התמיכה בשפות הממשק תואמת ל־macOS. macOS קובע בין אילו שפות ניתן לתרגם.";
-"usage.translateText.title" = "תרגום טקסט";
-"usage.translateText.description" = "יש לבחור טקסט וללחוץ על %@.";
-"usage.translateImageText.description" = "יש ללחוץ על %@, לבחור אזור במסך, לבחור מלל בתמונה ואז ללחוץ על %@ כדי לתרגם.";
+"usage.translateText.description" = "אם ניתן לסמן את הטקסט, סמן אותו ביישום אחר ולחץ על %@ כדי לתרגם.";
+"usage.translateImageText.description" = "אם לא ניתן לסמן את הטקסט, לחץ על %@ כדי לצלם את המסך. לאחר מכן סמן את הטקסט בתמונה ולחץ על %@ כדי לתרגם.\n\nBoundless Translator מזהה אוטומטית טקסט בצילומי מסך והופך אותו לניתן לסימון.";
 "usage.lookUp.title" = "חיפוש";
 "usage.lookUp.description" = "יש לבחור טקסט בלוח התרגום ואז ללחוץ על הספר.";
 "usage.listen.title" = "האזנה";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "לחץ על ? כדי לראות איך לתרגם טקסט מסומן וצילומי מסך.";

@@ -18,9 +18,8 @@
 "usage.show" = "Kullanımı Göster";
 "usage.languageSupport.title" = "Dil Desteği";
 "usage.languageSupport.description" = "Arayüz dili desteği macOS ile aynıdır. Hangi diller arasında çeviri yapılabileceğini macOS belirler.";
-"usage.translateText.title" = "Metni Çevir";
-"usage.translateText.description" = "Metni seçip %@ tuşlarına basın.";
-"usage.translateImageText.description" = "%@ tuşlarına basın, ekranın bir bölümünü seçin, görüntüdeki metni seçin ve çevirmek için %@ tuşlarına basın.";
+"usage.translateText.description" = "Metin seçilebiliyorsa başka bir uygulamada seçin ve çevirmek için %@ tuşlarına basın.";
+"usage.translateImageText.description" = "Metin seçilemiyorsa ekran görüntüsü almak için %@ tuşlarına basın. Ardından görüntüdeki metni seçin ve çevirmek için %@ tuşlarına basın.\n\nBoundless Translator, ekran görüntülerindeki metni otomatik olarak tanır ve seçilebilir hale getirir.";
 "usage.lookUp.title" = "Ara";
 "usage.lookUp.description" = "Çeviri panelinde metni seçin, ardından kitap simgesini tıklayın.";
 "usage.listen.title" = "Dinle";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Seçili metni ve ekran görüntülerini nasıl çevireceğinizi görmek için ? simgesine tıklayın.";

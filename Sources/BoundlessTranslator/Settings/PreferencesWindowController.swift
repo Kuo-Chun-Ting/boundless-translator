@@ -9,6 +9,7 @@ final class PreferencesWindowController: NSWindowController {
     private let windowPresenter: any ForegroundWindowPresenting
     private var languageCancellable: AnyCancellable?
     private let titleLabel = NSTextField(labelWithString: "")
+    private let tipController = SettingsTipController()
 
     init(
         settings: TranslationSettings,
@@ -49,6 +50,7 @@ final class PreferencesWindowController: NSWindowController {
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
+        let tipController = self.tipController
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
@@ -57,7 +59,12 @@ final class PreferencesWindowController: NSWindowController {
                 screenshotShortcutController: screenshotShortcutController,
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication,
-                onShowSubscription: onShowSubscription
+                onShowSubscription: onShowSubscription,
+                onHelpButtonReady: { button in
+                    tipController.setAnchor(button, localization: AppLocalization(
+                        languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+                    ))
+                }
             )
         )
         super.init(window: window)
@@ -84,6 +91,8 @@ final class PreferencesWindowController: NSWindowController {
         centerWindowOnPointerScreen()
         if let window {
             windowPresenter.present(window)
+            window.contentView?.layoutSubtreeIfNeeded()
+            tipController.present(in: window)
         }
     }
 

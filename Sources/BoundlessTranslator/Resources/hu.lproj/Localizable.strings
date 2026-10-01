@@ -18,9 +18,8 @@
 "usage.show" = "Használat megjelenítése";
 "usage.languageSupport.title" = "Nyelvi támogatás";
 "usage.languageSupport.description" = "A kezelőfelület nyelvi támogatása megegyezik a macOS-éval. A macOS határozza meg, mely nyelvek között lehet fordítani.";
-"usage.translateText.title" = "Szöveg fordítása";
-"usage.translateText.description" = "Jelölje ki a szöveget, majd nyomja meg: %@.";
-"usage.translateImageText.description" = "Nyomja meg a %@ billentyűkombinációt, jelöljön ki egy képernyőterületet, majd szöveget a képen, és nyomja meg a %@ billentyűkombinációt a fordításhoz.";
+"usage.translateText.description" = "Ha a szöveg kijelölhető, jelöld ki egy másik appban, majd nyomd meg a %@ billentyűkombinációt a fordításhoz.";
+"usage.translateImageText.description" = "Ha a szöveg nem jelölhető ki, készíts képernyőképet a %@ billentyűkombinációval. Ezután jelöld ki a szöveget a képen, és nyomd meg a %@ billentyűkombinációt a fordításhoz.\n\nA Boundless Translator automatikusan felismeri a képernyőképek szövegét, és kijelölhetővé teszi.";
 "usage.lookUp.title" = "Keresés";
 "usage.lookUp.description" = "Jelöljön ki szöveget a fordítási panelen, majd kattintson a könyvre.";
 "usage.listen.title" = "Meghallgatás";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Kattints a ? gombra a kijelölt szöveg és a képernyőképek fordításának megismeréséhez.";

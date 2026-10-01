@@ -34,6 +34,7 @@ struct PreferencesView: View {
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
     var onShowSubscription: (@MainActor () -> Void)? = nil
+    var onHelpButtonReady: (@MainActor (NSButton) -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -90,7 +91,8 @@ struct PreferencesView: View {
                 UsagePreferencesView(
                     translationShortcut: translationShortcutController.definition,
                     screenshotShortcut: screenshotShortcutController.definition,
-                    localization: localization
+                    localization: localization,
+                    onHelpButtonReady: onHelpButtonReady
                 )
             }
             .padding(.horizontal, 20)

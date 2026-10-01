@@ -9,6 +9,7 @@ struct HintView: View {
     let localization: AppLocalization
     let identifier: String
     let onClose: (Bool) -> Void
+    var presentation: HintPresentation = .inline
 
     @State private var doNotShowAgain = false
 
@@ -29,14 +30,32 @@ struct HintView: View {
                 closeButton
             }
         }
+        .environment(\.locale, Locale(identifier: localization.languageIdentifier))
+        .environment(
+            \.layoutDirection,
+            Locale.Language(identifier: localization.languageIdentifier).characterDirection == .rightToLeft
+                ? .rightToLeft : .leftToRight
+        )
         .padding(16)
-        .frame(width: width)
+        .frame(width: width - (presentation == .callout ? 8 : 0))
+        .padding(.leading, presentation == .callout ? 8 : 0)
         .fixedSize(horizontal: false, vertical: true)
-        .background(Color.primary.opacity(0.06))
-        .background(Color(nsColor: .windowBackgroundColor))
-        .overlay(alignment: .bottom) { Divider().allowsHitTesting(false) }
+        .background(HintSurface(presentation: presentation).fill(Color.primary.opacity(0.06)))
+        .background(HintSurface(presentation: presentation).fill(Color(nsColor: .windowBackgroundColor)))
+        .overlay {
+            if presentation == .callout {
+                HintSurface(presentation: presentation)
+                    .stroke(Color(nsColor: .separatorColor), lineWidth: 0.5)
+                    .allowsHitTesting(false)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if presentation == .inline { Divider().allowsHitTesting(false) }
+        }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(identifier)
+        // The callout stays on the physical right of Settings, including in RTL languages.
+        .environment(\.layoutDirection, .leftToRight)
     }
 
     private var description: some View {
@@ -56,6 +75,7 @@ struct HintView: View {
         Toggle(localization.string("hint.doNotShowAgain"), isOn: $doNotShowAgain)
             .toggleStyle(.checkbox)
             .font(.caption)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var closeButton: some View {

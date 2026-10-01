@@ -18,9 +18,8 @@
 "usage.show" = "Arată modul de utilizare";
 "usage.languageSupport.title" = "Compatibilitate lingvistică";
 "usage.languageSupport.description" = "Compatibilitatea cu limbile interfeței corespunde sistemului macOS. macOS stabilește între ce limbi se poate traduce.";
-"usage.translateText.title" = "Tradu text";
-"usage.translateText.description" = "Selectează textul și apasă %@.";
-"usage.translateImageText.description" = "Apăsați %@, selectați o regiune a ecranului, selectați textul din imagine, apoi apăsați %@ pentru a traduce.";
+"usage.translateText.description" = "Dacă textul poate fi selectat, selectează-l în altă aplicație și apasă %@ pentru traducere.";
+"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apasă %@ pentru o captură de ecran. Apoi selectează textul din imagine și apasă %@ pentru traducere.\n\nBoundless Translator recunoaște automat textul din capturi și îl face selectabil.";
 "usage.lookUp.title" = "Caută";
 "usage.lookUp.description" = "Selectează text în panoul de traducere, apoi fă clic pe carte.";
 "usage.listen.title" = "Ascultă";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Apasă pe ? pentru a vedea cum traduci textul selectat și capturile de ecran.";

@@ -18,9 +18,8 @@
 "usage.show" = "Tampilkan Penggunaan";
 "usage.languageSupport.title" = "Dukungan Bahasa";
 "usage.languageSupport.description" = "Dukungan bahasa antarmuka sama dengan macOS. macOS menentukan bahasa mana yang dapat diterjemahkan satu sama lain.";
-"usage.translateText.title" = "Terjemahkan Teks";
-"usage.translateText.description" = "Pilih teks dan tekan %@.";
-"usage.translateImageText.description" = "Tekan %@, pilih area layar, pilih teks pada gambar, lalu tekan %@ untuk menerjemahkan.";
+"usage.translateText.description" = "Jika teks bisa dipilih, pilih teks di app lain dan tekan %@ untuk menerjemahkan.";
+"usage.translateImageText.description" = "Jika teks tidak bisa dipilih, tekan %@ untuk mengambil tangkapan layar. Lalu pilih teks dalam gambar dan tekan %@ untuk menerjemahkan.\n\nBoundless Translator otomatis mengenali teks dalam tangkapan layar dan membuatnya bisa dipilih.";
 "usage.lookUp.title" = "Cari";
 "usage.lookUp.description" = "Pilih teks di panel terjemahan, lalu klik buku.";
 "usage.listen.title" = "Dengarkan";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Klik ? untuk melihat cara menerjemahkan teks yang dipilih dan tangkapan layar.";

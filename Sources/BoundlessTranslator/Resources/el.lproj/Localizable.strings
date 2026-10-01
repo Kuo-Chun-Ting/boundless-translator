@@ -18,9 +18,8 @@
 "usage.show" = "Εμφάνιση χρήσης";
 "usage.languageSupport.title" = "Υποστήριξη γλωσσών";
 "usage.languageSupport.description" = "Η υποστήριξη γλωσσών διεπαφής αντιστοιχεί στο macOS. Το macOS καθορίζει μεταξύ ποιων γλωσσών είναι δυνατή η μετάφραση.";
-"usage.translateText.title" = "Μετάφραση κειμένου";
-"usage.translateText.description" = "Επιλέξτε κείμενο και πατήστε %@.";
-"usage.translateImageText.description" = "Πατήστε %@, επιλέξτε μια περιοχή της οθόνης, επιλέξτε κείμενο στην εικόνα και πατήστε %@ για μετάφραση.";
+"usage.translateText.description" = "Αν το κείμενο μπορεί να επιλεγεί, επιλέξτε το σε άλλη εφαρμογή και πατήστε %@ για μετάφραση.";
+"usage.translateImageText.description" = "Αν το κείμενο δεν μπορεί να επιλεγεί, πατήστε %@ για λήψη στιγμιότυπου οθόνης. Έπειτα επιλέξτε το κείμενο στην εικόνα και πατήστε %@ για μετάφραση.\n\nΤο Boundless Translator αναγνωρίζει αυτόματα το κείμενο στα στιγμιότυπα και το κάνει επιλέξιμο.";
 "usage.lookUp.title" = "Αναζήτηση";
 "usage.lookUp.description" = "Επιλέξτε κείμενο στον πίνακα μετάφρασης και κάντε κλικ στο βιβλίο.";
 "usage.listen.title" = "Ακρόαση";
@@ -104,3 +103,5 @@
 "permission.openSystemSettings" = "Open System Settings";
 "permission.screenRecordingGuide" = "Capture the screen region you select.";
 "permission.allowScreenRecording" = "Allow";
+
+"usage.guidance" = "Κάντε κλικ στο ? για να δείτε πώς μεταφράζετε επιλεγμένο κείμενο και στιγμιότυπα οθόνης.";
