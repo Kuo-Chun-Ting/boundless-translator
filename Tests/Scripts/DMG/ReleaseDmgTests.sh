@@ -19,7 +19,7 @@ cat > "${BUILD_STUB}" <<'STUB'
 set -eu
 print -r -- "build $*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 [[ "${TEST_FAIL_RELEASE_STEP:-}" != build ]]
-product_name="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
+product_name="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator DMG Test}"
 mkdir -p "${BOUNDLESS_TRANSLATOR_BUILD_ROOT}/${product_name}.app"
 print -n app > "${BOUNDLESS_TRANSLATOR_BUILD_ROOT}/${product_name}.app/marker"
 STUB
@@ -75,7 +75,7 @@ function test_release_dmg_when_run_then_builds_verifies_notarizes_and_publishes_
 
     # Assert
     [[ "$(sed -n '1p' "${CALL_LOG}")" == 'build ' ]]
-    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator.app '*'/Boundless Translator-test.dmg' ]]
+    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator DMG Test.app '*'/Boundless Translator-test.dmg' ]]
     [[ "$(sed -n '3p' "${CALL_LOG}")" == verify\ *'/Boundless Translator-test.dmg' ]]
     [[ "$(sed -n '4p' "${CALL_LOG}")" == notarize\ *'/Boundless Translator-test.dmg' ]]
     [[ "$(<"${BUILD_ROOT}/Boundless Translator-test.dmg")" == packagednotarized ]]
@@ -99,6 +99,7 @@ function test_release_dmg_when_e2e_identity_is_requested_then_uses_e2e_artifact_
 
     # Act
     BOUNDLESS_TRANSLATOR_PRODUCT_NAME='Boundless Translator E2E' \
+    BOUNDLESS_TRANSLATOR_DMG_NAME='Boundless Translator E2E-test.dmg' \
         run_releaser
 
     # Assert

@@ -18,7 +18,7 @@ print -r -- "$*" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 
 derived_data_path=''
 configuration=''
-product_name='Boundless Translator'
+product_name='Boundless Translator DMG Test'
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
         -derivedDataPath) derived_data_path="$2"; shift 2 ;;
@@ -51,7 +51,7 @@ function test_build_app_when_requested_then_builds_test_dmg_app {
     run_builder
 
     # Assert
-    [[ -f "${BUILD_ROOT}/Boundless Translator.app/Contents/MacOS/Boundless Translator" ]]
+    [[ -f "${BUILD_ROOT}/Boundless Translator DMG Test.app/Contents/MacOS/Boundless Translator DMG Test" ]]
     local build_call="$(sed -n '1p' "${CALL_LOG}")"
     [[ "${build_call}" == build\ * ]]
     [[ "${build_call}" == *'-scheme BoundlessTranslator-Direct'* ]]
@@ -59,22 +59,22 @@ function test_build_app_when_requested_then_builds_test_dmg_app {
     [[ "${build_call}" != *MARKETING_VERSION=* ]]
     [[ "${build_call}" != *CURRENT_PROJECT_VERSION=* ]]
     [[ "${build_call}" != *SUBSCRIPTION_REQUIRED* ]]
-    [[ "${build_call}" == *'BOUNDLESS_TRANSLATOR_PRODUCT_NAME=Boundless Translator'* ]]
-    [[ "${build_call}" == *'BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER=com.lillard.BoundlessTranslator'* ]]
+    [[ "${build_call}" == *'BOUNDLESS_TRANSLATOR_PRODUCT_NAME=Boundless Translator DMG Test'* ]]
+    [[ "${build_call}" == *'BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER=com.lillard.BoundlessTranslator.dmgtest'* ]]
     [[ "$(wc -l < "${CALL_LOG}" | tr -d ' ')" == 1 ]]
 }
 
 function test_build_app_when_xcode_build_fails_then_preserves_previous_app {
     # Arrange
-    mkdir -p "${BUILD_ROOT}/Boundless Translator.app"
-    print previous > "${BUILD_ROOT}/Boundless Translator.app/marker"
+    mkdir -p "${BUILD_ROOT}/Boundless Translator DMG Test.app"
+    print previous > "${BUILD_ROOT}/Boundless Translator DMG Test.app/marker"
 
     # Act & Assert
     if TEST_XCODEBUILD_FAIL=true run_builder >/dev/null 2>&1; then
         print -u2 'Expected Xcode build failure to stop the build.'
         return 1
     fi
-    [[ "$(<"${BUILD_ROOT}/Boundless Translator.app/marker")" == previous ]]
+    [[ "$(<"${BUILD_ROOT}/Boundless Translator DMG Test.app/marker")" == previous ]]
 }
 
 function test_build_app_when_e2e_identity_is_requested_then_overrides_product_identity {

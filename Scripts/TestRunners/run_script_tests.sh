@@ -20,7 +20,9 @@ case "${1:-all}" in
             DMG/ReleaseDmg \
             DMG/VerifyApp \
             DMG/VerifyDmg \
-            ResetTestPermissions \
+            ResetAppData \
+            ResetEntryPoints \
+            ResetPermissions \
             Verification/GuiTestRunner \
             Verification/VerifyWorkflow \
             XcodeProject

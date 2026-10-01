@@ -2,14 +2,22 @@
 
 set -euo pipefail
 
-readonly DATA_PATH="${HOME}/Library/Containers/com.lillard.BoundlessTranslator/Data"
+case "$1" in
+    dmg) bundle_identifier='com.lillard.BoundlessTranslator.dmgtest' ;;
+    app-store) bundle_identifier='com.lillard.BoundlessTranslator' ;;
+    e2e) bundle_identifier='com.lillard.BoundlessTranslator.e2e' ;;
+esac
+readonly DATA_PATH="${HOME}/Library/Containers/${bundle_identifier}/Data"
 
-osascript <<'APPLESCRIPT'
-if application id "com.lillard.BoundlessTranslator" is running then
-    tell application id "com.lillard.BoundlessTranslator" to quit
-end if
+osascript - "${bundle_identifier}" <<'APPLESCRIPT'
+on run arguments
+    set bundleIdentifier to item 1 of arguments
+    if application id bundleIdentifier is running then
+        tell application id bundleIdentifier to quit
+    end if
+end run
 APPLESCRIPT
 
-defaults delete "${DATA_PATH}/Library/Preferences/com.lillard.BoundlessTranslator.plist" 2>/dev/null || true
+defaults delete "${DATA_PATH}/Library/Preferences/${bundle_identifier}.plist" 2>/dev/null || true
 rm -rf "${DATA_PATH}"
-print 'App data cleared. Open Boundless Translator to test a fresh launch.'
+print "App data cleared for ${bundle_identifier}. Reopen that App to test a fresh launch."

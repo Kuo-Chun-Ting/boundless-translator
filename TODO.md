@@ -1,5 +1,12 @@
 # TODO
 
+- [ ] 修正 GUI 測試結束後 Cursor Test Host 程序殘留：清理時先停止本次建置的測試 App，再刪除暫存檔，並補上程序退出的測試。
+
+- [x] 工作規則加入每次改完程式碼依序執行 Verify、E2E、Release DMG。
+
+- [x] 重設資料與權限使用共用核心，提供 DMG、App Store／TestFlight 的無參數入口；E2E 明確指定自己的版本。
+
+- [x] 分離一般 DMG、E2E 與 App Store 的 App 身分：DMG Test 安裝名稱與 Bundle ID、重設腳本及建置設定；保留共用介面文字與原本安裝包檔名。
 - [x] 選單列改用與 Hint、Settings 共用的去背精靈，避免完整 App 圖示的底色出現在選單列。
 
 - [ ] 全面檢查精靈圖示的使用位置與圖片來源，確認哪些仍帶背景，並統一去背顯示；留待下一個 commit 處理。

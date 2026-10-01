@@ -8,8 +8,8 @@ source "${PROJECT_ROOT}/Scripts/DMG/signing.conf"
 readonly XCODE_PROJECT="${PROJECT_ROOT}/BoundlessTranslator.xcodeproj"
 readonly XCODEBUILD_EXECUTABLE="${BOUNDLESS_TRANSLATOR_XCODEBUILD_EXECUTABLE:-xcodebuild}"
 readonly BUILD_ROOT="${BOUNDLESS_TRANSLATOR_BUILD_ROOT:-${PROJECT_ROOT}/Build}"
-readonly PRODUCT_NAME="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
-readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator}"
+readonly PRODUCT_NAME="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator DMG Test}"
+readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator.dmgtest}"
 readonly APP_PATH="${BUILD_ROOT}/${PRODUCT_NAME}.app"
 
 function fail {

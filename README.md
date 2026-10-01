@@ -68,7 +68,7 @@ cd boundless-translator
 Scripts/DMG/build_app.sh
 ```
 
-This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator.app`, with App Sandbox enabled and no subscription required. Test DMG releases use this build path; the App Store release uses an Xcode archive.
+This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator DMG Test.app`, with App Sandbox enabled and no subscription required. Test DMG releases use this build path; the App Store release uses an Xcode archive.
 
 `release_dmg.sh` normally calls this step for you. Run it directly only when diagnosing the App build before DMG packaging.
 
@@ -100,7 +100,7 @@ sudo automationmodetool disable-automationmode-without-authentication
 
 ### Script Layout
 
-- `Scripts/verify.sh`, `Scripts/release_dmg.sh`, and `Scripts/reset_test_permissions.sh` are the commands run directly during normal development.
+- `Scripts/verify.sh`, `Scripts/release_dmg.sh`, and the edition-specific reset scripts are the commands run directly during normal development.
 - `Scripts/DMG/` contains the private steps used by `release_dmg.sh` to build the App, package the DMG, verify the mounted DMG, and notarize it.
 - `Scripts/TestRunners/` contains test runners called by `verify.sh`.
 - `Scripts/Assets/` contains manual tools for regenerating App and DMG artwork.
@@ -108,11 +108,18 @@ sudo automationmodetool disable-automationmode-without-authentication
 
 ### Reset App Data
 
-```sh
-Scripts/reset_app_data.sh
-```
+Run the entry point for the installed edition, without arguments:
 
-Quits Boundless Translator and deletes `~/Library/Containers/com.lillard.BoundlessTranslator/Data`, including preferences and dismissed tips. The regular DMG and TestFlight editions share this folder. Reopen the App to test fresh settings; macOS permissions remain granted. Run this manually when needed. If macOS reports `Operation not permitted`, give the terminal app Full Disk Access in System Settings and reopen it.
+| Edition | Reset App data | Reset permissions |
+| --- | --- | --- |
+| DMG | `Scripts/reset_app_data_dmg.sh` | `Scripts/reset_permissions_dmg.sh` |
+| App Store / TestFlight | `Scripts/reset_app_data_app_store.sh` | `Scripts/reset_permissions_app_store.sh` |
+
+Data reset quits the selected App and clears its preferences and dismissed tips. It leaves macOS permissions granted. Permission reset quits the selected App and clears its Accessibility and Screen Recording permissions. Reopen it to test permission setup.
+
+The shared cores are `Scripts/reset_app_data.sh <dmg|app-store|e2e>` and `Scripts/reset_permissions.sh <dmg|app-store|e2e>`. E2E calls the permission core with `e2e` only in `--from-permission-setup` mode. Normal tests preserve permissions. The E2E runner passes its installed App path; manual entry points use the corresponding App in `/Applications`.
+
+Run resets manually when needed. If data reset reports `Operation not permitted`, give the terminal app Full Disk Access in System Settings and reopen it.
 
 ### Create a Test DMG
 
@@ -138,11 +145,11 @@ Scripts/release_dmg.sh
 - The script verifies the real built App, signs and mounts the real DMG to verify its contents, gets Apple notarization, attaches the ticket and checks Gatekeeper approval.
 - The script replaces the previous test DMG only after all checks pass.
 
-Quit other copies of the App, then install from this DMG. Test permission setup, selected-text translation, screenshot translation, speech and Lookup.
+Quit the other edition, then install `Boundless Translator DMG Test.app` into Applications. Authorize Accessibility and Screen Recording once for this new identity; subsequent compatible Developer ID updates should retain those permissions. Use `Scripts/reset_permissions_dmg.sh` to reset this DMG App’s permissions. Test permission setup, selected-text translation, screenshot translation, speech and Lookup.
 
 ### Prepare an App Store Release
 
-The App Store edition uses the same Xcode App target, Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. Direct distribution currently produces only the subscription-free test DMG.
+The App Store edition uses the same Xcode App target, Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. Direct distribution produces the subscription-free `Boundless Translator DMG Test` (`com.lillard.BoundlessTranslator.dmgtest`). TestFlight and App Store keep `Boundless Translator` (`com.lillard.BoundlessTranslator`). Each edition has separate settings and permission records.
 
 Complete the account, signing, product and public privacy-policy setup in the [App Store implementation plan](app-store/implementation-plan.md).
 

@@ -30,13 +30,13 @@ if [[ "${BOUNDLESS_TRANSLATOR_TEST_FAIL_RELEASE:-0}" == 1 ]]; then
     exit 42
 fi
 mkdir -p "${BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT}"
-print -n dmg > "${BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT}/${BOUNDLESS_TRANSLATOR_PRODUCT_NAME}-test.dmg"
+print -n dmg > "${BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT}/${BOUNDLESS_TRANSLATOR_DMG_NAME}"
 STUB
 
     cat > "${RESET_STUB}" <<'STUB'
 #!/bin/zsh
 set -eu
-print -r -- "reset-permissions ${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER} ${BOUNDLESS_TRANSLATOR_APP_PATH}" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
+print -r -- "reset-permissions $* ${BOUNDLESS_TRANSLATOR_APP_PATH}" >> "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 STUB
 
     cat > "${HDIUTIL_STUB}" <<'STUB'
@@ -142,7 +142,7 @@ function test_run_e2e_from_permission_setup_then_resets_only_e2e_permissions_bef
 
     # Assert
     local calls="$(<"${CALL_LOG}")"
-    [[ "${calls}" == *"reset-permissions com.lillard.BoundlessTranslator.e2e ${E2E_ROOT}/Installed/Boundless Translator E2E.app"* ]]
+    [[ "${calls}" == *"reset-permissions e2e ${E2E_ROOT}/Installed/Boundless Translator E2E.app"* ]]
     [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/PermissionE2ETests/test_translationAction_withoutAccessibilityPermission_thenContinuesToSystemSettings'* ]]
     [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/PermissionE2ETests/test_screenshotAction_withoutScreenRecordingPermission_thenRequestsSystemPermission'* ]]
     [[ "$(grep -c '^xcodebuild ' "${CALL_LOG}")" == 3 ]]

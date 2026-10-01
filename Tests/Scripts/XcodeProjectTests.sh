@@ -74,7 +74,9 @@ function test_xcode_project_when_release_configuration_changes_then_subscription
     grep -Eq '^ *CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO$' "${direct_settings}"
     grep -Eq '^ *OTHER_CODE_SIGN_FLAGS = --timestamp$' "${direct_settings}"
     grep -Eq '^ *INFOPLIST_FILE = Resources/Info.plist$' "${direct_settings}"
-    grep -Eq '^ *EXECUTABLE_NAME = Boundless Translator$' "${direct_settings}"
+    grep -Eq '^ *EXECUTABLE_NAME = Boundless Translator DMG Test$' "${direct_settings}"
+    grep -Eq '^ *PRODUCT_BUNDLE_IDENTIFIER = com\.lillard\.BoundlessTranslator\.dmgtest$' "${direct_settings}"
+    grep -Eq '^ *PRODUCT_BUNDLE_IDENTIFIER = com\.lillard\.BoundlessTranslator$' "${app_store_settings}"
     [[ ! -e "${PROJECT_ROOT}/Resources/AppInfo.plist" ]]
     grep -Eq '^ *CODE_SIGN_STYLE = Automatic$' "${app_store_settings}"
     grep -Eq '^ *DEBUG_INFORMATION_FORMAT = dwarf-with-dsym$' "${app_store_settings}"

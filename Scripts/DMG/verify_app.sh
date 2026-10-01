@@ -3,7 +3,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator}"
+readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator.dmgtest}"
 readonly EXPECTED_TEAM_ID="${BOUNDLESS_TRANSLATOR_TEAM_ID:-3S9ZKKJ6PW}"
 readonly EXPECTED_MINIMUM_OS_VERSION="15.0"
 readonly EXPECTED_PRIVACY_MANIFEST="${PROJECT_ROOT}/Resources/PrivacyInfo.xcprivacy"

@@ -35,7 +35,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 mkdir -p "${mount_point}"
 [[ "${TEST_MOUNT_CONTENTS_COMPLETE:-true}" == true ]] || exit 0
-product_name="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator}"
+product_name="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator DMG Test}"
 mkdir -p "${mount_point}/${product_name}.app" "${mount_point}/.background"
 ln -s /Applications "${mount_point}/Applications"
 touch "${mount_point}/.DS_Store" "${mount_point}/.background/DMGBackground.png"
@@ -79,7 +79,7 @@ function test_verify_dmg_when_image_is_complete_then_checks_image_and_contained_
     [[ "${calls}" == *$'hdiutil verify '* ]]
     [[ "${calls}" == *$'codesign --verify --strict --verbose=2 '* ]]
     [[ "${calls}" == *$'hdiutil attach -readonly -nobrowse -mountpoint '* ]]
-    [[ "${calls}" == *$'verify-app '*'/Boundless Translator.app'* ]]
+    [[ "${calls}" == *$'verify-app '*'/Boundless Translator DMG Test.app'* ]]
     [[ "${calls}" == *$'hdiutil detach '* ]]
 }
 
