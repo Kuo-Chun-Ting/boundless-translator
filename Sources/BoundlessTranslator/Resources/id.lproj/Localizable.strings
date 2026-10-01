@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Dukungan Bahasa";
 "usage.languageSupport.description" = "Dukungan bahasa antarmuka sama dengan macOS. macOS menentukan bahasa mana yang dapat diterjemahkan satu sama lain.";
 "usage.translateText.description" = "Jika teks bisa dipilih, pilih teks di app lain dan tekan %@ untuk menerjemahkan.";
-"usage.translateImageText.description" = "Jika teks tidak bisa dipilih, tekan %@ untuk mengambil tangkapan layar. Lalu pilih teks dalam gambar dan tekan %@ untuk menerjemahkan.\n\nBoundless Translator otomatis mengenali teks dalam tangkapan layar dan membuatnya bisa dipilih.";
-"usage.lookUp.title" = "Cari";
-"usage.lookUp.description" = "Pilih teks di panel terjemahan, lalu klik buku.";
-"usage.listen.title" = "Dengarkan";
-"usage.listen.description" = "Klik speaker di samping salah satu bahasa.";
+"usage.translateImageText.description" = "Untuk teks yang tidak dapat dipilih, tekan %@ untuk mengambil tangkapan layar area yang ingin diterjemahkan. Lalu pilih teks dalam tangkapan layar dan tekan %@ untuk menerjemahkan.";
+"usage.lookUp.description" = "Pilih kata atau frasa dalam teks sumber, lalu klik ikon buku.";
+"usage.listen.title" = "Bacakan Teks";
+"usage.listen.description" = "Bacakan teks asli atau terjemahannya.";
 "usage.pinWindow.title" = "Sematkan Jendela";
 "usage.pinWindow.description" = "Klik pin agar terjemahan tetap terlihat.";
 "screenshot.permissionRequired" = "Izinkan perekaman layar untuk Boundless Translator di Pengaturan Sistem > Privasi & Keamanan, lalu coba lagi. Anda mungkin perlu menutup dan membuka kembali app.";

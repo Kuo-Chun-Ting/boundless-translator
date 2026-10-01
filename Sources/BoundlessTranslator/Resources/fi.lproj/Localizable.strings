@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Kielituki";
 "usage.languageSupport.description" = "Käyttöliittymäkielten tuki vastaa macOS:n tukea. macOS määrittää, minkä kielten välillä voidaan kääntää.";
 "usage.translateText.description" = "Jos tekstin voi valita, valitse se toisessa apissa ja käännä painamalla %@.";
-"usage.translateImageText.description" = "Jos tekstiä ei voi valita, ota näyttökuva painamalla %@. Valitse sitten kuvan teksti ja käännä painamalla %@.\n\nBoundless Translator tunnistaa näyttökuvien tekstin automaattisesti ja tekee siitä valittavaa.";
-"usage.lookUp.title" = "Katso";
-"usage.lookUp.description" = "Valitse tekstiä käännöspaneelista ja klikkaa sitten kirjaa.";
-"usage.listen.title" = "Kuuntele";
-"usage.listen.description" = "Klikkaa jommankumman kielen vieressä olevaa kaiutinta.";
+"usage.translateImageText.description" = "Jos tekstiä ei voi valita, ota kuva käännettävästä alueesta painamalla %@. Valitse sitten teksti kuvasta ja käännä se painamalla %@.";
+"usage.lookUp.description" = "Valitse sana tai ilmaus lähdetekstistä ja klikkaa kirjakuvaketta.";
+"usage.listen.title" = "Lue ääneen";
+"usage.listen.description" = "Lue alkuperäinen teksti tai käännös ääneen.";
 "usage.pinWindow.title" = "Kiinnitä ikkuna";
 "usage.pinWindow.description" = "Klikkaa nastaa, jotta käännös pysyy näkyvissä.";
 "screenshot.permissionRequired" = "Salli näytön tallennus Boundless Translatorille kohdassa Järjestelmäasetukset > Tietosuoja ja suojaus ja yritä uudelleen. Sinun on ehkä lopetettava appi ja avattava se uudelleen.";

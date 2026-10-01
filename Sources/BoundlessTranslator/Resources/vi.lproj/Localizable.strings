@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Hỗ trợ ngôn ngữ";
 "usage.languageSupport.description" = "Khả năng hỗ trợ ngôn ngữ giao diện tương ứng với macOS. macOS quyết định những ngôn ngữ nào có thể dịch qua lại.";
 "usage.translateText.description" = "Nếu có thể chọn văn bản, hãy chọn văn bản trong ứng dụng khác rồi nhấn %@ để dịch.";
-"usage.translateImageText.description" = "Nếu không thể chọn văn bản, hãy nhấn %@ để chụp màn hình. Sau đó chọn văn bản trong ảnh và nhấn %@ để dịch.\n\nBoundless Translator tự động nhận dạng văn bản trong ảnh chụp màn hình và cho phép chọn văn bản đó.";
-"usage.lookUp.title" = "Tra cứu";
-"usage.lookUp.description" = "Chọn văn bản trong bảng dịch, sau đó bấm vào biểu tượng quyển sách.";
-"usage.listen.title" = "Nghe";
-"usage.listen.description" = "Bấm vào loa bên cạnh một trong hai ngôn ngữ.";
+"usage.translateImageText.description" = "Với văn bản không thể chọn, nhấn %@ để chụp vùng bạn muốn dịch. Sau đó chọn văn bản trong ảnh và nhấn %@ để dịch.";
+"usage.lookUp.description" = "Chọn một từ hoặc cụm từ trong văn bản gốc, rồi bấm vào biểu tượng sách.";
+"usage.listen.title" = "Đọc thành tiếng";
+"usage.listen.description" = "Đọc to văn bản gốc hoặc bản dịch.";
 "usage.pinWindow.title" = "Ghim cửa sổ";
 "usage.pinWindow.description" = "Bấm vào ghim để giữ bản dịch hiển thị.";
 "screenshot.permissionRequired" = "Cho phép ghi màn hình đối với Boundless Translator trong Cài đặt hệ thống > Quyền riêng tư & Bảo mật, rồi thử lại. Bạn có thể cần thoát và mở lại ứng dụng.";

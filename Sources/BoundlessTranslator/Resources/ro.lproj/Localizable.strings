@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Compatibilitate lingvistică";
 "usage.languageSupport.description" = "Compatibilitatea cu limbile interfeței corespunde sistemului macOS. macOS stabilește între ce limbi se poate traduce.";
 "usage.translateText.description" = "Dacă textul poate fi selectat, selectează-l în altă aplicație și apasă %@ pentru traducere.";
-"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apasă %@ pentru o captură de ecran. Apoi selectează textul din imagine și apasă %@ pentru traducere.\n\nBoundless Translator recunoaște automat textul din capturi și îl face selectabil.";
-"usage.lookUp.title" = "Caută";
-"usage.lookUp.description" = "Selectează text în panoul de traducere, apoi fă clic pe carte.";
-"usage.listen.title" = "Ascultă";
-"usage.listen.description" = "Fă clic pe difuzorul de lângă oricare dintre limbi.";
+"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apăsați %@ pentru a captura zona pe care doriți să o traduceți. Apoi selectați textul din captură și apăsați %@ pentru traducere.";
+"usage.lookUp.description" = "Selectați un cuvânt sau o expresie din textul sursă, apoi faceți clic pe pictograma cărții.";
+"usage.listen.title" = "Citire cu voce tare";
+"usage.listen.description" = "Citiți cu voce tare textul original sau traducerea.";
 "usage.pinWindow.title" = "Fixează fereastra";
 "usage.pinWindow.description" = "Fă clic pe piuneză pentru a păstra traducerea vizibilă.";
 "screenshot.permissionRequired" = "Permiteți înregistrarea ecranului pentru Boundless Translator în Configurări sistem > Intimitate și securitate, apoi încercați din nou. Este posibil să fie necesar să închideți și să redeschideți aplicația.";

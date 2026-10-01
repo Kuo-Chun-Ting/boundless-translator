@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Språkstöd";
 "usage.languageSupport.description" = "Stödet för gränssnittsspråk motsvarar macOS. macOS avgör vilka språk som kan översättas sinsemellan.";
 "usage.translateText.description" = "Om texten går att markera, markera den i en annan app och tryck på %@ för att översätta.";
-"usage.translateImageText.description" = "Om texten inte går att markera, tryck på %@ för att ta en skärmavbild. Markera sedan texten i bilden och tryck på %@ för att översätta.\n\nBoundless Translator känner automatiskt igen text i skärmavbilder och gör den markerbar.";
-"usage.lookUp.title" = "Slå upp";
-"usage.lookUp.description" = "Markera text i översättningspanelen och klicka sedan på boken.";
-"usage.listen.title" = "Lyssna";
-"usage.listen.description" = "Klicka på högtalaren bredvid något av språken.";
+"usage.translateImageText.description" = "Om texten inte går att markera trycker du på %@ för att ta en skärmbild av området du vill översätta. Markera sedan texten i bilden och tryck på %@ för att översätta.";
+"usage.lookUp.description" = "Markera ett ord eller en fras i källtexten och klicka på bokikonen.";
+"usage.listen.title" = "Läs upp";
+"usage.listen.description" = "Läs upp originaltexten eller översättningen.";
 "usage.pinWindow.title" = "Fäst fönster";
 "usage.pinWindow.description" = "Klicka på nålen för att hålla översättningen synlig.";
 "screenshot.permissionRequired" = "Tillåt skärminspelning för Boundless Translator i Systeminställningar > Integritet och säkerhet och försök igen. Du kan behöva avsluta och öppna appen igen.";

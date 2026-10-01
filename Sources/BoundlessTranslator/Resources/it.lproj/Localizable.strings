@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Supporto lingue";
 "usage.languageSupport.description" = "Il supporto delle lingue dell’interfaccia corrisponde a quello di macOS. macOS determina tra quali lingue è possibile tradurre.";
 "usage.translateText.description" = "Se il testo è selezionabile, selezionalo in un’altra app e premi %@ per tradurlo.";
-"usage.translateImageText.description" = "Se il testo non è selezionabile, premi %@ per acquisire una schermata. Poi seleziona il testo nella schermata e premi %@ per tradurlo.\n\nBoundless Translator riconosce automaticamente il testo nelle schermate e lo rende selezionabile.";
-"usage.lookUp.title" = "Cerca";
-"usage.lookUp.description" = "Seleziona il testo nel pannello di traduzione, quindi fai clic sul libro.";
-"usage.listen.title" = "Ascolta";
-"usage.listen.description" = "Fai clic sull’altoparlante accanto a una delle lingue.";
+"usage.translateImageText.description" = "Se il testo non è selezionabile, premi %@ per acquisire l’area da tradurre. Poi seleziona il testo nell’immagine e premi %@ per tradurlo.";
+"usage.lookUp.description" = "Seleziona una parola o una frase nel testo originale, poi fai clic sull’icona del libro.";
+"usage.listen.title" = "Lettura ad alta voce";
+"usage.listen.description" = "Leggi ad alta voce il testo originale o la traduzione.";
 "usage.pinWindow.title" = "Fissa finestra";
 "usage.pinWindow.description" = "Fai clic sulla puntina per mantenere visibile la traduzione.";
 "screenshot.permissionRequired" = "Consenti la registrazione dello schermo per Boundless Translator in Impostazioni di Sistema > Privacy e sicurezza, quindi riprova. Potrebbe essere necessario chiudere e riaprire l’app.";

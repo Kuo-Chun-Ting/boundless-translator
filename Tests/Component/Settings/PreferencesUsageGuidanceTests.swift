@@ -40,8 +40,8 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
     let expectedTitles = [
         "Selected Text Translation",
         "Screenshot Translation",
-        "Look Up",
-        "Listen",
+        "Dictionary",
+        "Read Aloud",
         "Pin Window",
         "Language Support",
     ]
@@ -70,10 +70,10 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
     #expect(items[1].description.contains("⇧⌘1"))
     #expect(items[0].description.hasPrefix("For selectable text"))
     #expect(items[1].description.hasPrefix("For non-selectable text"))
-    #expect(items[1].description.contains("makes it selectable"))
+    #expect(items[1].description.contains("capture the area you want to translate"))
     #expect(
         items[2].description
-            == "Select text in the translation panel, then click the book."
+            == "Select a word or phrase in the source text, then click the book icon."
     )
     let languageSupport = try #require(
         items.first { $0.id == "languageSupport" }

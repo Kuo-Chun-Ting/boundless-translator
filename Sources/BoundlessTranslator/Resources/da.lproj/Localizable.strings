@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Sprogunderstøttelse";
 "usage.languageSupport.description" = "Understøttelsen af brugerfladesprog svarer til macOS. macOS bestemmer, hvilke sprog der kan oversættes mellem.";
 "usage.translateText.description" = "Hvis teksten kan markeres, skal du markere den i en anden app og trykke på %@ for at oversætte.";
-"usage.translateImageText.description" = "Hvis teksten ikke kan markeres, skal du trykke på %@ for at tage et skærmbillede. Markér derefter teksten i billedet, og tryk på %@ for at oversætte.\n\nBoundless Translator genkender automatisk tekst i skærmbilleder og gør den markerbar.";
-"usage.lookUp.title" = "Slå op";
-"usage.lookUp.description" = "Vælg tekst i oversættelsespanelet, og klik derefter på bogen.";
-"usage.listen.title" = "Lyt";
-"usage.listen.description" = "Klik på højttaleren ud for et af sprogene.";
+"usage.translateImageText.description" = "Hvis teksten ikke kan markeres, skal du trykke på %@ for at tage et skærmbillede af det område, du vil oversætte. Markér derefter teksten i billedet, og tryk på %@ for at oversætte.";
+"usage.lookUp.description" = "Vælg et ord eller en frase i kildeteksten, og klik på bogikonet.";
+"usage.listen.title" = "Læs højt";
+"usage.listen.description" = "Læs originalteksten eller oversættelsen højt.";
 "usage.pinWindow.title" = "Fastgør vindue";
 "usage.pinWindow.description" = "Klik på knappenålen for at holde oversættelsen synlig.";
 "screenshot.permissionRequired" = "Tillad skærmoptagelse for Boundless Translator i Systemindstillinger > Anonymitet & sikkerhed, og prøv igen. Du skal muligvis afslutte og åbne appen igen.";

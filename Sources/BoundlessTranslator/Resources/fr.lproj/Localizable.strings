@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Prise en charge des langues";
 "usage.languageSupport.description" = "La prise en charge des langues de l’interface correspond à celle de macOS. macOS détermine les langues entre lesquelles la traduction est possible.";
 "usage.translateText.description" = "Si le texte est sélectionnable, sélectionnez-le dans une autre app et appuyez sur %@ pour le traduire.";
-"usage.translateImageText.description" = "Si le texte n’est pas sélectionnable, appuyez sur %@ pour faire une capture d’écran. Sélectionnez ensuite le texte dans la capture et appuyez sur %@ pour le traduire.\n\nBoundless Translator reconnaît automatiquement le texte des captures d’écran et le rend sélectionnable.";
-"usage.lookUp.title" = "Rechercher";
-"usage.lookUp.description" = "Sélectionnez du texte dans le panneau de traduction, puis cliquez sur le livre.";
-"usage.listen.title" = "Écouter";
-"usage.listen.description" = "Cliquez sur le haut-parleur à côté de l’une des langues.";
+"usage.translateImageText.description" = "Si le texte ne peut pas être sélectionné, appuyez sur %@ pour capturer la zone à traduire. Sélectionnez ensuite le texte dans la capture et appuyez sur %@ pour le traduire.";
+"usage.lookUp.description" = "Sélectionnez un mot ou une expression dans le texte source, puis cliquez sur l’icône du livre.";
+"usage.listen.title" = "Lecture à voix haute";
+"usage.listen.description" = "Lisez le texte original ou la traduction à voix haute.";
 "usage.pinWindow.title" = "Épingler la fenêtre";
 "usage.pinWindow.description" = "Cliquez sur l’épingle pour garder la traduction visible.";
 "screenshot.permissionRequired" = "Autorisez l’enregistrement de l’écran pour Boundless Translator dans Réglages Système > Confidentialité et sécurité, puis réessayez. Vous devrez peut-être quitter et rouvrir l’app.";

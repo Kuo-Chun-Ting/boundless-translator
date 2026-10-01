@@ -71,6 +71,8 @@ struct UsageGuideView: View {
         }
         .padding(18)
         .frame(width: 520)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("usageGuide")
     }
 
     private var items: [UsageGuideItem] {
@@ -141,7 +143,7 @@ struct UsageGuideItem: Identifiable {
             UsageGuideItem(
                 id: "lookUp",
                 icon: .text("📖"),
-                title: localization.string("usage.lookUp.title"),
+                title: localization.string("lookup.title"),
                 description: localization.string("usage.lookUp.description")
             ),
             UsageGuideItem(

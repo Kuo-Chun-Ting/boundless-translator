@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Jezikovna podpora";
 "usage.languageSupport.description" = "Podpora jezikov vmesnika je enaka kot v sistemu macOS. macOS določa, med katerimi jeziki je mogoče prevajati.";
 "usage.translateText.description" = "Če je besedilo mogoče izbrati, ga izberite v drugi aplikaciji in pritisnite %@ za prevod.";
-"usage.translateImageText.description" = "Če besedila ni mogoče izbrati, pritisnite %@ za posnetek zaslona. Nato izberite besedilo na sliki in pritisnite %@ za prevod.\n\nBoundless Translator samodejno prepozna besedilo na posnetkih zaslona in omogoči njegovo izbiro.";
-"usage.lookUp.title" = "Poišči";
-"usage.lookUp.description" = "Izberite besedilo v podoknu za prevod in kliknite knjigo.";
-"usage.listen.title" = "Poslušaj";
-"usage.listen.description" = "Kliknite zvočnik ob enem od jezikov.";
+"usage.translateImageText.description" = "Če besedila ni mogoče izbrati, pritisnite %@, da zajamete območje za prevod. Nato izberite besedilo na posnetku in pritisnite %@ za prevod.";
+"usage.lookUp.description" = "Izberite besedo ali besedno zvezo v izvornem besedilu in kliknite ikono knjige.";
+"usage.listen.title" = "Glasno branje";
+"usage.listen.description" = "Preberite izvirno besedilo ali prevod na glas.";
 "usage.pinWindow.title" = "Pripni okno";
 "usage.pinWindow.description" = "Kliknite žebljiček, da prevod ostane viden.";
 "screenshot.permissionRequired" = "Dovolite snemanje zaslona za Boundless Translator v sistemskih nastavitvah > Zasebnost in varnost, nato poskusite znova. Morda boste morali aplikacijo zapreti in znova odpreti.";

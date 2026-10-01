@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "언어 지원";
 "usage.languageSupport.description" = "인터페이스 언어 지원 범위는 macOS와 동일합니다. 어떤 언어 간에 번역할 수 있는지는 macOS에서 결정합니다.";
 "usage.translateText.description" = "텍스트를 선택할 수 있으면 다른 앱에서 텍스트를 선택하고 %@을 눌러 번역하세요.";
-"usage.translateImageText.description" = "텍스트를 선택할 수 없으면 %@을 눌러 스크린샷을 찍으세요. 그런 다음 이미지의 텍스트를 선택하고 %@을 눌러 번역하세요.\n\nBoundless Translator는 스크린샷의 텍스트를 자동으로 인식하여 선택할 수 있게 합니다.";
-"usage.lookUp.title" = "찾아보기";
-"usage.lookUp.description" = "번역 패널에서 텍스트를 선택한 다음 책을 클릭하십시오.";
-"usage.listen.title" = "듣기";
-"usage.listen.description" = "두 언어 중 하나 옆에 있는 스피커를 클릭하십시오.";
+"usage.translateImageText.description" = "선택할 수 없는 텍스트는 %@을 눌러 번역할 영역을 캡처하세요. 그런 다음 이미지에서 텍스트를 선택하고 %@을 눌러 번역하세요.";
+"usage.lookUp.description" = "원문에서 단어나 구문을 선택한 다음 책 아이콘을 클릭하세요.";
+"usage.listen.title" = "소리 내어 읽기";
+"usage.listen.description" = "원문이나 번역문을 소리 내어 읽습니다.";
 "usage.pinWindow.title" = "윈도우 고정";
 "usage.pinWindow.description" = "핀을 클릭하면 번역이 계속 표시됩니다.";
 "screenshot.permissionRequired" = "시스템 설정 > 개인정보 보호 및 보안에서 Boundless Translator의 화면 기록을 허용한 다음 다시 시도하세요. 앱을 종료한 후 다시 열어야 할 수 있습니다.";

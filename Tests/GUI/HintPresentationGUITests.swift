@@ -115,6 +115,44 @@ final class HintPresentationGUITests: XCTestCase {
         }
     }
 
+    func test_usageGuide_when_opened_then_usesConsistentFeatureSpacing() {
+        for appearance in ["light", "dark"] {
+            for language in ["en", "zh-Hant"] {
+                // Arrange
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_LANGUAGE"] = language
+                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] = appearance
+                app.launch()
+                app.activate()
+
+                // Act
+                app.buttons["usageHelpButton"].click()
+                let guide = app.groups["usageGuide"].firstMatch
+                XCTAssertTrue(guide.waitForExistence(timeout: 5))
+
+                // Assert
+                let dictionary = guide.groups["usageItem.lookUp"].firstMatch
+                let reading = guide.groups["usageItem.listen"].firstMatch
+                XCTAssertTrue(dictionary.staticTexts[language == "en" ? "Dictionary" : "字典"].exists)
+                XCTAssertTrue(reading.staticTexts[language == "en" ? "Read Aloud" : "朗讀"].exists)
+                let identifiers = ["translateText", "translateImageText", "lookUp", "listen", "pinWindow", "languageSupport"]
+                let rows = identifiers.map { guide.groups["usageItem.\($0)"].firstMatch }
+                let gaps = zip(rows, rows.dropFirst()).map { previous, next in
+                    next.staticTexts.element(boundBy: 0).frame.minY
+                        - previous.staticTexts.element(boundBy: 1).frame.maxY
+                }
+                for gap in gaps {
+                    XCTAssertEqual(gap, gaps[0], accuracy: 1)
+                }
+                let attachment = XCTAttachment(screenshot: guide.screenshot())
+                attachment.name = "Usage guide \(language) \(appearance)"
+                attachment.lifetime = .keepAlways
+                add(attachment)
+                app.terminate()
+            }
+        }
+    }
+
     func test_screenshotHint_whenFirstUsed_then_appearsUntilUserDismisses() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"

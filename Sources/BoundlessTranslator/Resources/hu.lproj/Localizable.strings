@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Nyelvi támogatás";
 "usage.languageSupport.description" = "A kezelőfelület nyelvi támogatása megegyezik a macOS-éval. A macOS határozza meg, mely nyelvek között lehet fordítani.";
 "usage.translateText.description" = "Ha a szöveg kijelölhető, jelöld ki egy másik appban, majd nyomd meg a %@ billentyűkombinációt a fordításhoz.";
-"usage.translateImageText.description" = "Ha a szöveg nem jelölhető ki, készíts képernyőképet a %@ billentyűkombinációval. Ezután jelöld ki a szöveget a képen, és nyomd meg a %@ billentyűkombinációt a fordításhoz.\n\nA Boundless Translator automatikusan felismeri a képernyőképek szövegét, és kijelölhetővé teszi.";
-"usage.lookUp.title" = "Keresés";
-"usage.lookUp.description" = "Jelöljön ki szöveget a fordítási panelen, majd kattintson a könyvre.";
-"usage.listen.title" = "Meghallgatás";
-"usage.listen.description" = "Kattintson az egyik nyelv melletti hangszóróra.";
+"usage.translateImageText.description" = "Ha a szöveg nem jelölhető ki, nyomja meg a %@ billentyűkombinációt a fordítandó terület rögzítéséhez. Ezután jelölje ki a szöveget a képen, és nyomja meg a %@ billentyűkombinációt a fordításhoz.";
+"usage.lookUp.description" = "Jelöljön ki egy szót vagy kifejezést a forrásszövegben, majd kattintson a könyv ikonra.";
+"usage.listen.title" = "Felolvasás";
+"usage.listen.description" = "Olvassa fel az eredeti szöveget vagy a fordítást.";
 "usage.pinWindow.title" = "Ablak rögzítése";
 "usage.pinWindow.description" = "Kattintson a rajzszögre, hogy a fordítás látható maradjon.";
 "screenshot.permissionRequired" = "Engedélyezze a képernyő rögzítését a Boundless Translator számára a Rendszerbeállítások > Adatvédelem és biztonság menüpontban, majd próbálja újra. Lehet, hogy ki kell lépnie az appból, és újra meg kell nyitnia.";

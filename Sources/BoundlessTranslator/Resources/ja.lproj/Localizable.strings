@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "言語サポート";
 "usage.languageSupport.description" = "インターフェイス言語の対応範囲はmacOSと同じです。どの言語間で翻訳できるかはmacOSによって決まります。";
 "usage.translateText.description" = "文字を選択できる場合は、ほかのアプリで文字を選択し、%@ を押して翻訳します。";
-"usage.translateImageText.description" = "文字を選択できない場合は、%@ を押してスクリーンショットを撮影します。画像内の文字を選択し、%@ を押して翻訳します。\n\nBoundless Translator はスクリーンショット内の文字を自動認識し、選択できるようにします。";
-"usage.lookUp.title" = "調べる";
-"usage.lookUp.description" = "翻訳パネルでテキストを選択してから、本のアイコンをクリックします。";
+"usage.translateImageText.description" = "選択できない文字は、%@ を押して翻訳したい範囲を撮影します。次に画像内の文字を選択し、%@ を押して翻訳します。";
+"usage.lookUp.description" = "原文の単語や語句を選択し、本のアイコンをクリックします。";
 "usage.listen.title" = "読み上げ";
-"usage.listen.description" = "いずれかの言語の横にあるスピーカーをクリックします。";
+"usage.listen.description" = "原文または訳文を読み上げます。";
 "usage.pinWindow.title" = "ウインドウを固定";
 "usage.pinWindow.description" = "ピンをクリックすると翻訳が表示されたままになります。";
 "screenshot.permissionRequired" = "「システム設定」>「プライバシーとセキュリティ」で Boundless Translator の画面収録を許可してから、もう一度お試しください。アプリを終了して開き直す必要がある場合があります。";

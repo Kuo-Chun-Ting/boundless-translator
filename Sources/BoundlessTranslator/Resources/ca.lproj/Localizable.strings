@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Compatibilitat d’idiomes";
 "usage.languageSupport.description" = "La compatibilitat amb els idiomes de la interfície coincideix amb la de macOS. macOS determina entre quins idiomes es pot traduir.";
 "usage.translateText.description" = "Si el text es pot seleccionar, selecciona’l en una altra app i prem %@ per traduir-lo.";
-"usage.translateImageText.description" = "Si el text no es pot seleccionar, prem %@ per fer una captura de pantalla. Després, selecciona el text de la captura i prem %@ per traduir-lo.\n\nBoundless Translator reconeix automàticament el text de les captures i permet seleccionar-lo.";
-"usage.lookUp.title" = "Consulta";
-"usage.lookUp.description" = "Selecciona text al tauler de traducció i fes clic al llibre.";
-"usage.listen.title" = "Escolta";
-"usage.listen.description" = "Fes clic a l’altaveu del costat de qualsevol idioma.";
+"usage.translateImageText.description" = "Si el text no es pot seleccionar, prem %@ per capturar la zona que vols traduir. Després selecciona el text de la captura i prem %@ per traduir-lo.";
+"usage.lookUp.description" = "Selecciona una paraula o frase del text original i fes clic a la icona del llibre.";
+"usage.listen.title" = "Lectura en veu alta";
+"usage.listen.description" = "Llegeix en veu alta el text original o la traducció.";
 "usage.pinWindow.title" = "Fixa la finestra";
 "usage.pinWindow.description" = "Fes clic a la xinxeta per mantenir visible la traducció.";
 "screenshot.permissionRequired" = "Permet la gravació de pantalla per al Boundless Translator a Configuració del Sistema > Privacitat i seguretat i torna-ho a provar. Pot ser que hagis de sortir de l’app i tornar-la a obrir.";

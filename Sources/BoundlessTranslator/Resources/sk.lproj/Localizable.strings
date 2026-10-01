@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Podpora jazykov";
 "usage.languageSupport.description" = "Podpora jazykov rozhrania zodpovedá systému macOS. macOS určuje, medzi ktorými jazykmi možno prekladať.";
 "usage.translateText.description" = "Ak sa text dá vybrať, vyberte ho v inej apke a stlačením %@ ho preložte.";
-"usage.translateImageText.description" = "Ak sa text nedá vybrať, stlačením %@ vytvorte snímku obrazovky. Potom vyberte text na snímke a stlačením %@ ho preložte.\n\nBoundless Translator automaticky rozpozná text na snímkach obrazovky a umožní jeho výber.";
-"usage.lookUp.title" = "Vyhľadať";
-"usage.lookUp.description" = "Vyberte text na paneli prekladu a kliknite na knihu.";
-"usage.listen.title" = "Počúvať";
-"usage.listen.description" = "Kliknite na reproduktor vedľa jedného z jazykov.";
+"usage.translateImageText.description" = "Ak sa text nedá vybrať, stlačením %@ zachyťte oblasť, ktorú chcete preložiť. Potom vyberte text na snímke a stlačením %@ ho preložte.";
+"usage.lookUp.description" = "Vyberte slovo alebo frázu v zdrojovom texte a kliknite na ikonu knihy.";
+"usage.listen.title" = "Čítanie nahlas";
+"usage.listen.description" = "Prečítajte nahlas pôvodný text alebo preklad.";
 "usage.pinWindow.title" = "Pripnúť okno";
 "usage.pinWindow.description" = "Kliknutím na špendlík ponecháte preklad zobrazený.";
 "screenshot.permissionRequired" = "Povoľte nahrávanie obrazovky pre Boundless Translator v Systémových nastaveniach > Súkromie a bezpečnosť a skúste to znova. Možno bude potrebné apku ukončiť a znova otvoriť.";

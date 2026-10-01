@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "語言支援";
 "usage.languageSupport.description" = "介面語言支援範圍與 macOS 相同。哪些語言可以互相翻譯，則由 macOS 決定。";
 "usage.translateText.description" = "可選字的情況下，在其他 App 選取文字，按 %@ 翻譯。";
-"usage.translateImageText.description" = "不可選字的情況下，按 %@ 截圖，再選取圖中文字，按 %@ 翻譯。\n\nBoundless Translator 會自動辨識截圖中的文字，讓文字可以被選取。";
-"usage.lookUp.title" = "查詢";
-"usage.lookUp.description" = "選取翻譯面板中的文字，然後按一下書本。";
-"usage.listen.title" = "聆聽";
-"usage.listen.description" = "按一下任一語言旁的揚聲器。";
+"usage.translateImageText.description" = "不可選字的情況下，按 %@ 擷取想翻譯的區域，再選取圖中文字，按 %@ 翻譯。";
+"usage.lookUp.description" = "選取原文中的單字或片語，再點書本圖示。";
+"usage.listen.title" = "朗讀";
+"usage.listen.description" = "朗讀原文或譯文。";
 "usage.pinWindow.title" = "釘選視窗";
 "usage.pinWindow.description" = "按一下圖釘，讓翻譯保持顯示。";
 "screenshot.permissionRequired" = "請在「系統設定」>「隱私權與安全性」允許 Boundless Translator 錄製螢幕，然後再試一次。你可能需要結束並重新開啟 App。";

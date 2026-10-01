@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "भाषा समर्थन";
 "usage.languageSupport.description" = "इंटरफ़ेस भाषा समर्थन macOS के समान है। macOS तय करता है कि किन भाषाओं के बीच अनुवाद किया जा सकता है।";
 "usage.translateText.description" = "अगर टेक्स्ट चुना जा सकता है, तो दूसरे ऐप में टेक्स्ट चुनें और अनुवाद के लिए %@ दबाएँ।";
-"usage.translateImageText.description" = "अगर टेक्स्ट चुना नहीं जा सकता है, तो स्क्रीनशॉट लेने के लिए %@ दबाएँ। फिर चित्र में टेक्स्ट चुनें और अनुवाद के लिए %@ दबाएँ।\n\nBoundless Translator स्क्रीनशॉट में टेक्स्ट को अपने आप पहचानकर उसे चुनने योग्य बनाता है।";
-"usage.lookUp.title" = "खोजें";
-"usage.lookUp.description" = "अनुवाद पैनल में टेक्स्ट चुनें, फिर किताब पर क्लिक करें।";
-"usage.listen.title" = "सुनें";
-"usage.listen.description" = "किसी भी भाषा के पास मौजूद स्पीकर पर क्लिक करें।";
+"usage.translateImageText.description" = "जिस टेक्स्ट को चुना नहीं जा सकता, उसके लिए %@ दबाकर उस हिस्से का स्क्रीनशॉट लें जिसका अनुवाद करना है। फिर स्क्रीनशॉट में टेक्स्ट चुनें और अनुवाद के लिए %@ दबाएँ।";
+"usage.lookUp.description" = "मूल पाठ में कोई शब्द या वाक्यांश चुनें, फिर पुस्तक के आइकॉन पर क्लिक करें।";
+"usage.listen.title" = "बोलकर पढ़ें";
+"usage.listen.description" = "मूल टेक्स्ट या अनुवाद को बोलकर पढ़ें।";
 "usage.pinWindow.title" = "विंडो पिन करें";
 "usage.pinWindow.description" = "अनुवाद को दिखाते रहने के लिए पिन पर क्लिक करें।";
 "screenshot.permissionRequired" = "सिस्टम सेटिंग्ज़ > गोपनीयता और सुरक्षा में Boundless Translator के लिए स्क्रीन रिकॉर्डिंग की अनुमति दें, फिर दोबारा कोशिश करें। आपको ऐप बंद करके फिर से खोलना पड़ सकता है।";

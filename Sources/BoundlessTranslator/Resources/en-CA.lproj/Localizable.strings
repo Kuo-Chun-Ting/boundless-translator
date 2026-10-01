@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Language Support";
 "usage.languageSupport.description" = "Interface language support matches macOS. macOS determines which languages can be translated between.";
 "usage.translateText.description" = "For selectable text, select it in another app and press %@ to translate.";
-"usage.translateImageText.description" = "For non-selectable text, press %@ to take a screenshot. Then select the text in the screenshot and press %@ to translate.\n\nBoundless Translator automatically recognizes text in screenshots and makes it selectable.";
-"usage.lookUp.title" = "Look Up";
-"usage.lookUp.description" = "Select text in the translation panel, then click the book.";
-"usage.listen.title" = "Listen";
-"usage.listen.description" = "Click the speaker beside either language.";
+"usage.translateImageText.description" = "For non-selectable text, press %@ to capture the area you want to translate. Then select the text in the screenshot and press %@ to translate.";
+"usage.lookUp.description" = "Select a word or phrase in the source text, then click the book icon.";
+"usage.listen.title" = "Read Aloud";
+"usage.listen.description" = "Read the source text or translation aloud.";
 "usage.pinWindow.title" = "Pin Window";
 "usage.pinWindow.description" = "Click the pin to keep the translation visible.";
 "screenshot.permissionRequired" = "Allow screen recording for Boundless Translator in System Settings > Privacy & Security, then try again. You may need to quit and reopen the app.";

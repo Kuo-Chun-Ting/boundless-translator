@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "语言支持";
 "usage.languageSupport.description" = "界面语言支持范围与 macOS 相同。哪些语言可以互相翻译，则由 macOS 决定。";
 "usage.translateText.description" = "可选字的情况下，在其他 App 中选取文字，按 %@ 翻译。";
-"usage.translateImageText.description" = "不可选字的情况下，按 %@ 截图，再选取图中文字，按 %@ 翻译。\n\nBoundless Translator 会自动识别截图中的文字，让文字可以被选取。";
-"usage.lookUp.title" = "查询";
-"usage.lookUp.description" = "选择翻译面板中的文本，然后点按书本图标。";
+"usage.translateImageText.description" = "不可选字的情况下，按 %@ 截取想翻译的区域，再选取图中文字，按 %@ 翻译。";
+"usage.lookUp.description" = "选择原文中的单词或短语，再点书本图标。";
 "usage.listen.title" = "朗读";
-"usage.listen.description" = "点按任一语言旁边的扬声器。";
+"usage.listen.description" = "朗读原文或译文。";
 "usage.pinWindow.title" = "固定窗口";
 "usage.pinWindow.description" = "点按图钉以保持显示翻译。";
 "screenshot.permissionRequired" = "请在“系统设置”>“隐私与安全性”中允许 Boundless Translator 录制屏幕，然后重试。你可能需要退出并重新打开 App。";

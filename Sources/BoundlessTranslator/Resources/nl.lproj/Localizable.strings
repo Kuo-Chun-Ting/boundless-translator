@@ -19,11 +19,10 @@
 "usage.languageSupport.title" = "Taalondersteuning";
 "usage.languageSupport.description" = "De ondersteuning voor interfacetalen komt overeen met macOS. macOS bepaalt tussen welke talen kan worden vertaald.";
 "usage.translateText.description" = "Als tekst selecteerbaar is, selecteer je deze in een andere app en druk je op %@ om te vertalen.";
-"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om een schermafbeelding te maken. Selecteer daarna de tekst in de afbeelding en druk op %@ om te vertalen.\n\nBoundless Translator herkent tekst in schermafbeeldingen automatisch en maakt deze selecteerbaar.";
-"usage.lookUp.title" = "Zoek op";
-"usage.lookUp.description" = "Selecteer tekst in het vertaalpaneel en klik vervolgens op het boek.";
-"usage.listen.title" = "Luister";
-"usage.listen.description" = "Klik op de luidspreker naast een van de talen.";
+"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om het te vertalen gebied vast te leggen. Selecteer daarna de tekst in de schermafbeelding en druk op %@ om te vertalen.";
+"usage.lookUp.description" = "Selecteer een woord of woordgroep in de brontekst en klik op het boekpictogram.";
+"usage.listen.title" = "Voorlezen";
+"usage.listen.description" = "Lees de brontekst of vertaling voor.";
 "usage.pinWindow.title" = "Zet venster vast";
 "usage.pinWindow.description" = "Klik op de punaise om de vertaling zichtbaar te houden.";
 "screenshot.permissionRequired" = "Sta schermopname voor Boundless Translator toe in Systeeminstellingen > Privacy en beveiliging en probeer het opnieuw. Mogelijk moet je de app stoppen en opnieuw openen.";
