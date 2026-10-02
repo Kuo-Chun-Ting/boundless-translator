@@ -54,8 +54,8 @@ function test_build_app_when_requested_then_builds_test_dmg_app {
     [[ -f "${BUILD_ROOT}/Boundless Translator DMG Test.app/Contents/MacOS/Boundless Translator DMG Test" ]]
     local build_call="$(sed -n '1p' "${CALL_LOG}")"
     [[ "${build_call}" == build\ * ]]
-    [[ "${build_call}" == *'-scheme BoundlessTranslator-Direct'* ]]
-    [[ "${build_call}" == *'-configuration DirectRelease'* ]]
+    [[ "${build_call}" == *'-scheme BoundlessTranslator-DMG'* ]]
+    [[ "${build_call}" == *'-configuration DMGRelease'* ]]
     [[ "${build_call}" != *MARKETING_VERSION=* ]]
     [[ "${build_call}" != *CURRENT_PROJECT_VERSION=* ]]
     [[ "${build_call}" != *SUBSCRIPTION_REQUIRED* ]]

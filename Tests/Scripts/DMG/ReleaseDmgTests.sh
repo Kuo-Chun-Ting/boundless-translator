@@ -75,10 +75,10 @@ function test_release_dmg_when_run_then_builds_verifies_notarizes_and_publishes_
 
     # Assert
     [[ "$(sed -n '1p' "${CALL_LOG}")" == 'build ' ]]
-    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator DMG Test.app '*'/Boundless Translator-test.dmg' ]]
-    [[ "$(sed -n '3p' "${CALL_LOG}")" == verify\ *'/Boundless Translator-test.dmg' ]]
-    [[ "$(sed -n '4p' "${CALL_LOG}")" == notarize\ *'/Boundless Translator-test.dmg' ]]
-    [[ "$(<"${BUILD_ROOT}/Boundless Translator-test.dmg")" == packagednotarized ]]
+    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator DMG Test.app '*'/Boundless Translator DMG Test.dmg' ]]
+    [[ "$(sed -n '3p' "${CALL_LOG}")" == verify\ *'/Boundless Translator DMG Test.dmg' ]]
+    [[ "$(sed -n '4p' "${CALL_LOG}")" == notarize\ *'/Boundless Translator DMG Test.dmg' ]]
+    [[ "$(<"${BUILD_ROOT}/Boundless Translator DMG Test.dmg")" == packagednotarized ]]
 }
 
 function test_release_dmg_when_argument_is_given_then_stops_before_build {
@@ -99,12 +99,12 @@ function test_release_dmg_when_e2e_identity_is_requested_then_uses_e2e_artifact_
 
     # Act
     BOUNDLESS_TRANSLATOR_PRODUCT_NAME='Boundless Translator E2E' \
-    BOUNDLESS_TRANSLATOR_DMG_NAME='Boundless Translator E2E-test.dmg' \
+    BOUNDLESS_TRANSLATOR_DMG_NAME='Boundless Translator E2E.dmg' \
         run_releaser
 
     # Assert
-    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator E2E.app '*'/Boundless Translator E2E-test.dmg' ]]
-    [[ -f "${BUILD_ROOT}/Boundless Translator E2E-test.dmg" ]]
+    [[ "$(sed -n '2p' "${CALL_LOG}")" == package\ *'/Boundless Translator E2E.app '*'/Boundless Translator E2E.dmg' ]]
+    [[ -f "${BUILD_ROOT}/Boundless Translator E2E.dmg" ]]
 }
 
 function test_release_dmg_when_release_step_fails_then_preserves_previous_image {
@@ -112,15 +112,15 @@ function test_release_dmg_when_release_step_fails_then_preserves_previous_image 
     for step in build package verify notarize publish; do
         # Arrange
         mkdir -p "${BUILD_ROOT}"
-        print -n previous > "${BUILD_ROOT}/Boundless Translator-test.dmg"
+        print -n previous > "${BUILD_ROOT}/Boundless Translator DMG Test.dmg"
         : > "${CALL_LOG}"
 
         # Act & Assert
         if TEST_FAIL_RELEASE_STEP="${step}" run_releaser >/dev/null 2>&1; then
-            print -u2 "Expected ${step} failure to stop the test DMG release."
+            print -u2 "Expected ${step} failure to stop the DMG release."
             return 1
         fi
-        [[ "$(<"${BUILD_ROOT}/Boundless Translator-test.dmg")" == previous ]]
+        [[ "$(<"${BUILD_ROOT}/Boundless Translator DMG Test.dmg")" == previous ]]
     done
 }
 
@@ -128,4 +128,4 @@ test_release_dmg_when_run_then_builds_verifies_notarizes_and_publishes_test_imag
 test_release_dmg_when_e2e_identity_is_requested_then_uses_e2e_artifact_names
 test_release_dmg_when_argument_is_given_then_stops_before_build
 test_release_dmg_when_release_step_fails_then_preserves_previous_image
-print 'Test DMG release tests passed.'
+print 'DMG release tests passed.'

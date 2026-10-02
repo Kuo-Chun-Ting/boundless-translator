@@ -22,14 +22,14 @@ function fail {
 mkdir -p "${BUILD_ROOT}"
 readonly TEMP_ROOT="$(mktemp -d "${BUILD_ROOT}/.boundless-translator-build.XXXXXX")"
 readonly DERIVED_DATA_PATH="${TEMP_ROOT}/DerivedData"
-readonly BUILT_APP_PATH="${DERIVED_DATA_PATH}/Build/Products/DirectRelease/${PRODUCT_NAME}.app"
+readonly BUILT_APP_PATH="${DERIVED_DATA_PATH}/Build/Products/DMGRelease/${PRODUCT_NAME}.app"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
 "${XCODEBUILD_EXECUTABLE}" \
     build \
     -project "${XCODE_PROJECT}" \
-    -scheme BoundlessTranslator-Direct \
-    -configuration DirectRelease \
+    -scheme BoundlessTranslator-DMG \
+    -configuration DMGRelease \
     -destination 'platform=macOS,arch=arm64' \
     -derivedDataPath "${DERIVED_DATA_PATH}" \
     'CODE_SIGN_STYLE=Manual' \

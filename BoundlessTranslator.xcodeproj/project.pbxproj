@@ -686,14 +686,14 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		14C47BFD1EA2D5F6273D2B6C /* DirectRelease */ = {
+		14C47BFD1EA2D5F6273D2B6C /* DMGRelease */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
-			name = DirectRelease;
+			name = DMGRelease;
 		};
 		585925E2FC0B42A295992C9F /* AppStoreRelease */ = {
 			isa = XCBuildConfiguration;
@@ -774,7 +774,7 @@
 			};
 			name = Debug;
 		};
-		C1EE4DE471E590D1D52F5FE2 /* DirectRelease */ = {
+		C1EE4DE471E590D1D52F5FE2 /* DMGRelease */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F1C0A7B21D394F7685E2A001 /* BoundlessTranslator.xcconfig */;
 			buildSettings = {
@@ -800,7 +800,7 @@
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
-			name = DirectRelease;
+			name = DMGRelease;
 		};
 /* End XCBuildConfiguration section */
 
@@ -809,21 +809,21 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA60E62D3E7BAEF305ADABEA /* Debug */,
-				14C47BFD1EA2D5F6273D2B6C /* DirectRelease */,
+				14C47BFD1EA2D5F6273D2B6C /* DMGRelease */,
 				9B0B275CDDEE7F324CD1710B /* AppStoreRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = DirectRelease;
+			defaultConfigurationName = DMGRelease;
 		};
 		7DE97F2CECB2601227982F09 /* Build configuration list for PBXNativeTarget "BoundlessTranslator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89679AD72EB8C11CFB977C17 /* Debug */,
-				C1EE4DE471E590D1D52F5FE2 /* DirectRelease */,
+				C1EE4DE471E590D1D52F5FE2 /* DMGRelease */,
 				585925E2FC0B42A295992C9F /* AppStoreRelease */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = DirectRelease;
+			defaultConfigurationName = DMGRelease;
 		};
 /* End XCConfigurationList section */
 

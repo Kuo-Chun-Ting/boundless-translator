@@ -68,7 +68,7 @@ cd boundless-translator
 Scripts/DMG/build_app.sh
 ```
 
-This uses the `BoundlessTranslator-Direct` Xcode scheme to build and publish `Build/Boundless Translator DMG Test.app`, with App Sandbox enabled and no subscription required. Test DMG releases use this build path; the App Store release uses an Xcode archive.
+This uses the `BoundlessTranslator-DMG` Xcode scheme to build and publish `Build/Boundless Translator DMG Test.app`, with App Sandbox enabled and no subscription required. DMG Test releases use this build path; the App Store release uses an Xcode archive.
 
 `release_dmg.sh` normally calls this step for you. Run it directly only when diagnosing the App build before DMG packaging.
 
@@ -112,7 +112,7 @@ Run the entry point for the installed edition, without arguments:
 
 | Edition | Reset App data | Reset permissions |
 | --- | --- | --- |
-| DMG | `Scripts/reset_app_data_dmg.sh` | `Scripts/reset_permissions_dmg.sh` |
+| DMG Test | `Scripts/reset_app_data_dmg.sh` | `Scripts/reset_permissions_dmg.sh` |
 | App Store / TestFlight | `Scripts/reset_app_data_app_store.sh` | `Scripts/reset_permissions_app_store.sh` |
 
 Data reset quits the selected App and clears its preferences and dismissed tips. It leaves macOS permissions granted. Permission reset quits the selected App and clears its Accessibility and Screen Recording permissions. Reopen it to test permission setup.
@@ -121,7 +121,7 @@ The shared cores are `Scripts/reset_app_data.sh <dmg|app-store|e2e>` and `Script
 
 Run resets manually when needed. If data reset reports `Operation not permitted`, give the terminal app Full Disk Access in System Settings and reopen it.
 
-### Create a Test DMG
+### Create a DMG Test installer
 
 Run this setup once. Replace the placeholders with your Apple Account email and Developer Team ID:
 
@@ -140,10 +140,10 @@ Build the DMG:
 Scripts/release_dmg.sh
 ```
 
-- Output: `Build/Boundless Translator-test.dmg`.
+- Output: `Build/Boundless Translator DMG Test.dmg`.
 - The App has App Sandbox enabled and requires no subscription.
 - The script verifies the real built App, signs and mounts the real DMG to verify its contents, gets Apple notarization, attaches the ticket and checks Gatekeeper approval.
-- The script replaces the previous test DMG only after all checks pass.
+- The script replaces the previous DMG Test installer only after all checks pass.
 
 Quit the other edition, then install `Boundless Translator DMG Test.app` into Applications. Authorize Accessibility and Screen Recording once for this new identity; subsequent compatible Developer ID updates should retain those permissions. Use `Scripts/reset_permissions_dmg.sh` to reset this DMG App’s permissions. Test permission setup, selected-text translation, screenshot translation, speech and Lookup.
 

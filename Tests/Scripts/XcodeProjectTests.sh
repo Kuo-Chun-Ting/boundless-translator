@@ -22,9 +22,9 @@ function test_xcode_project_when_listed_then_exposes_release_schemes_and_configu
 
     # Assert
     local output="$(<"${output_path}")"
-    [[ "${output}" == *BoundlessTranslator-Direct* ]]
+    [[ "${output}" == *BoundlessTranslator-DMG* ]]
     [[ "${output}" == *BoundlessTranslator-AppStore* ]]
-    [[ "${output}" == *DirectRelease* ]]
+    [[ "${output}" == *DMGRelease* ]]
     [[ "${output}" == *AppStoreRelease* ]]
 }
 
@@ -60,8 +60,8 @@ function test_xcode_project_when_release_configuration_changes_then_subscription
     # Act
     xcodebuild -showBuildSettings \
         -project "${XCODE_PROJECT}" \
-        -scheme BoundlessTranslator-Direct \
-        -configuration DirectRelease \
+        -scheme BoundlessTranslator-DMG \
+        -configuration DMGRelease \
         > "${direct_settings}"
     xcodebuild -showBuildSettings \
         -project "${XCODE_PROJECT}" \
@@ -116,8 +116,8 @@ function test_xcode_project_when_e2e_identity_is_overridden_then_changes_only_ap
     # Act
     xcodebuild -showBuildSettings \
         -project "${XCODE_PROJECT}" \
-        -scheme BoundlessTranslator-Direct \
-        -configuration DirectRelease \
+        -scheme BoundlessTranslator-DMG \
+        -configuration DMGRelease \
         'BOUNDLESS_TRANSLATOR_PRODUCT_NAME=Boundless Translator E2E' \
         'BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER=com.lillard.BoundlessTranslator.e2e' \
         > "${e2e_settings}"

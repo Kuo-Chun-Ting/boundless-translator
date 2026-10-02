@@ -99,7 +99,7 @@ function test_package_dmg_when_signing_fails_then_preserves_existing_image {
 function test_package_dmg_when_e2e_app_is_given_then_uses_e2e_volume_and_app_name {
     # Arrange
     local e2e_app="${TEMP_ROOT}/Boundless Translator E2E.app"
-    local output_dmg="${TEMP_ROOT}/Boundless Translator E2E-test.dmg"
+    local output_dmg="${TEMP_ROOT}/Boundless Translator E2E.dmg"
     mkdir -p "${e2e_app}"
     : > "${CALL_LOG}"
 

@@ -5,7 +5,7 @@ set -euo pipefail
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
 readonly VERIFIER="${PROJECT_ROOT}/Scripts/DMG/verify_dmg.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-dmg-tests.XXXXXX)"
-readonly DMG_PATH="${TEMP_ROOT}/Boundless Translator-test.dmg"
+readonly DMG_PATH="${TEMP_ROOT}/Boundless Translator DMG Test.dmg"
 readonly MOCK_BIN="${TEMP_ROOT}/bin"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
 trap 'rm -rf "${TEMP_ROOT}"' EXIT
