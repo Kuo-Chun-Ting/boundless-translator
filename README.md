@@ -82,7 +82,7 @@ Scripts/verify.sh
 
 `verify.sh` checks free-mode code, GUI behavior, subscription-mode code, local StoreKit transactions, Xcode project settings, and shell workflows. Pass `features` or `subscription` only when diagnosing one side; the normal workflow runs everything. It builds only test targets and test hosts; it does not build the production App or create a DMG, archive, or PKG.
 
-On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the five local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Scripts/TestRunners/run_storekit_tests.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
+On macOS 26.5.2 (25F84) with Xcode 26.6 (17F113), the five local StoreKit integration tests are temporarily skipped because purchase succeeds but entitlement queries return empty. Other checks still run; a successful exit with this warning means those checks passed, **not that subscription integration is verified**. Changing either OS or Xcode build re-enables the tests. Run `Tests/Runners/run_storekit_tests.sh --force` to retry on the affected environment. See [StoreKit testing](app-store/storekit-testing.md).
 
 GUI and StoreKit integration tests need a macOS desktop session. They do not need the production signing certificate. Actual Apple purchase, trial, renewal, expiration, refund and restore flows are tested separately in the subscription-enabled TestFlight edition, where test purchases incur no charges. See [Apple's testing overview](https://developer.apple.com/documentation/storekit/testing-at-all-stages-of-development-with-xcode-and-the-sandbox).
 
@@ -100,9 +100,11 @@ sudo automationmodetool disable-automationmode-without-authentication
 
 ### Script Layout
 
-- `Scripts/verify.sh`, `Scripts/release_dmg.sh`, and the edition-specific reset scripts are the commands run directly during normal development.
+- `Scripts/` contains the Verify, E2E, DMG release, App Store release, and edition-specific reset entry points.
 - `Scripts/DMG/` contains the private steps used by `release_dmg.sh` to build the App, package the DMG, verify the mounted DMG, and notarize it.
-- `Scripts/TestRunners/` contains test runners called by `verify.sh`.
+- `Scripts/AppStore/` contains the archive, validation, and upload steps called by `release_app_store.sh`.
+- `Scripts/Reset/` contains the shared reset cores called by the edition-specific entry points.
+- `Tests/Runners/` contains test runners called by `verify.sh`.
 - `Scripts/Assets/` contains manual tools for regenerating App and DMG artwork.
 - `Tests/Scripts/` tests the shell workflows themselves.
 
@@ -117,7 +119,7 @@ Run the entry point for the installed edition, without arguments:
 
 Data reset quits the selected App and clears its preferences and dismissed tips. It leaves macOS permissions granted. Permission reset quits the selected App and clears its Accessibility and Screen Recording permissions. Reopen it to test permission setup.
 
-The shared cores are `Scripts/reset_app_data.sh <dmg|app-store|e2e>` and `Scripts/reset_permissions.sh <dmg|app-store|e2e>`. E2E calls the permission core with `e2e` only in `--from-permission-setup` mode. Normal tests preserve permissions. The E2E runner passes its installed App path; manual entry points use the corresponding App in `/Applications`.
+The shared cores are `Scripts/Reset/reset_app_data.sh <dmg|app-store|e2e>` and `Scripts/Reset/reset_permissions.sh <dmg|app-store|e2e>`. E2E calls the permission core with `e2e` only in `--from-permission-setup` mode. Normal tests preserve permissions. The E2E runner passes its installed App path; manual entry points use the corresponding App in `/Applications`.
 
 Run resets manually when needed. If data reset reports `Operation not permitted`, give the terminal app Full Disk Access in System Settings and reopen it.
 

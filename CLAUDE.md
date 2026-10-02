@@ -8,7 +8,7 @@
 - Codex 執行 Verify 與 E2E 測試腳本時，第一次就以 `exec_command` 的 `sandbox_permissions: "require_escalated"` 執行；一般讀檔、改檔指令維持預設沙盒。
 - 每次交付修改前檢查 `TODO.md`，勾選本次已完成的項目；未完成的項目維持未勾選。
 - 只有需要驗證首次權限設定流程時，執行 `Scripts/run_e2e_tests.sh --from-permission-setup`。此模式會自行重設權限，等待使用者完成 macOS 授權，再繼續功能測試。
-- 不要在其他流程自動執行 `Scripts/reset_permissions.sh`；只有使用者要求單獨重設測試權限時才執行。
+- 不要在其他流程自動執行 `Scripts/Reset/reset_permissions.sh`；只有使用者要求單獨重設測試權限時才執行。
 
 不得存放或提交簽章私鑰。
 

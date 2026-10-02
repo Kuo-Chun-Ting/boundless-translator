@@ -8,13 +8,14 @@ trap 'rm -rf "${TEMP_ROOT}"' EXIT
 
 function test_reset_entry_points_when_run_without_arguments_then_forward_edition_to_core {
     # Arrange
+    mkdir -p "${TEMP_ROOT}/Reset"
     local core suffix edition
     for core in reset_app_data reset_permissions; do
-        cat > "${TEMP_ROOT}/${core}.sh" <<'MOCK'
+        cat > "${TEMP_ROOT}/Reset/${core}.sh" <<'MOCK'
 #!/bin/zsh
 print -r -- "$*" > "${BOUNDLESS_TRANSLATOR_TEST_CALL_LOG}"
 MOCK
-        chmod +x "${TEMP_ROOT}/${core}.sh"
+        chmod +x "${TEMP_ROOT}/Reset/${core}.sh"
         for suffix in dmg app_store; do
             case "${suffix}" in
                 dmg) edition=dmg ;;

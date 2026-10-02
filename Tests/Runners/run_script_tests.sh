@@ -39,7 +39,7 @@ case "${1:-all}" in
         done < <(find "${PROJECT_ROOT}/Tests/Scripts" -type f -name '*Tests.sh' | sort)
         ;;
     *)
-        print -u2 'Usage: Scripts/TestRunners/run_script_tests.sh [features|subscription|all]'
+        print -u2 'Usage: Tests/Runners/run_script_tests.sh [features|subscription|all]'
         exit 2
         ;;
 esac

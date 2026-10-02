@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-exec "${0:A:h}/reset_permissions.sh" app-store
+exec "${0:A:h}/Reset/reset_permissions.sh" app-store

@@ -4,9 +4,9 @@ set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h}"
 readonly SWIFT_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE:-$(command -v swift)}"
-readonly GUI_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_gui_tests.sh}"
-readonly STOREKIT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_storekit_tests.sh}"
-readonly SCRIPT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SCRIPT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/TestRunners/run_script_tests.sh}"
+readonly GUI_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_GUI_TEST_EXECUTABLE:-${PROJECT_ROOT}/Tests/Runners/run_gui_tests.sh}"
+readonly STOREKIT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Tests/Runners/run_storekit_tests.sh}"
+readonly SCRIPT_TEST_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SCRIPT_TEST_EXECUTABLE:-${PROJECT_ROOT}/Tests/Runners/run_script_tests.sh}"
 readonly TEST_REPORT_ROOT="$(mktemp -d /private/tmp/boundless-translator-test-results.XXXXXX)"
 readonly VERIFICATION_BUILD_ROOT="${PROJECT_ROOT}/.build/verification"
 storekit_integration_skipped=false

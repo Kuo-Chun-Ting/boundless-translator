@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h}"
+readonly PROJECT_ROOT="${0:A:h:h:h}"
 case "$1" in
     dmg)
         bundle_identifier='com.lillard.BoundlessTranslator.dmgtest'

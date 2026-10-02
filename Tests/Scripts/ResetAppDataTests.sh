@@ -2,7 +2,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly RESETTER="${PROJECT_ROOT}/Scripts/reset_app_data.sh"
+readonly RESETTER="${PROJECT_ROOT}/Scripts/Reset/reset_app_data.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-data-reset-tests.XXXXXX)"
 readonly MOCK_BIN="${TEMP_ROOT}/bin"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"

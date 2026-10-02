@@ -1,6 +1,6 @@
 #!/bin/zsh
 set -e
-cd "${0:A:h:h:h}"
+cd "${0:A:h:h}"
 
 Scripts/AppStore/archive_app_store.sh
 Scripts/AppStore/validate_app_store.sh
