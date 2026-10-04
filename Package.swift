@@ -32,6 +32,13 @@ let package = Package(
             name: "BoundlessTranslatorComponentTests",
             dependencies: ["BoundlessTranslator"],
             path: "Tests/Component"
+        ),
+        .testTarget(
+            name: "BoundlessTranslatorLanguageSupportTests",
+            dependencies: ["BoundlessTranslator"],
+            path: "Tests/LanguageSupport",
+            exclude: ["README.md"],
+            resources: [.copy("Fixtures")]
         )
     ]
 )
