@@ -19,7 +19,7 @@ Boundless Translator 不需要帳號，也沒有開發者營運的伺服器。Ap
 
 App 使用 macOS「輔助使用」讀取選取文字。必要時，App 會模擬 Command-C 並讀取剪貼簿；複製前會在記憶體暫存原有剪貼簿內容，取得選取文字後，在未觀察到後續剪貼簿更新的情況下立即還原。同時或延遲發生的 Copy 操作仍可能影響還原。
 
-截圖翻譯使用 macOS 區域截圖工具與 VisionKit「原況文字」。App 會在截圖完成後刪除暫存檔案，不保留截圖或翻譯紀錄，也不會將內容傳送給開發者。
+截圖翻譯使用 macOS 區域截圖工具與 Apple Vision 裝置端文字辨識。App 會在截圖完成後刪除暫存檔案，不保留截圖或翻譯紀錄，也不會將內容傳送給開發者。
 
 翻譯、語音與「查詢」功能使用 Apple 系統 framework 與服務。Apple 依其[隱私權政策](https://www.apple.com/tw/legal/privacy/)處理相關服務。
 

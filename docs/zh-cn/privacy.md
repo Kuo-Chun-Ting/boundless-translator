@@ -19,7 +19,7 @@ Boundless Translator 无需账号，也不使用开发者运营的服务器。Ap
 
 App 使用 macOS“辅助功能”读取所选文本。必要时，App 会模拟 Command-C 并读取剪贴板；此备用方式可能替换原有的剪贴板内容。
 
-截图翻译使用 macOS 区域截图工具与 VisionKit“实况文本”。App 会在截图完成后删除临时文件，不保留截图或翻译历史，也不会将内容发送给开发者。
+截图翻译使用 macOS 区域截图工具与 Apple Vision 设备端文字识别。App 会在截图完成后删除临时文件，不保留截图或翻译历史，也不会将内容发送给开发者。
 
 翻译、语音与“查询”功能使用 Apple 系统框架与服务。Apple 依照其[隐私政策](https://www.apple.com.cn/legal/privacy/)处理相关服务。
 

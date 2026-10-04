@@ -19,6 +19,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     )
     private var interactionPolicy = WindowInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationWindowKind.translation
+    private var hasUserResized = false
     private var mouseDownMonitor: MouseDownMonitor?
     private weak var translationCoordinator: TranslationCoordinator?
 
@@ -134,6 +135,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         toolbarController.synchronize()
         interactionPolicy = WindowInteractionPolicy(kind: kind)
         presentedKind = kind
+        hasUserResized = false
         window.contentView = TranslationWindowContentView(rootView: content)
         window.setContentSize(windowSize)
         configureWindowControls(for: kind)
@@ -144,7 +146,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     }
 
     private func resizeTranslationWindow(to size: CGSize) {
-        guard case .translation = presentedKind else {
+        guard case .translation = presentedKind, !hasUserResized else {
             return
         }
         guard window.contentLayoutRect.size != size else {
@@ -226,15 +228,18 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
             name: NSWorkspace.didActivateApplicationNotification,
             object: nil
         )
-        mouseDownMonitor = MouseDownMonitor { [weak self] screenLocation in
+        mouseDownMonitor = MouseDownMonitor { [weak self] screenLocation, eventWindow in
             Task { @MainActor [weak self] in
-                self?.dismissForMouseDown(at: screenLocation)
+                self?.dismissForMouseDown(at: screenLocation, in: eventWindow)
             }
         }
     }
 
-    func dismissForMouseDown(at screenLocation: CGPoint) {
+    func dismissForMouseDown(at screenLocation: CGPoint, in eventWindow: NSWindow? = nil) {
         guard window.isVisible else {
+            return
+        }
+        guard eventWindow !== window else {
             return
         }
         guard !window.frame.contains(screenLocation) else {
@@ -283,6 +288,15 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         endTranslation()
     }
 
+    func windowWillStartLiveResize(_ notification: Notification) {
+        hasUserResized = true
+    }
+
+    func windowShouldZoom(_ window: NSWindow, toFrame newFrame: NSRect) -> Bool {
+        hasUserResized = true
+        return true
+    }
+
     private func dismiss(_ sender: Any?) {
         speechController.stopPlayback()
         endTranslation()
@@ -300,16 +314,18 @@ private final class MouseDownMonitor {
     private let globalToken: Any?
     private let localToken: Any?
 
-    init(onMouseDown: @escaping (CGPoint) -> Void) {
+    init(onMouseDown: @escaping (CGPoint, NSWindow?) -> Void) {
         globalToken = NSEvent.addGlobalMonitorForEvents(
             matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
         ) { _ in
-            onMouseDown(NSEvent.mouseLocation)
+            onMouseDown(NSEvent.mouseLocation, nil)
         }
         localToken = NSEvent.addLocalMonitorForEvents(
             matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
         ) { event in
-            onMouseDown(NSEvent.mouseLocation)
+            let location = event.window?.convertPoint(toScreen: event.locationInWindow)
+                ?? NSEvent.mouseLocation
+            onMouseDown(location, event.window)
             return event
         }
     }

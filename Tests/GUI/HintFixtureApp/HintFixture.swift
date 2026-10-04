@@ -10,7 +10,7 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         interfaceLanguageSettings: languages,
         engine: TranslationEngine(loadLanguages: { [] }, makeTaskHost: { _, _ in AnyView(EmptyView()) })
     )
-    private let imageView = LiveTextImageView()
+    private let imageView = ImageTextView()
     private lazy var viewer = ImageViewerWindowController(content: imageView, interfaceLanguageSettings: languages)
     private lazy var preferences = PreferencesWindowController(
         settings: TranslationSettings(), interfaceLanguageSettings: languages,
@@ -41,8 +41,15 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func presentTranslation() throws {
-        coordinator.submit(try SelectedText("Hello"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+        let longText = ProcessInfo.processInfo.environment["BOUNDLESS_TRANSLATOR_HINT_LONG_TEXT"] == "1"
+        let source = longText
+            ? String(repeating: "People live under different economic, social, and physical conditions. Small decisions can create opportunities. ", count: 6)
+            : "Hello"
+        coordinator.submit(try SelectedText(source), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
         translator.show(coordinator: coordinator, supportedLanguages: [], pointerLocation: presentationPoint)
+        if longText, let request = coordinator.request {
+            Task { await coordinator.translate(request, using: HintTranslationStub()) }
+        }
     }
 
     private func presentScreenshot() {
@@ -64,9 +71,7 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         guard let window = viewer.window else { return }
         let screenRect = window.convertToScreen(imageView.convert(imageView.bounds, to: nil))
         let state: [String: Any] = [
-            "cursor": NSCursor.current === NSCursor.iBeam ? "ibeam"
-                : NSCursor.current === NSCursor.arrow ? "arrow" : "other",
-            "recognizedText": imageView.overlayView.text,
+            "recognizedText": imageView.document.text,
             "selectedText": imageView.selectedText,
             "imageFrame": [screenRect.minX, NSScreen.screens[0].frame.maxY - screenRect.maxY,
                            screenRect.width, screenRect.height],
@@ -107,5 +112,14 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         ("TARGET" as NSString).draw(at: NSPoint(x: 40, y: 130), withAttributes: attributes)
         image.unlockFocus()
         return image
+    }
+}
+
+private struct HintTranslationStub: TranslationRunning {
+    func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
+        TranslationOutput(
+            translatedText: String(repeating: "人們生活在不同的經濟、社會與身體狀況之下。小小的選擇也能創造機會。", count: 6),
+            sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant"
+        )
     }
 }

@@ -341,6 +341,38 @@ private func pinWindow(_ window: TranslationWindow) throws {
     #expect(NSApplication.shared.sendAction(action, to: pinButton.target, from: pinButton))
 }
 
+@Test @MainActor
+func test_show_when_translationArrivesAfterUserResizes_then_preservesUserWindowSize() async throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    defer { fixture.window.close() }
+    fixture.window.contentView?.layoutSubtreeIfNeeded()
+    let requestedSize = CGSize(width: 900, height: 650)
+    fixture.window.delegate?.windowWillStartLiveResize?(
+        Notification(name: NSWindow.willStartLiveResizeNotification, object: fixture.window)
+    )
+    fixture.window.setContentSize(requestedSize)
+    fixture.window.contentView?.layoutSubtreeIfNeeded()
+    let resizedBounds = try #require(fixture.window.contentView?.bounds.size)
+    let request = try #require(fixture.coordinator.request)
+    let target = String(repeating: "這是一段延遲完成的譯文。", count: 50)
+
+    // Act
+    await fixture.coordinator.translate(request, using: ResizeTranslationStub(text: target))
+    fixture.window.contentView?.layoutSubtreeIfNeeded()
+
+    // Assert
+    #expect(fixture.window.contentView?.bounds.size == resizedBounds)
+}
+
+private struct ResizeTranslationStub: TranslationRunning {
+    let text: String
+
+    func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
+        TranslationOutput(translatedText: text, sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    }
+}
+
 @MainActor
 private func makeTranslationWindowFixture(
     sourceText: String = "Hello",

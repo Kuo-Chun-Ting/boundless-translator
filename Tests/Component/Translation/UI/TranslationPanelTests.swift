@@ -626,6 +626,43 @@ private struct TranslationWindowRenderFixture {
     }
 }
 
+@Test @MainActor
+func test_body_when_longTranslationIsResized_then_bothColumnsReflowAndKeepSelection() async throws {
+    // Arrange
+    let source = String(repeating: "People make small choices every day. ", count: 30)
+    let target = String(repeating: "人們每天做出小小的選擇。", count: 30)
+    let coordinator = TranslationCoordinator()
+    coordinator.submit(try SelectedText(source), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    await coordinator.translate(try #require(coordinator.request), using: WindowTranslationRunner(
+        output: TranslationOutput(translatedText: target, sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    ))
+    let hostingView = makeTranslationHostingView(coordinator: coordinator)
+    hostingView.layoutSubtreeIfNeeded()
+    let textViews = descendants(of: NSTextView.self, in: hostingView)
+    #expect(textViews.count == 2)
+    let narrowHeights = textViews.map { textView -> CGFloat in
+        textView.setSelectedRange(NSRange(location: 0, length: 2))
+        textView.layoutManager!.ensureLayout(for: textView.textContainer!)
+        return textView.layoutManager!.usedRect(for: textView.textContainer!).height
+    }
+
+    // Act
+    hostingView.frame.size = CGSize(width: 900, height: 650)
+    hostingView.layoutSubtreeIfNeeded()
+
+    // Assert
+    for (index, textView) in textViews.enumerated() {
+        let container = try #require(textView.textContainer)
+        let manager = try #require(textView.layoutManager)
+        manager.ensureLayout(for: container)
+        #expect(container.size.width > 380)
+        #expect(manager.usedRect(for: container).height < narrowHeights[index])
+        #expect(textView.enclosingScrollView!.contentSize.height > 440)
+        #expect(textView.selectedRange() == NSRange(location: 0, length: 2))
+    }
+    #expect(Set(textViews.map(\.string)) == Set([source, target]))
+}
+
 private struct WindowTranslationRunner: TranslationRunning {
     let output: TranslationOutput
 

@@ -82,8 +82,8 @@ function verify_executable {
     dependencies="$(otool -L "${executable}")"
     [[ "${dependencies}" == *"/System/Library/Frameworks/Translation.framework/"* ]] ||
         fail "App executable is missing Translation.framework."
-    [[ "${dependencies}" == *"/System/Library/Frameworks/VisionKit.framework/"* ]] ||
-        fail "App executable is missing VisionKit.framework."
+    [[ "${dependencies}" == *"/System/Library/Frameworks/Vision.framework/"* ]] ||
+        fail "App executable is missing Vision.framework."
     [[ "${dependencies}" != *"@rpath"* && "${dependencies}" != *"@loader_path"* && "${dependencies}" != *"@executable_path"* ]] ||
         fail "App executable contains unresolved relative library paths."
 }

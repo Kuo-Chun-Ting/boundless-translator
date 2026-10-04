@@ -19,7 +19,7 @@ Boundless Translator does not require an account and does not use a developer-op
 
 The app uses macOS Accessibility to read selected text. If needed, it simulates Command-C and reads the clipboard. Before copying, it temporarily saves the existing clipboard contents in memory and restores them after reading the selected text, provided no later clipboard update has been observed. Concurrent or delayed Copy operations can still affect restoration.
 
-Screenshot translation uses the macOS region-capture tool and VisionKit Live Text. The app deletes the temporary screenshot after capture, keeps no screenshot or translation history, and does not send this content to the developer.
+Screenshot translation uses the macOS region-capture tool and on-device Apple Vision text recognition. The app deletes the temporary screenshot after capture, keeps no screenshot or translation history, and does not send this content to the developer.
 
 Translation, speech, and Lookup use Apple system frameworks and services. Apple handles its services under the [Apple Privacy Policy](https://www.apple.com/legal/privacy/).
 

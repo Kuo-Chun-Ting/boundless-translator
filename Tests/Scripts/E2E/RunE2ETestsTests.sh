@@ -107,7 +107,7 @@ function run_e2e {
         zsh "${RUNNER}" "$@"
 }
 
-function test_run_e2e_when_run_then_uses_isolated_notarized_dmg_and_runs_three_core_flows {
+function test_run_e2e_when_run_then_uses_isolated_notarized_dmg_and_runs_core_flows {
     # Arrange
     : > "${CALL_LOG}"
 
@@ -125,7 +125,10 @@ function test_run_e2e_when_run_then_uses_isolated_notarized_dmg_and_runs_three_c
     [[ "${calls}" == *'ditto '*'/Boundless Translator E2E.app '*'/E2E/Installed/Boundless Translator E2E.app'* ]]
     [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/SelectionTranslationE2ETests/test_accessibilitySelection_whenTranslationActionRuns_thenPresentsSelectedSourceText'* ]]
     [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/SelectionTranslationE2ETests/test_copyOnlySelection_whenTranslationActionRuns_thenUsesClipboardFallback'* ]]
-    [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/ScreenshotE2ETests/test_screenshotAction_whenFixtureRegionIsCaptured_thenRoutesLiveTextSelectionToTranslation'* ]]
+    [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/ScreenshotE2ETests'* ]]
+    [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/ImageTextSelectionGUITests'* ]]
+    [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/ImageTextLayoutGUITests'* ]]
+    [[ "${calls}" == *'-only-testing:BoundlessTranslatorE2ETests/ImageTextFocusGUITests'* ]]
     [[ "${calls}" == *"BOUNDLESS_TRANSLATOR_E2E_APP_PATH=${E2E_ROOT}/Installed/Boundless Translator E2E.app"* ]]
     [[ "${calls}" == *"pkill -f ^${E2E_ROOT}/Installed/Boundless Translator E2E.app/Contents/MacOS/Boundless Translator E2E([[:space:]]|$)"* ]]
     [[ "$(grep -c '^xcodebuild ' "${CALL_LOG}")" == 1 ]]
@@ -179,7 +182,7 @@ function test_run_e2e_when_unknown_argument_is_given_then_stops_before_release {
 }
 
 create_command_stubs
-test_run_e2e_when_run_then_uses_isolated_notarized_dmg_and_runs_three_core_flows
+test_run_e2e_when_run_then_uses_isolated_notarized_dmg_and_runs_core_flows
 test_run_e2e_from_permission_setup_then_resets_only_e2e_permissions_before_core_flows
 test_run_e2e_when_release_fails_then_preserves_installed_e2e_app
 test_run_e2e_when_unknown_argument_is_given_then_stops_before_release

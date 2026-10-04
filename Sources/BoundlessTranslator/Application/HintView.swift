@@ -5,7 +5,7 @@ struct HintView: View {
     let title: Text
     let message: Text?
     let icon: Image
-    let width: CGFloat
+    let width: CGFloat?
     let localization: AppLocalization
     let identifier: String
     let onClose: (Bool) -> Void
@@ -37,7 +37,8 @@ struct HintView: View {
                 ? .rightToLeft : .leftToRight
         )
         .padding(16)
-        .frame(width: width - (presentation == .callout ? 8 : 0))
+        .frame(width: width.map { $0 - (presentation == .callout ? 8 : 0) })
+        .frame(maxWidth: width == nil ? .infinity : nil)
         .padding(.leading, presentation == .callout ? 8 : 0)
         .fixedSize(horizontal: false, vertical: true)
         .background(HintSurface(presentation: presentation).fill(Color.primary.opacity(0.06)))

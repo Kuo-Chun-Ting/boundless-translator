@@ -149,7 +149,10 @@ function run_core_feature_tests {
         Features \
         -only-testing:BoundlessTranslatorE2ETests/SelectionTranslationE2ETests/test_accessibilitySelection_whenTranslationActionRuns_thenPresentsSelectedSourceText \
         -only-testing:BoundlessTranslatorE2ETests/SelectionTranslationE2ETests/test_copyOnlySelection_whenTranslationActionRuns_thenUsesClipboardFallback \
-        -only-testing:BoundlessTranslatorE2ETests/ScreenshotE2ETests/test_screenshotAction_whenFixtureRegionIsCaptured_thenRoutesLiveTextSelectionToTranslation
+        -only-testing:BoundlessTranslatorE2ETests/ScreenshotE2ETests \
+        -only-testing:BoundlessTranslatorE2ETests/ImageTextSelectionGUITests \
+        -only-testing:BoundlessTranslatorE2ETests/ImageTextLayoutGUITests \
+        -only-testing:BoundlessTranslatorE2ETests/ImageTextFocusGUITests
 }
 
 trap clean_up EXIT

@@ -179,8 +179,8 @@ private enum CursorTestHost {
         let delegate: NSApplicationDelegate
         if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] != nil {
             delegate = HintFixtureDelegate()
-        } else if environment["BOUNDLESS_TRANSLATOR_LIVE_TEXT_FIXTURE_OUTPUT"] != nil {
-            delegate = LiveTextFixtureDelegate()
+        } else if environment["BOUNDLESS_TRANSLATOR_IMAGE_TEXT_FIXTURE_OUTPUT"] != nil {
+            delegate = ImageTextFixtureDelegate()
         } else {
             delegate = CursorTestHostDelegate()
         }

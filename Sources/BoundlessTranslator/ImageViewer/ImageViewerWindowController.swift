@@ -16,7 +16,7 @@ protocol ImageViewerControlling: ImageViewerSelectionProviding {
     func present(image: NSImage, pointerLocation: CGPoint)
 }
 
-extension LiveTextImageView: ImageViewerContent {
+extension ImageTextView: ImageViewerContent {
     var view: NSView {
         self
     }
@@ -48,7 +48,7 @@ final class ImageViewerWindowController: NSWindowController,
     private var screenshotHintHeight: CGFloat = 0
 
     init(
-        content: any ImageViewerContent = LiveTextImageView(),
+        content: any ImageViewerContent = ImageTextView(),
         visibleFrameForPointer: @escaping VisibleFrameProvider = { pointerLocation in
             NSScreen.screens.first {
                 $0.frame.contains(pointerLocation)
@@ -74,14 +74,12 @@ final class ImageViewerWindowController: NSWindowController,
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
-        window.acceptsMouseMovedEvents = true
         window.contentMinSize = CGSize(width: 420, height: 300)
         let container = NSView(frame: window.contentLayoutRect)
         content.view.frame = container.bounds
         content.view.autoresizingMask = [.width, .height]
         container.addSubview(content.view)
         window.contentView = container
-        window.imageContent = content.view as? LiveTextImageView
 
         super.init(window: window)
         window.delegate = self
@@ -215,17 +213,12 @@ final class ImageViewerWindowController: NSWindowController,
 }
 
 private final class ImageViewerWindow: NSWindow {
-    weak var imageContent: LiveTextImageView?
-    private var pendingTextDrag = false
-
     override func sendEvent(_ event: NSEvent) {
         if event.type == .keyDown, event.keyCode == 53,
            event.modifierFlags.intersection([.command, .option, .control, .shift]).isEmpty {
             cancelOperation(nil)
             return
         }
-        defer { updateTextCursor(for: event) }
-        if handlePendingTextDrag(event) { return }
         super.sendEvent(event)
     }
 
@@ -235,66 +228,10 @@ private final class ImageViewerWindow: NSWindow {
 
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.modifierFlags.intersection([.command, .option, .control, .shift]) == .command,
-           event.charactersIgnoringModifiers?.lowercased() == "w" {
+           event.characters?.lowercased() == "w" {
             performClose(nil)
             return true
         }
         return super.performKeyEquivalent(with: event)
-    }
-
-    private func handlePendingTextDrag(_ event: NSEvent) -> Bool {
-        guard let textView = imageContent else { return false }
-        switch event.type {
-        case .leftMouseDown:
-            guard isImageHit(at: event.locationInWindow) else { return false }
-            pendingTextDrag = textView.canBeginSelection(at: event.locationInWindow)
-                && !textView.containsText(at: event.locationInWindow)
-            guard pendingTextDrag else { return false }
-            makeKeyAndOrderFront(nil)
-            textView.clearSelection()
-            // Own the blank-space gesture until it reaches text. Sending this
-            // down to VisionKit would start a competing native tracking loop.
-            return true
-        case .leftMouseDragged:
-            guard pendingTextDrag else { return false }
-            guard isImageHit(at: event.locationInWindow),
-                  textView.containsText(at: event.locationInWindow) else { return true }
-            pendingTextDrag = false
-            beginNativeTextDrag(with: event)
-            return false
-        case .leftMouseUp:
-            let wasPending = pendingTextDrag
-            pendingTextDrag = false
-            return wasPending
-        default:
-            return false
-        }
-    }
-
-    private func beginNativeTextDrag(with event: NSEvent) {
-        // Hand off once, at the first text hit. Subsequent drag/up events follow
-        // normal AppKit dispatch; nothing is posted to the system event queue.
-        guard let start = NSEvent.mouseEvent(
-            with: .leftMouseDown, location: event.locationInWindow,
-            modifierFlags: event.modifierFlags, timestamp: event.timestamp,
-            windowNumber: windowNumber, context: nil,
-            eventNumber: event.eventNumber, clickCount: 1, pressure: 1
-        ) else { return }
-        super.sendEvent(start)
-    }
-
-    private func updateTextCursor(for event: NSEvent) {
-        switch event.type {
-        case .mouseMoved, .leftMouseDown, .leftMouseDragged, .leftMouseUp, .cursorUpdate:
-            guard isImageHit(at: event.locationInWindow) else { return }
-            imageContent?.updateCursor(at: event.locationInWindow)
-        default:
-            break
-        }
-    }
-
-    private func isImageHit(at point: NSPoint) -> Bool {
-        guard let imageContent, let hit = contentView?.hitTest(point) else { return false }
-        return hit.isDescendant(of: imageContent)
     }
 }

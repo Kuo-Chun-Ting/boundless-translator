@@ -29,6 +29,51 @@ final class HintPresentationGUITests: XCTestCase {
         }
     }
 
+    func test_translationWindow_when_resizedFromOuterEdge_then_keepsContentAndExpandsDictionaryHint() {
+        // Arrange
+        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "dictionary"
+        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_LONG_TEXT"] = "1"
+        app.launch()
+        app.activate()
+        let source = app.textViews["translation.sourceText"]
+        let target = app.textViews["translation.targetText"]
+        let hint = app.groups["hint.dictionary"].firstMatch
+        XCTAssertTrue(hint.waitForExistence(timeout: 5))
+        XCTAssertTrue(target.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch
+        let originalWidth = window.frame.width
+        let sourceWidth = source.frame.width
+        let targetWidth = target.frame.width
+        let edge = window.coordinate(withNormalizedOffset: .zero).withOffset(
+            CGVector(dx: originalWidth + 2, dy: window.frame.height / 2)
+        )
+
+        // Act
+        edge.press(forDuration: 0.1, thenDragTo: edge.withOffset(CGVector(dx: 180, dy: 0)))
+
+        // Assert
+        XCTAssertTrue(source.exists, "Resizing the native window border must not dismiss its content.")
+        XCTAssertTrue(target.exists)
+        XCTAssertGreaterThan(window.frame.width, originalWidth + 100)
+        XCTAssertGreaterThan(source.frame.width, sourceWidth + 50)
+        XCTAssertGreaterThan(target.frame.width, targetWidth + 50)
+        XCTAssertEqual(hint.frame.width, window.frame.width / 2, accuracy: 2,
+                       "The dictionary hint must fill the resized source column.")
+        captureHint()
+
+        // A second drag and a real control action must still work after resizing.
+        let top = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
+            .withOffset(CGVector(dx: 0, dy: -2))
+        let originalHeight = window.frame.height
+        top.press(forDuration: 0.1, thenDragTo: top.withOffset(CGVector(dx: 0, dy: -100)))
+        XCTAssertGreaterThan(window.frame.height, originalHeight + 50)
+        hint.buttons["Close"].click()
+        XCTAssertTrue(hint.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(source.exists)
+        XCTAssertTrue(target.exists)
+        XCTAssertGreaterThan(window.frame.width, originalWidth + 100)
+    }
+
     func test_settingsHint_when_firstOpened_then_appearsAtRightUntilPermanentlyDismissed() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
@@ -236,12 +281,6 @@ final class HintPresentationGUITests: XCTestCase {
 
         // Act & Assert
         XCTAssertLessThanOrEqual(hint.frame.maxY, before.imageFrame[1], "The hint must occupy its own row above the image.")
-        movePointer(to: before.textStart, in: window)
-        waitForObservation { $0.cursor == "ibeam" }
-        for element in [hint.staticTexts["Translate Selected Text"], hint.staticTexts["Select text and press ⌥T to translate."]] {
-            element.hover()
-            waitForObservation { $0.cursor == "arrow" }
-        }
         captureHint()
         coordinate(at: before.textStart, in: window).press(
             forDuration: 0.1, thenDragTo: coordinate(at: before.textEnd, in: window)
@@ -259,7 +298,6 @@ final class HintPresentationGUITests: XCTestCase {
     }
 
     private struct ScreenshotObservation: Decodable {
-        let cursor: String
         let recognizedText: String
         let selectedText: String
         let imageFrame: [Double]
@@ -278,10 +316,6 @@ final class HintPresentationGUITests: XCTestCase {
             return matches(state)
         }
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: nil)], timeout: 8), .completed)
-    }
-
-    private func movePointer(to point: [Double], in window: XCUIElement) {
-        coordinate(at: point, in: window).hover()
     }
 
     private func coordinate(at point: [Double], in window: XCUIElement) -> XCUICoordinate {

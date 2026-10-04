@@ -102,8 +102,8 @@ func test_sendEvent_whenEscapeIsPressedWithContentFocused_then_closesImageWindow
     #expect(fixture.content.clearSelectionCount == 1)
 }
 
-@Test @MainActor
-func test_performKeyEquivalent_whenCommandWIsPressed_then_closesImageWindow() throws {
+@Test(arguments: ["w", "ㄊ"]) @MainActor
+func test_performKeyEquivalent_whenCommandWIsPressed_then_closesImageWindow(unmodifiedKey: String) throws {
     // Arrange
     let fixture = makeImageViewerFixture()
     let window = try #require(fixture.controller.window)
@@ -112,7 +112,7 @@ func test_performKeyEquivalent_whenCommandWIsPressed_then_closesImageWindow() th
     let event = try #require(NSEvent.keyEvent(
         with: .keyDown, location: .zero, modifierFlags: .command,
         timestamp: 0, windowNumber: window.windowNumber, context: nil,
-        characters: "w", charactersIgnoringModifiers: "w", isARepeat: false, keyCode: 13
+        characters: "w", charactersIgnoringModifiers: unmodifiedKey, isARepeat: false, keyCode: 13
     ))
 
     // Act

@@ -56,7 +56,7 @@ EOF
 #!/bin/zsh
 print "$2:"
 [[ "${TEST_INCLUDE_TRANSLATION_FRAMEWORK:-true}" != true ]] || print '/System/Library/Frameworks/Translation.framework/Versions/A/Translation'
-[[ "${TEST_INCLUDE_VISIONKIT_FRAMEWORK:-true}" != true ]] || print '/System/Library/Frameworks/VisionKit.framework/Versions/A/VisionKit'
+[[ "${TEST_INCLUDE_VISION_FRAMEWORK:-true}" != true ]] || print '/System/Library/Frameworks/Vision.framework/Versions/A/Vision'
 EOF
     chmod +x "${MOCK_BIN}/codesign" "${MOCK_BIN}/vtool" "${MOCK_BIN}/otool"
 }

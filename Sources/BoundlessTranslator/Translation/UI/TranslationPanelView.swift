@@ -163,7 +163,7 @@ struct TranslationWindowView: View {
                     title: lookupTip.title,
                     message: lookupTip.message,
                     icon: Image(nsImage: AppBrand.spriteImage),
-                    width: metrics.size.width / 2,
+                    width: nil,
                     localization: localization,
                     identifier: "hint.dictionary",
                     onClose: closeLookupTip
