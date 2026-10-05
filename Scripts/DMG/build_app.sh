@@ -12,13 +12,6 @@ readonly PRODUCT_NAME="${BOUNDLESS_TRANSLATOR_PRODUCT_NAME:-Boundless Translator
 readonly BUNDLE_IDENTIFIER="${BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER:-com.lillard.BoundlessTranslator.dmgtest}"
 readonly APP_PATH="${BUILD_ROOT}/${PRODUCT_NAME}.app"
 
-function fail {
-    print -u2 "$1"
-    exit 1
-}
-
-[[ "$#" -eq 0 ]] || fail 'Usage: build_app.sh'
-
 mkdir -p "${BUILD_ROOT}"
 readonly TEMP_ROOT="$(mktemp -d "${BUILD_ROOT}/.boundless-translator-build.XXXXXX")"
 readonly DERIVED_DATA_PATH="${TEMP_ROOT}/DerivedData"
@@ -37,7 +30,6 @@ trap 'rm -rf "${TEMP_ROOT}"' EXIT
     "BOUNDLESS_TRANSLATOR_PRODUCT_NAME=${PRODUCT_NAME}" \
     "BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER=${BUNDLE_IDENTIFIER}"
 
-[[ -d "${BUILT_APP_PATH}" ]] || fail "Xcode build is missing the App: ${BUILT_APP_PATH}"
 rm -rf "${APP_PATH}"
 mv "${BUILT_APP_PATH}" "${APP_PATH}"
 print "Built ${APP_PATH}"

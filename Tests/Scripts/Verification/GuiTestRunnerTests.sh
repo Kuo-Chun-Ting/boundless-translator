@@ -24,7 +24,7 @@ function test_gui_when_image_case_selected_then_keeps_original_runner_and_filter
     : > "${MOCK_CALL_LOG}"
     # Act
     run_gui ImageTextFocusGUITests
-    run_gui ImageTextFocusGUITests/test_cursor_when_movingFromTextToBlank_then_changesFromIBeamToArrow
+    run_gui ImageTextFocusGUITests/test_focus_when_translationCloses_then_sourceCanSelectImmediately
     # Assert
     [[ "$(wc -l < "${MOCK_CALL_LOG}" | tr -d ' ')" == 2 ]]
     local calls="$(<"${MOCK_CALL_LOG}")"
@@ -45,7 +45,7 @@ function test_gui_when_all_requested_then_selects_only_gui_cases_with_original_r
     [[ "$calls" == *'-only-testing:BoundlessTranslatorGUITests/HintPresentationGUITests'* ]]
     [[ "$calls" != *'DictionaryLookupCursorGUITests'* ]]
     [[ "$calls" == *'CODE_SIGN_IDENTITY=-'* ]]
-    for name in ImageTextSelectionGUITests ImageTextLayoutGUITests ImageTextFocusGUITests; do
+    for name in ImageTextSelectionGUITests ImageTextFocusGUITests; do
         [[ "$calls" == *"-only-testing:BoundlessTranslatorE2ETests/${name}"* ]]
     done
     [[ "$calls" != *'/ScreenshotE2ETests'* && "$calls" != *'/SelectionTranslationE2ETests'* ]]

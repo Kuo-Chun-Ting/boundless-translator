@@ -15,7 +15,6 @@ function fail {
 
 [[ "$#" -eq 1 ]] || fail 'Usage: verify_dmg.sh <dmg-path>'
 readonly DMG_PATH="$1"
-[[ -f "${DMG_PATH}" ]] || fail "DMG does not exist: ${DMG_PATH}"
 
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-verify-dmg.XXXXXX)"
 readonly MOUNT_POINT="${TEMP_ROOT}/Mounted"

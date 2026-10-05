@@ -40,7 +40,6 @@ function clean_up {
         exit_status=1
     fi
     pkill -f "^${host_executable}$" 2>/dev/null || true
-    chmod -R u+w "${derived_data_path}" 2>/dev/null || true
     rm -rf "${derived_data_path}" 2>/dev/null || true
     exit "${exit_status}"
 }
@@ -66,11 +65,4 @@ xcodebuild test \
     CODE_SIGN_IDENTITY=- \
     CODE_SIGN_STYLE=Manual
 
-test_summary="$(xcrun xcresulttool get test-results summary \
-    --path "${result_bundle_path}" \
-    --compact)"
-readonly test_summary
-
-print -r -- "${test_summary}" | grep -Eq '"totalTestCount":[1-9][0-9]*'
-print -r -- "${test_summary}" | grep -Eq '"passedTests":[1-9][0-9]*'
-print -r -- "${test_summary}" | grep -Eq '"failedTests":0'
+"${repository_root}/Scripts/Shared/check_xcode_test_results.sh" "${result_bundle_path}"

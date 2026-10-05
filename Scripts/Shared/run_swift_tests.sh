@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly SWIFT_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE:-$(command -v swift)}"
+readonly SWIFT_EXECUTABLE="${BOUNDLESS_TRANSLATOR_SWIFT_EXECUTABLE:-swift}"
 readonly BUILD_ROOT="${BOUNDLESS_TRANSLATOR_VERIFICATION_BUILD_ROOT:-${PROJECT_ROOT}/.build/verification}"
 readonly TARGET="$1"
 shift

@@ -6,7 +6,8 @@ if (( $# )); then
     exit 2
 fi
 
-typeset -a incomplete=()
+typeset -a summary=()
+integer passed=0 failed=0 skipped=0
 function run_check {
     local name="$1"
     local executable="$2"
@@ -14,9 +15,16 @@ function run_check {
     print "Verifying ${name}…"
     "${executable}" || result=$?
     case "${result}" in
-        0) print "PASS: ${name}" ;;
-        78) incomplete+=("${name}: skipped (environment unavailable)") ;;
-        *) incomplete+=("${name}: failed (exit ${result})") ;;
+        0)
+            print "PASS: ${name}"
+            summary+=("${name}: PASS")
+            (( passed += 1 )) ;;
+        78)
+            summary+=("${name}: SKIPPED (environment unavailable)")
+            (( skipped += 1 )) ;;
+        *)
+            summary+=("${name}: FAIL (exit ${result})")
+            (( failed += 1 )) ;;
     esac
 }
 
@@ -29,9 +37,11 @@ run_check StoreKit "${BOUNDLESS_TRANSLATOR_STOREKIT_TEST_EXECUTABLE:-${PROJECT_R
 run_check Languages "${BOUNDLESS_TRANSLATOR_LANGUAGE_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/run_language_support_tests.sh}"
 run_check Release "${BOUNDLESS_TRANSLATOR_RELEASE_TEST_EXECUTABLE:-${PROJECT_ROOT}/Scripts/run_release_tests.sh}"
 
-if (( ${#incomplete} )); then
-    print -u2 'Verification incomplete:'
-    printf '  %s\n' "${incomplete[@]}" >&2
+print '\nVerification summary:'
+printf '  %s\n' "${summary[@]}"
+print "Total: ${passed} passed, ${failed} failed, ${skipped} skipped"
+if (( failed + skipped )); then
+    print -u2 'Verification incomplete.'
     exit 1
 fi
 print 'Verification passed.'

@@ -8,7 +8,7 @@ for name in "$@"; do
     case "${name%%/*}" in
         HintPresentationGUITests)
             local_cases+=("-only-testing:BoundlessTranslatorGUITests/${name}") ;;
-        ImageTextFocusGUITests|ImageTextLayoutGUITests|ImageTextSelectionGUITests)
+        ImageTextFocusGUITests|ImageTextSelectionGUITests)
             image_cases+=("-only-testing:BoundlessTranslatorE2ETests/${name}") ;;
         *) print -u2 "Unknown GUI test: ${name}"; exit 2 ;;
     esac
@@ -19,7 +19,6 @@ if (( $# == 0 )); then
     )
     image_cases=(
         -only-testing:BoundlessTranslatorE2ETests/ImageTextSelectionGUITests
-        -only-testing:BoundlessTranslatorE2ETests/ImageTextLayoutGUITests
         -only-testing:BoundlessTranslatorE2ETests/ImageTextFocusGUITests
     )
 fi

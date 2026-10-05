@@ -116,6 +116,30 @@ func test_clearSelection_when_textSelected_then_preventsStaleTextFromBeingRead()
 private enum AnalysisFailure: Error { case unavailable }
 
 @Test @MainActor
+func test_display_when_analysisCompletesInBackground_then_doesNotPresentWindowAgain() async throws {
+    // Arrange
+    let stub = SuspendedImageAnalysis()
+    let view = ImageTextView(analysisProvider: stub.analyze)
+    let presenter = ForegroundWindowPresenterSpy()
+    let controller = ImageViewerWindowController(
+        content: view, windowPresenter: presenter,
+        interfaceLanguageSettings: makeTestInterfaceLanguageSettings())
+    let window = try #require(controller.window)
+    defer { window.close() }
+    controller.present(image: NSImage(size: CGSize(width: 200, height: 200)), pointerLocation: .zero)
+    await stub.waitForRequests(1)
+    window.orderOut(nil)
+    // Act
+    stub.complete(0, with: sampleDocument())
+    await viewAnalysis(view)
+    // Assert
+    #expect(view.document.text == "ABC")
+    #expect(presenter.presentedWindows.count == 1)
+    #expect(!window.isVisible)
+    #expect(!window.isKeyWindow)
+}
+
+@Test @MainActor
 func test_selectAll_when_commandKeyUsesZhuyinInput_then_selectsRecognizedText() async throws {
     // Arrange: macOS supplies the Latin command character while the unmodified key is Zhuyin.
     let (window, view) = await selectionFixture()
@@ -168,30 +192,6 @@ func test_selection_when_focusIsLostMidDrag_then_staleDragCannotExtendSelection(
     #expect(view.selectedText == "A")
 }
 
-@MainActor private func selectionFixture() async -> (NSWindow, ImageTextView) {
-    let view = ImageTextView(analysisProvider: { _ in
-        ImageTextDocument(text: "A B", words: [
-            ImageTextRegion(range: NSRange(location: 0, length: 1),
-                            bounds: CGRect(x: 10, y: 10, width: 20, height: 20), line: 0),
-            ImageTextRegion(range: NSRange(location: 2, length: 1),
-                            bounds: CGRect(x: 80, y: 10, width: 20, height: 20), line: 0)
-        ])
-    })
-    let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 200, height: 200),
-                          styleMask: [.titled], backing: .buffered, defer: false)
-    window.isReleasedWhenClosed = false
-    window.contentView = view
-    view.display(NSImage(size: NSSize(width: 200, height: 200)))
-    await viewAnalysis(view)
-    return (window, view)
-}
-
-@MainActor private func mouseEvent(_ type: NSEvent.EventType, at point: CGPoint, in window: NSWindow) -> NSEvent {
-    NSEvent.mouseEvent(with: type, location: point, modifierFlags: [], timestamp: 0,
-                      windowNumber: window.windowNumber, context: nil,
-                      eventNumber: 0, clickCount: 1, pressure: 1)!
-}
-
 private func sampleDocument() -> ImageTextDocument {
     ImageTextDocument(
         text: "ABC",
@@ -200,12 +200,6 @@ private func sampleDocument() -> ImageTextDocument {
                 range: NSRange(location: 0, length: 3), bounds: CGRect(x: 20, y: 20, width: 60, height: 20),
                 line: 0)
         ])
-}
-
-@MainActor private func viewAnalysis(_ view: ImageTextView) async {
-    for _ in 0..<100 where view.accessibilityIdentifier() == "imageWorkspace.loading" {
-        await Task.yield()
-    }
 }
 
 @MainActor private final class SuspendedImageAnalysis {

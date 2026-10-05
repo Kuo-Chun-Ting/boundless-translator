@@ -6,7 +6,7 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 |---|---|
 | `Scripts/run_unit_tests.sh` | All Unit tests, in free and subscription compilation modes |
 | `Scripts/run_component_tests.sh` | All Component tests, in both modes |
-| `Scripts/run_gui_tests.sh` | Local UI fixtures: hints, image selection/layout/focus; dictionary cursor is covered by Component |
+| `Scripts/run_gui_tests.sh` | 8 local UI cases: native event routing, resize, hint persistence and localized controls |
 | `Scripts/run_e2e_tests.sh` | Build the signed E2E App and test its complete product flows; no DMG packaging or installation |
 | `Scripts/run_storekit_tests.sh` | Local simulated purchases and subscription entitlements; no charges |
 | `Scripts/run_language_support_tests.sh` | Real Apple Translation and OCR fixtures; requires ready translation models |
@@ -15,6 +15,17 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 | `Scripts/verify.sh` | Run all eight entries and report every failed or unavailable level |
 
 Normal code changes require Unit and Component before delivery. Other levels run on request, or to validate changes to those tests themselves. See [project workflow](../AGENTS.md). No entry uploads to App Store Connect.
+
+## Coverage boundaries
+
+| Level | Responsibility |
+|---|---|
+| Unit | Selection ranges, forward/reverse endpoints, row ordering and paragraph joining |
+| Component | Production views/controllers: selection state, responder commands, copy/translation input, delayed OCR, image replacement, hint sizing and dismissal. Fixed screenshot inputs use real Vision recognition without another App. |
+| GUI (8 cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; repeated app switching; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
+| E2E (5 cases) | Two selected-text routes and three screenshot regressions through real shortcuts and Apple Translation |
+
+Esc and the close button are two inputs to one closure regression. Geometry variations stay in fast tests. SwiftUI control placement and persistent tip lifecycle retain GUI coverage; size/color measurements and controller cleanup remain Component tests.
 
 ## Selecting cases
 
@@ -46,7 +57,7 @@ Without selectors, each entry runs its entire level. Unknown/empty test selectio
 - StoreKit returns exit 78 on the known macOS 26.5.2 / Xcode 26.6 entitlement-query issue. Use `Scripts/run_storekit_tests.sh --force` for diagnostics. See [StoreKit testing](../app-store/storekit-testing.md).
 - Release verification requires signing credentials, notarization credentials and network access. With no argument, it produces the current `Build/Boundless Translator DMG Test.dmg`. To check an existing artifact without rebuilding or submitting it again: `Scripts/run_release_tests.sh '/absolute/path/to/file.dmg'`. It copies the App to a temporary directory, detaches the image, verifies the installed copy and launches it. It does not replace `/Applications` or automate Finder drag-and-drop.
 - `Scripts/release_dmg.sh` remains the independent command for producing an installable DMG. Packaging alone does not run the test suite.
-- Verify has no partial mode. It attempts all entries, returns nonzero for any failure or skip, and does not certify TestFlight purchasing or App Store submission. Those still require acceptance of the actual store build.
+- Verify has no partial mode. It attempts all entries and ends with each level's PASS/FAIL/SKIPPED result and totals. Any failure or skip returns nonzero. It does not certify TestFlight purchasing or App Store submission; those still require acceptance of the actual store build.
 
 ## Layout
 

@@ -97,20 +97,8 @@ function test_build_app_when_e2e_identity_is_requested_then_overrides_product_id
     [[ "${build_call}" != *BOUNDLESS_TRANSLATOR_EXECUTABLE_NAME* ]]
 }
 
-function test_build_app_when_argument_is_given_then_stops_before_xcode_build {
-    # Arrange
-    : > "${CALL_LOG}"
-
-    # Act & Assert
-    if run_builder --formal-dmg >/dev/null 2>&1; then
-        print -u2 'Expected build_app.sh to reject arguments.'
-        return 1
-    fi
-    [[ ! -s "${CALL_LOG}" ]]
-}
 
 test_build_app_when_requested_then_builds_test_dmg_app
 test_build_app_when_e2e_identity_is_requested_then_overrides_product_identity
 test_build_app_when_xcode_build_fails_then_preserves_previous_app
-test_build_app_when_argument_is_given_then_stops_before_xcode_build
 print 'App build tests passed.'

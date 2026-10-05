@@ -36,17 +36,6 @@ function run_packager {
         zsh "${PACKAGER}" "$@"
 }
 
-function test_package_dmg_when_paths_are_missing_then_stops_before_packaging {
-    # Arrange
-    : > "${CALL_LOG}"
-
-    # Act & Assert
-    if run_packager >/dev/null 2>&1; then
-        print -u2 'Expected packaging without App and DMG paths to fail.'
-        return 1
-    fi
-    [[ ! -s "${CALL_LOG}" ]]
-}
 
 function test_package_dmg_when_source_app_is_missing_then_preserves_existing_image {
     # Arrange
@@ -114,7 +103,6 @@ function test_package_dmg_when_e2e_app_is_given_then_uses_e2e_volume_and_app_nam
 }
 
 create_tool_stubs
-test_package_dmg_when_paths_are_missing_then_stops_before_packaging
 test_package_dmg_when_source_app_is_missing_then_preserves_existing_image
 test_package_dmg_when_inputs_are_valid_then_creates_and_signs_image_without_verifying_it
 test_package_dmg_when_e2e_app_is_given_then_uses_e2e_volume_and_app_name

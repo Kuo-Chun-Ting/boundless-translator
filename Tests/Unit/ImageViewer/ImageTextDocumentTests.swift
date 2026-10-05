@@ -93,6 +93,19 @@ private func characterDocument() -> ImageTextDocument {
     #expect(subject.text(in: selected) == "甲乙丙")
 }
 
+@Test func test_range_when_reverseDragEndsAtChinesePunctuation_then_keepsBothEndpoints() {
+    // Arrange
+    let text = "中文字。"
+    let subject = ImageTextDocument(text: text, words: [], characters: (0..<4).map {
+        ImageTextRegion(range: NSRange(location: $0, length: 1),
+                        bounds: CGRect(x: 10 + CGFloat($0) * 20, y: 10, width: 20, height: 20), line: 0)
+    })
+    // Act
+    let selected = subject.range(from: CGPoint(x: 79, y: 20), to: CGPoint(x: 11, y: 20))
+    // Assert
+    #expect(subject.text(in: selected) == "中文字。")
+}
+
 @Test func test_range_when_dragReversesAcrossLines_then_includesEndpointsWithoutAdjacentCharacters()
 {
     // Arrange

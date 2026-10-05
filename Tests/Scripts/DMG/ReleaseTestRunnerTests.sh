@@ -46,7 +46,7 @@ function test_release_checks_when_default_then_builds_once_and_launches_installe
     # Assert
     local calls="$(<"${MOCK_CALL_LOG}")"
     [[ "$(grep -c '^release ' "${MOCK_CALL_LOG}")" == 1 ]]
-    [[ "$calls" == *'xcrun stapler validate '* && "$calls" == *'spctl --assess '* ]]
+    [[ "$calls" != *'xcrun stapler validate '* && "$calls" != *'spctl --assess '* ]]
     [[ "$calls" == *'ditto '*'/Installed/Boundless Translator DMG Test.app'* ]]
     [[ "$(tail -n 1 "${MOCK_CALL_LOG}")" == 'verify-app '*'/Installed/Boundless Translator DMG Test.app' ]]
 }
@@ -60,10 +60,11 @@ function test_release_checks_when_existing_dmg_then_does_not_rebuild_or_submit {
     [[ "$(head -n 1 "${MOCK_CALL_LOG}")" == "verify-dmg $dmg" ]]
     ! grep -q '^release ' "${MOCK_CALL_LOG}"
     ! grep -q notarytool "${MOCK_CALL_LOG}"
+    [[ "$(<"${MOCK_CALL_LOG}")" == *'xcrun stapler validate '* && "$(<"${MOCK_CALL_LOG}")" == *'spctl --assess '* ]]
 }
 function test_release_checks_when_validation_or_launch_fails_then_returns_failure {
     # Act & Assert
-    if FAIL_STEP=spctl run_release_tests >/dev/null 2>&1; then return 1; fi
+    if FAIL_STEP=spctl run_release_tests "${BOUNDLESS_TRANSLATOR_RELEASE_BUILD_ROOT}/Boundless Translator DMG Test.dmg" >/dev/null 2>&1; then return 1; fi
     if FAIL_STEP=verify-app run_release_tests >/dev/null 2>&1; then return 1; fi
     [[ "$(grep -c 'hdiutil detach' "${MOCK_CALL_LOG}")" -gt 0 ]]
 }

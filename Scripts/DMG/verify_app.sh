@@ -15,12 +15,6 @@ function fail {
     exit 1
 }
 
-function require_path {
-    local path="$1"
-    local description="$2"
-    [[ -e "${path}" ]] || fail "${description} is missing: ${path}"
-}
-
 function verify_signature {
     local app_path="$1"
     local signing_requirement
@@ -51,11 +45,6 @@ function verify_bundle_contents {
     local info_plist="${app_path}/Contents/Info.plist"
     local privacy_manifest="${resources_path}/PrivacyInfo.xcprivacy"
 
-    require_path "${info_plist}" "App Info.plist"
-    require_path "${privacy_manifest}" "Privacy manifest"
-    require_path "${resources_path}/en.lproj" "English localization"
-    require_path "${resources_path}/zh-Hant.lproj" "Traditional Chinese localization"
-
     plutil -lint "${info_plist}" >/dev/null
     plutil -lint "${privacy_manifest}" >/dev/null
     cmp "${EXPECTED_PRIVACY_MANIFEST}" "${privacy_manifest}"
@@ -72,8 +61,6 @@ function verify_bundle_contents {
 
 function verify_executable {
     local executable="$1"
-    require_path "${executable}" "App executable"
-    [[ -x "${executable}" ]] || fail "App executable is not executable: ${executable}"
 
     [[ "$(vtool -show-build "${executable}")" == *"minos ${EXPECTED_MINIMUM_OS_VERSION}"* ]] ||
         fail "App executable has the wrong minimum macOS version."
@@ -110,7 +97,6 @@ function verify_launch {
 [[ "$#" -eq 1 ]] || fail "Usage: verify_app.sh <app-path>"
 readonly APP_PATH="$1"
 
-[[ -d "${APP_PATH}" ]] || fail "App does not exist: ${APP_PATH}"
 verify_signature "${APP_PATH}"
 verify_bundle_contents "${APP_PATH}"
 readonly EXECUTABLE_NAME="$(plutil -extract CFBundleExecutable raw "${APP_PATH}/Contents/Info.plist")"

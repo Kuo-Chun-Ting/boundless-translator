@@ -7,36 +7,12 @@ readonly BACKGROUND_PATH="${PROJECT_ROOT}/Resources/DMGBackground.png"
 source "${PROJECT_ROOT}/Scripts/DMG/signing.conf"
 readonly SIGNING_IDENTITY="${BOUNDLESS_TRANSLATOR_SIGNING_IDENTITY:-${DEFAULT_SIGNING_IDENTITY}}"
 
-if [[ -n "${BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE:-}" ]]; then
-    CREATE_DMG_EXECUTABLE="${BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE}"
-else
-    CREATE_DMG_EXECUTABLE="$(command -v create-dmg || true)"
-fi
-readonly CREATE_DMG_EXECUTABLE
+readonly CREATE_DMG_EXECUTABLE="${BOUNDLESS_TRANSLATOR_CREATE_DMG_EXECUTABLE:-create-dmg}"
 
-if [[ "$#" -ne 2 ]]; then
-    print -u2 "Usage: package_dmg.sh <app-path> <dmg-path>"
-    exit 1
-fi
 readonly APP_PATH="$1"
 readonly DMG_PATH="$2"
 readonly APP_NAME="${APP_PATH:t}"
 readonly VOLUME_NAME="${APP_NAME%.app}"
-
-if [[ ! -d "${APP_PATH}" ]]; then
-    print -u2 "Source App does not exist: ${APP_PATH}"
-    exit 1
-fi
-
-if [[ ! -x "${CREATE_DMG_EXECUTABLE}" ]]; then
-    print -u2 "create-dmg is not installed. Run: brew install create-dmg"
-    exit 1
-fi
-
-if [[ ! -f "${BACKGROUND_PATH}" ]]; then
-    print -u2 "DMG background does not exist: ${BACKGROUND_PATH}"
-    exit 1
-fi
 
 readonly OUTPUT_DIRECTORY="${DMG_PATH:h}"
 mkdir -p "${OUTPUT_DIRECTORY}"

@@ -30,6 +30,8 @@ function test_verify_when_all_pass_then_runs_every_level_once {
     run_verify > "${TEMP_ROOT}/output"
     # Assert
     [[ "$(<"${MOCK_CALL_LOG}")" == $'unit\ncomponent\nscripts\ngui\ne2e\nstorekit\nlanguage\nrelease' ]]
+    local summary="$(sed -n '/^Verification summary:/,$p' "${TEMP_ROOT}/output")"
+    [[ "$summary" == $'Verification summary:\n  Unit: PASS\n  Component: PASS\n  Scripts: PASS\n  GUI: PASS\n  E2E: PASS\n  StoreKit: PASS\n  Languages: PASS\n  Release: PASS\nTotal: 8 passed, 0 failed, 0 skipped\nVerification passed.' ]]
     grep -q 'Verification passed' "${TEMP_ROOT}/output"
 }
 function test_verify_when_failure_or_skip_then_finishes_all_levels_and_returns_nonzero {
@@ -44,6 +46,15 @@ function test_verify_when_failure_or_skip_then_finishes_all_levels_and_returns_n
         [[ "$result" != 0 ]]
         [[ "$(tail -n 1 "${MOCK_CALL_LOG}")" == release ]]
         [[ "$(wc -l < "${MOCK_CALL_LOG}" | tr -d ' ')" == 8 ]]
+        local summary="$(sed -n '/^Verification summary:/,$p' "${TEMP_ROOT}/output")"
+        [[ "$summary" == *'Release: PASS'* ]]
+        if (( code == 78 )); then
+            [[ "$summary" == *'StoreKit: SKIPPED (environment unavailable)'* ]]
+            [[ "$summary" == *'Total: 7 passed, 0 failed, 1 skipped'* ]]
+        else
+            [[ "$summary" == *'StoreKit: FAIL (exit 1)'* ]]
+            [[ "$summary" == *'Total: 7 passed, 1 failed, 0 skipped'* ]]
+        fi
         ! grep -q 'Verification passed' "${TEMP_ROOT}/output"
     done
 }

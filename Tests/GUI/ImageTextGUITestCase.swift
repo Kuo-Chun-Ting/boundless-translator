@@ -37,21 +37,6 @@ class ImageTextGUITestCase: XCTestCase {
         helper?.terminate()
     }
 
-    func checkReturn(_ region: String) throws {
-        // Arrange
-        try select("TARGET")
-        switchAway()
-        // Act
-        let target = try word("TARGET")
-        click(region == "text" ? coordinate(target, "center") : point(region))
-        move(coordinate(target, "center"))
-        // Assert
-        XCTAssertEqual(app.state, .runningForeground)
-        XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
-        try select("TARGET")
-        capture("return-" + region)
-    }
-
     func select(_ text: String) throws {
         let w = try word(text)
         drag(coordinate(w, "start"), coordinate(w, "end"))
@@ -69,14 +54,15 @@ class ImageTextGUITestCase: XCTestCase {
 
     var selectedText: String { app.textViews["imageText.selection"].value as? String ?? "" }
     var imageFrame: CGRect { app.groups["imageText.content"].frame }
+    var imageBlankPoint: CGPoint {
+        CGPoint(x: imageFrame.minX + 35 * imageFrame.width / 760,
+                y: imageFrame.minY + 140 * imageFrame.height / 360)
+    }
     var translationWindow: XCUIElement { app.windows["imageText.translation"] }
-    var settingsWindow: XCUIElement { app.windows["imageText.settings"] }
     var translationSource: String { translationWindow.textViews["translation.sourceText"].value as? String ?? "" }
-    var recognitionPending: Bool { app.images["imageWorkspace.loading"].exists }
 
     struct Word {
         let text: String
-        let line: Int
         let frame: CGRect
     }
 
@@ -86,15 +72,8 @@ class ImageTextGUITestCase: XCTestCase {
         return snapshot.children.filter {
             $0.identifier.hasPrefix("imageText.word.")
         }.map { element in
-            let line = Int(element.identifier.split(separator: ".")[2])!
-            return Word(text: element.label, line: line, frame: element.frame)
+            return Word(text: element.label, frame: element.frame)
         }
-    }
-
-    func wordsInLine(containing text: String) throws -> [Word] {
-        let recognizedWords = words()
-        let anchor = try XCTUnwrap(recognizedWords.first { $0.text.contains(text) })
-        return recognizedWords.filter { $0.line == anchor.line }
     }
 
     func word(_ text: String) throws -> Word {
@@ -105,29 +84,6 @@ class ImageTextGUITestCase: XCTestCase {
         let x = edge == "start" ? word.frame.minX + 1
             : edge == "end" ? word.frame.maxX - 1 : word.frame.midX
         return CGPoint(x: x, y: word.frame.midY)
-    }
-
-    func point(_ region: String) -> CGPoint {
-        fixturePoint(35, region == "margin" ? -35 : 220)
-    }
-
-    func loadFixture(_ name: String, holdCompletionUntilInactive: Bool = false) throws {
-        app.terminate()
-        app.launchEnvironment = [
-            "IMAGE_TEXT_SESSION": session,
-            "IMAGE_TEXT_FIXTURE": name,
-            "IMAGE_TEXT_HOLD_UNTIL_INACTIVE": holdCompletionUntilInactive ? "1" : "0",
-        ]
-        app.launch()
-        XCTAssertTrue(app.windows["imageText.screenshot"].waitForExistence(timeout: 8))
-        if !holdCompletionUntilInactive {
-            XCTAssertTrue(waitFor { self.recognitionPending == false })
-        }
-    }
-
-    func fixturePoint(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
-        CGPoint(x: imageFrame.minX + x * imageFrame.width / 760,
-                y: imageFrame.minY + (360 - y) * imageFrame.height / 360)
     }
 
     func assertSelected(_ expected: String, file: StaticString = #filePath, line: UInt = #line) {
@@ -142,37 +98,6 @@ class ImageTextGUITestCase: XCTestCase {
         XCTAssertTrue(waitFor { self.translationWindow.exists })
     }
 
-    func copyPreservingClipboard() throws -> String {
-        let board = NSPasteboard.general
-        let saved = (board.pasteboardItems ?? []).map { item in
-            Dictionary(
-                uniqueKeysWithValues: item.types.compactMap { type in
-                    item.data(forType: type).map { (type, $0) }
-                })
-        }
-        let oldCount = board.changeCount
-        key(8, .maskCommand)
-        XCTAssertTrue(waitFor { board.changeCount != oldCount })
-        let ownedCount = board.changeCount
-        defer {
-            if board.changeCount == ownedCount {
-                board.clearContents()
-                let items = saved.map { values in
-                    let item = NSPasteboardItem()
-                    for (type, data) in values { item.setData(data, forType: type) }
-                    return item
-                }
-                board.writeObjects(items)
-            }
-        }
-        return try XCTUnwrap(board.string(forType: .string))
-    }
-    func capture(_ name: String, window: XCUIElement? = nil) {
-        let a = XCTAttachment(screenshot: (window ?? app.windows["imageText.screenshot"]).screenshot())
-        a.name = name
-        a.lifetime = .keepAlways
-        add(a)
-    }
     func move(_ p: CGPoint) {
         mouse(.mouseMoved, p)
         pause(0.2)

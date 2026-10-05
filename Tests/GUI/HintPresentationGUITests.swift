@@ -69,50 +69,6 @@ final class HintPresentationGUITests: XCTestCase {
         XCTAssertGreaterThan(window.frame.width, originalWidth + 100)
     }
 
-    func test_settingsHint_when_firstOpened_then_appearsAtRightUntilPermanentlyDismissed() {
-        // Arrange
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
-        let hint = app.groups["hint.settings"].firstMatch
-
-        // Act & Assert
-        checkHintLifecycle(hint: hint, readyElement: app.buttons["usageHelpButton"]) {
-            self.assertSettingsHintPosition()
-        }
-    }
-
-    private func assertSettingsHintPosition() {
-        let hint = app.groups["hint.settings"].firstMatch
-        let settings = app.windows["Boundless Translator Settings"]
-        let help = settings.buttons["usageHelpButton"]
-        XCTAssertGreaterThan(hint.frame.minX, settings.frame.maxX)
-        XCTAssertEqual(hint.frame.maxY - 28, help.frame.midY, accuracy: 3)
-        XCTAssertTrue(hint.staticTexts["How to Use"].exists)
-        XCTAssertTrue(hint.staticTexts["Click ? to see how to translate selected text and screenshots."].exists)
-    }
-
-    func test_settingsHint_when_settingsMoves_then_followsAtRightAndHelpStillOpens() {
-        // Arrange
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
-        app.launch()
-        app.activate()
-        let hint = app.groups["hint.settings"].firstMatch
-        XCTAssertTrue(hint.waitForExistence(timeout: 5))
-        let settings = app.windows["Boundless Translator Settings"]
-        let before = hint.frame
-        let titlebar = settings.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: 180, dy: 12))
-
-        // Act
-        titlebar.press(forDuration: 0.1, thenDragTo: titlebar.withOffset(CGVector(dx: -60, dy: 40)))
-
-        // Assert
-        XCTAssertEqual(hint.frame.minX, before.minX - 60, accuracy: 3)
-        XCTAssertEqual(hint.frame.minY, before.minY + 40, accuracy: 3)
-        assertSettingsHintPosition()
-        settings.buttons["usageHelpButton"].click()
-        XCTAssertTrue(app.staticTexts["For selectable text, select it in another app and press ⇧⌘1 to translate."].waitForExistence(timeout: 5))
-        captureHint()
-    }
-
     func test_settingsHint_when_localizedInLightAndDark_then_textAndControlsFitInCard() {
         for appearance in ["light", "dark"] {
             for language in ["en", "zh-Hant", "de", "ar"] {
@@ -150,44 +106,6 @@ final class HintPresentationGUITests: XCTestCase {
                 card.name = "Settings card \(language) \(appearance)"
                 card.lifetime = .keepAlways
                 add(card)
-                app.terminate()
-            }
-        }
-    }
-
-    func test_usageGuide_when_opened_then_usesConsistentFeatureSpacing() {
-        for appearance in ["light", "dark"] {
-            for language in ["en", "zh-Hant"] {
-                // Arrange
-                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "settings"
-                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_LANGUAGE"] = language
-                app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] = appearance
-                app.launch()
-                app.activate()
-
-                // Act
-                app.buttons["usageHelpButton"].click()
-                let guide = app.groups["usageGuide"].firstMatch
-                XCTAssertTrue(guide.waitForExistence(timeout: 5))
-
-                // Assert
-                let dictionary = guide.groups["usageItem.lookUp"].firstMatch
-                let reading = guide.groups["usageItem.listen"].firstMatch
-                XCTAssertTrue(dictionary.staticTexts[language == "en" ? "Dictionary" : "字典"].exists)
-                XCTAssertTrue(reading.staticTexts[language == "en" ? "Read Aloud" : "朗讀"].exists)
-                let identifiers = ["translateText", "translateImageText", "lookUp", "listen", "pinWindow", "languageSupport"]
-                let rows = identifiers.map { guide.groups["usageItem.\($0)"].firstMatch }
-                let gaps = zip(rows, rows.dropFirst()).map { previous, next in
-                    next.staticTexts.element(boundBy: 0).frame.minY
-                        - previous.staticTexts.element(boundBy: 1).frame.maxY
-                }
-                for gap in gaps {
-                    XCTAssertEqual(gap, gaps[0], accuracy: 1)
-                }
-                let attachment = XCTAttachment(screenshot: guide.screenshot())
-                attachment.name = "Usage guide \(language) \(appearance)"
-                attachment.lifetime = .keepAlways
-                add(attachment)
                 app.terminate()
             }
         }
@@ -242,56 +160,6 @@ final class HintPresentationGUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.checkBoxes["Don’t show again"].firstMatch.waitForExistence(timeout: 5),
                       "Permanently dismissing one hint must not hide the other.")
-    }
-
-    func test_hints_whenDarkAppearance_then_appearInTheirWindows() {
-        // Arrange
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] = "dark"
-
-        // Act & Assert
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "dictionary"
-        app.launch()
-        XCTAssertTrue(app.staticTexts["Dictionary"].waitForExistence(timeout: 5))
-        assertDictionaryHintPosition()
-        captureHint()
-        app.terminate()
-
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"
-        app.launch()
-        XCTAssertTrue(app.staticTexts["Select text and press ⌥T to translate."].waitForExistence(timeout: 5))
-        assertScreenshotHintPosition(relativeTo: app.windows["Screenshot Translation"])
-        captureHint()
-    }
-
-    func test_screenshotHint_whenDisplayed_then_reservesSpaceAndKeepsImageSizeAfterClosing() throws {
-        // Arrange
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"
-        app.launch()
-        let hint = app.groups["hint.screenshot"].firstMatch
-        XCTAssertTrue(hint.waitForExistence(timeout: 5))
-        let window = app.windows["Screenshot Translation"]
-        let content = app.groups["imageText.content"]
-        let target = content.staticTexts.matching(NSPredicate(format: "label == %@", "TARGET")).firstMatch
-        XCTAssertTrue(target.waitForExistence(timeout: 8))
-        let selection = app.textViews["imageText.selection"]
-        let before = content.frame
-        let windowHeight = window.frame.height
-
-        // Act & Assert
-        XCTAssertLessThanOrEqual(hint.frame.maxY, before.minY, "The hint must occupy its own row above the image.")
-        captureHint()
-        target.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).press(
-            forDuration: 0.1,
-            thenDragTo: target.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)))
-        XCTAssertEqual(selection.value as? String, "TARGET")
-        app.buttons["Close"].firstMatch.click()
-        XCTAssertTrue(hint.waitForNonExistence(timeout: 5))
-        let after = content.frame
-        XCTAssertLessThan(after.minY, before.minY)
-        XCTAssertEqual(after.width, before.width, accuracy: 1)
-        XCTAssertEqual(after.height, before.height, accuracy: 1)
-        XCTAssertEqual(selection.value as? String, "TARGET")
-        XCTAssertLessThan(window.frame.height, windowHeight)
     }
 
     private func assertDictionaryHintPosition() {

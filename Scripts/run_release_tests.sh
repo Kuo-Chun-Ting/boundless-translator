@@ -16,10 +16,9 @@ if (( $# == 0 )); then
     "${RELEASE_EXECUTABLE}"
 else
     "${VERIFY_DMG_EXECUTABLE}" "${DMG_PATH}"
+    xcrun stapler validate "${DMG_PATH}"
+    spctl --assess --type open --context context:primary-signature --verbose=4 "${DMG_PATH}"
 fi
-[[ -f "${DMG_PATH}" ]] || { print -u2 "Missing DMG: ${DMG_PATH}"; exit 1; }
-xcrun stapler validate "${DMG_PATH}"
-spctl --assess --type open --context context:primary-signature --verbose=4 "${DMG_PATH}"
 
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-release-install.XXXXXX)"
 readonly MOUNT_POINT="${TEMP_ROOT}/Mounted"

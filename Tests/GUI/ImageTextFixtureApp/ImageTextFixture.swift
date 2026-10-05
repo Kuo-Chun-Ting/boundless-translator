@@ -36,10 +36,9 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
             try Tips.configure([.datastoreLocation(.url(datastore))])
             configureMenu()
             languages.languageIdentifier = "en"
-            let filename = ProcessInfo.processInfo.environment["IMAGE_TEXT_FIXTURE"] ?? "basic-text.png"
             let image = NSImage(
                 contentsOf: Bundle.main.url(
-                    forResource: filename, withExtension: nil, subdirectory: "ImageText")!)!
+                    forResource: "basic-text.png", withExtension: nil, subdirectory: "ImageText")!)!
             imageView.setAccessibilityChildren([imageAccessibility])
             viewer.present(image: image, pointerLocation: NSEvent.mouseLocation)
             viewer.window?.setAccessibilityIdentifier("imageText.screenshot")
@@ -68,10 +67,6 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
         let result = try await Task.detached {
             try ImageTextRecognizer.recognize(cgImage, size: size)
         }.value
-        // Test the delivery of a real OCR result while another app is active.
-        if ProcessInfo.processInfo.environment["IMAGE_TEXT_HOLD_UNTIL_INACTIVE"] == "1" {
-            while NSApp.isActive { try await Task.sleep(nanoseconds: 20_000_000) }
-        }
         return result
     }
 

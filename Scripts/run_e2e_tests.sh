@@ -38,7 +38,7 @@ function quit_e2e_app {
     local info="${APP_PATH}/Contents/Info.plist"
     [[ -f "$info" ]] || return 0
     local name
-    name="$(plutil -extract CFBundleExecutable raw "$info")" || return 0
+    name="$(plutil -extract CFBundleExecutable raw "$info")"
     pkill -f "^${APP_PATH}/Contents/MacOS/${name}([[:space:]]|$)" >/dev/null 2>&1 || true
 }
 
@@ -100,11 +100,10 @@ BOUNDLESS_TRANSLATOR_BUILD_ROOT="${APP_ROOT}" \
 BOUNDLESS_TRANSLATOR_PRODUCT_NAME="${PRODUCT_NAME}" \
 BOUNDLESS_TRANSLATOR_BUNDLE_IDENTIFIER="${BUNDLE_IDENTIFIER}" \
     "${BUILD_APP_EXECUTABLE}"
-[[ -d "${APP_PATH}" ]] || { print -u2 "Build did not produce ${APP_PATH}"; exit 1; }
 if (( from_permission_setup )); then
     run_permission_setup_tests
+    quit_e2e_app
 fi
-quit_e2e_app
 print 'Running product E2E tests…'
 run_xcuitest_phase Features "${selected[@]}"
 print "E2E tests passed. Results: ${RESULT_ROOT}"

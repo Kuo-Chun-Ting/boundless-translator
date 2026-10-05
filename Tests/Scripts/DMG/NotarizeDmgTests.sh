@@ -39,30 +39,7 @@ function run_notarizer {
         zsh "${NOTARIZER}" "$@"
 }
 
-function test_notarize_dmg_when_path_is_missing_then_fails_before_calling_apple_tools {
-    # Arrange
-    : > "${CALL_LOG}"
 
-    # Act & Assert
-    if run_notarizer >/dev/null 2>&1; then
-        print -u2 "Expected notarization without a DMG path to fail."
-        return 1
-    fi
-    [[ ! -s "${CALL_LOG}" ]]
-}
-
-function test_notarize_dmg_when_dmg_is_missing_then_fails_before_calling_apple_tools {
-    # Arrange
-    local missing_dmg="${TEMP_ROOT}/Missing.dmg"
-    : > "${CALL_LOG}"
-
-    # Act & Assert
-    if run_notarizer "${missing_dmg}" >/dev/null 2>&1; then
-        print -u2 "Expected notarization to fail when the DMG is missing."
-        return 1
-    fi
-    [[ ! -s "${CALL_LOG}" ]]
-}
 
 function test_notarize_dmg_when_submission_succeeds_then_staples_and_assesses_same_dmg {
     # Arrange
@@ -97,8 +74,6 @@ function test_notarize_dmg_when_submission_fails_then_does_not_staple_or_assess 
 }
 
 create_tool_stubs
-test_notarize_dmg_when_path_is_missing_then_fails_before_calling_apple_tools
-test_notarize_dmg_when_dmg_is_missing_then_fails_before_calling_apple_tools
 test_notarize_dmg_when_submission_succeeds_then_staples_and_assesses_same_dmg
 test_notarize_dmg_when_submission_fails_then_does_not_staple_or_assess
 

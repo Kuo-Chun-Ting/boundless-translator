@@ -1,6 +1,6 @@
 # Screenshot selection inputs
 
-These fixed images are bundled with the GUI fixture. Tests use the production OCR and selection view; they do not draw or read another app’s files at runtime.
+Component tests pass these fixed images through production Vision recognition and the selection view in one process. The GUI fixture uses basic-text.png for native event routing. Tests do not draw inputs or exchange files between Apps.
 
 | Image | Input and purpose |
 | --- | --- |
@@ -9,7 +9,6 @@ These fixed images are bundled with the GUI fixture. Tests use the production OC
 | ragged-rows.png | Three rows with different left edges; partial first/last rows and a complete middle row. |
 | two-columns.png | Two labels on each row; horizontal reading order. |
 | mixed-font-sizes.png | Different font sizes on one row. |
-| recognition-completion.png | Text used to deliver OCR while another app is active. |
 | no-text.png | Empty image; no selectable text. |
 | battery-settings.jpeg | Real screenshot from the screenshot-demo source; selection on a real UI. |
 
