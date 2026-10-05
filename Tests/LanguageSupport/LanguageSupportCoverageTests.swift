@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import BoundlessTranslator
 
-@Test(.enabled(if: LanguageSupportFixture.isEnabled, "Run Tests/Runners/run_language_support_tests.sh")) @MainActor
+@Test(.enabled(if: LanguageSupportFixture.isEnabled, "Run Scripts/run_language_support_tests.sh")) @MainActor
 func test_language_support_when_runtime_capabilities_change_then_reports_fixture_gaps() async throws {
     // Arrange
     let fixtures = try LanguageSupportFixture.load()

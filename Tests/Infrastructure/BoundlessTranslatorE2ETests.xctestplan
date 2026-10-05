@@ -10,10 +10,6 @@
   "defaultOptions" : {
     "environmentVariableEntries" : [
       {
-        "key" : "BOUNDLESS_TRANSLATOR_IMAGE_TEXT_OUTPUT_ROOT",
-        "value" : "$(SRCROOT)/../../Build/ImageTextTestState"
-      },
-      {
         "key" : "BOUNDLESS_TRANSLATOR_IMAGE_TEXT_FIXTURE_APP_PATH",
         "value" : "$(BUILT_PRODUCTS_DIR)/BoundlessTranslatorCursorTestHost.app"
       },

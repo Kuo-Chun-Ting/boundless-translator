@@ -83,7 +83,7 @@ MOCK
         case "${edition}" in
             dmg) app_path='/Applications/Boundless Translator DMG Test.app' ;;
             app-store) app_path='/Applications/Boundless Translator.app' ;;
-            e2e) app_path="${PROJECT_ROOT}/Build/E2E/Installed/Boundless Translator E2E.app" ;;
+            e2e) app_path="${PROJECT_ROOT}/Build/E2E/App/Boundless Translator E2E.app" ;;
         esac
         : > "${CALL_LOG}"
 

@@ -18,13 +18,14 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
         supportedLanguageCatalog: SupportedLanguageCatalog(loadLanguages: { [] }), onShowSubscription: {},
         pointerScreenVisibleFrame: { NSScreen.screens[0].visibleFrame }
     )
-    private var observationTimer: Timer?
+    private lazy var imageAccessibility = ImageTextAccessibility(imageView: imageView)
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
             let environment = ProcessInfo.processInfo.environment
             NSApp.appearance = NSAppearance(named: environment["BOUNDLESS_TRANSLATOR_HINT_APPEARANCE"] == "dark" ? .darkAqua : .aqua)
-            let datastore = URL(fileURLWithPath: environment["BOUNDLESS_TRANSLATOR_HINT_DATASTORE"]!)
+            let datastore = FileManager.default.temporaryDirectory.appendingPathComponent(
+                "hint-tests-" + environment["BOUNDLESS_TRANSLATOR_HINT_SESSION"]!)
             try Tips.configure([.datastoreLocation(.url(datastore))])
             languages.languageIdentifier = environment["BOUNDLESS_TRANSLATOR_HINT_LANGUAGE"] ?? "en"
             if environment["BOUNDLESS_TRANSLATOR_HINT_KIND"] == "settings" {
@@ -54,43 +55,8 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
 
     private func presentScreenshot() {
         viewer.translationShortcutName = { "⌥T" }
+        imageView.setAccessibilityChildren([imageAccessibility])
         viewer.present(image: makeImage(), pointerLocation: presentationPoint)
-        startObservingScreenshot()
-    }
-
-    private func startObservingScreenshot() {
-        guard let path = ProcessInfo.processInfo.environment["BOUNDLESS_HINT_OBSERVATIONS"] else { return }
-        let timer = Timer(timeInterval: 0.02, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated { self?.publishScreenshotState(to: URL(fileURLWithPath: path)) }
-        }
-        observationTimer = timer
-        RunLoop.main.add(timer, forMode: .common)
-    }
-
-    private func publishScreenshotState(to url: URL) {
-        guard let window = viewer.window else { return }
-        let screenRect = window.convertToScreen(imageView.convert(imageView.bounds, to: nil))
-        let state: [String: Any] = [
-            "recognizedText": imageView.document.text,
-            "selectedText": imageView.selectedText,
-            "imageFrame": [screenRect.minX, NSScreen.screens[0].frame.maxY - screenRect.maxY,
-                           screenRect.width, screenRect.height],
-            "textStart": screenPoint(NSPoint(x: 48, y: 150), window: window),
-            "textEnd": screenPoint(NSPoint(x: 186, y: 150), window: window)
-        ]
-        if let data = try? JSONSerialization.data(withJSONObject: state) {
-            try? data.write(to: url, options: .atomic)
-        }
-    }
-
-    private func screenPoint(_ point: NSPoint, window: NSWindow) -> [Double] {
-        let scale = min(imageView.bounds.width / 760, imageView.bounds.height / 420)
-        let local = NSPoint(
-            x: (imageView.bounds.width - 760 * scale) / 2 + point.x * scale,
-            y: (imageView.bounds.height - 420 * scale) / 2 + point.y * scale
-        )
-        let screen = window.convertPoint(toScreen: imageView.convert(local, to: nil))
-        return [screen.x, NSScreen.screens[0].frame.maxY - screen.y]
     }
 
     private var presentationPoint: CGPoint {

@@ -1,6 +1,6 @@
 # Language support checks
 
-Run `Tests/Runners/run_language_support_tests.sh` from the repository root. The tests use the production translation adapter and OCR recognizer, without windows, shortcuts or permission resets. Ordinary `swift test` and Verify skip this group.
+Run `Scripts/run_language_support_tests.sh` from the repository root. The tests use the production translation adapter and OCR recognizer, without windows, shortcuts or permission resets. Ordinary `swift test` skips this group; full Verify runs its dedicated entry.
 
 The headless translation test requires macOS 26 or later and ready translation models. Traditional models use individual language packs from System Settings → General → Language & Region → Translation Languages. Apple Intelligence translation requires Apple Intelligence to be enabled and its models ready; its additional languages may have no individual download entry. The tests do not download models. An unready pair produces an `UNVERIFIED` issue and a nonzero exit. The current diagnostic always suggests installing packs; that advice is incomplete for Apple Intelligence-only languages. The App itself still supports macOS 15.
 

@@ -27,35 +27,29 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
         translationShortcutController: GlobalShortcutController(handler: {}),
         supportedLanguageCatalog: SupportedLanguageCatalog(loadLanguages: { [] })
     )
-    private var timer: Timer?
-    private var reportedWriteError = false
-    private var outputDirectory: URL {
-        URL(
-            fileURLWithPath: ProcessInfo.processInfo.environment[
-                "BOUNDLESS_TRANSLATOR_IMAGE_TEXT_FIXTURE_OUTPUT"]!)
-    }
+    private lazy var imageAccessibility = ImageTextAccessibility(imageView: imageView)
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
-            try FileManager.default.createDirectory(
-                at: outputDirectory, withIntermediateDirectories: true)
-            try Tips.configure([.datastoreLocation(.url(outputDirectory.appendingPathComponent("tips")))])
+            let datastore = FileManager.default.temporaryDirectory.appendingPathComponent(
+                "image-text-tips-" + ProcessInfo.processInfo.environment["IMAGE_TEXT_SESSION"]!)
+            try Tips.configure([.datastoreLocation(.url(datastore))])
             configureMenu()
             languages.languageIdentifier = "en"
             let filename = ProcessInfo.processInfo.environment["IMAGE_TEXT_FIXTURE"] ?? "basic-text.png"
             let image = NSImage(
                 contentsOf: Bundle.main.url(
                     forResource: filename, withExtension: nil, subdirectory: "ImageText")!)!
+            imageView.setAccessibilityChildren([imageAccessibility])
             viewer.present(image: image, pointerLocation: NSEvent.mouseLocation)
             viewer.window?.setAccessibilityIdentifier("imageText.screenshot")
             // A taller window leaves actual workspace margins above and below the image.
             viewer.window?.setContentSize(NSSize(width: 900, height: 680))
-            viewer.window?.center()
-            let timer = Timer(timeInterval: 0.03, repeats: true) { [weak self] _ in
-                MainActor.assumeIsolated { self?.publishState() }
-            }
-            self.timer = timer
-            RunLoop.main.add(timer, forMode: .common)
+            let window = viewer.window!
+            let screen = NSScreen.screens[0].visibleFrame
+            window.setFrameOrigin(NSPoint(
+                x: screen.midX - window.frame.width / 2,
+                y: screen.midY - window.frame.height / 2))
         } catch {
             NSLog("Image text fixture failed: %@", String(describing: error))
             NSApp.terminate(nil)
@@ -66,11 +60,6 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
     {
         showSettings()
         return false
-    }
-
-    func applicationWillTerminate(_ notification: Notification) {
-        timer?.invalidate()
-        try? FileManager.default.removeItem(at: outputDirectory)
     }
 
     private static func analyzeImage(_ image: NSImage) async throws -> ImageTextDocument? {
@@ -103,7 +92,10 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
         NSApp.mainMenu = menu
     }
 
-    @objc private func showSettings() { preferences.present() }
+    @objc private func showSettings() {
+        preferences.present()
+        preferences.window?.setAccessibilityIdentifier("imageText.settings")
+    }
 
     @objc private func showTranslation() {
         Task { @MainActor in
@@ -119,9 +111,7 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
                     pointerLocation: NSEvent.mouseLocation)
                 translationWindow?.setAccessibilityIdentifier("imageText.translation")
             } catch {
-                try? String(describing: error).write(
-                    to: outputDirectory.appendingPathComponent("error.txt"), atomically: true, encoding: .utf8
-                )
+                NSLog("Image text fixture translation failed: %@", String(describing: error))
             }
         }
     }
@@ -130,57 +120,86 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
         NSApp.windows.first { $0 is TranslationWindow && $0.isVisible }
     }
 
-    private var keyWindowName: String {
-        guard let keyWindow = NSApp.keyWindow else { return "none" }
-        if keyWindow === viewer.window { return "screenshot" }
-        if keyWindow === translationWindow { return "translation" }
-        if keyWindow === preferences.window { return "settings" }
-        return "other"
+}
+
+// Test-only accessibility for drawn OCR text. These views expose values and bounds, without handling events.
+@MainActor
+final class ImageTextAccessibility: NSView {
+    private unowned let imageView: ImageTextView
+    private var cachedText: String?
+    private var wordElements: [NSView] = []
+    private lazy var selectionElement = ImageTextValueElement(
+        role: .textArea, identifier: "imageText.selection", parent: self,
+        value: { [unowned self] in imageView.selectedText },
+        frame: { [unowned self] in accessibilityFrame() })
+
+    init(imageView: ImageTextView) {
+        self.imageView = imageView
+        super.init(frame: .zero)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilityIdentifier("imageText.content")
+        setAccessibilityParent(imageView)
     }
 
-    private func screenPoint(_ point: CGPoint) -> [Double] {
-        let rect = imageView.viewRect(for: CGRect(origin: point, size: .zero))
-        let screen = viewer.window!.convertPoint(toScreen: imageView.convert(rect.origin, to: nil))
-        return [screen.x, NSScreen.screens[0].frame.maxY - screen.y]
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func accessibilityFrame() -> NSRect {
+        imageView.window?.convertToScreen(imageView.convert(imageView.imageRect, to: nil)) ?? .zero
     }
 
-    private func publishState() {
-        let frame = viewer.window!.convertToScreen(imageView.convert(imageView.imageRect, to: nil))
-        let state: [String: Any] = [
-            "token": ProcessInfo.processInfo.environment["IMAGE_TEXT_TOKEN"] ?? "",
-            "active": NSApp.isActive,
-            "keyWindow": keyWindowName,
-            "selectionResponder": viewer.window?.firstResponder === imageView,
-            "selectionActive": imageView.isSelectionEmphasized,
-            "selected": imageView.selectedText,
-            "translationSource": coordinator.request?.text ?? "",
-            "translationVisible": translationWindow != nil,
-            "ocrPending": imageView.accessibilityIdentifier() == "imageWorkspace.loading",
-            "recognizedText": imageView.document.text,
-            "imageFrame": [
-                frame.minX, NSScreen.screens[0].frame.maxY - frame.maxY, frame.width, frame.height,
-            ],
-            "blank": screenPoint(CGPoint(x: 35, y: 220)),
-            "margin": screenPoint(CGPoint(x: 35, y: -35)),
-            "words": imageView.document.words.map { word in
-                [
-                    "text": imageView.document.text(in: word.range),
-                    "start": screenPoint(CGPoint(x: word.bounds.minX + 1, y: word.bounds.midY)),
-                    "end": screenPoint(CGPoint(x: word.bounds.maxX - 1, y: word.bounds.midY)),
-                    "center": screenPoint(CGPoint(x: word.bounds.midX, y: word.bounds.midY)),
-                    "lineText": imageView.document.text.components(separatedBy: "\n")[word.line],
-                ] as [String: Any]
-            },
-        ]
-        do {
-            let data = try JSONSerialization.data(withJSONObject: state)
-            try data.write(to: outputDirectory.appendingPathComponent("state.json"), options: .atomic)
-        } catch {
-            if !reportedWriteError {
-                NSLog("Cannot publish image selection test state: %@", String(describing: error))
-                reportedWriteError = true
+    override func accessibilityChildren() -> [Any]? {
+        updateChildren()
+        return super.accessibilityChildren()
+    }
+
+    private func updateChildren() {
+        if cachedText != imageView.document.text {
+            cachedText = imageView.document.text
+            wordElements = imageView.document.words.map { word in
+                let text = imageView.document.text(in: word.range)
+                let element = ImageTextValueElement(
+                    role: .staticText,
+                    identifier: "imageText.word.\(word.line).\(word.range.location)", parent: self,
+                    value: { text },
+                    frame: { [unowned self] in
+                        imageView.window?.convertToScreen(
+                            imageView.convert(imageView.viewRect(for: word.bounds), to: nil)) ?? .zero
+                    })
+                element.setAccessibilityLabel(text)
+                return element
             }
         }
+        setAccessibilityChildren([selectionElement] + wordElements)
+    }
+}
+
+@MainActor
+private final class ImageTextValueElement: NSView {
+    private let readValue: () -> String
+    private let readFrame: () -> NSRect
+
+    init(role: NSAccessibility.Role, identifier: String, parent: Any,
+         value: @escaping () -> String, frame: @escaping () -> NSRect) {
+        readValue = value
+        readFrame = frame
+        super.init(frame: .zero)
+        setAccessibilityElement(true)
+        setAccessibilityRole(role)
+        setAccessibilityIdentifier(identifier)
+        setAccessibilityParent(parent)
+    }
+
+    override func accessibilityValue() -> Any? {
+        readValue()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func accessibilityFrame() -> NSRect {
+        readFrame()
     }
 }
 

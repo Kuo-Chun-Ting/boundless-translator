@@ -4,7 +4,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test(
-    .enabled(if: LanguageSupportFixture.isEnabled, "Run Tests/Runners/run_language_support_tests.sh"),
+    .enabled(if: LanguageSupportFixture.isEnabled, "Run Scripts/run_language_support_tests.sh"),
     .serialized,
     .timeLimit(.minutes(1)),
     arguments: try await TranslationLanguagePair.load()

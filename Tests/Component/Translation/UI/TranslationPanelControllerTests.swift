@@ -221,7 +221,7 @@ func test_show_when_fifthLineLookupActionOverlapsSourceText_then_buttonOwnsHitTe
 }
 
 @Test @MainActor
-func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCursor() throws {
+func test_sendEvent_when_hoveringFifthLineLookupActionRepeatedly_then_usesPointingHandCursor() throws {
     // Arrange
     let sourceText = [
         "First line",
@@ -257,13 +257,13 @@ func test_sendEvent_when_hoveringFifthLineLookupAction_then_usesPointingHandCurs
             pressure: 0
         )
     )
-    NSCursor.arrow.set()
-
-    // Act
-    fixture.window.sendEvent(event)
-
-    // Assert
-    #expect(NSCursor.current === NSCursor.pointingHand)
+    for _ in 0..<3 {
+        NSCursor.arrow.set()
+        // Act
+        fixture.window.sendEvent(event)
+        // Assert
+        #expect(NSCursor.current === NSCursor.pointingHand)
+    }
     fixture.window.orderOut(nil)
 }
 

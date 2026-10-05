@@ -2,20 +2,15 @@ import XCTest
 
 final class HintPresentationGUITests: XCTestCase {
     private var app: XCUIApplication!
-    private var datastore: URL!
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        datastore = FileManager.default.temporaryDirectory.appendingPathComponent("hint-tests-\(UUID().uuidString)")
         app = XCUIApplication()
-        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_DATASTORE"] = datastore.path
-        app.launchEnvironment["BOUNDLESS_HINT_OBSERVATIONS"] = datastore.appendingPathExtension("json").path
+        app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_SESSION"] = UUID().uuidString
     }
 
     override func tearDownWithError() throws {
         app.terminate()
-        try? FileManager.default.removeItem(at: datastore)
-        try? FileManager.default.removeItem(at: datastore.appendingPathExtension("json"))
     }
 
     func test_dictionaryHint_whenFirstUsed_then_appearsUntilUserDismisses() {
@@ -274,53 +269,29 @@ final class HintPresentationGUITests: XCTestCase {
         app.launch()
         let hint = app.groups["hint.screenshot"].firstMatch
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
-        waitForObservation { $0.recognizedText.contains("TARGET") }
         let window = app.windows["Screenshot Translation"]
-        let before = try screenshotObservation()
+        let content = app.groups["imageText.content"]
+        let target = content.staticTexts.matching(NSPredicate(format: "label == %@", "TARGET")).firstMatch
+        XCTAssertTrue(target.waitForExistence(timeout: 8))
+        let selection = app.textViews["imageText.selection"]
+        let before = content.frame
         let windowHeight = window.frame.height
 
         // Act & Assert
-        XCTAssertLessThanOrEqual(hint.frame.maxY, before.imageFrame[1], "The hint must occupy its own row above the image.")
+        XCTAssertLessThanOrEqual(hint.frame.maxY, before.minY, "The hint must occupy its own row above the image.")
         captureHint()
-        coordinate(at: before.textStart, in: window).press(
-            forDuration: 0.1, thenDragTo: coordinate(at: before.textEnd, in: window)
-        )
-        waitForObservation { $0.selectedText.contains("TARGET") }
-        let selectedText = try screenshotObservation().selectedText
+        target.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).press(
+            forDuration: 0.1,
+            thenDragTo: target.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)))
+        XCTAssertEqual(selection.value as? String, "TARGET")
         app.buttons["Close"].firstMatch.click()
         XCTAssertTrue(hint.waitForNonExistence(timeout: 5))
-        waitForObservation { $0.imageFrame[1] < before.imageFrame[1] }
-        let after = try screenshotObservation()
-        XCTAssertEqual(after.imageFrame[2], before.imageFrame[2], accuracy: 1)
-        XCTAssertEqual(after.imageFrame[3], before.imageFrame[3], accuracy: 1)
-        XCTAssertEqual(after.selectedText, selectedText)
+        let after = content.frame
+        XCTAssertLessThan(after.minY, before.minY)
+        XCTAssertEqual(after.width, before.width, accuracy: 1)
+        XCTAssertEqual(after.height, before.height, accuracy: 1)
+        XCTAssertEqual(selection.value as? String, "TARGET")
         XCTAssertLessThan(window.frame.height, windowHeight)
-    }
-
-    private struct ScreenshotObservation: Decodable {
-        let recognizedText: String
-        let selectedText: String
-        let imageFrame: [Double]
-        let textStart: [Double]
-        let textEnd: [Double]
-    }
-
-    private func screenshotObservation() throws -> ScreenshotObservation {
-        let data = try Data(contentsOf: datastore.appendingPathExtension("json"))
-        return try JSONDecoder().decode(ScreenshotObservation.self, from: data)
-    }
-
-    private func waitForObservation(_ matches: @escaping (ScreenshotObservation) -> Bool) {
-        let condition = NSPredicate { _, _ in
-            guard let state = try? self.screenshotObservation() else { return false }
-            return matches(state)
-        }
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: condition, object: nil)], timeout: 8), .completed)
-    }
-
-    private func coordinate(at point: [Double], in window: XCUIElement) -> XCUICoordinate {
-        window.coordinate(withNormalizedOffset: .zero)
-            .withOffset(CGVector(dx: point[0] - window.frame.minX, dy: point[1] - window.frame.minY))
     }
 
     private func assertDictionaryHintPosition() {

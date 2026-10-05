@@ -20,20 +20,20 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         // Act
         move(coordinate(try word("TARGET"), "center"))
         // Assert
-        XCTAssertEqual(state()["active"] as? Bool, false)
+        XCTAssertEqual(app.state == .runningForeground, false)
         assertSelected("TARGET")
     }
 
     func test_focus_when_recognitionCompletesInBackground_then_doesNotStealFocus() throws {
         // Arrange: delay delivery of the real OCR result until the app loses focus.
         try loadFixture("recognition-completion.png", holdCompletionUntilInactive: true)
-        XCTAssertEqual(state()["ocrPending"] as? Bool, true)
+        XCTAssertEqual(recognitionPending, true)
         // Act
         switchAway()
         // Assert
-        XCTAssertTrue(waitFor { self.state()["ocrPending"] as? Bool == false })
+        XCTAssertTrue(waitFor { self.recognitionPending == false })
         XCTAssertFalse(words().isEmpty)
-        XCTAssertEqual(state()["active"] as? Bool, false)
+        XCTAssertEqual(app.state == .runningForeground, false)
         XCTAssertEqual(
             NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
             "com.boundless-translator.e2e-test-host")
@@ -50,8 +50,8 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         key(36, .maskCommand)
         // Assert
         assertSelected("TARGET")
-        XCTAssertEqual(state()["translationVisible"] as? Bool, false)
-        XCTAssertEqual(state()["active"] as? Bool, false)
+        XCTAssertEqual(translationWindow.exists, false)
+        XCTAssertEqual(app.state == .runningForeground, false)
     }
 
     func test_focus_when_translationCloseButtonIsClicked_then_sourceCanSelectImmediately() throws {
@@ -62,7 +62,7 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         let close = app.windows["imageText.translation"].buttons[XCUIIdentifierCloseWindow].frame
         click(CGPoint(x: close.midX, y: close.midY))
         // Assert
-        XCTAssertTrue(waitFor { self.state()["keyWindow"] as? String == "screenshot" })
+        XCTAssertTrue(waitFor { self.translationWindow.exists == false })
         move(coordinate(try word("TARGET"), "center"))
         XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
         try select("ORIGINAL")
@@ -77,7 +77,7 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         // Act
         click(point("blank"))
         // Assert
-        XCTAssertTrue(waitFor { self.state()["translationVisible"] as? Bool == false })
+        XCTAssertTrue(waitFor { self.translationWindow.exists == false })
         assertSelected("")
         move(coordinate(try word("TARGET"), "center"))
         XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
@@ -94,11 +94,11 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         let configuration = NSWorkspace.OpenConfiguration()
         _ = try await NSWorkspace.shared.openApplication(at: fixtureURL, configuration: configuration)
         // Assert
-        XCTAssertTrue(waitFor { self.state()["keyWindow"] as? String == "settings" })
+        XCTAssertTrue(waitFor { self.settingsWindow.exists })
         capture("settings-reopen-background", window: app.windows.containing(.staticText, identifier: "preferencesTitle").firstMatch)
         key(13, .maskCommand)
         XCTAssertTrue(
-            waitFor { self.state()["keyWindow"] as? String != "settings" },
+            waitFor { self.settingsWindow.exists == false },
             "Settings must receive Command-W without another click")
     }
 
@@ -109,9 +109,9 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
             // Arrange
             try select("TARGET")
             pressTranslate()
-            key(53)
-            XCTAssertTrue(waitFor { self.state()["translationVisible"] as? Bool == false })
+            XCTAssertEqual(translationSource, "TARGET")
             switchAway()
+            XCTAssertTrue(waitFor { self.translationWindow.exists == false })
             // Act
             click(point("blank"))
             move(coordinate(try word("TARGET"), "center"))
@@ -119,7 +119,7 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
             XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
             try select("ORIGINAL")
             pressTranslate()
-            XCTAssertEqual(state()["translationSource"] as? String, "ORIGINAL")
+            XCTAssertEqual(translationSource, "ORIGINAL")
             key(53)
         }
     }

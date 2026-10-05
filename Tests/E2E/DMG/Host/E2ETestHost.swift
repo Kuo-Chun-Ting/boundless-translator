@@ -14,8 +14,17 @@ private final class E2ETestHostDelegate: NSObject, NSApplicationDelegate {
         configureMainMenu()
         configureTestEditor()
         window.title = "Boundless Translator E2E Fixture"
-        window.contentView = makeContentView()
-        window.center()
+        if ProcessInfo.processInfo.environment["IMAGE_TEXT_FOCUS_TEST"] == "1" {
+            window.contentView = NSView()
+            window.setContentSize(NSSize(width: 120, height: 560))
+            let screen = NSScreen.screens[0].visibleFrame
+            window.setFrameOrigin(NSPoint(
+                x: screen.minX,
+                y: screen.midY - window.frame.height / 2))
+        } else {
+            window.contentView = makeContentView()
+            window.center()
+        }
         window.makeKeyAndOrderFront(nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
     }

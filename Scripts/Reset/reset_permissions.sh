@@ -14,7 +14,7 @@ case "$1" in
         ;;
     e2e)
         bundle_identifier='com.lillard.BoundlessTranslator.e2e'
-        app_path="${PROJECT_ROOT}/Build/E2E/Installed/Boundless Translator E2E.app"
+        app_path="${PROJECT_ROOT}/Build/E2E/App/Boundless Translator E2E.app"
         ;;
 esac
 readonly BUNDLE_IDENTIFIER="${bundle_identifier}"

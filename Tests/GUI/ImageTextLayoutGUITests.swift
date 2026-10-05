@@ -64,8 +64,8 @@ final class ImageTextLayoutGUITests: ImageTextGUITestCase {
         // Act
         pressTranslate()
         // Assert
-        XCTAssertEqual(state()["translationSource"] as? String, expectedScattered)
-        XCTAssertEqual(state()["selected"] as? String, expectedScattered)
+        XCTAssertEqual(translationSource, expectedScattered)
+        XCTAssertEqual(selectedText, expectedScattered)
     }
 
     func test_selection_when_threeRaggedRows_then_selectsWholeMiddleAndPartialEnds() throws {
