@@ -4,12 +4,21 @@ import Vision
 
 enum ImageTextRecognizer {
     static func recognize(_ image: CGImage, size: CGSize) throws -> ImageTextDocument {
+        let request = makeRequest()
+        try VNImageRequestHandler(cgImage: image).perform([request])
+        return try makeDocument(from: request.results ?? [], size: size)
+    }
+
+    static func supportedLanguages() throws -> [String] {
+        try makeRequest().supportedRecognitionLanguages()
+    }
+
+    private static func makeRequest() -> VNRecognizeTextRequest {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.automaticallyDetectsLanguage = true
         request.usesLanguageCorrection = true
-        try VNImageRequestHandler(cgImage: image).perform([request])
-        return try makeDocument(from: request.results ?? [], size: size)
+        return request
     }
 
     private static func makeDocument(

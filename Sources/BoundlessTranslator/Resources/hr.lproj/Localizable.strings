@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
 "screenshot.hintTitle" = "Prevedi odabrani tekst";
 "screenshot.guidance" = "Odaberite tekst pa pritisnite %@ za prijevod.";
+"screenshot.noTextTitle" = "Nije prepoznat tekst";
+"screenshot.noTextMessage" = "Slika možda ne sadrži tekst, tekst je nejasan ili njegov jezik nije podržan za prepoznavanje.";
+"screenshot.languageLimitTitle" = "Jezično ograničenje snimke zaslona";
+"screenshot.languageLimitMessage" = "Prepoznavanje teksta ne podržava %@. I dalje možete prevoditi odabrani tekst. Za prijevod drugog prepoznatljivog teksta na slici promijenite izvorni jezik u Postavkama.";
+"common.ok" = "U redu";
 "lookup.action" = "Potraži";
 "lookup.title" = "Rječnik";
 "lookup.guidance" = "Odaberite riječ ili izraz";

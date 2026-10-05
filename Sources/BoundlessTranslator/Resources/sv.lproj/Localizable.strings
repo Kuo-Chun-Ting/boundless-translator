@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";
 "screenshot.hintTitle" = "Översätt markerad text";
 "screenshot.guidance" = "Markera text och tryck på %@ för att översätta.";
+"screenshot.noTextTitle" = "Ingen text identifierades";
+"screenshot.noTextMessage" = "Bilden kanske saknar text, innehåller otydlig text eller ett språk som inte stöds för textigenkänning.";
+"screenshot.languageLimitTitle" = "Språkbegränsning för skärmbilder";
+"screenshot.languageLimitMessage" = "Textigenkänning stöder inte %@. Du kan fortfarande översätta markerad text. Ändra källspråk i Inställningar för att översätta annan identifierbar text i bilden.";
+"common.ok" = "OK";
 "lookup.action" = "Slå upp";
 "lookup.title" = "Ordbok";
 "lookup.guidance" = "Markera ett ord eller uttryck";

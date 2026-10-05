@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
 "screenshot.hintTitle" = "Seçili Metni Çevir";
 "screenshot.guidance" = "Metni seçin, ardından çevirmek için %@ tuşlarına basın.";
+"screenshot.noTextTitle" = "Metin tanınmadı";
+"screenshot.noTextMessage" = "Görüntü metin içermiyor olabilir, metin net olmayabilir veya dili metin tanıma için desteklenmiyor olabilir.";
+"screenshot.languageLimitTitle" = "Ekran görüntüsü dil sınırlaması";
+"screenshot.languageLimitMessage" = "Metin tanıma %@ dilini desteklemiyor. Seçili metinleri yine de çevirebilirsiniz. Görüntüdeki tanınabilen başka metinleri çevirmek için Ayarlar’dan kaynak dili değiştirin.";
+"common.ok" = "Tamam";
 "lookup.action" = "Ara";
 "lookup.title" = "Sözlük";
 "lookup.guidance" = "Bir sözcük veya ifade seçin";

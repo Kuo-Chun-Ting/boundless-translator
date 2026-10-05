@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "No s’ha pogut fer la captura de pantalla";
 "screenshot.hintTitle" = "Tradueix el text seleccionat";
 "screenshot.guidance" = "Selecciona text i prem %@ per traduir-lo.";
+"screenshot.noTextTitle" = "No s’ha reconegut cap text";
+"screenshot.noTextMessage" = "Pot ser que la imatge no contingui text, que el text sigui poc clar o que l’idioma no sigui compatible amb el reconeixement.";
+"screenshot.languageLimitTitle" = "Limitació d’idioma de la captura";
+"screenshot.languageLimitMessage" = "El reconeixement de text no admet %@. Pots utilitzar la traducció de text seleccionat. Per traduir altre text reconeixible de la imatge, canvia l’idioma d’origen a Configuració.";
+"common.ok" = "D’acord";
 "lookup.action" = "Consulta";
 "lookup.title" = "Diccionari";
 "lookup.guidance" = "Selecciona una paraula o expressió";

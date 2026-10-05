@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "无法截屏";
 "screenshot.hintTitle" = "选字翻译";
 "screenshot.guidance" = "选字后按 %@ 翻译。";
+"screenshot.noTextTitle" = "未识别到文字";
+"screenshot.noTextMessage" = "图片中可能没有文字、文字不够清晰，或文字语言尚未受支持。";
+"screenshot.languageLimitTitle" = "截图语言限制";
+"screenshot.languageLimitMessage" = "截图识别不支持%@。仍可使用选字翻译；若要翻译图片中其他可识别的文字，请在设置中调整源语言。";
+"common.ok" = "好";
 "lookup.action" = "查询";
 "lookup.title" = "字典";
 "lookup.guidance" = "选取单词或短语";

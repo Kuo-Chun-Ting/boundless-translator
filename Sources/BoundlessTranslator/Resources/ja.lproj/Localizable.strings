@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "スクリーンショットを撮影できませんでした";
 "screenshot.hintTitle" = "選択したテキストを翻訳";
 "screenshot.guidance" = "テキストを選択し、%@ を押して翻訳します。";
+"screenshot.noTextTitle" = "テキストが認識されませんでした";
+"screenshot.noTextMessage" = "画像にテキストがない、テキストが不鮮明、またはテキスト認識に対応していない言語の可能性があります。";
+"screenshot.languageLimitTitle" = "スクリーンショットの言語制限";
+"screenshot.languageLimitMessage" = "テキスト認識は%@に対応していません。選択したテキストの翻訳は引き続き利用できます。画像内のほかの認識可能なテキストを翻訳するには、設定で原文の言語を変更してください。";
+"common.ok" = "OK";
 "lookup.action" = "調べる";
 "lookup.title" = "辞書";
 "lookup.guidance" = "単語や語句を選択";

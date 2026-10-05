@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "לא ניתן לצלם צילום מסך";
 "screenshot.hintTitle" = "תרגום הטקסט שנבחר";
 "screenshot.guidance" = "בחרו טקסט ולחצו על %@ כדי לתרגם.";
+"screenshot.noTextTitle" = "לא זוהה טקסט";
+"screenshot.noTextMessage" = "ייתכן שאין טקסט בתמונה, שהטקסט אינו ברור או שהשפה אינה נתמכת בזיהוי טקסט.";
+"screenshot.languageLimitTitle" = "מגבלת שפה בצילום מסך";
+"screenshot.languageLimitMessage" = "זיהוי טקסט אינו תומך ב%@. עדיין אפשר לתרגם טקסט נבחר. כדי לתרגם טקסט אחר שניתן לזהות בתמונה, יש לשנות את שפת המקור בהגדרות.";
+"common.ok" = "אישור";
 "lookup.action" = "חיפוש";
 "lookup.title" = "מילון";
 "lookup.guidance" = "בחרו מילה או ביטוי";

@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Không thể chụp ảnh màn hình";
 "screenshot.hintTitle" = "Dịch văn bản đã chọn";
 "screenshot.guidance" = "Chọn văn bản, rồi nhấn %@ để dịch.";
+"screenshot.noTextTitle" = "Không nhận dạng được văn bản";
+"screenshot.noTextMessage" = "Hình ảnh có thể không chứa văn bản, văn bản không rõ hoặc ngôn ngữ chưa được hỗ trợ để nhận dạng văn bản.";
+"screenshot.languageLimitTitle" = "Giới hạn ngôn ngữ ảnh chụp";
+"screenshot.languageLimitMessage" = "Nhận dạng văn bản không hỗ trợ %@. Bạn vẫn có thể dịch văn bản đã chọn. Để dịch văn bản khác có thể nhận dạng trong ảnh, hãy đổi ngôn ngữ nguồn trong Cài đặt.";
+"common.ok" = "OK";
 "lookup.action" = "Tra cứu";
 "lookup.title" = "Từ điển";
 "lookup.guidance" = "Chọn một từ hoặc cụm từ";

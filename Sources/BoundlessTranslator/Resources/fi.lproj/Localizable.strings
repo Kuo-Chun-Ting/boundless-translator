@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Näyttökuvaa ei voitu ottaa";
 "screenshot.hintTitle" = "Käännä valittu teksti";
 "screenshot.guidance" = "Valitse teksti ja käännä painamalla %@.";
+"screenshot.noTextTitle" = "Tekstiä ei tunnistettu";
+"screenshot.noTextMessage" = "Kuvassa ei ehkä ole tekstiä, teksti on epäselvää tai sen kieltä ei tueta tekstintunnistuksessa.";
+"screenshot.languageLimitTitle" = "Näyttökuvan kielirajoitus";
+"screenshot.languageLimitMessage" = "Tekstintunnistus ei tue kieltä %@. Voit silti kääntää valittua tekstiä. Jos haluat kääntää muuta tunnistettavaa tekstiä kuvassa, vaihda lähdekieli asetuksissa.";
+"common.ok" = "OK";
 "lookup.action" = "Katso sanakirjasta";
 "lookup.title" = "Sanakirja";
 "lookup.guidance" = "Valitse sana tai ilmaus";

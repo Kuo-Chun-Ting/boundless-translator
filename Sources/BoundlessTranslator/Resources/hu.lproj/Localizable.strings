@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Nem sikerült képernyőfotót készíteni";
 "screenshot.hintTitle" = "Kijelölt szöveg fordítása";
 "screenshot.guidance" = "Jelöljön ki szöveget, majd nyomja meg a %@ billentyűkombinációt a fordításhoz.";
+"screenshot.noTextTitle" = "Nem sikerült szöveget felismerni";
+"screenshot.noTextMessage" = "Lehet, hogy a képen nincs szöveg, a szöveg nem elég tiszta, vagy a nyelve nem támogatott a szövegfelismeréshez.";
+"screenshot.languageLimitTitle" = "A képernyőkép nyelvi korlátja";
+"screenshot.languageLimitMessage" = "A szövegfelismerés nem támogatja ezt a nyelvet: %@. A kijelölt szöveg továbbra is fordítható. A kép más felismerhető szövegének fordításához módosítsa a forrásnyelvet a Beállításokban.";
+"common.ok" = "OK";
 "lookup.action" = "Keresés";
 "lookup.title" = "Szótár";
 "lookup.guidance" = "Jelöljön ki egy szót vagy kifejezést";

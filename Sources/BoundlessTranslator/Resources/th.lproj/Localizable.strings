@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "ไม่สามารถจับภาพหน้าจอได้";
 "screenshot.hintTitle" = "แปลข้อความที่เลือก";
 "screenshot.guidance" = "เลือกข้อความ แล้วกด %@ เพื่อแปล";
+"screenshot.noTextTitle" = "ไม่พบข้อความที่รู้จำได้";
+"screenshot.noTextMessage" = "ภาพอาจไม่มีข้อความ ข้อความไม่ชัดเจน หรือเป็นภาษาที่ยังไม่รองรับการรู้จำข้อความ";
+"screenshot.languageLimitTitle" = "ข้อจำกัดภาษาของภาพหน้าจอ";
+"screenshot.languageLimitMessage" = "การรู้จำข้อความไม่รองรับ%@ คุณยังแปลข้อความที่เลือกได้ หากต้องการแปลข้อความอื่นที่รู้จำได้ในภาพ ให้เปลี่ยนภาษาต้นฉบับในการตั้งค่า";
+"common.ok" = "ตกลง";
 "lookup.action" = "ค้นหา";
 "lookup.title" = "พจนานุกรม";
 "lookup.guidance" = "เลือกคำหรือวลี";

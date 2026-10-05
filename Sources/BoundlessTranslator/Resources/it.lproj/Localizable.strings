@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Impossibile acquisire l’istantanea";
 "screenshot.hintTitle" = "Traduci il testo selezionato";
 "screenshot.guidance" = "Seleziona il testo e premi %@ per tradurlo.";
+"screenshot.noTextTitle" = "Nessun testo riconosciuto";
+"screenshot.noTextMessage" = "L’immagine potrebbe non contenere testo, il testo potrebbe essere poco chiaro o la sua lingua non essere supportata per il riconoscimento.";
+"screenshot.languageLimitTitle" = "Limite di lingua delle schermate";
+"screenshot.languageLimitMessage" = "Il riconoscimento del testo non supporta %@. Puoi comunque tradurre il testo selezionato. Per tradurre altro testo riconoscibile nell’immagine, cambia la lingua di origine in Impostazioni.";
+"common.ok" = "OK";
 "lookup.action" = "Cerca";
 "lookup.title" = "Dizionario";
 "lookup.guidance" = "Seleziona una parola o una frase";

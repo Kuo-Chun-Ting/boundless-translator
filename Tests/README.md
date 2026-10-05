@@ -21,7 +21,7 @@ Normal code changes require Unit and Component before delivery. Other levels run
 | Level | Responsibility |
 |---|---|
 | Unit | Selection ranges, forward/reverse endpoints, row ordering and paragraph joining |
-| Component | Production views/controllers: selection state, responder commands, copy/translation input, delayed OCR, image replacement, hint sizing and dismissal. Fixed screenshot inputs use real Vision recognition without another App. |
+| Component | Production views/controllers: selection state, responder commands, copy/translation input, delayed OCR, image replacement, independent hint dismissal and reflow, and empty-recognition Alerts. Fixed screenshot inputs use real Vision recognition without another App. |
 | GUI (8 cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; repeated app switching; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
 | E2E (5 cases) | Two selected-text routes and three screenshot regressions through real shortcuts and Apple Translation |
 

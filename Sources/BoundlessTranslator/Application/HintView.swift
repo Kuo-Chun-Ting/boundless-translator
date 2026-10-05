@@ -1,6 +1,31 @@
 import AppKit
 import SwiftUI
 
+struct HintItem: Identifiable {
+    let id: String
+    let title: Text
+    let message: Text?
+    let icon: Image
+    let onClose: (Bool) -> Void
+}
+
+struct HintListView: View {
+    let items: [HintItem]
+    let width: CGFloat
+    let localization: AppLocalization
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(items) { item in
+                HintView(
+                    title: item.title, message: item.message, icon: item.icon, width: width,
+                    localization: localization, identifier: item.id, onClose: item.onClose
+                )
+            }
+        }
+    }
+}
+
 struct HintView: View {
     let title: Text
     let message: Text?

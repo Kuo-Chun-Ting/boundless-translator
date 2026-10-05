@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "تعذر التقاط لقطة شاشة";
 "screenshot.hintTitle" = "ترجمة النص المحدد";
 "screenshot.guidance" = "حدد نصًا، ثم اضغط على %@ للترجمة.";
+"screenshot.noTextTitle" = "لم يتم التعرف على نص";
+"screenshot.noTextMessage" = "قد لا تحتوي الصورة على نص، أو قد يكون النص غير واضح، أو بلغته غير المدعومة للتعرف على النص.";
+"screenshot.languageLimitTitle" = "قيود لغة لقطة الشاشة";
+"screenshot.languageLimitMessage" = "التعرف على النص لا يدعم %@. يمكنك استخدام ترجمة النص المحدد. لترجمة نص آخر قابل للتعرف في الصورة، غيّر لغة المصدر في الإعدادات.";
+"common.ok" = "موافق";
 "lookup.action" = "بحث";
 "lookup.title" = "قاموس";
 "lookup.guidance" = "حدد كلمة أو عبارة";

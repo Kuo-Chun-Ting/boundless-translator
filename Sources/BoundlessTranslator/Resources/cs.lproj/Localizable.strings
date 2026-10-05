@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Snímek obrazovky se nepodařilo pořídit";
 "screenshot.hintTitle" = "Přeložit vybraný text";
 "screenshot.guidance" = "Vyberte text a stisknutím %@ ho přeložte.";
+"screenshot.noTextTitle" = "Nebyl rozpoznán žádný text";
+"screenshot.noTextMessage" = "Obrázek možná neobsahuje text, text je nejasný nebo jeho jazyk není podporován pro rozpoznávání.";
+"screenshot.languageLimitTitle" = "Omezení jazyka snímku";
+"screenshot.languageLimitMessage" = "Rozpoznávání textu nepodporuje jazyk %@. Stále můžete překládat vybraný text. Pro překlad jiného rozpoznatelného textu v obrázku změňte zdrojový jazyk v Nastavení.";
+"common.ok" = "OK";
 "lookup.action" = "Vyhledat";
 "lookup.title" = "Slovník";
 "lookup.guidance" = "Vyberte slovo nebo frázi";

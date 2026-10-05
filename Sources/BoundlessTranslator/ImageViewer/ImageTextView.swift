@@ -7,6 +7,7 @@ final class ImageTextView: NSView {
     private(set) var image: NSImage?
     private(set) var document = ImageTextDocument(text: "", words: [])
     private(set) var selection: NSRange?
+    var onAnalysisCompletion: ((ImageTextDocument?) -> Void)?
     private let analysisProvider: AnalysisProvider
     private var analysisTask: Task<Void, Never>?
     private var pointerDown: CGPoint?
@@ -79,6 +80,7 @@ final class ImageTextView: NSView {
             setAccessibilityIdentifier(
                 result == nil ? "imageWorkspace.unavailable" : "imageWorkspace.text")
             refreshSelectionDisplay()
+            onAnalysisCompletion?(result)
         }
     }
 

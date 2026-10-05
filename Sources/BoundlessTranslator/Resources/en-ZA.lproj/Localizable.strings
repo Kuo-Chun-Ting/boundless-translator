@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Could not capture screenshot";
 "screenshot.hintTitle" = "Translate Selected Text";
 "screenshot.guidance" = "Select text and press %@ to translate.";
+"screenshot.noTextTitle" = "No text recognized";
+"screenshot.noTextMessage" = "The image may contain no text, unclear text, or a language that isn't supported for text recognition.";
+"screenshot.languageLimitTitle" = "Screenshot language limitation";
+"screenshot.languageLimitMessage" = "Text recognition doesn’t support %@. You can still use Selected Text Translation. To translate other recognizable text in this image, change the source language in Settings.";
+"common.ok" = "OK";
 "lookup.action" = "Look Up";
 "lookup.title" = "Dictionary";
 "lookup.guidance" = "Select a word or phrase";

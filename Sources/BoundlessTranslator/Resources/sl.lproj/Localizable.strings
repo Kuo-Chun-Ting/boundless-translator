@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";
 "screenshot.hintTitle" = "Prevedi izbrano besedilo";
 "screenshot.guidance" = "Izberite besedilo in pritisnite %@ za prevod.";
+"screenshot.noTextTitle" = "Besedilo ni bilo prepoznano";
+"screenshot.noTextMessage" = "Slika morda ne vsebuje besedila, besedilo ni jasno ali njegov jezik ni podprt za prepoznavanje.";
+"screenshot.languageLimitTitle" = "Jezikovna omejitev posnetka";
+"screenshot.languageLimitMessage" = "Prepoznavanje besedila ne podpira jezika %@. Še vedno lahko prevajate izbrano besedilo. Za prevod drugega prepoznavnega besedila na sliki spremenite izvorni jezik v Nastavitvah.";
+"common.ok" = "V redu";
 "lookup.action" = "Poišči";
 "lookup.title" = "Slovar";
 "lookup.guidance" = "Izberite besedo ali izraz";

@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";
 "screenshot.hintTitle" = "Traduceți textul selectat";
 "screenshot.guidance" = "Selectați textul, apoi apăsați %@ pentru a traduce.";
+"screenshot.noTextTitle" = "Nu a fost recunoscut niciun text";
+"screenshot.noTextMessage" = "Imaginea poate să nu conțină text, textul poate fi neclar sau limba sa nu este acceptată pentru recunoaștere.";
+"screenshot.languageLimitTitle" = "Limitarea limbii capturii";
+"screenshot.languageLimitMessage" = "Recunoașterea textului nu acceptă %@. Puteți traduce în continuare text selectat. Pentru a traduce alt text recognoscibil din imagine, schimbați limba sursă în Configurări.";
+"common.ok" = "OK";
 "lookup.action" = "Caută";
 "lookup.title" = "Dicționar";
 "lookup.guidance" = "Selectați un cuvânt sau o expresie";

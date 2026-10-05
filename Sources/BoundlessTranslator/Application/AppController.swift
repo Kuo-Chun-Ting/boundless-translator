@@ -87,6 +87,9 @@ final class AppController {
             viewer.translationShortcutName = { [weak self] in
                 self?.translationShortcutController.definition.displayName ?? ""
             }
+            viewer.sourceLanguageIdentifier = { [weak self] in
+                self?.settings.sourceLanguageIdentifier
+            }
         }
     }
 

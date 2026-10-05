@@ -227,6 +227,7 @@ private final class ImageViewerContentStub: ImageViewerContent {
     let view = NSView()
     var selectedText = ""
     var hasActiveTextSelection = false
+    var onAnalysisCompletion: ((ImageTextDocument?) -> Void)?
     private(set) var displayedImages: [NSImage] = []
     private(set) var clearSelectionCount = 0
 

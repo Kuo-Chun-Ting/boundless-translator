@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";
 "screenshot.hintTitle" = "Geselecteerde tekst vertalen";
 "screenshot.guidance" = "Selecteer tekst en druk op %@ om te vertalen.";
+"screenshot.noTextTitle" = "Geen tekst herkend";
+"screenshot.noTextMessage" = "De afbeelding bevat mogelijk geen tekst, onduidelijke tekst of een taal die niet wordt ondersteund voor tekstherkenning.";
+"screenshot.languageLimitTitle" = "Taalbeperking voor schermafbeeldingen";
+"screenshot.languageLimitMessage" = "Tekstherkenning ondersteunt %@ niet. Je kunt geselecteerde tekst nog steeds vertalen. Wijzig de brontaal in Instellingen om andere herkenbare tekst in de afbeelding te vertalen.";
+"common.ok" = "OK";
 "lookup.action" = "Zoek op";
 "lookup.title" = "Woordenboek";
 "lookup.guidance" = "Selecteer een woord of uitdrukking";

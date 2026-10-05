@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Skærmbilledet kunne ikke tages";
 "screenshot.hintTitle" = "Oversæt markeret tekst";
 "screenshot.guidance" = "Markér tekst, og tryk på %@ for at oversætte.";
+"screenshot.noTextTitle" = "Ingen tekst genkendt";
+"screenshot.noTextMessage" = "Billedet indeholder muligvis ingen tekst, uklar tekst eller et sprog, som tekstgenkendelse ikke understøtter.";
+"screenshot.languageLimitTitle" = "Sprogbegrænsning for skærmbilleder";
+"screenshot.languageLimitMessage" = "Tekstgenkendelse understøtter ikke %@. Du kan stadig oversætte markeret tekst. Skift kildesprog i Indstillinger for at oversætte anden genkendelig tekst i billedet.";
+"common.ok" = "OK";
 "lookup.action" = "Slå op";
 "lookup.title" = "Ordbog";
 "lookup.guidance" = "Markér et ord eller udtryk";

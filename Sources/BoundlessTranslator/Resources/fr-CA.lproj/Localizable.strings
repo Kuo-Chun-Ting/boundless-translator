@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";
 "screenshot.hintTitle" = "Traduire le texte sélectionné";
 "screenshot.guidance" = "Sélectionnez du texte, puis appuyez sur %@ pour le traduire.";
+"screenshot.noTextTitle" = "Aucun texte reconnu";
+"screenshot.noTextMessage" = "L’image ne contient peut-être pas de texte, le texte manque de netteté ou sa langue n’est pas prise en charge pour la reconnaissance.";
+"screenshot.languageLimitTitle" = "Limite de langue des captures";
+"screenshot.languageLimitMessage" = "La reconnaissance de texte ne prend pas en charge %@. Vous pouvez toujours traduire du texte sélectionné. Pour traduire un autre texte reconnaissable dans l’image, changez la langue source dans Réglages.";
+"common.ok" = "OK";
 "lookup.action" = "Rechercher";
 "lookup.title" = "Dictionnaire";
 "lookup.guidance" = "Sélectionnez un mot ou une expression";

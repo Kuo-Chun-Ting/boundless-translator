@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Bildschirmfoto konnte nicht aufgenommen werden";
 "screenshot.hintTitle" = "Ausgewählten Text übersetzen";
 "screenshot.guidance" = "Wähle Text aus und drücke %@ zum Übersetzen.";
+"screenshot.noTextTitle" = "Kein Text erkannt";
+"screenshot.noTextMessage" = "Das Bild enthält möglicherweise keinen Text, undeutlichen Text oder eine Sprache, die nicht für die Texterkennung unterstützt wird.";
+"screenshot.languageLimitTitle" = "Sprachbeschränkung bei Screenshots";
+"screenshot.languageLimitMessage" = "Die Texterkennung unterstützt %@ nicht. Du kannst weiterhin ausgewählten Text übersetzen. Ändere die Ausgangssprache in den Einstellungen, um anderen erkennbaren Text im Bild zu übersetzen.";
+"common.ok" = "OK";
 "lookup.action" = "Nachschlagen";
 "lookup.title" = "Wörterbuch";
 "lookup.guidance" = "Wähle ein Wort oder eine Wortgruppe aus";

@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";
 "screenshot.hintTitle" = "Przetłumacz zaznaczony tekst";
 "screenshot.guidance" = "Zaznacz tekst i naciśnij %@, aby przetłumaczyć.";
+"screenshot.noTextTitle" = "Nie rozpoznano tekstu";
+"screenshot.noTextMessage" = "Obraz może nie zawierać tekstu, tekst może być niewyraźny lub jego język nie jest obsługiwany przy rozpoznawaniu tekstu.";
+"screenshot.languageLimitTitle" = "Ograniczenie języka zrzutu ekranu";
+"screenshot.languageLimitMessage" = "Rozpoznawanie tekstu nie obsługuje języka %@. Nadal możesz tłumaczyć zaznaczony tekst. Aby przetłumaczyć inny rozpoznawalny tekst na obrazie, zmień język źródłowy w Ustawieniach.";
+"common.ok" = "OK";
 "lookup.action" = "Sprawdź";
 "lookup.title" = "Słownik";
 "lookup.guidance" = "Zaznacz słowo lub frazę";

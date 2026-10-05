@@ -6,6 +6,7 @@ protocol ImageViewerContent: AnyObject {
     var view: NSView { get }
     var selectedText: String { get }
     var hasActiveTextSelection: Bool { get }
+    var onAnalysisCompletion: ((ImageTextDocument?) -> Void)? { get set }
 
     func display(_ image: NSImage)
     func clearSelection()
@@ -38,12 +39,14 @@ final class ImageViewerWindowController: NSWindowController,
     }
 
     var translationShortcutName: @MainActor () -> String = { "" }
+    var sourceLanguageIdentifier: @MainActor () -> String? = { nil }
 
     private let screenshotTipController = ScreenshotTipController()
     private let content: any ImageViewerContent
     private let visibleFrameForPointer: VisibleFrameProvider
     private let windowPresenter: any ForegroundWindowPresenting
     private let interfaceLanguageSettings: InterfaceLanguageSettings
+    private let recognitionLanguages: @MainActor () -> [String]?
     private var languageCancellable: AnyCancellable?
     private var screenshotHintHeight: CGFloat = 0
 
@@ -55,12 +58,16 @@ final class ImageViewerWindowController: NSWindowController,
             }?.visibleFrame ?? NSScreen.main?.visibleFrame
         },
         windowPresenter: any ForegroundWindowPresenting = ForegroundWindowPresenter.shared,
-        interfaceLanguageSettings: InterfaceLanguageSettings
+        interfaceLanguageSettings: InterfaceLanguageSettings,
+        recognitionLanguages: @escaping @MainActor () -> [String]? = {
+            try? ImageTextRecognizer.supportedLanguages()
+        }
     ) {
         self.content = content
         self.visibleFrameForPointer = visibleFrameForPointer
         self.windowPresenter = windowPresenter
         self.interfaceLanguageSettings = interfaceLanguageSettings
+        self.recognitionLanguages = recognitionLanguages
 
         let window = ImageViewerWindow(
             contentRect: CGRect(
@@ -83,6 +90,9 @@ final class ImageViewerWindowController: NSWindowController,
 
         super.init(window: window)
         window.delegate = self
+        content.onAnalysisCompletion = { [weak self] document in
+            self?.showEmptyResultAlert(for: document)
+        }
         screenshotTipController.onHeightChange = { [weak self] height in
             self?.reserveScreenshotHintSpace(height: height)
         }
@@ -139,6 +149,20 @@ final class ImageViewerWindowController: NSWindowController,
         layoutScreenshotContent()
     }
 
+    private func showEmptyResultAlert(for document: ImageTextDocument?) {
+        guard let document, document.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let window, window.isVisible else { return }
+        let localization = AppLocalization(languageIdentifier:
+            interfaceLanguageSettings.resolvedLanguageIdentifier(
+                for: interfaceLanguageSettings.languageIdentifier))
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = localization.string("screenshot.noTextTitle")
+        alert.informativeText = localization.string("screenshot.noTextMessage")
+        alert.addButton(withTitle: localization.string("common.ok"))
+        alert.beginSheetModal(for: window)
+    }
+
     private func layoutScreenshotContent() {
         guard let bounds = window?.contentView?.bounds else { return }
         content.view.frame = CGRect(
@@ -155,8 +179,24 @@ final class ImageViewerWindowController: NSWindowController,
             )
         )
         screenshotTipController.present(
-            in: window, localization: localization, shortcut: translationShortcutName()
+            in: window, localization: localization, hints: makeScreenshotHints(localization: localization)
         )
+    }
+
+    private func makeScreenshotHints(localization: AppLocalization) -> [ScreenshotHint] {
+        var hints: [ScreenshotHint] = []
+        if let source = sourceLanguageIdentifier(), let tip = ScreenshotLanguageTip.make(
+            localization: localization, sourceLanguageIdentifier: source,
+            recognitionLanguages: recognitionLanguages()
+        ) {
+            hints.append(ScreenshotHint(id: "hint.screenshotLanguage", tip: tip))
+        }
+        let shortcut = translationShortcutName()
+        if !shortcut.isEmpty {
+            hints.append(ScreenshotHint(id: "hint.screenshot", tip: ScreenshotTip(
+                localization: localization, shortcut: shortcut)))
+        }
+        return hints
     }
 
     private func fitWindow(to imageSize: CGSize, inside visibleFrame: CGRect) {
@@ -189,7 +229,7 @@ final class ImageViewerWindowController: NSWindowController,
         ).string("shortcut.screenshotTranslation")
         screenshotTipController.update(
             localization: AppLocalization(languageIdentifier: resolvedIdentifier),
-            shortcut: translationShortcutName()
+            hints: makeScreenshotHints(localization: AppLocalization(languageIdentifier: resolvedIdentifier))
         )
     }
 

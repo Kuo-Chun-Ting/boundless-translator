@@ -2,6 +2,33 @@ import SwiftUI
 import Testing
 @testable import BoundlessTranslator
 
+@Test(arguments: ["en", "zh-Hant", "de", "ar", "hi"]) @MainActor
+func test_hintList_when_widthIsReduced_then_reflowsBothLocalizedHints(language: String) {
+    // Arrange
+    let localization = AppLocalization(languageIdentifier: language)
+    let limit = ScreenshotLanguageTip(localization: localization, sourceLanguageIdentifier: "hi")
+    let tutorial = ScreenshotTip(localization: localization, shortcut: "⇧⌘1")
+    let items = [
+        HintItem(id: "limit", title: limit.title, message: limit.message,
+                 icon: Image(systemName: "exclamationmark.triangle"), onClose: { _ in }),
+        HintItem(id: "tutorial", title: tutorial.title, message: tutorial.message,
+                 icon: Image(nsImage: AppBrand.spriteImage), onClose: { _ in })
+    ]
+    func measure(width: CGFloat) -> CGSize {
+        NSHostingController(rootView: HintListView(
+            items: items, width: width, localization: localization)).view.fittingSize
+    }
+
+    // Act
+    let narrow = measure(width: 420)
+    let wide = measure(width: 1_000)
+
+    // Assert
+    #expect(narrow.width == 420)
+    #expect(narrow.height > wide.height)
+    #expect(narrow.height < 500)
+}
+
 @Test(arguments: ["en", "zh-Hant", "de", "ar"], [false, true])
 @MainActor
 func test_hintView_when_measuredBeforePresentation_then_hasContentSize(language: String, screenshot: Bool) {

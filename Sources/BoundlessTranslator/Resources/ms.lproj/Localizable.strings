@@ -30,6 +30,11 @@
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
 "screenshot.hintTitle" = "Terjemah Teks Dipilih";
 "screenshot.guidance" = "Pilih teks, kemudian tekan %@ untuk menterjemah.";
+"screenshot.noTextTitle" = "Tiada teks dikenal pasti";
+"screenshot.noTextMessage" = "Imej mungkin tidak mengandungi teks, teks kurang jelas, atau bahasanya tidak disokong untuk pengecaman teks.";
+"screenshot.languageLimitTitle" = "Had bahasa tangkapan skrin";
+"screenshot.languageLimitMessage" = "Pengecaman teks tidak menyokong %@. Anda masih boleh menterjemah teks yang dipilih. Untuk menterjemah teks lain yang boleh dikenal pasti dalam imej, tukar bahasa sumber dalam Seting.";
+"common.ok" = "OK";
 "lookup.action" = "Cari";
 "lookup.title" = "Kamus";
 "lookup.guidance" = "Pilih perkataan atau frasa";
