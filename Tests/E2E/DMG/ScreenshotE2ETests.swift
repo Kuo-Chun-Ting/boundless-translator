@@ -3,6 +3,25 @@ import ApplicationServices
 import XCTest
 
 final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
+    func test_screenshotPreview_when_hoveringRecognizedWord_then_showsAppleTranslation() throws {
+        // Arrange
+        launchBoundlessTranslator()
+        launchFixture()
+        captureFixtureScreenshot()
+        let workspace = appElement("imageWorkspace.text")
+        XCTAssertTrue(workspace.waitForExistence(timeout: 10))
+        // Act
+        let word = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.32, dy: 0.18)).screenPoint
+        postMouseEvent(.mouseMoved, at: word)
+        // Assert: this is the quick card, not the full translation window.
+        let result = appElement("screenshotPreview.translation")
+        XCTAssertTrue(waitUntil(timeout: 60) {
+            result.exists && !self.stringValue(of: result).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        })
+        XCTAssertFalse(appElement("translation.sourceText").exists)
+        attachScreen("screenshot-hover-translation", window: boundlessTranslator.dialogs["screenshotPreview"])
+    }
+
     func test_screenshotSelection_whenReturningAfterTranslation_thenFirstDragSelectsText() throws {
         // Arrange
         let screenshot = try prepareScreenshotAfterReturningFromAnotherApp()

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Sokongan Bahasa";
 "usage.languageSupport.description" = "Sokongan bahasa antara muka sepadan dengan macOS. macOS menentukan bahasa yang boleh diterjemahkan antara satu sama lain.";
 "usage.translateText.description" = "Jika teks boleh dipilih, pilih teks dalam app lain dan tekan %@ untuk menterjemah.";
-"usage.translateImageText.description" = "Untuk teks yang tidak boleh dipilih, tekan %@ untuk menangkap kawasan yang ingin diterjemahkan. Kemudian pilih teks dalam tangkapan skrin dan tekan %@ untuk menterjemah.";
+"usage.translateImageText.description" = "Untuk teks yang tidak boleh dipilih, tekan %@ untuk menangkap kawasan yang ingin diterjemahkan. Letakkan kursor pada perkataan atau pilih teks untuk menterjemah. Klik pembesar suara untuk mendengar atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka tetingkap terjemahan.";
 "usage.lookUp.description" = "Pilih perkataan atau frasa dalam teks sumber, kemudian klik ikon buku.";
 "usage.listen.title" = "Baca dengan Kuat";
 "usage.listen.description" = "Baca teks asal atau terjemahan dengan kuat.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Benarkan rakaman skrin untuk Boundless Translator dalam Seting Sistem > Privasi & Keselamatan, kemudian cuba lagi. Anda mungkin perlu keluar dan membuka semula app.";
 "screenshot.failed" = "Tidak dapat menangkap kawasan skrin. Cuba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
-"screenshot.hintTitle" = "Terjemah Teks Dipilih";
-"screenshot.guidance" = "Pilih teks, kemudian tekan %@ untuk menterjemah.";
+"screenshot.hintTitle" = "Terjemahan Tangkapan Skrin";
+"screenshot.guidance" = "Letakkan kursor pada perkataan atau pilih teks untuk menterjemah. Klik pembesar suara untuk mendengar atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka tetingkap terjemahan.";
 "screenshot.noTextTitle" = "Tiada teks dikenal pasti";
 "screenshot.noTextMessage" = "Imej mungkin tidak mengandungi teks, teks kurang jelas, atau bahasanya tidak disokong untuk pengecaman teks.";
 "screenshot.languageLimitTitle" = "Had bahasa tangkapan skrin";

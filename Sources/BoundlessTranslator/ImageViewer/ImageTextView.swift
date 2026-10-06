@@ -8,6 +8,7 @@ final class ImageTextView: NSView {
     private(set) var document = ImageTextDocument(text: "", words: [])
     private(set) var selection: NSRange?
     var onAnalysisCompletion: ((ImageTextDocument?) -> Void)?
+    var quickTranslation: ScreenshotTranslationController?
     private let analysisProvider: AnalysisProvider
     private var analysisTask: Task<Void, Never>?
     private var pointerDown: CGPoint?
@@ -85,6 +86,7 @@ final class ImageTextView: NSView {
     }
 
     func clearSelection() {
+        quickTranslation?.dismiss()
         selection = nil
         endGesture()
         refreshSelectionDisplay()
@@ -118,7 +120,14 @@ final class ImageTextView: NSView {
         NSColor.windowBackgroundColor.setFill()
         bounds.fill()
         image?.draw(in: imageRect)
-        guard let selection else { return }
+        guard let selection, selection.length > 0 else {
+            if let sourceBounds = quickTranslation?.highlightedSourceBounds {
+                NSColor.gray.withAlphaComponent(0.22).setFill()
+                let rect = viewRect(for: sourceBounds).insetBy(dx: -2, dy: -2)
+                NSBezierPath(roundedRect: rect, xRadius: 3, yRadius: 3).fill()
+            }
+            return
+        }
         let color =
             isSelectionEmphasized
             ? NSColor.selectedContentBackgroundColor : NSColor.unemphasizedSelectedContentBackgroundColor
@@ -136,7 +145,7 @@ final class ImageTextView: NSView {
         super.updateTrackingAreas()
         if let trackingArea { removeTrackingArea(trackingArea) }
         let area = NSTrackingArea(
-            rect: .zero, options: [.inVisibleRect, .activeInKeyWindow, .mouseMoved, .cursorUpdate],
+            rect: .zero, options: [.inVisibleRect, .activeInKeyWindow, .mouseMoved, .cursorUpdate, .mouseEnteredAndExited],
             owner: self
         )
         trackingArea = area
@@ -152,9 +161,24 @@ final class ImageTextView: NSView {
     }
 
     override func cursorUpdate(with event: NSEvent) { updateCursor(at: imagePoint(for: event)) }
-    override func mouseMoved(with event: NSEvent) { updateCursor(at: imagePoint(for: event)) }
+    override func mouseMoved(with event: NSEvent) {
+        let point = imagePoint(for: event)
+        updateCursor(at: point)
+        guard isSelectionEmphasized, pointerDown == nil else { return }
+        let target = ImageTextPreviewTarget.make(document: document, selection: selection, point: point)
+        if hasActiveTextSelection { quickTranslation?.update(target) }
+        else { quickTranslation?.hover(target) }
+    }
+
+    override func mouseExited(with event: NSEvent) { quickTranslation?.scheduleDismissal() }
+
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        quickTranslation?.positionCard()
+    }
 
     override func mouseDown(with event: NSEvent) {
+        quickTranslation?.dismiss()
         window?.makeFirstResponder(self)
         let point = imagePoint(for: event)
         pointerDown = point
@@ -181,6 +205,10 @@ final class ImageTextView: NSView {
     override func mouseUp(with event: NSEvent) {
         endGesture()
         updateCursor(at: imagePoint(for: event))
+        if hasActiveTextSelection {
+            quickTranslation?.update(ImageTextPreviewTarget.make(
+                document: document, selection: selection, point: imagePoint(for: event)))
+        }
     }
 
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
@@ -208,6 +236,7 @@ final class ImageTextView: NSView {
         selection =
             document.text.isEmpty ? nil : NSRange(location: 0, length: document.text.utf16.count)
         needsDisplay = true
+        quickTranslation?.update(ImageTextPreviewTarget.make(document: document, selection: selection, point: .zero))
     }
 
     func viewRect(for rect: CGRect) -> CGRect {
@@ -216,6 +245,10 @@ final class ImageTextView: NSView {
         return CGRect(
             x: imageRect.minX + rect.minX * scale, y: imageRect.minY + rect.minY * scale,
             width: rect.width * scale, height: rect.height * scale)
+    }
+
+    func cursor(atImagePoint point: CGPoint) -> NSCursor {
+        document.selectionRegions.contains { $0.bounds.contains(point) } ? .iBeam : .arrow
     }
 
     private func imagePoint(for event: NSEvent) -> CGPoint {
@@ -243,8 +276,7 @@ final class ImageTextView: NSView {
 
     private func updateCursor(at point: CGPoint) {
         guard isSelectionEmphasized else { return }
-        let isText = document.selectionRegions.contains { $0.bounds.contains(point) }
-        (isDragging && hasReachedText || isText ? NSCursor.iBeam : .arrow).set()
+        cursor(atImagePoint: point).set()
     }
 
     private func updateBackgroundColor() {

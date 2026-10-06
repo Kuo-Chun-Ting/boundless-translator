@@ -6,7 +6,7 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 |---|---|
 | `Scripts/run_unit_tests.sh` | All Unit tests, in free and subscription compilation modes |
 | `Scripts/run_component_tests.sh` | All Component tests, in both modes |
-| `Scripts/run_gui_tests.sh` | 8 local UI cases: native event routing, resize, hint persistence and localized controls |
+| `Scripts/run_gui_tests.sh` | 11 local UI cases: native event routing, screenshot preview/Lookup, resize, hint persistence and localized controls |
 | `Scripts/run_e2e_tests.sh` | Build the signed E2E App and test its complete product flows; no DMG packaging or installation |
 | `Scripts/run_storekit_tests.sh` | Local simulated purchases and subscription entitlements; no charges |
 | `Scripts/run_language_support_tests.sh` | Real Apple Translation and OCR fixtures; requires ready translation models |
@@ -20,10 +20,10 @@ Normal code changes require Unit and Component before delivery. Other levels run
 
 | Level | Responsibility |
 |---|---|
-| Unit | Selection ranges, forward/reverse endpoints, row ordering and paragraph joining |
-| Component | Production views/controllers: selection state, responder commands, copy/translation input, delayed OCR, image replacement, independent hint dismissal and reflow, and empty-recognition Alerts. Fixed screenshot inputs use real Vision recognition without another App. |
-| GUI (8 cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; repeated app switching; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
-| E2E (5 cases) | Two selected-text routes and three screenshot regressions through real shortcuts and Apple Translation |
+| Unit | Selection ranges, forward/reverse endpoints, row ordering, paragraph joining, preview targets and card positioning |
+| Component | Production views/controllers: selection, copy/translation input, delayed OCR, image replacement, hints and empty-recognition Alerts; preview cancellation, stale results, chunk failures, retry, speech/Lookup input and scrolling. Fixed screenshot inputs use real Vision recognition without another App. |
+| GUI (11 cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; repeated app switching; hover-card actions, selection and native Lookup return; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
+| E2E (6 cases) | Two selected-text routes, three screenshot regressions, and screenshot hover translation through real Apple Translation |
 
 Esc and the close button are two inputs to one closure regression. Geometry variations stay in fast tests. SwiftUI control placement and persistent tip lifecycle retain GUI coverage; size/color measurements and controller cleanup remain Component tests.
 

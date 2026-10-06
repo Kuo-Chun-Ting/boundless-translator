@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "语言支持";
 "usage.languageSupport.description" = "界面语言支持范围与 macOS 相同。哪些语言可以互相翻译，则由 macOS 决定。";
 "usage.translateText.description" = "可选字的情况下，在其他 App 中选取文字，按 %@ 翻译。";
-"usage.translateImageText.description" = "不可选字的情况下，按 %@ 截取想翻译的区域，再选取图中文字，按 %@ 翻译。";
+"usage.translateImageText.description" = "无法选字时，按 %@ 截取想翻译的区域。停在单词上或选取文字即可翻译。点喇叭朗读、点书本查词典。选字后按 %@ 打开翻译窗口。";
 "usage.lookUp.description" = "选择原文中的单词或短语，再点书本图标。";
 "usage.listen.title" = "朗读";
 "usage.listen.description" = "朗读原文或译文。";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "请在“系统设置”>“隐私与安全性”中允许 Boundless Translator 录制屏幕，然后重试。你可能需要退出并重新打开 App。";
 "screenshot.failed" = "无法截取屏幕区域。请重试。";
 "screenshot.errorTitle" = "无法截屏";
-"screenshot.hintTitle" = "选字翻译";
-"screenshot.guidance" = "选字后按 %@ 翻译。";
+"screenshot.hintTitle" = "截图翻译";
+"screenshot.guidance" = "停在单词上或选取文字即可翻译。点喇叭朗读、点书本查词典。选字后按 %@ 打开翻译窗口。";
 "screenshot.noTextTitle" = "未识别到文字";
 "screenshot.noTextMessage" = "图片中可能没有文字、文字不够清晰，或文字语言尚未受支持。";
 "screenshot.languageLimitTitle" = "截图语言限制";

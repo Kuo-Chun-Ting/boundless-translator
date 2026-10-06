@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Sprachunterstützung";
 "usage.languageSupport.description" = "Die Unterstützung für Oberflächensprachen entspricht macOS. macOS bestimmt, zwischen welchen Sprachen übersetzt werden kann.";
 "usage.translateText.description" = "Bei auswählbarem Text wähle ihn in einer anderen App aus und drücke %@ zum Übersetzen.";
-"usage.translateImageText.description" = "Bei nicht auswählbarem Text drücke %@, um den gewünschten Bereich aufzunehmen. Wähle dann den Text im Screenshot aus und drücke %@ zum Übersetzen.";
+"usage.translateImageText.description" = "Bei nicht auswählbarem Text drücke %@, um den gewünschten Bereich aufzunehmen. Zeige auf ein Wort oder markiere Text zum Übersetzen. Lautsprecher: vorlesen. Buch: nachschlagen. Markiere Text und drücke %@ für das Übersetzungsfenster.";
 "usage.lookUp.description" = "Wähle ein Wort oder eine Wortgruppe im Ausgangstext aus und klicke auf das Buchsymbol.";
 "usage.listen.title" = "Vorlesen";
 "usage.listen.description" = "Lies den Originaltext oder die Übersetzung vor.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Erlaube Boundless Translator die Bildschirmaufnahme unter Systemeinstellungen > Datenschutz & Sicherheit und versuche es erneut. Möglicherweise musst du die App beenden und erneut öffnen.";
 "screenshot.failed" = "Der Bildschirmbereich konnte nicht aufgenommen werden. Versuche es erneut.";
 "screenshot.errorTitle" = "Bildschirmfoto konnte nicht aufgenommen werden";
-"screenshot.hintTitle" = "Ausgewählten Text übersetzen";
-"screenshot.guidance" = "Wähle Text aus und drücke %@ zum Übersetzen.";
+"screenshot.hintTitle" = "Übersetzung von Screenshots";
+"screenshot.guidance" = "Zeige auf ein Wort oder markiere Text zum Übersetzen. Lautsprecher: vorlesen. Buch: nachschlagen. Markiere Text und drücke %@ für das Übersetzungsfenster.";
 "screenshot.noTextTitle" = "Kein Text erkannt";
 "screenshot.noTextMessage" = "Das Bild enthält möglicherweise keinen Text, undeutlichen Text oder eine Sprache, die nicht für die Texterkennung unterstützt wird.";
 "screenshot.languageLimitTitle" = "Sprachbeschränkung bei Screenshots";

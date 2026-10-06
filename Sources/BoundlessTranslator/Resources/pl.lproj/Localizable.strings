@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Obsługa języków";
 "usage.languageSupport.description" = "Obsługa języków interfejsu odpowiada systemowi macOS. macOS określa, między którymi językami można tłumaczyć.";
 "usage.translateText.description" = "Jeśli tekst można zaznaczyć, zaznacz go w innej aplikacji i naciśnij %@, aby przetłumaczyć.";
-"usage.translateImageText.description" = "Jeśli tekstu nie można zaznaczyć, naciśnij %@, aby zrobić zrzut obszaru do przetłumaczenia. Następnie zaznacz tekst na zrzucie i naciśnij %@, aby go przetłumaczyć.";
+"usage.translateImageText.description" = "Jeśli tekstu nie można zaznaczyć, naciśnij %@, aby zrobić zrzut obszaru do przetłumaczenia. Najedź na słowo lub zaznacz tekst, aby go przetłumaczyć. Kliknij głośnik, aby odsłuchać, lub książkę, aby otworzyć słownik. Zaznacz tekst i naciśnij %@, aby otworzyć okno tłumaczenia.";
 "usage.lookUp.description" = "Zaznacz słowo lub frazę w tekście źródłowym, a następnie kliknij ikonę książki.";
 "usage.listen.title" = "Czytanie na głos";
 "usage.listen.description" = "Odczytaj na głos tekst źródłowy lub tłumaczenie.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Zezwól na nagrywanie ekranu aplikacji Boundless Translator w Ustawieniach systemowych > Prywatność i ochrona, a następnie spróbuj ponownie. Konieczne może być zamknięcie i ponowne otwarcie aplikacji.";
 "screenshot.failed" = "Nie udało się zrobić zrzutu obszaru ekranu. Spróbuj ponownie.";
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";
-"screenshot.hintTitle" = "Przetłumacz zaznaczony tekst";
-"screenshot.guidance" = "Zaznacz tekst i naciśnij %@, aby przetłumaczyć.";
+"screenshot.hintTitle" = "Tłumaczenie zrzutu ekranu";
+"screenshot.guidance" = "Najedź na słowo lub zaznacz tekst, aby go przetłumaczyć. Kliknij głośnik, aby odsłuchać, lub książkę, aby otworzyć słownik. Zaznacz tekst i naciśnij %@, aby otworzyć okno tłumaczenia.";
 "screenshot.noTextTitle" = "Nie rozpoznano tekstu";
 "screenshot.noTextMessage" = "Obraz może nie zawierać tekstu, tekst może być niewyraźny lub jego język nie jest obsługiwany przy rozpoznawaniu tekstu.";
 "screenshot.languageLimitTitle" = "Ograniczenie języka zrzutu ekranu";

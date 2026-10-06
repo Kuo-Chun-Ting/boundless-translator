@@ -106,6 +106,9 @@
 		636092C146070C1950A6DA61 = {isa = PBXBuildFile; fileRef = 4D2E61952C500CD3627188CB; };
 		12489BC041204119E649BD00 = {isa = PBXBuildFile; fileRef = 3C19556856123C8BF5801AC8; };
 		D09E630A22D6B6FAAE0C1850 = {isa = PBXBuildFile; fileRef = 3809DE42D1BF5068D977036D; };
+		572BE9718A68F3D8B693F491 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5296DB8803B95C1779036160; };
+		ADB8B32B2BDE15723140120D /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E288DEFBB826E79252158A8; };
+		F8DD5994994A4F8F847F5A38 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC8BEE88306B60F60D7F364; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -256,6 +259,9 @@
 		4D2E61952C500CD3627188CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/BoundlessTranslator/ImageViewer/ImageTextDocument.swift"; sourceTree = SOURCE_ROOT; };
 		3C19556856123C8BF5801AC8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/BoundlessTranslator/ImageViewer/ImageTextLayout.swift"; sourceTree = SOURCE_ROOT; };
 		3809DE42D1BF5068D977036D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/BoundlessTranslator/ImageViewer/ImageTextRecognizer.swift"; sourceTree = SOURCE_ROOT; };
+		5296DB8803B95C1779036160 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift; sourceTree = SOURCE_ROOT; };
+		1E288DEFBB826E79252158A8 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift; sourceTree = SOURCE_ROOT; };
+		1FC8BEE88306B60F60D7F364 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +320,9 @@
 				3C19556856123C8BF5801AC8,
 				3809DE42D1BF5068D977036D,
 				02409D0738175CC51E07AF81 /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift */,
+				1FC8BEE88306B60F60D7F364 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift */,
+				1E288DEFBB826E79252158A8 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift */,
+				5296DB8803B95C1779036160 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift */,
 				47141CA41D31B1166BD0BEB7 /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift */,
 				1764B1FD90D833416991A554 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotCapture.swift */,
 				184D07152AFFD34BF919BFD9 /* Sources/BoundlessTranslator/LanguageDisplayNameFormatter.swift */,
@@ -555,6 +564,9 @@
 				12489BC041204119E649BD00,
 				D09E630A22D6B6FAAE0C1850,
 				EC1E53D064BC6BA8F7BA23DA /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift in Sources */,
+				F8DD5994994A4F8F847F5A38 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift in Sources */,
+				ADB8B32B2BDE15723140120D /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift in Sources */,
+				572BE9718A68F3D8B693F491 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift in Sources */,
 				F6C807E035DF3284A5EBFDEF /* Sources/BoundlessTranslator/ImageViewer/ScreenRecordingPermission.swift in Sources */,
 				A9F798CB3A907BB32B1193E6 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotCapture.swift in Sources */,
 				BC30F583515D9D847C0F2EF6 /* Sources/BoundlessTranslator/LanguageDisplayNameFormatter.swift in Sources */,

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "תמיכה בשפות";
 "usage.languageSupport.description" = "התמיכה בשפות הממשק תואמת ל־macOS. macOS קובע בין אילו שפות ניתן לתרגם.";
 "usage.translateText.description" = "אם ניתן לסמן את הטקסט, סמן אותו ביישום אחר ולחץ על %@ כדי לתרגם.";
-"usage.translateImageText.description" = "אם לא ניתן לבחור את הטקסט, לחצו על %@ כדי לצלם את האזור שברצונכם לתרגם. לאחר מכן בחרו את הטקסט בצילום ולחצו על %@ כדי לתרגם.";
+"usage.translateImageText.description" = "אם לא ניתן לבחור את הטקסט, לחצו על %@ כדי לצלם את האזור שברצונכם לתרגם. רחפו מעל מילה או בחרו טקסט לתרגום. לחצו על הרמקול להאזנה או על הספר למילון. בחרו טקסט ולחצו על %@ לפתיחת חלון התרגום.";
 "usage.lookUp.description" = "בחרו מילה או צירוף מילים בטקסט המקור ולחצו על סמל הספר.";
 "usage.listen.title" = "הקראה";
 "usage.listen.description" = "הקראת טקסט המקור או התרגום.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "יש לאפשר הקלטת מסך עבור Boundless Translator בהגדרות המערכת > פרטיות ואבטחה, ואז לנסות שוב. ייתכן שיהיה צורך לסיים את היישום ולפתוח אותו מחדש.";
 "screenshot.failed" = "לא ניתן לצלם את האזור במסך. יש לנסות שוב.";
 "screenshot.errorTitle" = "לא ניתן לצלם צילום מסך";
-"screenshot.hintTitle" = "תרגום הטקסט שנבחר";
-"screenshot.guidance" = "בחרו טקסט ולחצו על %@ כדי לתרגם.";
+"screenshot.hintTitle" = "תרגום צילום מסך";
+"screenshot.guidance" = "רחפו מעל מילה או בחרו טקסט לתרגום. לחצו על הרמקול להאזנה או על הספר למילון. בחרו טקסט ולחצו על %@ לפתיחת חלון התרגום.";
 "screenshot.noTextTitle" = "לא זוהה טקסט";
 "screenshot.noTextMessage" = "ייתכן שאין טקסט בתמונה, שהטקסט אינו ברור או שהשפה אינה נתמכת בזיהוי טקסט.";
 "screenshot.languageLimitTitle" = "מגבלת שפה בצילום מסך";

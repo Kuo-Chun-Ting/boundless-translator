@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Språkstöd";
 "usage.languageSupport.description" = "Stödet för gränssnittsspråk motsvarar macOS. macOS avgör vilka språk som kan översättas sinsemellan.";
 "usage.translateText.description" = "Om texten går att markera, markera den i en annan app och tryck på %@ för att översätta.";
-"usage.translateImageText.description" = "Om texten inte går att markera trycker du på %@ för att ta en skärmbild av området du vill översätta. Markera sedan texten i bilden och tryck på %@ för att översätta.";
+"usage.translateImageText.description" = "Om texten inte går att markera trycker du på %@ för att ta en skärmbild av området du vill översätta. Håll pekaren över ett ord eller markera text för att översätta. Klicka på högtalaren för att lyssna eller boken för att slå upp. Markera text och tryck på %@ för att öppna översättningsfönstret.";
 "usage.lookUp.description" = "Markera ett ord eller en fras i källtexten och klicka på bokikonen.";
 "usage.listen.title" = "Läs upp";
 "usage.listen.description" = "Läs upp originaltexten eller översättningen.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Tillåt skärminspelning för Boundless Translator i Systeminställningar > Integritet och säkerhet och försök igen. Du kan behöva avsluta och öppna appen igen.";
 "screenshot.failed" = "Det gick inte att ta en bild av skärmområdet. Försök igen.";
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";
-"screenshot.hintTitle" = "Översätt markerad text";
-"screenshot.guidance" = "Markera text och tryck på %@ för att översätta.";
+"screenshot.hintTitle" = "Översättning av skärmavbild";
+"screenshot.guidance" = "Håll pekaren över ett ord eller markera text för att översätta. Klicka på högtalaren för att lyssna eller boken för att slå upp. Markera text och tryck på %@ för att öppna översättningsfönstret.";
 "screenshot.noTextTitle" = "Ingen text identifierades";
 "screenshot.noTextMessage" = "Bilden kanske saknar text, innehåller otydlig text eller ett språk som inte stöds för textigenkänning.";
 "screenshot.languageLimitTitle" = "Språkbegränsning för skärmbilder";

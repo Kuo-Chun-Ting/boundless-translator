@@ -31,16 +31,29 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
+            if let appearance = ProcessInfo.processInfo.environment["IMAGE_TEXT_APPEARANCE"] {
+                NSApp.appearance = NSAppearance(named: appearance == "dark" ? .darkAqua : .aqua)
+            }
             let datastore = FileManager.default.temporaryDirectory.appendingPathComponent(
                 "image-text-tips-" + ProcessInfo.processInfo.environment["IMAGE_TEXT_SESSION"]!)
             try Tips.configure([.datastoreLocation(.url(datastore))])
             configureMenu()
             languages.languageIdentifier = "en"
+            let previewSettings = TranslationSettings()
+            previewSettings.sourceLanguageIdentifier = "en"
+            previewSettings.targetLanguageIdentifier = "fr"
+            viewer.enableQuickTranslation(settings: previewSettings, engine: TranslationEngine(
+                loadLanguages: { [] },
+                makeTaskHost: { request, coordinator in
+                    AnyView(Color.clear.task {
+                        await coordinator.translate(request, using: FixtureTranslationRunner())
+                    })
+                }))
             let image = NSImage(
                 contentsOf: Bundle.main.url(
                     forResource: "basic-text.png", withExtension: nil, subdirectory: "ImageText")!)!
             imageView.setAccessibilityChildren([imageAccessibility])
-            viewer.present(image: image, pointerLocation: NSEvent.mouseLocation)
+            viewer.present(image: Self.previewBackground(image), pointerLocation: NSEvent.mouseLocation)
             viewer.window?.setAccessibilityIdentifier("imageText.screenshot")
             // A taller window leaves actual workspace margins above and below the image.
             viewer.window?.setContentSize(NSSize(width: 900, height: 680))
@@ -59,6 +72,24 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
     {
         showSettings()
         return false
+    }
+
+    private static func previewBackground(_ image: NSImage) -> NSImage {
+        let background = ProcessInfo.processInfo.environment["IMAGE_TEXT_BACKGROUND"]
+        guard background == "dark" || background == "color" else { return image }
+        let result = NSImage(size: image.size)
+        result.lockFocus()
+        let rect = CGRect(origin: .zero, size: image.size)
+        image.draw(in: rect)
+        if background == "dark" {
+            NSColor.white.setFill()
+            rect.fill(using: .difference)
+        } else {
+            NSColor(calibratedRed: 0.72, green: 0.52, blue: 0.30, alpha: 1).setFill()
+            rect.fill(using: .multiply)
+        }
+        result.unlockFocus()
+        return result
     }
 
     private static func analyzeImage(_ image: NSImage) async throws -> ImageTextDocument? {
@@ -201,7 +232,7 @@ private final class ImageTextValueElement: NSView {
 private struct FixtureTranslationRunner: TranslationRunning {
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
         TranslationOutput(
-            translatedText: "Texte traduit", sourceLanguageIdentifier: "en",
+            translatedText: ProcessInfo.processInfo.environment["IMAGE_TEXT_TRANSLATION"] ?? "Texte traduit", sourceLanguageIdentifier: "en",
             targetLanguageIdentifier: "fr")
     }
 }

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Jezikovna podpora";
 "usage.languageSupport.description" = "Podpora jezikov vmesnika je enaka kot v sistemu macOS. macOS določa, med katerimi jeziki je mogoče prevajati.";
 "usage.translateText.description" = "Če je besedilo mogoče izbrati, ga izberite v drugi aplikaciji in pritisnite %@ za prevod.";
-"usage.translateImageText.description" = "Če besedila ni mogoče izbrati, pritisnite %@, da zajamete območje za prevod. Nato izberite besedilo na posnetku in pritisnite %@ za prevod.";
+"usage.translateImageText.description" = "Če besedila ni mogoče izbrati, pritisnite %@, da zajamete območje za prevod. Za prevod postavite kazalec na besedo ali izberite besedilo. Kliknite zvočnik za poslušanje ali knjigo za slovar. Izberite besedilo in pritisnite %@ za okno s prevodom.";
 "usage.lookUp.description" = "Izberite besedo ali besedno zvezo v izvornem besedilu in kliknite ikono knjige.";
 "usage.listen.title" = "Glasno branje";
 "usage.listen.description" = "Preberite izvirno besedilo ali prevod na glas.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Dovolite snemanje zaslona za Boundless Translator v sistemskih nastavitvah > Zasebnost in varnost, nato poskusite znova. Morda boste morali aplikacijo zapreti in znova odpreti.";
 "screenshot.failed" = "Območja zaslona ni bilo mogoče zajeti. Poskusite znova.";
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";
-"screenshot.hintTitle" = "Prevedi izbrano besedilo";
-"screenshot.guidance" = "Izberite besedilo in pritisnite %@ za prevod.";
+"screenshot.hintTitle" = "Prevod posnetka zaslona";
+"screenshot.guidance" = "Za prevod postavite kazalec na besedo ali izberite besedilo. Kliknite zvočnik za poslušanje ali knjigo za slovar. Izberite besedilo in pritisnite %@ za okno s prevodom.";
 "screenshot.noTextTitle" = "Besedilo ni bilo prepoznano";
 "screenshot.noTextMessage" = "Slika morda ne vsebuje besedila, besedilo ni jasno ali njegov jezik ni podprt za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezikovna omejitev posnetka";

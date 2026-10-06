@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Compatibilitate lingvistică";
 "usage.languageSupport.description" = "Compatibilitatea cu limbile interfeței corespunde sistemului macOS. macOS stabilește între ce limbi se poate traduce.";
 "usage.translateText.description" = "Dacă textul poate fi selectat, selectează-l în altă aplicație și apasă %@ pentru traducere.";
-"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apăsați %@ pentru a captura zona pe care doriți să o traduceți. Apoi selectați textul din captură și apăsați %@ pentru traducere.";
+"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apăsați %@ pentru a captura zona pe care doriți să o traduceți. Treceți cursorul peste un cuvânt sau selectați text pentru traducere. Apăsați difuzorul pentru a asculta sau cartea pentru dicționar. Selectați text și apăsați %@ pentru a deschide fereastra de traducere.";
 "usage.lookUp.description" = "Selectați un cuvânt sau o expresie din textul sursă, apoi faceți clic pe pictograma cărții.";
 "usage.listen.title" = "Citire cu voce tare";
 "usage.listen.description" = "Citiți cu voce tare textul original sau traducerea.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Permiteți înregistrarea ecranului pentru Boundless Translator în Configurări sistem > Intimitate și securitate, apoi încercați din nou. Este posibil să fie necesar să închideți și să redeschideți aplicația.";
 "screenshot.failed" = "Nu s-a putut captura regiunea ecranului. Încercați din nou.";
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";
-"screenshot.hintTitle" = "Traduceți textul selectat";
-"screenshot.guidance" = "Selectați textul, apoi apăsați %@ pentru a traduce.";
+"screenshot.hintTitle" = "Traducerea capturii de ecran";
+"screenshot.guidance" = "Treceți cursorul peste un cuvânt sau selectați text pentru traducere. Apăsați difuzorul pentru a asculta sau cartea pentru dicționar. Selectați text și apăsați %@ pentru a deschide fereastra de traducere.";
 "screenshot.noTextTitle" = "Nu a fost recunoscut niciun text";
 "screenshot.noTextMessage" = "Imaginea poate să nu conțină text, textul poate fi neclar sau limba sa nu este acceptată pentru recunoaștere.";
 "screenshot.languageLimitTitle" = "Limitarea limbii capturii";

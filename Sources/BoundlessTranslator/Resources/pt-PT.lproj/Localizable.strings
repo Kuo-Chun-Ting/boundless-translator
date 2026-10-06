@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Suporte de idiomas";
 "usage.languageSupport.description" = "O suporte de idiomas da interface corresponde ao macOS. O macOS determina entre que idiomas é possível traduzir.";
 "usage.translateText.description" = "Se o texto for selecionável, selecione-o noutra aplicação e prima %@ para traduzir.";
-"usage.translateImageText.description" = "Se o texto não puder ser selecionado, prima %@ para capturar a área que pretende traduzir. Depois selecione o texto na captura e prima %@ para traduzir.";
+"usage.translateImageText.description" = "Se o texto não puder ser selecionado, prima %@ para capturar a área que pretende traduzir. Passe o cursor sobre uma palavra ou selecione texto para traduzir. Clique no altifalante para ouvir ou no livro para consultar o dicionário. Selecione texto e prima %@ para abrir a janela de tradução.";
 "usage.lookUp.description" = "Selecione uma palavra ou expressão no texto original e clique no ícone do livro.";
 "usage.listen.title" = "Ler em voz alta";
 "usage.listen.description" = "Leia o texto original ou a tradução em voz alta.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Permita a gravação do ecrã para o Boundless Translator em Definições do Sistema > Privacidade e Segurança e tente novamente. Poderá ter de sair da aplicação e voltar a abri-la.";
 "screenshot.failed" = "Não foi possível capturar a área do ecrã. Tente novamente.";
 "screenshot.errorTitle" = "Não foi possível efetuar a captura de ecrã";
-"screenshot.hintTitle" = "Traduzir texto selecionado";
-"screenshot.guidance" = "Selecione o texto e pressione %@ para traduzir.";
+"screenshot.hintTitle" = "Tradução de captura de ecrã";
+"screenshot.guidance" = "Passe o cursor sobre uma palavra ou selecione texto para traduzir. Clique no altifalante para ouvir ou no livro para consultar o dicionário. Selecione texto e prima %@ para abrir a janela de tradução.";
 "screenshot.noTextTitle" = "Nenhum texto reconhecido";
 "screenshot.noTextMessage" = "A imagem pode não conter texto, o texto pode estar pouco nítido ou o idioma não ser compatível com o reconhecimento de texto.";
 "screenshot.languageLimitTitle" = "Limitação de idioma da captura";

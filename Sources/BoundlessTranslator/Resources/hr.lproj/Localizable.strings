@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Podrška za jezike";
 "usage.languageSupport.description" = "Podrška za jezike sučelja odgovara sustavu macOS. macOS određuje između kojih je jezika moguće prevoditi.";
 "usage.translateText.description" = "Ako se tekst može odabrati, odaberite ga u drugoj aplikaciji i pritisnite %@ za prijevod.";
-"usage.translateImageText.description" = "Ako se tekst ne može odabrati, pritisnite %@ za snimanje područja koje želite prevesti. Zatim odaberite tekst na snimci i pritisnite %@ za prijevod.";
+"usage.translateImageText.description" = "Ako se tekst ne može odabrati, pritisnite %@ za snimanje područja koje želite prevesti. Zadržite pokazivač na riječi ili odaberite tekst za prijevod. Kliknite zvučnik za slušanje ili knjigu za rječnik. Odaberite tekst i pritisnite %@ za otvaranje prozora za prijevod.";
 "usage.lookUp.description" = "Odaberite riječ ili izraz u izvornom tekstu, zatim kliknite ikonu knjige.";
 "usage.listen.title" = "Čitanje naglas";
 "usage.listen.description" = "Pročitajte izvorni tekst ili prijevod naglas.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Dopustite snimanje zaslona za Boundless Translator u Postavkama sustava > Privatnost i sigurnost pa pokušajte ponovno. Možda ćete morati zatvoriti i ponovno otvoriti aplikaciju.";
 "screenshot.failed" = "Nije moguće snimiti područje zaslona. Pokušajte ponovno.";
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
-"screenshot.hintTitle" = "Prevedi odabrani tekst";
-"screenshot.guidance" = "Odaberite tekst pa pritisnite %@ za prijevod.";
+"screenshot.hintTitle" = "Prijevod snimke zaslona";
+"screenshot.guidance" = "Zadržite pokazivač na riječi ili odaberite tekst za prijevod. Kliknite zvučnik za slušanje ili knjigu za rječnik. Odaberite tekst i pritisnite %@ za otvaranje prozora za prijevod.";
 "screenshot.noTextTitle" = "Nije prepoznat tekst";
 "screenshot.noTextMessage" = "Slika možda ne sadrži tekst, tekst je nejasan ili njegov jezik nije podržan za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezično ograničenje snimke zaslona";

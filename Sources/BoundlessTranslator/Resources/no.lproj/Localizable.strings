@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Språkstøtte";
 "usage.languageSupport.description" = "Støtten for grensesnittspråk samsvarer med macOS. macOS bestemmer hvilke språk det kan oversettes mellom.";
 "usage.translateText.description" = "Hvis teksten kan markeres, markerer du den i en annen app og trykker på %@ for å oversette.";
-"usage.translateImageText.description" = "Hvis teksten ikke kan markeres, trykker du på %@ for å ta et skjermbilde av området du vil oversette. Marker deretter teksten i bildet og trykk på %@ for å oversette.";
+"usage.translateImageText.description" = "Hvis teksten ikke kan markeres, trykker du på %@ for å ta et skjermbilde av området du vil oversette. Hold pekeren over et ord eller marker tekst for å oversette. Klikk på høyttaleren for å lytte eller boken for å slå opp. Marker tekst og trykk på %@ for å åpne oversettelsesvinduet.";
 "usage.lookUp.description" = "Velg et ord eller uttrykk i kildeteksten, og klikk på bokikonet.";
 "usage.listen.title" = "Les høyt";
 "usage.listen.description" = "Les originalteksten eller oversettelsen høyt.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Tillat skjermopptak for Boundless Translator i Systeminnstillinger > Personvern og sikkerhet, og prøv igjen. Du må kanskje avslutte og åpne appen på nytt.";
 "screenshot.failed" = "Kunne ikke ta bilde av skjermområdet. Prøv igjen.";
 "screenshot.errorTitle" = "Kunne ikke ta skjermbilde";
-"screenshot.hintTitle" = "Oversett markert tekst";
-"screenshot.guidance" = "Marker tekst, og trykk på %@ for å oversette.";
+"screenshot.hintTitle" = "Oversettelse av skjermbilde";
+"screenshot.guidance" = "Hold pekeren over et ord eller marker tekst for å oversette. Klikk på høyttaleren for å lytte eller boken for å slå opp. Marker tekst og trykk på %@ for å åpne oversettelsesvinduet.";
 "screenshot.noTextTitle" = "Ingen tekst gjenkjent";
 "screenshot.noTextMessage" = "Bildet inneholder kanskje ingen tekst, uklar tekst eller et språk som ikke støttes for tekstgjenkjenning.";
 "screenshot.languageLimitTitle" = "Språkbegrensning for skjermbilder";

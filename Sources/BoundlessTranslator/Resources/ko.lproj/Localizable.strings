@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "언어 지원";
 "usage.languageSupport.description" = "인터페이스 언어 지원 범위는 macOS와 동일합니다. 어떤 언어 간에 번역할 수 있는지는 macOS에서 결정합니다.";
 "usage.translateText.description" = "텍스트를 선택할 수 있으면 다른 앱에서 텍스트를 선택하고 %@을 눌러 번역하세요.";
-"usage.translateImageText.description" = "선택할 수 없는 텍스트는 %@을 눌러 번역할 영역을 캡처하세요. 그런 다음 이미지에서 텍스트를 선택하고 %@을 눌러 번역하세요.";
+"usage.translateImageText.description" = "선택할 수 없는 텍스트는 %@을 눌러 번역할 영역을 캡처하세요. 단어에 마우스를 올리거나 텍스트를 선택하면 번역됩니다. 스피커를 누르면 읽어 주고, 책을 누르면 사전을 엽니다. 텍스트를 선택한 뒤 %@을 누르면 번역 창이 열립니다.";
 "usage.lookUp.description" = "원문에서 단어나 구문을 선택한 다음 책 아이콘을 클릭하세요.";
 "usage.listen.title" = "소리 내어 읽기";
 "usage.listen.description" = "원문이나 번역문을 소리 내어 읽습니다.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "시스템 설정 > 개인정보 보호 및 보안에서 Boundless Translator의 화면 기록을 허용한 다음 다시 시도하세요. 앱을 종료한 후 다시 열어야 할 수 있습니다.";
 "screenshot.failed" = "화면 영역을 캡처할 수 없습니다. 다시 시도하세요.";
 "screenshot.errorTitle" = "스크린샷을 캡처할 수 없습니다";
-"screenshot.hintTitle" = "선택한 텍스트 번역";
-"screenshot.guidance" = "텍스트를 선택한 다음 %@을 눌러 번역하세요.";
+"screenshot.hintTitle" = "스크린샷 번역";
+"screenshot.guidance" = "단어에 마우스를 올리거나 텍스트를 선택하면 번역됩니다. 스피커를 누르면 읽어 주고, 책을 누르면 사전을 엽니다. 텍스트를 선택한 뒤 %@을 누르면 번역 창이 열립니다.";
 "screenshot.noTextTitle" = "인식된 텍스트가 없습니다";
 "screenshot.noTextMessage" = "이미지에 텍스트가 없거나, 텍스트가 불분명하거나, 텍스트 인식을 지원하지 않는 언어일 수 있습니다.";
 "screenshot.languageLimitTitle" = "스크린샷 언어 제한";

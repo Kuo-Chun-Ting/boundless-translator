@@ -8,7 +8,7 @@ func test_instruction_whenShortcutIsCustomized_then_displaysProvidedShortcut() {
     // Act
     let instruction = tip.instruction
     // Assert
-    #expect(instruction == "Select text and press ⌥T to translate.")
+    #expect(instruction == "Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press ⌥T to open the translation window.")
 }
 
 @Test
@@ -18,5 +18,5 @@ func test_instruction_whenLanguageIsTraditionalChinese_then_usesLocalizedSentenc
     // Act
     let instruction = tip.instruction
     // Assert
-    #expect(instruction == "選字後按 ⇧⌘1 翻譯。")
+    #expect(instruction == "停在單字上或選取文字即可翻譯。點喇叭朗讀、點書本查字典。選字後按 ⇧⌘1 開啟翻譯視窗。")
 }

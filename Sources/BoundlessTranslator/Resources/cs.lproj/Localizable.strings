@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Podpora jazyků";
 "usage.languageSupport.description" = "Podpora jazyků rozhraní odpovídá systému macOS. macOS určuje, mezi kterými jazyky lze překládat.";
 "usage.translateText.description" = "Pokud lze text vybrat, vyberte ho v jiné aplikaci a stisknutím %@ ho přeložte.";
-"usage.translateImageText.description" = "Pokud text nelze vybrat, stisknutím %@ zachyťte oblast, kterou chcete přeložit. Poté vyberte text na snímku a stisknutím %@ jej přeložte.";
+"usage.translateImageText.description" = "Pokud text nelze vybrat, stisknutím %@ zachyťte oblast, kterou chcete přeložit. Najeďte na slovo nebo vyberte text pro překlad. Kliknutím na reproduktor si text poslechnete, kliknutím na knihu otevřete slovník. Vyberte text a stiskněte %@ pro otevření okna překladu.";
 "usage.lookUp.description" = "Vyberte slovo nebo frázi ve zdrojovém textu a klikněte na ikonu knihy.";
 "usage.listen.title" = "Čtení nahlas";
 "usage.listen.description" = "Přečtěte nahlas původní text nebo překlad.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "V Nastavení systému > Soukromí a zabezpečení povolte aplikaci Boundless Translator záznam obrazovky a zkuste to znovu. Možná bude nutné aplikaci ukončit a znovu otevřít.";
 "screenshot.failed" = "Oblast obrazovky se nepodařilo zachytit. Zkuste to znovu.";
 "screenshot.errorTitle" = "Snímek obrazovky se nepodařilo pořídit";
-"screenshot.hintTitle" = "Přeložit vybraný text";
-"screenshot.guidance" = "Vyberte text a stisknutím %@ ho přeložte.";
+"screenshot.hintTitle" = "Překlad snímku obrazovky";
+"screenshot.guidance" = "Najeďte na slovo nebo vyberte text pro překlad. Kliknutím na reproduktor si text poslechnete, kliknutím na knihu otevřete slovník. Vyberte text a stiskněte %@ pro otevření okna překladu.";
 "screenshot.noTextTitle" = "Nebyl rozpoznán žádný text";
 "screenshot.noTextMessage" = "Obrázek možná neobsahuje text, text je nejasný nebo jeho jazyk není podporován pro rozpoznávání.";
 "screenshot.languageLimitTitle" = "Omezení jazyka snímku";

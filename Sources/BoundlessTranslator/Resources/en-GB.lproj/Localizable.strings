@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Language Support";
 "usage.languageSupport.description" = "Interface language support matches macOS. macOS determines which languages can be translated between.";
 "usage.translateText.description" = "For selectable text, select it in another app and press %@ to translate.";
-"usage.translateImageText.description" = "For non-selectable text, press %@ to capture the area you want to translate. Then select the text in the screenshot and press %@ to translate.";
+"usage.translateImageText.description" = "For non-selectable text, press %@ to capture the area you want to translate. Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press %@ to open the translation window.";
 "usage.lookUp.description" = "Select a word or phrase in the source text, then click the book icon.";
 "usage.listen.title" = "Read Aloud";
 "usage.listen.description" = "Read the source text or translation aloud.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Allow screen recording for Boundless Translator in System Settings > Privacy & Security, then try again. You may need to quit and reopen the app.";
 "screenshot.failed" = "Could not capture the screen region. Try again.";
 "screenshot.errorTitle" = "Could not capture screenshot";
-"screenshot.hintTitle" = "Translate Selected Text";
-"screenshot.guidance" = "Select text and press %@ to translate.";
+"screenshot.hintTitle" = "Screenshot Translation";
+"screenshot.guidance" = "Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press %@ to open the translation window.";
 "screenshot.noTextTitle" = "No text recognized";
 "screenshot.noTextMessage" = "The image may contain no text, unclear text, or a language that isn't supported for text recognition.";
 "screenshot.languageLimitTitle" = "Screenshot language limitation";

@@ -78,6 +78,9 @@ final class AppController {
             fallbackReader: selectedTextReader
         )
         if let viewer = resolvedImageViewerController as? ImageViewerWindowController {
+            viewer.enableQuickTranslation(settings: settings, engine: translationEngine) { [weak self] in
+                self?.authorizeFeature() ?? false
+            }
             viewer.translationShortcutName = { [weak self] in
                 self?.translationShortcutController.definition.displayName ?? ""
             }

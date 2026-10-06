@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Kielituki";
 "usage.languageSupport.description" = "Käyttöliittymäkielten tuki vastaa macOS:n tukea. macOS määrittää, minkä kielten välillä voidaan kääntää.";
 "usage.translateText.description" = "Jos tekstin voi valita, valitse se toisessa apissa ja käännä painamalla %@.";
-"usage.translateImageText.description" = "Jos tekstiä ei voi valita, ota kuva käännettävästä alueesta painamalla %@. Valitse sitten teksti kuvasta ja käännä se painamalla %@.";
+"usage.translateImageText.description" = "Jos tekstiä ei voi valita, ota kuva käännettävästä alueesta painamalla %@. Vie osoitin sanan päälle tai valitse teksti kääntääksesi. Kuuntele kaiuttimesta tai avaa sanakirja kirjasta. Valitse teksti ja paina %@ avataksesi käännösikkunan.";
 "usage.lookUp.description" = "Valitse sana tai ilmaus lähdetekstistä ja klikkaa kirjakuvaketta.";
 "usage.listen.title" = "Lue ääneen";
 "usage.listen.description" = "Lue alkuperäinen teksti tai käännös ääneen.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Salli näytön tallennus Boundless Translatorille kohdassa Järjestelmäasetukset > Tietosuoja ja suojaus ja yritä uudelleen. Sinun on ehkä lopetettava appi ja avattava se uudelleen.";
 "screenshot.failed" = "Näytön alueesta ei voitu ottaa kuvaa. Yritä uudelleen.";
 "screenshot.errorTitle" = "Näyttökuvaa ei voitu ottaa";
-"screenshot.hintTitle" = "Käännä valittu teksti";
-"screenshot.guidance" = "Valitse teksti ja käännä painamalla %@.";
+"screenshot.hintTitle" = "Kuvakaappauksen käännös";
+"screenshot.guidance" = "Vie osoitin sanan päälle tai valitse teksti kääntääksesi. Kuuntele kaiuttimesta tai avaa sanakirja kirjasta. Valitse teksti ja paina %@ avataksesi käännösikkunan.";
 "screenshot.noTextTitle" = "Tekstiä ei tunnistettu";
 "screenshot.noTextMessage" = "Kuvassa ei ehkä ole tekstiä, teksti on epäselvää tai sen kieltä ei tueta tekstintunnistuksessa.";
 "screenshot.languageLimitTitle" = "Näyttökuvan kielirajoitus";

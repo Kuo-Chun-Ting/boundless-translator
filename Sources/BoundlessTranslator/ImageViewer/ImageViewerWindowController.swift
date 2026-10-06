@@ -120,6 +120,14 @@ final class ImageViewerWindowController: NSWindowController,
         }
     }
 
+    func enableQuickTranslation(settings: TranslationSettings, engine: TranslationEngine,
+                                authorize: @escaping @MainActor () -> Bool = { true }) {
+        guard let imageView = content as? ImageTextView else { return }
+        imageView.quickTranslation = ScreenshotTranslationController(
+            imageView: imageView, settings: settings, interfaceLanguageSettings: interfaceLanguageSettings,
+            engine: engine, coordinator: TranslationCoordinator(authorize: authorize))
+    }
+
     func windowWillClose(_ notification: Notification) {
         screenshotTipController.close()
         content.clearSelection()

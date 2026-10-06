@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Supporto lingue";
 "usage.languageSupport.description" = "Il supporto delle lingue dell’interfaccia corrisponde a quello di macOS. macOS determina tra quali lingue è possibile tradurre.";
 "usage.translateText.description" = "Se il testo è selezionabile, selezionalo in un’altra app e premi %@ per tradurlo.";
-"usage.translateImageText.description" = "Se il testo non è selezionabile, premi %@ per acquisire l’area da tradurre. Poi seleziona il testo nell’immagine e premi %@ per tradurlo.";
+"usage.translateImageText.description" = "Se il testo non è selezionabile, premi %@ per acquisire l’area da tradurre. Passa il puntatore su una parola o seleziona del testo per tradurlo. Fai clic sull’altoparlante per ascoltare o sul libro per consultare il dizionario. Seleziona il testo e premi %@ per aprire la finestra di traduzione.";
 "usage.lookUp.description" = "Seleziona una parola o una frase nel testo originale, poi fai clic sull’icona del libro.";
 "usage.listen.title" = "Lettura ad alta voce";
 "usage.listen.description" = "Leggi ad alta voce il testo originale o la traduzione.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Consenti la registrazione dello schermo per Boundless Translator in Impostazioni di Sistema > Privacy e sicurezza, quindi riprova. Potrebbe essere necessario chiudere e riaprire l’app.";
 "screenshot.failed" = "Impossibile acquisire l’area dello schermo. Riprova.";
 "screenshot.errorTitle" = "Impossibile acquisire l’istantanea";
-"screenshot.hintTitle" = "Traduci il testo selezionato";
-"screenshot.guidance" = "Seleziona il testo e premi %@ per tradurlo.";
+"screenshot.hintTitle" = "Traduzione di istantanee";
+"screenshot.guidance" = "Passa il puntatore su una parola o seleziona del testo per tradurlo. Fai clic sull’altoparlante per ascoltare o sul libro per consultare il dizionario. Seleziona il testo e premi %@ per aprire la finestra di traduzione.";
 "screenshot.noTextTitle" = "Nessun testo riconosciuto";
 "screenshot.noTextMessage" = "L’immagine potrebbe non contenere testo, il testo potrebbe essere poco chiaro o la sua lingua non essere supportata per il riconoscimento.";
 "screenshot.languageLimitTitle" = "Limite di lingua delle schermate";

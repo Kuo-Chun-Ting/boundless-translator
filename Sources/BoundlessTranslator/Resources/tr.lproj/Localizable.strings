@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Dil Desteği";
 "usage.languageSupport.description" = "Arayüz dili desteği macOS ile aynıdır. Hangi diller arasında çeviri yapılabileceğini macOS belirler.";
 "usage.translateText.description" = "Metin seçilebiliyorsa başka bir uygulamada seçin ve çevirmek için %@ tuşlarına basın.";
-"usage.translateImageText.description" = "Seçilemeyen metinler için %@ tuşlarına basarak çevirmek istediğiniz alanı yakalayın. Ardından ekran görüntüsündeki metni seçip çevirmek için %@ tuşlarına basın.";
+"usage.translateImageText.description" = "Seçilemeyen metinler için %@ tuşlarına basarak çevirmek istediğiniz alanı yakalayın. Çevirmek için bir sözcüğün üzerine gelin veya metin seçin. Dinlemek için hoparlöre, sözlük için kitaba tıklayın. Çeviri penceresini açmak için metni seçip %@ tuşlarına basın.";
 "usage.lookUp.description" = "Kaynak metinde bir sözcük veya ifade seçin, ardından kitap simgesine tıklayın.";
 "usage.listen.title" = "Sesli Oku";
 "usage.listen.description" = "Kaynak metni veya çeviriyi sesli okuyun.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Sistem Ayarları > Gizlilik ve Güvenlik bölümünde Boundless Translator için ekran kaydına izin verin, sonra yeniden deneyin. Uygulamadan çıkıp uygulamayı yeniden açmanız gerekebilir.";
 "screenshot.failed" = "Ekranın seçilen bölümü yakalanamadı. Yeniden deneyin.";
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
-"screenshot.hintTitle" = "Seçili Metni Çevir";
-"screenshot.guidance" = "Metni seçin, ardından çevirmek için %@ tuşlarına basın.";
+"screenshot.hintTitle" = "Ekran Görüntüsü Çevirisi";
+"screenshot.guidance" = "Çevirmek için bir sözcüğün üzerine gelin veya metin seçin. Dinlemek için hoparlöre, sözlük için kitaba tıklayın. Çeviri penceresini açmak için metni seçip %@ tuşlarına basın.";
 "screenshot.noTextTitle" = "Metin tanınmadı";
 "screenshot.noTextMessage" = "Görüntü metin içermiyor olabilir, metin net olmayabilir veya dili metin tanıma için desteklenmiyor olabilir.";
 "screenshot.languageLimitTitle" = "Ekran görüntüsü dil sınırlaması";

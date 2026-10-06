@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Dukungan Bahasa";
 "usage.languageSupport.description" = "Dukungan bahasa antarmuka sama dengan macOS. macOS menentukan bahasa mana yang dapat diterjemahkan satu sama lain.";
 "usage.translateText.description" = "Jika teks bisa dipilih, pilih teks di app lain dan tekan %@ untuk menerjemahkan.";
-"usage.translateImageText.description" = "Untuk teks yang tidak dapat dipilih, tekan %@ untuk mengambil tangkapan layar area yang ingin diterjemahkan. Lalu pilih teks dalam tangkapan layar dan tekan %@ untuk menerjemahkan.";
+"usage.translateImageText.description" = "Untuk teks yang tidak dapat dipilih, tekan %@ untuk mengambil tangkapan layar area yang ingin diterjemahkan. Arahkan kursor ke kata atau pilih teks untuk menerjemahkan. Klik pengeras suara untuk mendengarkan atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka jendela terjemahan.";
 "usage.lookUp.description" = "Pilih kata atau frasa dalam teks sumber, lalu klik ikon buku.";
 "usage.listen.title" = "Bacakan Teks";
 "usage.listen.description" = "Bacakan teks asli atau terjemahannya.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Izinkan perekaman layar untuk Boundless Translator di Pengaturan Sistem > Privasi & Keamanan, lalu coba lagi. Anda mungkin perlu menutup dan membuka kembali app.";
 "screenshot.failed" = "Tidak dapat menjepret area layar. Coba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil jepretan layar";
-"screenshot.hintTitle" = "Terjemahkan Teks Terpilih";
-"screenshot.guidance" = "Pilih teks, lalu tekan %@ untuk menerjemahkan.";
+"screenshot.hintTitle" = "Terjemahan Tangkapan Layar";
+"screenshot.guidance" = "Arahkan kursor ke kata atau pilih teks untuk menerjemahkan. Klik pengeras suara untuk mendengarkan atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka jendela terjemahan.";
 "screenshot.noTextTitle" = "Tidak ada teks yang dikenali";
 "screenshot.noTextMessage" = "Gambar mungkin tidak berisi teks, teks kurang jelas, atau bahasanya tidak didukung untuk pengenalan teks.";
 "screenshot.languageLimitTitle" = "Batasan bahasa tangkapan layar";

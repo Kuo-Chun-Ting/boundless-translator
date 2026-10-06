@@ -114,7 +114,8 @@ final class HintPresentationGUITests: XCTestCase {
     func test_screenshotHint_whenFirstUsed_then_appearsUntilUserDismisses() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"
-        let hint = app.staticTexts["Select text and press ⌥T to translate."]
+        let hint = app.staticTexts.matching(NSPredicate(format: "value == %@",
+            "Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press ⌥T to open the translation window.")).firstMatch
 
         // Act & Assert
         let screenshotWindow = app.windows["Screenshot Translation"]
@@ -177,8 +178,9 @@ final class HintPresentationGUITests: XCTestCase {
     private func assertScreenshotHintPosition(relativeTo window: XCUIElement) {
         let hint = app.groups["hint.screenshot"].firstMatch
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
-        XCTAssertTrue(hint.staticTexts["Translate Selected Text"].exists)
-        XCTAssertTrue(hint.staticTexts["Select text and press ⌥T to translate."].exists)
+        XCTAssertTrue(hint.staticTexts["Screenshot Translation"].exists)
+        XCTAssertTrue(hint.staticTexts.matching(NSPredicate(format: "value == %@",
+            "Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press ⌥T to open the translation window.")).firstMatch.exists)
         let hintFrame = hintSurfaceFrame(hint)
         let windowFrame = window.frame
         XCTAssertGreaterThan(hintFrame.height, 24)

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Taalondersteuning";
 "usage.languageSupport.description" = "De ondersteuning voor interfacetalen komt overeen met macOS. macOS bepaalt tussen welke talen kan worden vertaald.";
 "usage.translateText.description" = "Als tekst selecteerbaar is, selecteer je deze in een andere app en druk je op %@ om te vertalen.";
-"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om het te vertalen gebied vast te leggen. Selecteer daarna de tekst in de schermafbeelding en druk op %@ om te vertalen.";
+"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om het te vertalen gebied vast te leggen. Wijs een woord aan of selecteer tekst om te vertalen. Klik op de luidspreker om te luisteren of op het boek voor het woordenboek. Selecteer tekst en druk op %@ om het vertaalvenster te openen.";
 "usage.lookUp.description" = "Selecteer een woord of woordgroep in de brontekst en klik op het boekpictogram.";
 "usage.listen.title" = "Voorlezen";
 "usage.listen.description" = "Lees de brontekst of vertaling voor.";
@@ -27,8 +27,8 @@
 "screenshot.permissionRequired" = "Sta schermopname voor Boundless Translator toe in Systeeminstellingen > Privacy en beveiliging en probeer het opnieuw. Mogelijk moet je de app stoppen en opnieuw openen.";
 "screenshot.failed" = "Het schermgebied kon niet worden vastgelegd. Probeer het opnieuw.";
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";
-"screenshot.hintTitle" = "Geselecteerde tekst vertalen";
-"screenshot.guidance" = "Selecteer tekst en druk op %@ om te vertalen.";
+"screenshot.hintTitle" = "Vertaling van schermafbeelding";
+"screenshot.guidance" = "Wijs een woord aan of selecteer tekst om te vertalen. Klik op de luidspreker om te luisteren of op het boek voor het woordenboek. Selecteer tekst en druk op %@ om het vertaalvenster te openen.";
 "screenshot.noTextTitle" = "Geen tekst herkend";
 "screenshot.noTextMessage" = "De afbeelding bevat mogelijk geen tekst, onduidelijke tekst of een taal die niet wordt ondersteund voor tekstherkenning.";
 "screenshot.languageLimitTitle" = "Taalbeperking voor schermafbeeldingen";
