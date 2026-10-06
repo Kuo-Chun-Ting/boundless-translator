@@ -32,15 +32,23 @@ struct UsageGuideView: View {
     let translationShortcut: GlobalShortcutDefinition
     let screenshotShortcut: GlobalShortcutDefinition
     let localization: AppLocalization
+    let versionText: String?
 
     init(
         translationShortcut: GlobalShortcutDefinition,
         screenshotShortcut: GlobalShortcutDefinition,
-        localization: AppLocalization
+        localization: AppLocalization,
+        bundle: Bundle = .main
     ) {
         self.translationShortcut = translationShortcut
         self.screenshotShortcut = screenshotShortcut
         self.localization = localization
+        if let version = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+           let build = bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+            versionText = "Version \(version) (\(build))"
+        } else {
+            versionText = nil
+        }
     }
 
     var body: some View {
@@ -67,6 +75,15 @@ struct UsageGuideView: View {
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("usageItem.\(item.id)")
+            }
+
+            if let versionText {
+                Text(verbatim: versionText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .accessibilityIdentifier("usageVersion")
             }
         }
         .padding(18)

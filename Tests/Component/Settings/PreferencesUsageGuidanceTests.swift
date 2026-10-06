@@ -102,6 +102,34 @@ func test_usageGuideView_when_rendered_then_uses_readableWidth() {
     #expect(abs(hostingView.fittingSize.width - 520) < 0.5)
 }
 
+@Test @MainActor
+func test_usageGuideView_when_bundleContainsVersion_then_showsVersionAndBuild() throws {
+    // Arrange
+    let bundleURL = FileManager.default.temporaryDirectory
+        .appending(path: "UsageGuideTests.\(UUID().uuidString).bundle")
+    try FileManager.default.createDirectory(at: bundleURL, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: bundleURL) }
+    let info = [
+        "CFBundleIdentifier": "UsageGuideTests",
+        "CFBundleShortVersionString": "2.3.4",
+        "CFBundleVersion": "567",
+    ]
+    try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+        .write(to: bundleURL.appending(path: "Info.plist"))
+    let stub_bundle = try #require(Bundle(url: bundleURL))
+
+    // Act
+    let guide = UsageGuideView(
+        translationShortcut: .commandShift1,
+        screenshotShortcut: .commandShift2,
+        localization: testEnglishLocalization,
+        bundle: stub_bundle
+    )
+
+    // Assert
+    #expect(guide.versionText == "Version 2.3.4 (567)")
+}
+
 @MainActor
 private func findUsageViews(
     in view: NSView,

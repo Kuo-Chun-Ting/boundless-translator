@@ -9,10 +9,26 @@ permalink: /en/support/
 
 Boundless Translator requires an Apple silicon Mac with macOS 15 or later.
 
-- **Translate selected text:** select text in another app and press Command-Shift-1.
-- **Translate a screenshot:** press Command-Shift-2, capture a region, select text with Live Text, then press Command-Shift-1.
-- **Change the shortcut or languages:** open Preferences from the menu bar.
-- **Allow permissions:** follow the in-app guide for Accessibility or Screen Recording. If Accessibility does not list Boundless Translator, click **+** and choose the installed app. Quit and reopen the app when macOS requests it.
-- **Manage a subscription:** in the Mac App Store edition, open Subscription from the menu bar or Preferences. You can purchase, restore a purchase, or manage renewal there.
+## How to translate
+
+- Select text in another app and press Command-Shift-1.
+- If you cannot select the text, press Command-Shift-2 to capture an area. Drag to select text in the screenshot window, then press Command-Shift-1.
+- These are the default shortcuts. Open Preferences from the menu bar to change shortcuts, translation languages or the app language. Click "?" for instructions.
+
+## Languages and recognition
+
+- If automatic detection cannot identify the language, choose a source language in Apple's prompt. You can also set a fixed source language in Preferences.
+- Translation availability depends on your Mac, macOS version and language resources. Download language packs when prompted. Languages that need Apple Intelligence require it to be enabled with its models ready.
+- App interface languages do not indicate translation support. Screenshot recognition also differs: Hindi supports selected-text translation but not screenshot recognition.
+- If a screenshot returns no text, enlarge the original and capture a clearer text area. For unsupported screenshot languages, try selected-text translation instead.
+
+## Permissions and subscriptions
+
+- Follow the app's guide to allow Accessibility or Screen Recording. If Boundless Translator is missing from Accessibility, click "+" to add the installed app. Quit and reopen it when macOS requests it.
+- In the Mac App Store edition, open Subscription from the menu bar or Preferences to purchase, restore purchases or manage your subscription.
+
+## Contact
+
+To find your app version and build number, open Preferences and click "?". They appear at the bottom right as `Version 1.0 (40)`.
 
 For help, email [halila@me.com](mailto:halila@me.com) with your app version, macOS version, and the steps that caused the problem.

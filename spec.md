@@ -108,6 +108,7 @@ Read selected text through Accessibility in the background and run splitting out
 - Preserve saved shortcuts when defaults change; use the defaults only when a saved shortcut is missing or invalid.
 - Cancel unfinished shortcut recording when Preferences closes or loses focus, restoring the saved shortcut.
 - Open the compact Usage popover from a standard macOS Help button at the bottom right.
+- Show selectable app version and build numbers from the app bundle in a trailing-aligned, secondary-text footer in the Usage popover, for example `Version 1.0 (40)`.
 - Place a concise Quit action at the leading edge below the settings, with Subscription… and Help together at the trailing edge on the same row. Mirror this layout for right-to-left languages.
 - Subscription-required builds expose Subscription from Preferences and the menu bar, including when feature access has expired. Free-testing builds do not show purchase controls.
 

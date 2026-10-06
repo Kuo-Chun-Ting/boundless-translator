@@ -1,5 +1,13 @@
 # TODO
 
+- [x] 清理 Build 中現行流程不再使用的 121 項舊產物（約 17.6 GiB）：120 項刪除，含系統收據的 StoreKitVerification 移至垃圾桶。保留現行 DMG／App、GUI／E2E 產物與 App Store 發布紀錄；已確認舊路徑移除，未執行測試或重新建置。
+
+- [x] 問號操作說明右下角以次要灰色顯示可複製的 `Version 1.0 (40)`，版本與 Build 編號從 App bundle 讀取；三語 Support 頁補上查詢位置。Unit 234 項、Component 161 項，兩種編譯模式皆通過；未做實際 UI 驗證，未產生 DMG，Support 尚未發布。
+
+- [x] 更新英文、繁中、簡中 Support 頁：移除過時的原況文字操作，補上預設快捷鍵、自動偵測、語言資源與截圖辨識限制，保留權限、訂閱及聯絡方式。已核對三語內容與既有連結；尚未發布。
+
+- [x] 2026-10-06 執行 App Store 發布入口：1.0（Build 40）封存、驗證與上傳成功；Apple 後續處理及正式上架尚未確認。
+
 - [x] Apple 回傳使用者取消時，關閉本次翻譯視窗，不再保留待命提示；區分一般工作取消，忽略舊請求的取消結果。使用者實測確認正常。
   - 2026-10-06 驗證：Unit（234 項 × 2）、Component（160 項 × 2）、Scripts、GUI（8 項）、E2E（5 項）、DMG 公證與安裝後啟動驗證通過。啟用 Apple Intelligence 並等模型準備完成後，重跑語言測試，44 個翻譯方向、22 項 OCR 及測資完整性檢查全部通過；驗證期間未修改程式碼。StoreKit 仍依既有環境限制跳過，不算完整 Verify 全數通過。DMG：`Build/Boundless Translator DMG Test.dmg`。
 
