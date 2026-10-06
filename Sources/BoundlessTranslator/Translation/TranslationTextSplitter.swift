@@ -9,7 +9,7 @@ struct TranslationTextSplitter: Sendable {
         self.targetCharacters = targetCharacters
     }
 
-    func split(_ text: String, languageIdentifier: String) throws -> [String] {
+    func split(_ text: String, languageIdentifier: String?) throws -> [String] {
         var chunks: [String] = []
         var current = ""
         var currentCount = 0
@@ -37,12 +37,14 @@ struct TranslationTextSplitter: Sendable {
     private func units(
         in text: String,
         unit: NLTokenUnit,
-        languageIdentifier: String
+        languageIdentifier: String?
     ) throws -> [String] {
         guard !text.isEmpty else { return [] }
         let tokenizer = NLTokenizer(unit: unit)
         tokenizer.string = text
-        tokenizer.setLanguage(NLLanguage(rawValue: languageIdentifier))
+        if let languageIdentifier {
+            tokenizer.setLanguage(NLLanguage(rawValue: languageIdentifier))
+        }
         var starts: [String.Index] = []
         tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { range, _ in
             guard !Task.isCancelled else { return false }

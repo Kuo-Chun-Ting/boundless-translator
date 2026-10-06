@@ -29,12 +29,13 @@ struct TranslationWindowLayout {
         status: TranslationStatus,
         partialOutput: TranslationOutput? = nil,
         sourceAccessoryHeight: CGFloat = 0,
+        targetStatusHeight: CGFloat = 0,
         localization: AppLocalization
     ) -> TranslationWindowMetrics {
         let idealContentHeight = max(
             measuredHeight(for: sourceText) + sourceAccessoryHeight,
             max(
-                resultHeight(for: status, localization: localization),
+                resultHeight(for: status, measuredStatusHeight: targetStatusHeight, localization: localization),
                 partialOutput.map { measuredHeight(for: $0.translatedText) } ?? 0
             )
         )
@@ -67,6 +68,7 @@ struct TranslationWindowLayout {
 
     private func resultHeight(
         for status: TranslationStatus,
+        measuredStatusHeight: CGFloat,
         localization: AppLocalization
     ) -> CGFloat {
         switch status {
@@ -77,7 +79,9 @@ struct TranslationWindowLayout {
         case .translated(let output):
             measuredHeight(for: output.translatedText)
         case .failed(let failure):
-            measuredHeight(for: failure.message(localization: localization)) + 52
+            measuredStatusHeight > 0
+                ? measuredStatusHeight
+                : measuredHeight(for: failure.message(localization: localization)) + 52
         }
     }
 

@@ -14,12 +14,12 @@ func test_localizedMessage_when_interfaceLanguageChanges_then_updatesErrorMessag
         preferredLanguageIdentifiers: { ["en"] }
     )
     let view = SelectionErrorView(
-        message: .translationLanguagesUnavailable,
+        message: .screenshot(.captureFailed),
         interfaceLanguageSettings: interfaceLanguageSettings
     )
     #expect(
         view.localizedMessage
-            == "No translation languages are available. Check your macOS language settings and try again."
+            == "Could not capture the screen region. Try again."
     )
 
     // Act
@@ -28,6 +28,6 @@ func test_localizedMessage_when_interfaceLanguageChanges_then_updatesErrorMessag
     // Assert
     #expect(
         view.localizedMessage
-            == "沒有可用的翻譯語言。請檢查 macOS 語言設定，然後再試一次。"
+            == "無法擷取螢幕範圍。請再試一次。"
     )
 }

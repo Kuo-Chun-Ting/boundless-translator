@@ -6,7 +6,6 @@
 "preferences.quit" = "יציאה";
 "preferences.translateFrom" = "תרגום מ־";
 "preferences.translateTo" = "תרגום ל־";
-"translation.from" = "מ";
 "translation.detectAutomatically" = "זיהוי אוטומטי";
 "shortcut.invalid" = "יש להשתמש ב-Command, ב-Option או ב-Control בשילוב עם מקש נוסף.";
 "shortcut.recording" = "הקלדת קיצור";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "הפסקת הקראת התרגום";
 "speech.readSource" = "הקראת טקסט המקור";
 "speech.readTranslation" = "הקראת התרגום";
-"sourceSelection.original" = "מקור";
-"sourceSelection.title" = "בחירת שפת המקור";
-"sourceSelection.message" = "לא ניתן היה לזהות בוודאות את שפת הטקסט הזה.";
-"common.cancel" = "ביטול";
-"common.translate" = "תרגום";
 "selectionError.title" = "לא ניתן לקרוא את הטקסט שנבחר";
 "selectionError.guidance" = "יש להשתמש בקיצור שהוגדר בהגדרות.";
-"translation.noLanguages" = "אין שפות תרגום זמינות. יש לבדוק את הגדרות השפה של macOS ולנסות שוב.";
 "translationFailure.unsupportedSource" = "שפת הטקסט שנבחר אינה נתמכת.";
 "translationFailure.unsupportedTarget" = "שפת היעד שנבחרה אינה נתמכת. יש לבחור שפה אחרת בהגדרות.";
 "translationFailure.unsupportedPair" = "ייתכן שהטקסט כבר בשפת היעד, או שצמד השפות הזה אינו נתמך.";

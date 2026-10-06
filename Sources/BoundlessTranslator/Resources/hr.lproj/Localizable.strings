@@ -6,7 +6,6 @@
 "preferences.quit" = "Zatvori";
 "preferences.translateFrom" = "Prevedi s";
 "preferences.translateTo" = "Prevedi na";
-"translation.from" = "Iz";
 "translation.detectAutomatically" = "Automatski prepoznaj";
 "shortcut.invalid" = "Upotrijebite Command, Option ili Control s drugom tipkom.";
 "shortcut.recording" = "Unesite prečac";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Zaustavi čitanje prijevoda";
 "speech.readSource" = "Pročitaj izvorni tekst naglas";
 "speech.readTranslation" = "Pročitaj prijevod naglas";
-"sourceSelection.original" = "Izvornik";
-"sourceSelection.title" = "Odaberi izvorni jezik";
-"sourceSelection.message" = "Jezik ovog teksta nije bilo moguće pouzdano prepoznati.";
-"common.cancel" = "Odustani";
-"common.translate" = "Prevedi";
 "selectionError.title" = "Odabrani tekst nije bilo moguće pročitati";
 "selectionError.guidance" = "Upotrijebite prečac postavljen u Postavkama.";
-"translation.noLanguages" = "Nema dostupnih jezika za prijevod. Provjerite jezične postavke sustava macOS i pokušajte ponovno.";
 "translationFailure.unsupportedSource" = "Jezik odabranog teksta nije podržan.";
 "translationFailure.unsupportedTarget" = "Odabrani ciljni jezik nije podržan. Odaberite drugi jezik u Postavkama.";
 "translationFailure.unsupportedPair" = "Tekst je možda već na ciljnom jeziku ili ovaj jezični par nije podržan.";

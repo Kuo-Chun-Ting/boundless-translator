@@ -35,21 +35,4 @@ struct LanguageOption: Identifiable {
             )
         ] + supportedOptions
     }
-
-    static func preferredIdentifier(
-        supportedLanguages: [Locale.Language],
-        suggestedIdentifier: String?
-    ) -> String? {
-        guard let suggestedIdentifier else {
-            return supportedLanguages.first?.minimalIdentifier
-        }
-
-        let suggestedLanguage = Locale.Language(identifier: suggestedIdentifier)
-        let isSupported = supportedLanguages.contains {
-            $0.maximalIdentifier == suggestedLanguage.maximalIdentifier
-        }
-        return isSupported
-            ? suggestedIdentifier
-            : supportedLanguages.first?.minimalIdentifier
-    }
 }

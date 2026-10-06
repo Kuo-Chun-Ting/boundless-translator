@@ -6,7 +6,6 @@
 "preferences.quit" = "Slut";
 "preferences.translateFrom" = "Oversæt fra";
 "preferences.translateTo" = "Oversæt til";
-"translation.from" = "Fra";
 "translation.detectAutomatically" = "Find automatisk";
 "shortcut.invalid" = "Brug Kommando, Alternativ eller Ctrl sammen med en anden tast.";
 "shortcut.recording" = "Indtast genvej";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Stop oplæsning af oversættelse";
 "speech.readSource" = "Læs kildetekst højt";
 "speech.readTranslation" = "Læs oversættelse højt";
-"sourceSelection.original" = "Original";
-"sourceSelection.title" = "Vælg kildesprog";
-"sourceSelection.message" = "Sproget i denne tekst kunne ikke identificeres med sikkerhed.";
-"common.cancel" = "Annuller";
-"common.translate" = "Oversæt";
 "selectionError.title" = "Den valgte tekst kunne ikke læses";
 "selectionError.guidance" = "Brug den genvej, der er indstillet i Indstillinger.";
-"translation.noLanguages" = "Der er ingen tilgængelige oversættelsessprog. Kontrollér sprogindstillingerne i macOS, og prøv igen.";
 "translationFailure.unsupportedSource" = "Sproget i den valgte tekst understøttes ikke.";
 "translationFailure.unsupportedTarget" = "Det valgte målsprog understøttes ikke. Vælg et andet sprog i Indstillinger.";
 "translationFailure.unsupportedPair" = "Teksten er muligvis allerede på målsproget, eller dette sprogpar understøttes ikke.";

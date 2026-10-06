@@ -6,7 +6,6 @@
 "preferences.quit" = "Kilépés";
 "preferences.translateFrom" = "Fordítás erről";
 "preferences.translateTo" = "Fordítás erre";
-"translation.from" = "Forrás";
 "translation.detectAutomatically" = "Automatikus felismerés";
 "shortcut.invalid" = "Használja a Command, Option vagy Control billentyűt egy másik billentyűvel együtt.";
 "shortcut.recording" = "Billentyűparancs megadása";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Fordítás felolvasásának leállítása";
 "speech.readSource" = "Forrásszöveg felolvasása";
 "speech.readTranslation" = "Fordítás felolvasása";
-"sourceSelection.original" = "Eredeti";
-"sourceSelection.title" = "Forrásnyelv kiválasztása";
-"sourceSelection.message" = "A szöveg nyelvét nem sikerült megbízhatóan azonosítani.";
-"common.cancel" = "Mégse";
-"common.translate" = "Fordítás";
 "selectionError.title" = "A kijelölt szöveg nem olvasható";
 "selectionError.guidance" = "Használja a Beállításokban megadott billentyűparancsot.";
-"translation.noLanguages" = "Nem érhető el fordítási nyelv. Ellenőrizze a macOS nyelvi beállításait, majd próbálja újra.";
 "translationFailure.unsupportedSource" = "A kijelölt szöveg nyelve nem támogatott.";
 "translationFailure.unsupportedTarget" = "A kiválasztott célnyelv nem támogatott. Válasszon másik nyelvet a Beállításokban.";
 "translationFailure.unsupportedPair" = "Lehet, hogy a szöveg már a célnyelven van, vagy ez a nyelvpár nem támogatott.";

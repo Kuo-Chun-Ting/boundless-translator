@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 @MainActor
@@ -20,8 +21,10 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     private var interactionPolicy = WindowInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationWindowKind.translation
     private var hasUserResized = false
+    private var isPresentingSheet = false
     private var mouseDownMonitor: MouseDownMonitor?
     private weak var translationCoordinator: TranslationCoordinator?
+    private var userCancellationObservation: AnyCancellable?
 
     init(
         applicationNotificationCenter: NotificationCenter = NSWorkspace.shared.notificationCenter,
@@ -60,8 +63,11 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         pointerLocation: CGPoint
     ) {
         translationCoordinator = coordinator
+        userCancellationObservation = coordinator.userDidCancel.sink { [weak self] in
+            self?.dismiss(nil)
+        }
         let initialSize = translationLayout.metrics(
-            sourceText: coordinator.request?.text ?? "",
+            sourceText: coordinator.sourceText,
             status: coordinator.status,
             localization: localization
         ).size
@@ -94,31 +100,6 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
                 interfaceLanguageSettings: interfaceLanguageSettings
             ),
             kind: .error,
-            pointerLocation: pointerLocation,
-            windowSize: auxiliaryWindowSize
-        )
-    }
-
-    func showSourceLanguageSelection(
-        selectedText: SelectedText,
-        selection: SourceLanguageSelection,
-        supportedLanguages: [Locale.Language],
-        pointerLocation: CGPoint,
-        onSelect: @escaping @MainActor (String) -> Void
-    ) {
-        endTranslation()
-        present(
-            SourceLanguageSelectionView(
-                selectedText: selectedText,
-                selection: selection,
-                supportedLanguages: supportedLanguages,
-                interfaceLanguageSettings: interfaceLanguageSettings,
-                onCancel: { [weak self] in
-                    self?.dismiss(nil)
-                },
-                onSelect: onSelect
-            ),
-            kind: .sourceLanguageSelection,
             pointerLocation: pointerLocation,
             windowSize: auxiliaryWindowSize
         )
@@ -198,7 +179,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
             window.standardWindowButton(.closeButton)?.isHidden = false
             window.standardWindowButton(.miniaturizeButton)?.isHidden = false
             window.standardWindowButton(.zoomButton)?.isHidden = false
-        case .error, .sourceLanguageSelection:
+        case .error:
             window.standardWindowButton(.closeButton)?.isHidden = false
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
@@ -229,14 +210,14 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
             object: nil
         )
         mouseDownMonitor = MouseDownMonitor { [weak self] screenLocation, eventWindow in
-            Task { @MainActor [weak self] in
+            MainActor.assumeIsolated {
                 self?.dismissForMouseDown(at: screenLocation, in: eventWindow)
             }
         }
     }
 
     func dismissForMouseDown(at screenLocation: CGPoint, in eventWindow: NSWindow? = nil) {
-        guard window.isVisible else {
+        guard window.isVisible, !isPresentingSheet else {
             return
         }
         guard eventWindow !== window else {
@@ -258,7 +239,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         guard processIdentifier != ProcessInfo.processInfo.processIdentifier else {
             return
         }
-        guard window.isVisible else {
+        guard window.isVisible, !isPresentingSheet else {
             return
         }
         guard interactionPolicy.shouldDismissForOutsideClick(
@@ -268,6 +249,14 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         }
 
         dismiss(nil)
+    }
+
+    func windowWillBeginSheet(_ notification: Notification) {
+        isPresentingSheet = true
+    }
+
+    func windowDidEndSheet(_ notification: Notification) {
+        isPresentingSheet = false
     }
 
     @objc
@@ -304,6 +293,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     }
 
     private func endTranslation() {
+        userCancellationObservation = nil
         translationCoordinator?.cancel()
         translationCoordinator = nil
         window.contentView = nil

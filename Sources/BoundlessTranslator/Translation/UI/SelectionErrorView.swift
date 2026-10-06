@@ -3,7 +3,6 @@ import SwiftUI
 enum SelectionErrorMessage {
     case screenshot(ScreenshotCaptureError)
     case globalShortcut(GlobalShortcutError)
-    case translationLanguagesUnavailable
     case verbatim(String)
 
     func localizedText(using localization: AppLocalization) -> String {
@@ -12,8 +11,6 @@ enum SelectionErrorMessage {
             error.message(localization: localization)
         case .globalShortcut(let error):
             error.message(localization: localization)
-        case .translationLanguagesUnavailable:
-            localization.string("translation.noLanguages")
         case .verbatim(let message):
             message
         }

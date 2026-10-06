@@ -6,9 +6,18 @@ final class TranslationCoordinator: ObservableObject {
     @Published private(set) var request: TranslationRequest?
     @Published private(set) var status: TranslationStatus = .idle
     @Published private(set) var partialOutput: TranslationOutput?
+    let userDidCancel = PassthroughSubject<Void, Never>()
     private let splitter: TranslationTextSplitter
     private let authorize: @MainActor () -> Bool
     private var activeTranslation: (id: UUID, cancel: @MainActor () -> Void)?
+
+    var sourceText: String { request?.text ?? "" }
+
+    var sourceLanguageIdentifier: String? {
+        partialOutput?.sourceLanguageIdentifier ?? request?.sourceLanguageIdentifier
+    }
+
+    var targetLanguageIdentifier: String? { request?.targetLanguageIdentifier }
 
     init(
         splitter: TranslationTextSplitter = TranslationTextSplitter(),
@@ -20,17 +29,15 @@ final class TranslationCoordinator: ObservableObject {
 
     func submit(
         _ selectedText: SelectedText,
-        sourceLanguageIdentifier: String,
-        targetLanguageIdentifier: String,
-        sourceLanguageWasDetected: Bool = false
+        sourceLanguageIdentifier: String?,
+        targetLanguageIdentifier: String
     ) {
         guard authorize() else { return }
         cancelActiveTranslation()
         request = TranslationRequest(
             text: selectedText.value,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: targetLanguageIdentifier,
-            sourceLanguageWasDetected: sourceLanguageWasDetected
+            targetLanguageIdentifier: targetLanguageIdentifier
         )
         partialOutput = nil
         status = .translating
@@ -56,7 +63,7 @@ final class TranslationCoordinator: ObservableObject {
 
         resubmit(
             request,
-            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
+            sourceLanguageIdentifier: sourceLanguageIdentifier,
             targetLanguageIdentifier: languageIdentifier,
             sourceLanguageWasDetected: request.sourceLanguageWasDetected
         )
@@ -69,7 +76,7 @@ final class TranslationCoordinator: ObservableObject {
 
         resubmit(
             request,
-            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
+            sourceLanguageIdentifier: sourceLanguageIdentifier,
             targetLanguageIdentifier: request.targetLanguageIdentifier,
             sourceLanguageWasDetected: request.sourceLanguageWasDetected
         )
@@ -100,6 +107,10 @@ final class TranslationCoordinator: ObservableObject {
             let output = try await translateChunks(request, using: runner)
             try ensureCurrent(request)
             status = .translated(output)
+        } catch CocoaError.userCancelled {
+            guard self.request?.id == request.id else { return }
+            status = .idle
+            userDidCancel.send()
         } catch is CancellationError {
             guard self.request?.id == request.id else { return }
             status = .idle
@@ -132,11 +143,7 @@ final class TranslationCoordinator: ObservableObject {
         }
         var translatedText = ""
         var separator = ""
-        var output = TranslationOutput(
-            translatedText: "",
-            sourceLanguageIdentifier: request.sourceLanguageIdentifier,
-            targetLanguageIdentifier: request.targetLanguageIdentifier
-        )
+        var output: TranslationOutput?
         for chunk in chunks {
             try ensureCurrent(request)
             let response = try await runner.translate(request.replacingText(with: chunk))
@@ -153,6 +160,7 @@ final class TranslationCoordinator: ObservableObject {
             )
             partialOutput = output
         }
+        guard let output else { throw TranslationFailure.nothingToTranslate }
         return output
     }
 
@@ -169,7 +177,7 @@ final class TranslationCoordinator: ObservableObject {
 
     private func resubmit(
         _ request: TranslationRequest,
-        sourceLanguageIdentifier: String,
+        sourceLanguageIdentifier: String?,
         targetLanguageIdentifier: String,
         sourceLanguageWasDetected: Bool
     ) {

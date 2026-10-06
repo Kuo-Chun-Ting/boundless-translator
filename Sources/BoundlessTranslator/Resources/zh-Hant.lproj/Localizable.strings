@@ -6,7 +6,6 @@
 "preferences.quit" = "結束";
 "preferences.translateFrom" = "翻譯來源";
 "preferences.translateTo" = "翻譯目標";
-"translation.from" = "來源";
 "translation.detectAutomatically" = "自動偵測";
 "shortcut.invalid" = "請搭配 Command、Option 或 Control 與其他按鍵使用。";
 "shortcut.recording" = "輸入快速鍵";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "停止朗讀譯文";
 "speech.readSource" = "朗讀原文";
 "speech.readTranslation" = "朗讀譯文";
-"sourceSelection.original" = "原文";
-"sourceSelection.title" = "選擇原文語言";
-"sourceSelection.message" = "無法確定辨識此文字的語言。";
-"common.cancel" = "取消";
-"common.translate" = "翻譯";
 "selectionError.title" = "無法讀取選取的文字";
 "selectionError.guidance" = "請使用偏好設定中設定的快速鍵。";
-"translation.noLanguages" = "沒有可用的翻譯語言。請檢查 macOS 語言設定，然後再試一次。";
 "translationFailure.unsupportedSource" = "不支援所選文字的語言。";
 "translationFailure.unsupportedTarget" = "不支援所選的目標語言。請在設定中選擇其他語言。";
 "translationFailure.unsupportedPair" = "文字可能已是目標語言，或不支援此語言組合。";

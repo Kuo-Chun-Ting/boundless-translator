@@ -6,9 +6,7 @@ enum AppleTranslationConfigurationFactory {
         for request: TranslationRequest
     ) -> TranslationSession.Configuration {
         TranslationSession.Configuration(
-            source: Locale.Language(
-                identifier: request.sourceLanguageIdentifier
-            ),
+            source: request.sourceLanguageIdentifier.map { Locale.Language(identifier: $0) },
             target: Locale.Language(
                 identifier: request.targetLanguageIdentifier
             )

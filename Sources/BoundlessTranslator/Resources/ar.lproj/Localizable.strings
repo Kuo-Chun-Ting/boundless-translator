@@ -6,7 +6,6 @@
 "preferences.quit" = "إنهاء";
 "preferences.translateFrom" = "الترجمة من";
 "preferences.translateTo" = "الترجمة إلى";
-"translation.from" = "من";
 "translation.detectAutomatically" = "اكتشاف تلقائي";
 "shortcut.invalid" = "استخدم Command أو Option أو Control مع مفتاح آخر.";
 "shortcut.recording" = "اكتب الاختصار";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "إيقاف قراءة الترجمة";
 "speech.readSource" = "قراءة النص المصدر بصوت عالٍ";
 "speech.readTranslation" = "قراءة الترجمة بصوت عالٍ";
-"sourceSelection.original" = "الأصل";
-"sourceSelection.title" = "اختيار لغة المصدر";
-"sourceSelection.message" = "تعذر تحديد لغة هذا النص بثقة.";
-"common.cancel" = "إلغاء";
-"common.translate" = "ترجمة";
 "selectionError.title" = "تعذر قراءة النص المحدد";
 "selectionError.guidance" = "استخدم الاختصار الذي تم إعداده في الإعدادات.";
-"translation.noLanguages" = "لا تتوفر لغات للترجمة. تحقق من إعدادات اللغة في macOS وحاول مرة أخرى.";
 "translationFailure.unsupportedSource" = "لغة النص المحدد غير مدعومة.";
 "translationFailure.unsupportedTarget" = "لغة الهدف المحددة غير مدعومة. اختر لغة أخرى في الإعدادات.";
 "translationFailure.unsupportedPair" = "قد يكون النص باللغة الهدف بالفعل، أو أن هذا الزوج غير مدعوم.";

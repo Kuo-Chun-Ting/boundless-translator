@@ -19,7 +19,7 @@ When the user presses the translation shortcut (default `Command-Shift-1`):
 
 The screenshot shortcut (default `Command-Shift-2`) starts native region capture directly, without checking selected text. Open the captured image in the image workspace for text selection; the user can then select text and press the translation shortcut. Only one current shortcut request runs at a time. Pause each global shortcut while it is being recorded.
 
-Read selected text through Accessibility in the background and run language detection and splitting outside the main actor. Do not show a separate loading window or cancellation button before the translation window opens. No selection stops quietly. Measure only enough text layout to determine the capped window height.
+Read selected text through Accessibility in the background and run splitting outside the main actor. Do not show a separate loading window or cancellation button before the translation window opens. No selection stops quietly. Measure only enough text layout to determine the capped window height.
 
 ## Translation
 
@@ -27,11 +27,12 @@ Read selected text through Accessibility in the background and run language dete
 - `TranslationTextSplitter` divides the entire source into contiguous chunks targeting 10,000 Swift characters (including whitespace). Preserve complete paragraphs where possible; split oversized paragraphs at Natural Language sentence boundaries. Keep an oversized single sentence intact. Concatenating the source chunks must reproduce the original exactly. There is no whole-document input limit.
 - `TranslationCoordinator` obtains chunks from the splitter and sends them sequentially to the existing `TranslationRunning` interface. The Apple runner translates one chunk. Publish each completed chunk immediately, retaining prior output; show a small native spinner before the localized Translating… text, vertically centered on the same row, below partial output until completion. Preserve source whitespace at joins without repeating it. Keep partial output on failure and show the existing failure/retry controls; retry starts the whole request again.
 - Cancel stops unsent chunks and invalidates all results for that request. A new request starts independently with a new session, without waiting for the old call or a cancellation acknowledgment. Apple may still finish the already-submitted chunk. Check cancellation and request identity before each call and before publishing its result. Translated speech remains available after the complete translation, as before.
-- Use the configured source language or detect it automatically.
-- Ask the user to choose a source language when detection confidence is insufficient.
+- Pass the configured source language to Apple Translation. In automatic mode, pass `source: nil`; do not run a separate language recognizer or confidence threshold.
+- Let Apple present its native source-language chooser when automatic detection needs clarification. Keep the original text in the translation window and show Apple’s returned source language after translation. Changing the target or retrying reuses the resolved source when available. When Apple reports user cancellation, close the current translation window without an error, even if pinned. Ordinary task cancellation and cancellation from a replaced request must not close a new translation. There is no Boundless source-language prompt or hint.
 - Use the configured target language by default.
 - Allow the source and target languages to change for the current translation without changing saved defaults.
 - Preserve the current request for retry after a recoverable failure.
+- Show translation failures in a top-aligned neutral rounded card in the result column, using the interface language and existing error messages. Match Hint headline/subheadline sizes; use primary title text and slightly subdued description text, without a logo or warning icon. Adapt the background to light/dark appearance. Only retryable failures include Try Again; long messages wrap and scroll within the window height limit.
 
 ## Translation Window
 
@@ -46,6 +47,7 @@ Read selected text through Accessibility in the background and run language dete
 - A localized dictionary hint sits below the original text in the source column. The original text appears first; closing the hint removes its reserved space. It uses the title “Dictionary” and the message “Select a word or phrase”. Both hints require an icon, title, and message. `LookupTip` and `ScreenshotTip` define their own titles and messages; their presenters pass that content to the shared `HintView`. Both use the same transparent sprite artwork, without an App icon background in either appearance; the Lookup action button keeps its book icon. Both hints use the same inline layout and adaptive system window background. Wide rows place dismissal controls beside the description; narrow rows wrap them below it. They reserve their own space rather than floating over selectable content. Each hint has an unchecked “Don’t show again” checkbox and a close button. Checking the box leaves the hint open; closing with the box checked permanently invalidates that hint in TipKit. Closing without the check hides it for the current presentation only. Dismissal records are independent. Localized text wraps, and the translation window includes the hint height while retaining its maximum height.
 - Position the window on the screen containing the pointer.
 - Close an unpinned translation when the user clicks outside it, activates another app, or presses Escape.
+- Suspend outside-click and app-activation dismissal between the translation window’s sheet-begin and sheet-end delegate callbacks. Ignore clicks received during that interval immediately. Restore normal dismissal and pin behavior when the sheet ends; translation or download activity alone does not suspend dismissal. Leave explicit close actions unchanged.
 - Native window-border resizing belongs to the translation window and must not dismiss its content. The dictionary hint fills the source column as the window is resized.
 - Keep a pinned translation visible until the user closes or unpins it.
 - Dismissing a translation window clears its request and removes its translation task host. On macOS 26 or later, also call `TranslationSession.cancel()` while the session is active; macOS 15 relies on task-host removal. Starting a replacement request also cancels the active session. Cancellation is not displayed as a translation failure, and late results cannot update a cancelled or replaced request. Apple does not guarantee immediate termination of translation work.
@@ -118,7 +120,6 @@ Read selected text through Accessibility in the background and run language dete
 - `Translation` owns requests, state, failures, and the supported-language catalog. Its subdirectories group the complete translation feature:
   - `UI` owns translation-window layout, lifecycle, dismissal, pinning, and language controls.
   - `Engines` defines the runner contract and the engine composition value. `Engines/Apple` owns Apple configuration, session hosting, language availability, execution, and error conversion.
-  - `LanguageDetection` resolves automatic source-language detection and confirmation.
   - `Speech` owns language support and source or target playback state.
   - `Lookup` owns dictionary selection and Lookup presentation.
 - Application selects the engine and supplies its language loader to the catalog and its task host to the translation window. The window recreates the task host for each request, including retries and language changes.

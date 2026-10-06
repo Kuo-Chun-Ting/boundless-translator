@@ -86,3 +86,16 @@ func test_translate_when_operationIsCancelled_then_preservesCancellation() async
 private func makeAppleRunnerRequest() -> TranslationRequest {
     TranslationRequest(text: "Hello", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
 }
+
+@Test @MainActor
+func test_translate_when_nativeLanguageChoiceIsCancelled_then_preservesCancellation() async {
+    // Arrange
+    let stub_runner = AppleTranslationRunner(translateText: { _ in
+        throw CocoaError(.userCancelled)
+    })
+
+    // Act & Assert
+    await #expect(throws: CocoaError(.userCancelled)) {
+        try await stub_runner.translate(makeAppleRunnerRequest())
+    }
+}

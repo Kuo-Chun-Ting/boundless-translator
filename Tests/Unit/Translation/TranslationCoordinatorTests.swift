@@ -38,9 +38,8 @@ func test_updateSourceLanguage_when_requestExists_then_resubmitsWithExplicitSour
     let coordinator = TranslationCoordinator()
     coordinator.submit(
         try SelectedText("Hello"),
-        sourceLanguageIdentifier: "en",
-        targetLanguageIdentifier: "zh-Hant",
-        sourceLanguageWasDetected: true
+        sourceLanguageIdentifier: nil,
+        targetLanguageIdentifier: "zh-Hant"
     )
     let previousRequestID = coordinator.request?.id
 
@@ -57,15 +56,18 @@ func test_updateSourceLanguage_when_requestExists_then_resubmitsWithExplicitSour
 }
 
 @Test @MainActor
-func test_updateTargetLanguage_when_requestExists_then_preservesDetectedSource() throws {
+func test_updateTargetLanguage_when_appleResolvedSource_then_reusesSourceWithoutDetectingAgain() async throws {
     // Arrange
     let coordinator = TranslationCoordinator()
     coordinator.submit(
         try SelectedText("Hello"),
-        sourceLanguageIdentifier: "en",
-        targetLanguageIdentifier: "zh-Hant",
-        sourceLanguageWasDetected: true
+        sourceLanguageIdentifier: nil,
+        targetLanguageIdentifier: "zh-Hant"
     )
+    let stub_runner = ImmediateTranslationRunner(result: .success(TranslationOutput(
+        translatedText: "你好", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant"
+    )))
+    await coordinator.translate(try #require(coordinator.request), using: stub_runner)
     let previousRequestID = coordinator.request?.id
 
     // Act
@@ -86,9 +88,8 @@ func test_retry_when_requestExists_then_resubmitsSameTranslation() throws {
     let coordinator = TranslationCoordinator()
     coordinator.submit(
         try SelectedText("Hello"),
-        sourceLanguageIdentifier: "en",
-        targetLanguageIdentifier: "zh-Hant",
-        sourceLanguageWasDetected: true
+        sourceLanguageIdentifier: nil,
+        targetLanguageIdentifier: "zh-Hant"
     )
     let previousRequestID = coordinator.request?.id
 
@@ -98,7 +99,7 @@ func test_retry_when_requestExists_then_resubmitsSameTranslation() throws {
     // Assert
     #expect(coordinator.request?.id != previousRequestID)
     #expect(coordinator.request?.text == "Hello")
-    #expect(coordinator.request?.sourceLanguageIdentifier == "en")
+    #expect(coordinator.request?.sourceLanguageIdentifier == nil)
     #expect(coordinator.request?.targetLanguageIdentifier == "zh-Hant")
     #expect(coordinator.request?.sourceLanguageWasDetected == true)
     #expect(coordinator.status == .translating)
@@ -115,7 +116,7 @@ func test_translate_when_runner_succeeds_then_publishes_output() async throws {
     let coordinator = TranslationCoordinator()
     coordinator.submit(
         try SelectedText("Hello"),
-        sourceLanguageIdentifier: "en",
+        sourceLanguageIdentifier: nil,
         targetLanguageIdentifier: "zh-Hant"
     )
     let request = try #require(coordinator.request)
@@ -126,6 +127,7 @@ func test_translate_when_runner_succeeds_then_publishes_output() async throws {
 
     // Assert
     #expect(coordinator.status == .translated(output))
+    #expect(coordinator.sourceLanguageIdentifier == "en")
 }
 
 @Test @MainActor
@@ -337,13 +339,14 @@ func test_submit_when_previousTranslationFinishesLate_then_nextTranslationCanSti
     #expect(coordinator.status == .idle)
 }
 
-@Test @MainActor
-func test_translate_when_runnerIsCancelled_then_doesNotPublishFailure() async throws {
+@Test(arguments: [false, true]) @MainActor
+func test_translate_when_runnerIsCancelled_then_doesNotPublishFailure(byUser: Bool) async throws {
     // Arrange
     let coordinator = TranslationCoordinator()
     coordinator.submit(try SelectedText("Hello"), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
     let request = try #require(coordinator.request)
-    let stub_runner = ImmediateTranslationRunner(result: .failure(CancellationError()))
+    let error: any Error = byUser ? CocoaError(.userCancelled) : CancellationError()
+    let stub_runner = ImmediateTranslationRunner(result: .failure(error))
 
     // Act
     await coordinator.translate(request, using: stub_runner)

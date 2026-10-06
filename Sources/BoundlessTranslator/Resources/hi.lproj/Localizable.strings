@@ -6,7 +6,6 @@
 "preferences.quit" = "बाहर निकलें";
 "preferences.translateFrom" = "इससे अनुवाद करें";
 "preferences.translateTo" = "इसमें अनुवाद करें";
-"translation.from" = "से";
 "translation.detectAutomatically" = "अपने आप पहचानें";
 "shortcut.invalid" = "Command, Option या Control को किसी दूसरी कुंजी के साथ इस्तेमाल करें।";
 "shortcut.recording" = "शॉर्टकट टाइप करें";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "अनुवाद पढ़ना रोकें";
 "speech.readSource" = "स्रोत टेक्स्ट बोलकर पढ़ें";
 "speech.readTranslation" = "अनुवाद बोलकर पढ़ें";
-"sourceSelection.original" = "मूल";
-"sourceSelection.title" = "स्रोत भाषा चुनें";
-"sourceSelection.message" = "इस टेक्स्ट की भाषा की विश्वसनीय पहचान नहीं हो सकी।";
-"common.cancel" = "रद्द करें";
-"common.translate" = "अनुवाद करें";
 "selectionError.title" = "चुना गया टेक्स्ट पढ़ा नहीं जा सका";
 "selectionError.guidance" = "सेटिंग्ज़ में तय किया गया शॉर्टकट इस्तेमाल करें।";
-"translation.noLanguages" = "अनुवाद के लिए कोई भाषा उपलब्ध नहीं है। macOS की भाषा सेटिंग्ज़ जाँचें और फिर कोशिश करें।";
 "translationFailure.unsupportedSource" = "चुने गए टेक्स्ट की भाषा समर्थित नहीं है।";
 "translationFailure.unsupportedTarget" = "चुनी गई लक्ष्य भाषा समर्थित नहीं है। सेटिंग्ज़ में कोई दूसरी भाषा चुनें।";
 "translationFailure.unsupportedPair" = "हो सकता है कि टेक्स्ट पहले से लक्ष्य भाषा में हो या यह भाषा युग्म समर्थित न हो।";

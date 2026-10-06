@@ -6,7 +6,6 @@
 "preferences.quit" = "Thoát";
 "preferences.translateFrom" = "Dịch từ";
 "preferences.translateTo" = "Dịch sang";
-"translation.from" = "Từ";
 "translation.detectAutomatically" = "Tự động phát hiện";
 "shortcut.invalid" = "Sử dụng Command, Option hoặc Control cùng với một phím khác.";
 "shortcut.recording" = "Nhập phím tắt";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Dừng đọc bản dịch";
 "speech.readSource" = "Đọc to văn bản nguồn";
 "speech.readTranslation" = "Đọc to bản dịch";
-"sourceSelection.original" = "Bản gốc";
-"sourceSelection.title" = "Chọn ngôn ngữ nguồn";
-"sourceSelection.message" = "Không thể xác định chắc chắn ngôn ngữ của văn bản này.";
-"common.cancel" = "Hủy";
-"common.translate" = "Dịch";
 "selectionError.title" = "Không thể đọc văn bản đã chọn";
 "selectionError.guidance" = "Sử dụng phím tắt được đặt trong Cài đặt.";
-"translation.noLanguages" = "Không có ngôn ngữ dịch nào khả dụng. Hãy kiểm tra cài đặt ngôn ngữ macOS và thử lại.";
 "translationFailure.unsupportedSource" = "Ngôn ngữ của văn bản đã chọn không được hỗ trợ.";
 "translationFailure.unsupportedTarget" = "Ngôn ngữ đích đã chọn không được hỗ trợ. Chọn ngôn ngữ khác trong Cài đặt.";
 "translationFailure.unsupportedPair" = "Văn bản có thể đã ở ngôn ngữ đích hoặc cặp ngôn ngữ này không được hỗ trợ.";

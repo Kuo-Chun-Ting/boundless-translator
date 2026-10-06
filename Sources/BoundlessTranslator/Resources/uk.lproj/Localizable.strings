@@ -6,7 +6,6 @@
 "preferences.quit" = "Завершити";
 "preferences.translateFrom" = "Перекласти з";
 "preferences.translateTo" = "Перекласти на";
-"translation.from" = "З";
 "translation.detectAutomatically" = "Визначати автоматично";
 "shortcut.invalid" = "Використовуйте Command, Option або Control разом з іншою клавішею.";
 "shortcut.recording" = "Введіть скорочення";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Зупинити читання перекладу";
 "speech.readSource" = "Прочитати оригінал уголос";
 "speech.readTranslation" = "Прочитати переклад уголос";
-"sourceSelection.original" = "Оригінал";
-"sourceSelection.title" = "Вибрати мову оригіналу";
-"sourceSelection.message" = "Не вдалося впевнено визначити мову цього тексту.";
-"common.cancel" = "Скасувати";
-"common.translate" = "Перекласти";
 "selectionError.title" = "Не вдалося прочитати виділений текст";
 "selectionError.guidance" = "Скористайтеся скороченням, заданим у Параметрах.";
-"translation.noLanguages" = "Немає доступних мов перекладу. Перевірте мовні параметри macOS і повторіть спробу.";
 "translationFailure.unsupportedSource" = "Мова виділеного тексту не підтримується.";
 "translationFailure.unsupportedTarget" = "Вибрана цільова мова не підтримується. Виберіть іншу мову в Параметрах.";
 "translationFailure.unsupportedPair" = "Можливо, текст уже написано цільовою мовою або ця мовна пара не підтримується.";

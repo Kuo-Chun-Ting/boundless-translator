@@ -6,7 +6,6 @@
 "preferences.quit" = "Завершить";
 "preferences.translateFrom" = "Перевести с";
 "preferences.translateTo" = "Перевести на";
-"translation.from" = "С";
 "translation.detectAutomatically" = "Определять автоматически";
 "shortcut.invalid" = "Используйте Command, Option или Control вместе с другой клавишей.";
 "shortcut.recording" = "Введите сочетание";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Остановить чтение перевода";
 "speech.readSource" = "Прочитать исходный текст";
 "speech.readTranslation" = "Прочитать перевод";
-"sourceSelection.original" = "Оригинал";
-"sourceSelection.title" = "Выберите исходный язык";
-"sourceSelection.message" = "Не удалось достоверно определить язык этого текста.";
-"common.cancel" = "Отменить";
-"common.translate" = "Перевести";
 "selectionError.title" = "Не удалось прочитать выделенный текст";
 "selectionError.guidance" = "Используйте сочетание клавиш, заданное в Настройках.";
-"translation.noLanguages" = "Нет доступных языков перевода. Проверьте языковые настройки macOS и повторите попытку.";
 "translationFailure.unsupportedSource" = "Язык выделенного текста не поддерживается.";
 "translationFailure.unsupportedTarget" = "Выбранный целевой язык не поддерживается. Выберите другой язык в Настройках.";
 "translationFailure.unsupportedPair" = "Возможно, текст уже написан на целевом языке или эта языковая пара не поддерживается.";

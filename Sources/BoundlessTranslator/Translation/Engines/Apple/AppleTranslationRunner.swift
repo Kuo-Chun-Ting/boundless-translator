@@ -25,6 +25,8 @@ struct AppleTranslationRunner: TranslationRunning {
             return try await translateText(request.text)
         } catch is CancellationError {
             throw CancellationError()
+        } catch CocoaError.userCancelled {
+            throw CocoaError(.userCancelled)
         } catch {
             throw AppleTranslationErrorMapper.map(error)
         }

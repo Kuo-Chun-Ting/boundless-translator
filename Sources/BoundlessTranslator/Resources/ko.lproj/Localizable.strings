@@ -6,7 +6,6 @@
 "preferences.quit" = "종료";
 "preferences.translateFrom" = "번역 원문";
 "preferences.translateTo" = "번역 언어";
-"translation.from" = "출발어";
 "translation.detectAutomatically" = "자동 감지";
 "shortcut.invalid" = "Command, Option 또는 Control 키를 다른 키와 함께 사용하십시오.";
 "shortcut.recording" = "단축키 입력";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "번역문 읽기 중지";
 "speech.readSource" = "원문 소리 내어 읽기";
 "speech.readTranslation" = "번역문 소리 내어 읽기";
-"sourceSelection.original" = "원문";
-"sourceSelection.title" = "원문 언어 선택";
-"sourceSelection.message" = "이 텍스트의 언어를 확실하게 식별할 수 없습니다.";
-"common.cancel" = "취소";
-"common.translate" = "번역";
 "selectionError.title" = "선택한 텍스트를 읽을 수 없음";
 "selectionError.guidance" = "설정에서 지정한 단축키를 사용하십시오.";
-"translation.noLanguages" = "사용 가능한 번역 언어가 없습니다. macOS 언어 설정을 확인하고 다시 시도하십시오.";
 "translationFailure.unsupportedSource" = "선택한 텍스트의 언어는 지원되지 않습니다.";
 "translationFailure.unsupportedTarget" = "선택한 대상 언어는 지원되지 않습니다. 설정에서 다른 언어를 선택하십시오.";
 "translationFailure.unsupportedPair" = "텍스트가 이미 대상 언어로 되어 있거나 이 언어 조합이 지원되지 않을 수 있습니다.";

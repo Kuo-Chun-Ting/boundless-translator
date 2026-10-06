@@ -6,7 +6,6 @@
 "preferences.quit" = "終了";
 "preferences.translateFrom" = "翻訳元";
 "preferences.translateTo" = "翻訳先";
-"translation.from" = "翻訳元";
 "translation.detectAutomatically" = "自動検出";
 "shortcut.invalid" = "Command、Option、またはControlキーと別のキーを組み合わせてください。";
 "shortcut.recording" = "ショートカットを入力";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "訳文の読み上げを停止";
 "speech.readSource" = "原文を読み上げ";
 "speech.readTranslation" = "訳文を読み上げ";
-"sourceSelection.original" = "原文";
-"sourceSelection.title" = "原文の言語を選択";
-"sourceSelection.message" = "このテキストの言語を確実に判定できませんでした。";
-"common.cancel" = "キャンセル";
-"common.translate" = "翻訳";
 "selectionError.title" = "選択したテキストを読み取れませんでした";
 "selectionError.guidance" = "設定で指定したショートカットを使用してください。";
-"translation.noLanguages" = "利用できる翻訳言語がありません。macOSの言語設定を確認して、もう一度お試しください。";
 "translationFailure.unsupportedSource" = "選択したテキストの言語はサポートされていません。";
 "translationFailure.unsupportedTarget" = "選択した翻訳先の言語はサポートされていません。設定で別の言語を選択してください。";
 "translationFailure.unsupportedPair" = "テキストがすでに翻訳先の言語であるか、この言語の組み合わせがサポートされていない可能性があります。";

@@ -6,7 +6,6 @@
 "preferences.quit" = "Ukončiť";
 "preferences.translateFrom" = "Preložiť z";
 "preferences.translateTo" = "Preložiť do";
-"translation.from" = "Z";
 "translation.detectAutomatically" = "Rozpoznať automaticky";
 "shortcut.invalid" = "Použite kláves Command, Option alebo Control spolu s ďalším klávesom.";
 "shortcut.recording" = "Zadajte skratku";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Zastaviť čítanie prekladu";
 "speech.readSource" = "Prečítať zdrojový text nahlas";
 "speech.readTranslation" = "Prečítať preklad nahlas";
-"sourceSelection.original" = "Pôvodný";
-"sourceSelection.title" = "Vybrať zdrojový jazyk";
-"sourceSelection.message" = "Jazyk tohto textu sa nepodarilo spoľahlivo určiť.";
-"common.cancel" = "Zrušiť";
-"common.translate" = "Preložiť";
 "selectionError.title" = "Vybraný text sa nepodarilo prečítať";
 "selectionError.guidance" = "Použite skratku nastavenú v Nastaveniach.";
-"translation.noLanguages" = "Nie sú k dispozícii žiadne jazyky prekladu. Skontrolujte jazykové nastavenia macOS a skúste to znova.";
 "translationFailure.unsupportedSource" = "Jazyk vybraného textu nie je podporovaný.";
 "translationFailure.unsupportedTarget" = "Vybraný cieľový jazyk nie je podporovaný. Vyberte v Nastaveniach iný jazyk.";
 "translationFailure.unsupportedPair" = "Text už môže byť v cieľovom jazyku alebo táto jazyková dvojica nie je podporovaná.";

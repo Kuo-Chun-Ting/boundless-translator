@@ -6,7 +6,6 @@
 "preferences.quit" = "Avslutt";
 "preferences.translateFrom" = "Oversett fra";
 "preferences.translateTo" = "Oversett til";
-"translation.from" = "Fra";
 "translation.detectAutomatically" = "Finn automatisk";
 "shortcut.invalid" = "Bruk Kommando, Tilvalg eller Kontroll sammen med en annen tast.";
 "shortcut.recording" = "Skriv inn snarvei";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Stopp opplesing av oversettelse";
 "speech.readSource" = "Les kildetekst høyt";
 "speech.readTranslation" = "Les oversettelse høyt";
-"sourceSelection.original" = "Original";
-"sourceSelection.title" = "Velg kildespråk";
-"sourceSelection.message" = "Språket i denne teksten kunne ikke identifiseres sikkert.";
-"common.cancel" = "Avbryt";
-"common.translate" = "Oversett";
 "selectionError.title" = "Kunne ikke lese den markerte teksten";
 "selectionError.guidance" = "Bruk snarveien som er angitt i Innstillinger.";
-"translation.noLanguages" = "Ingen oversettelsesspråk er tilgjengelige. Kontroller språkinnstillingene i macOS og prøv igjen.";
 "translationFailure.unsupportedSource" = "Språket i den markerte teksten støttes ikke.";
 "translationFailure.unsupportedTarget" = "Det valgte målspråket støttes ikke. Velg et annet språk i Innstillinger.";
 "translationFailure.unsupportedPair" = "Teksten kan allerede være på målspråket, eller dette språkparet støttes ikke.";

@@ -3,10 +3,10 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_translate_when_multipleChunks_then_publishesEachResultBeforeSendingTheNext() async throws {
+func test_translate_when_autoDetectingMultipleChunks_then_publishesEachResultBeforeSendingTheNext() async throws {
     // Arrange
     let coordinator = TranslationCoordinator(splitter: TranslationTextSplitter(targetCharacters: 7))
-    coordinator.submit(try SelectedText("First.\nSecond."), sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    coordinator.submit(try SelectedText("First.\nSecond."), sourceLanguageIdentifier: nil, targetLanguageIdentifier: "zh-Hant")
     let request = try #require(coordinator.request)
     let mock_runner = ChunkRunnerMock()
     let task = Task { await coordinator.translate(request, using: mock_runner) }
@@ -19,6 +19,8 @@ func test_translate_when_multipleChunks_then_publishesEachResultBeforeSendingThe
     // Assert: partial output is visible while the second call is outstanding.
     #expect(coordinator.partialOutput?.translatedText == "第一句。")
     #expect(coordinator.status == .translating)
+    #expect(coordinator.sourceLanguageIdentifier == "en")
+    #expect(mock_runner.requests.allSatisfy { $0.sourceLanguageIdentifier == nil })
     #expect(mock_runner.requests.map(\.text) == ["First.\n", "Second."])
 
     // Act

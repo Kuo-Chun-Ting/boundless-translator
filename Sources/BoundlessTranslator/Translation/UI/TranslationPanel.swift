@@ -69,7 +69,7 @@ final class TranslationWindow: NSWindow {
                 .fullSizeContentView,
             ]
             toolbar?.isVisible = true
-        case .error, .sourceLanguageSelection:
+        case .error:
             styleMask = [
                 .titled,
                 .closable,

@@ -6,7 +6,6 @@
 "preferences.quit" = "Τερματισμός";
 "preferences.translateFrom" = "Μετάφραση από";
 "preferences.translateTo" = "Μετάφραση σε";
-"translation.from" = "Από";
 "translation.detectAutomatically" = "Αυτόματος εντοπισμός";
 "shortcut.invalid" = "Χρησιμοποιήστε Command, Option ή Control μαζί με ένα άλλο πλήκτρο.";
 "shortcut.recording" = "Πληκτρολογήστε συντόμευση";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Διακοπή ανάγνωσης μετάφρασης";
 "speech.readSource" = "Εκφώνηση αρχικού κειμένου";
 "speech.readTranslation" = "Εκφώνηση μετάφρασης";
-"sourceSelection.original" = "Πρωτότυπο";
-"sourceSelection.title" = "Επιλογή γλώσσας προέλευσης";
-"sourceSelection.message" = "Δεν ήταν δυνατή η αξιόπιστη αναγνώριση της γλώσσας αυτού του κειμένου.";
-"common.cancel" = "Ακύρωση";
-"common.translate" = "Μετάφραση";
 "selectionError.title" = "Δεν ήταν δυνατή η ανάγνωση του επιλεγμένου κειμένου";
 "selectionError.guidance" = "Χρησιμοποιήστε τη συντόμευση που έχει οριστεί στις Ρυθμίσεις.";
-"translation.noLanguages" = "Δεν υπάρχουν διαθέσιμες γλώσσες μετάφρασης. Ελέγξτε τις ρυθμίσεις γλώσσας του macOS και δοκιμάστε ξανά.";
 "translationFailure.unsupportedSource" = "Η γλώσσα του επιλεγμένου κειμένου δεν υποστηρίζεται.";
 "translationFailure.unsupportedTarget" = "Η επιλεγμένη γλώσσα προορισμού δεν υποστηρίζεται. Επιλέξτε άλλη γλώσσα στις Ρυθμίσεις.";
 "translationFailure.unsupportedPair" = "Το κείμενο μπορεί να είναι ήδη στη γλώσσα προορισμού ή αυτός ο συνδυασμός γλωσσών να μην υποστηρίζεται.";

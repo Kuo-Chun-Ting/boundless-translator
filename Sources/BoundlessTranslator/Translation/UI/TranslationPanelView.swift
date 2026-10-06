@@ -8,6 +8,7 @@ struct TranslationWindowView: View {
     @State private var isShowingLookupTip = false
     @State private var lookupTipClosed = false
     @State private var lookupTipHeight: CGFloat = 0
+    @State private var failureHeight: CGFloat = 0
 
     let supportedLanguages: [Locale.Language]
     let engine: TranslationEngine
@@ -134,13 +135,7 @@ struct TranslationWindowView: View {
             guard let request = coordinator.request else {
                 return ("", "")
             }
-            let languageIdentifier: String
-            if case .translated(let output) = coordinator.status {
-                languageIdentifier = output.sourceLanguageIdentifier
-            } else {
-                languageIdentifier = request.sourceLanguageIdentifier
-            }
-            return (request.text, languageIdentifier)
+            return (request.text, coordinator.sourceLanguageIdentifier ?? "")
         case .target:
             guard case .translated(let output) = coordinator.status else {
                 return ("", "")
@@ -152,7 +147,7 @@ struct TranslationWindowView: View {
     private var sourceContent: some View {
         VStack(spacing: 0) {
             SelectableSourceTextView(
-                text: coordinator.request?.text ?? "",
+                text: coordinator.sourceText,
                 localization: localization
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -219,31 +214,25 @@ struct TranslationWindowView: View {
         case .translated:
             EmptyView()
         case .failed(let failure):
-            VStack(alignment: .leading, spacing: 8) {
-                Label(
-                    localization.string("panel.failureTitle"),
-                    systemImage: "exclamationmark.triangle"
+            ScrollView {
+                TranslationFailureView(
+                    failure: failure, localization: localization, onRetry: coordinator.retry
                 )
-                    .foregroundStyle(.red)
-                Text(verbatim: failure.message(localization: localization))
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-                if failure.canRetry {
-                    Button(localization.string("panel.tryAgain")) {
-                        coordinator.retry()
-                    }
-                    .appControlStyle()
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
+                    failureHeight = $0
                 }
             }
+            .frame(maxHeight: failureHeight > 0 ? failureHeight : nil, alignment: .topLeading)
         }
     }
 
     private var metrics: TranslationWindowMetrics {
         layout.metrics(
-            sourceText: coordinator.request?.text ?? "",
+            sourceText: coordinator.sourceText,
             status: coordinator.status,
             partialOutput: coordinator.partialOutput,
             sourceAccessoryHeight: lookupTipHeight,
+            targetStatusHeight: failureHeight,
             localization: localization
         )
     }

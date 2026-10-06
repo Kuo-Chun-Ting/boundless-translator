@@ -1,7 +1,6 @@
 enum TranslationWindowKind {
     case translation
     case error
-    case sourceLanguageSelection
 }
 
 struct WindowInteractionPolicy {
@@ -13,8 +12,6 @@ struct WindowInteractionPolicy {
             !isPinned
         case .error:
             true
-        case .sourceLanguageSelection:
-            false
         }
     }
 
@@ -22,7 +19,7 @@ struct WindowInteractionPolicy {
         switch kind {
         case .translation:
             !isPinned
-        case .error, .sourceLanguageSelection:
+        case .error:
             true
         }
     }

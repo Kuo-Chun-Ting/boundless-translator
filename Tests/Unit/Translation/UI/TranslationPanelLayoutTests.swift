@@ -194,3 +194,27 @@ func test_sourceDescription_when_languageWasExplicit_then_usesLanguageNameOnly()
 }
 
 private let englishLocalization = AppLocalization(languageIdentifier: "en")
+
+@Test
+func test_metrics_when_errorCardIsMeasured_then_fitsItWithinTheWindowHeightLimit() {
+    // Arrange
+    let layout = TranslationWindowLayout()
+
+    // Act
+    let short = layout.metrics(
+        sourceText: "test", status: .failed(.unexpected("Unavailable")),
+        targetStatusHeight: 180, localization: englishLocalization)
+    let long = layout.metrics(
+        sourceText: "test", status: .failed(.unexpected("Unavailable")),
+        targetStatusHeight: 600, localization: englishLocalization)
+    let translated = layout.metrics(
+        sourceText: "test", status: .translated(TranslationOutput(
+            translatedText: "測試", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")),
+        targetStatusHeight: 600, localization: englishLocalization)
+
+    // Assert
+    #expect(short.contentHeight == 180)
+    #expect(long.size.height == 440)
+    #expect(long.idealContentHeight == 600)
+    #expect(translated.size.height == 211)
+}

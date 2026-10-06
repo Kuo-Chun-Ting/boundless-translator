@@ -38,7 +38,6 @@ final class AppController {
     private let selectedTextReader: any SelectedTextReading
     private let screenshotCapture: any ScreenshotCapturing
     private let imageViewerController: any ImageViewerControlling
-    private let sourceLanguageResolver: SourceLanguageResolver
     private var shortcutTask: Task<Void, Never>?
     private var isCapturingScreenshot = false
 
@@ -56,10 +55,6 @@ final class AppController {
         screenshotCapture: any ScreenshotCapturing = SystemScreenshotCapture(),
         imageViewerController: (any ImageViewerControlling)? = nil,
         interfaceLanguageSettings: InterfaceLanguageSettings = InterfaceLanguageSettings(),
-        sourceLanguageResolver: SourceLanguageResolver = SourceLanguageResolver(
-            minimumConfidence: 0.60,
-            languageIdentifier: NaturalLanguageIdentifier()
-        ),
         subscriptionAccess: SubscriptionAccessController? = nil,
         onSubscriptionRequired: (@MainActor () -> Void)? = nil
     ) {
@@ -82,7 +77,6 @@ final class AppController {
             ),
             fallbackReader: selectedTextReader
         )
-        self.sourceLanguageResolver = sourceLanguageResolver
         if let viewer = resolvedImageViewerController as? ImageViewerWindowController {
             viewer.translationShortcutName = { [weak self] in
                 self?.translationShortcutController.definition.displayName ?? ""
@@ -116,21 +110,21 @@ final class AppController {
 
     func translate(
         _ selectedText: SelectedText,
-        sourceLanguageIdentifier: String,
-        sourceLanguageWasDetected: Bool = false
+        sourceLanguageIdentifier: String?
     ) async {
         await subscriptionAccess.loadIfNeeded()
         guard !Task.isCancelled else { return }
         guard authorizeFeature() else { return }
+        let supportedLanguages = await supportedLanguageCatalog.load()
+        guard !Task.isCancelled else { return }
         coordinator.submit(
             selectedText,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: settings.targetLanguageIdentifier,
-            sourceLanguageWasDetected: sourceLanguageWasDetected
+            targetLanguageIdentifier: settings.targetLanguageIdentifier
         )
         windowController.show(
             coordinator: coordinator,
-            supportedLanguages: supportedLanguageCatalog.languages,
+            supportedLanguages: supportedLanguages,
             pointerLocation: NSEvent.mouseLocation
         )
     }
@@ -148,7 +142,7 @@ final class AppController {
             do {
                 let selectedText = try await selectedTextReader.readSelectedText()
                 try Task.checkCancellation()
-                await resolveSourceLanguage(for: selectedText)
+                await translate(selectedText, sourceLanguageIdentifier: settings.sourceLanguageIdentifier)
             } catch is CancellationError {
                 return
             } catch {
@@ -227,51 +221,4 @@ final class AppController {
             pointerLocation: NSEvent.mouseLocation
         )
     }
-
-    private func resolveSourceLanguage(for selectedText: SelectedText) async {
-        let supportedLanguages = await supportedLanguageCatalog.load()
-        guard !Task.isCancelled else { return }
-        let configuredSource = settings.sourceLanguageIdentifier
-        let detection = Task.detached { [sourceLanguageResolver] in
-            sourceLanguageResolver.resolve(text: selectedText.value, configuredSource: configuredSource)
-        }
-        let resolution = await withTaskCancellationHandler {
-            await detection.value
-        } onCancel: {
-            detection.cancel()
-        }
-        guard !Task.isCancelled else { return }
-
-        switch resolution {
-        case .resolved(let languageIdentifier):
-            await translate(
-                selectedText,
-                sourceLanguageIdentifier: languageIdentifier,
-                sourceLanguageWasDetected: settings.sourceLanguageIdentifier == nil
-            )
-        case .needsSelection(let suggestedLanguageIdentifier):
-            guard let selection = SourceLanguageSelection.make(
-                supportedLanguages: supportedLanguages,
-                suggestedLanguageIdentifier: suggestedLanguageIdentifier
-            ) else {
-                showError(.translationLanguagesUnavailable)
-                return
-            }
-
-            windowController.showSourceLanguageSelection(
-                selectedText: selectedText,
-                selection: selection,
-                supportedLanguages: supportedLanguages,
-                pointerLocation: NSEvent.mouseLocation
-            ) { [weak self] languageIdentifier in
-                Task { [weak self] in
-                    await self?.translate(
-                        selectedText,
-                        sourceLanguageIdentifier: languageIdentifier
-                    )
-                }
-            }
-        }
-    }
-
 }

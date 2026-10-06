@@ -6,7 +6,6 @@
 "preferences.quit" = "Çık";
 "preferences.translateFrom" = "Şu dilden çevir";
 "preferences.translateTo" = "Şu dile çevir";
-"translation.from" = "Kaynak";
 "translation.detectAutomatically" = "Otomatik Algıla";
 "shortcut.invalid" = "Command, Option veya Control tuşunu başka bir tuşla birlikte kullanın.";
 "shortcut.recording" = "Kestirmeyi Girin";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Çeviriyi Okumayı Durdur";
 "speech.readSource" = "Kaynak Metni Sesli Oku";
 "speech.readTranslation" = "Çeviriyi Sesli Oku";
-"sourceSelection.original" = "Özgün";
-"sourceSelection.title" = "Kaynak Dili Seç";
-"sourceSelection.message" = "Bu metnin dili güvenilir biçimde belirlenemedi.";
-"common.cancel" = "Vazgeç";
-"common.translate" = "Çevir";
 "selectionError.title" = "Seçilen metin okunamadı";
 "selectionError.guidance" = "Ayarlar’da belirlenen kestirmeyi kullanın.";
-"translation.noLanguages" = "Kullanılabilir çeviri dili yok. macOS dil ayarlarını denetleyip yeniden deneyin.";
 "translationFailure.unsupportedSource" = "Seçilen metnin dili desteklenmiyor.";
 "translationFailure.unsupportedTarget" = "Seçilen hedef dil desteklenmiyor. Ayarlar’dan başka bir dil seçin.";
 "translationFailure.unsupportedPair" = "Metin zaten hedef dilde olabilir veya bu dil çifti desteklenmiyor olabilir.";

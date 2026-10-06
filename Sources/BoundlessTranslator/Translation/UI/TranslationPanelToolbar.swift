@@ -30,6 +30,9 @@ struct TranslationLanguageMenu: View {
 
     private var languagePicker: some View {
         Picker(accessibilityLabel, selection: selection) {
+            if role == .source && selectedIdentifier == nil {
+                Text(verbatim: localization.string("translation.detectAutomatically")).tag("")
+            }
             ForEach(options) { option in
                 Text(verbatim: optionTitle(option))
                     .tag(option.id)
@@ -54,7 +57,7 @@ struct TranslationLanguageMenu: View {
     }
 
     private func select(_ identifier: String) {
-        guard identifier != selectedIdentifier else {
+        guard !identifier.isEmpty, identifier != selectedIdentifier else {
             return
         }
 
@@ -84,7 +87,7 @@ struct TranslationLanguageMenu: View {
 
     private var options: [LanguageOption] {
         guard let selectedIdentifier else {
-            return []
+            return supportedLanguages.map { LanguageOption(id: $0.minimalIdentifier, language: $0) }
         }
 
         return LanguageOption.make(
@@ -96,13 +99,16 @@ struct TranslationLanguageMenu: View {
     private var selectedIdentifier: String? {
         switch role {
         case .source:
-            request?.sourceLanguageIdentifier
+            coordinator.sourceLanguageIdentifier
         case .target:
-            request?.targetLanguageIdentifier
+            coordinator.targetLanguageIdentifier
         }
     }
 
     private var title: String {
+        if role == .source && selectedIdentifier == nil {
+            return localization.string("translation.detectAutomatically")
+        }
         guard let selectedIdentifier else {
             return localization.string(
                 role == .source
@@ -131,19 +137,17 @@ struct TranslationLanguageMenu: View {
     }
 
     private var accessibilityValue: String {
-        guard let request else {
-            return title
-        }
+        guard let selectedIdentifier else { return title }
 
         switch role {
         case .source:
             return formatter.sourceDescription(
-                languageIdentifier: request.sourceLanguageIdentifier,
-                wasDetected: request.sourceLanguageWasDetected
+                languageIdentifier: selectedIdentifier,
+                wasDetected: request?.sourceLanguageWasDetected == true
             )
         case .target:
             return formatter.languageName(
-                for: request.targetLanguageIdentifier
+                for: selectedIdentifier
             )
         }
     }

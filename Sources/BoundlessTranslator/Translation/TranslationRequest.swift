@@ -3,14 +3,14 @@ import Foundation
 struct TranslationRequest: Equatable, Identifiable, Sendable {
     let id: UUID
     let text: String
-    let sourceLanguageIdentifier: String
+    let sourceLanguageIdentifier: String?
     let targetLanguageIdentifier: String
     let sourceLanguageWasDetected: Bool
 
     init(
         id: UUID = UUID(),
         text: String,
-        sourceLanguageIdentifier: String,
+        sourceLanguageIdentifier: String?,
         targetLanguageIdentifier: String,
         sourceLanguageWasDetected: Bool = false
     ) {
@@ -18,7 +18,7 @@ struct TranslationRequest: Equatable, Identifiable, Sendable {
         self.text = text
         self.sourceLanguageIdentifier = sourceLanguageIdentifier
         self.targetLanguageIdentifier = targetLanguageIdentifier
-        self.sourceLanguageWasDetected = sourceLanguageWasDetected
+        self.sourceLanguageWasDetected = sourceLanguageIdentifier == nil || sourceLanguageWasDetected
     }
 }
 

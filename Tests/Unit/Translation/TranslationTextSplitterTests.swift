@@ -2,6 +2,20 @@ import Foundation
 import Testing
 @testable import BoundlessTranslator
 
+@Test(arguments: ["Hello world. Another sentence. Last one.", "今日は晴れです。明日は雨です。", "今天天氣很好。明天會下雨。"])
+func test_split_when_sourceIsAutomatic_then_preservesTextAndSentenceBoundaries(text: String) throws {
+    // Arrange
+    let splitter = TranslationTextSplitter(targetCharacters: 1)
+
+    // Act
+    let chunks = try splitter.split(text, languageIdentifier: nil)
+
+    // Assert
+    #expect(chunks.count > 1)
+    #expect(chunks.joined() == text)
+    #expect(chunks.allSatisfy { $0.trimmingCharacters(in: .whitespacesAndNewlines).last.map { ".。".contains($0) } == true })
+}
+
 @Test
 func test_split_when_paragraphsFitTarget_then_packsWholeParagraphsWithoutLosingWhitespace() throws {
     // Arrange

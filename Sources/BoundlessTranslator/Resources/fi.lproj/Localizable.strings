@@ -6,7 +6,6 @@
 "preferences.quit" = "Lopeta";
 "preferences.translateFrom" = "Käännä kielestä";
 "preferences.translateTo" = "Käännä kielelle";
-"translation.from" = "Lähde";
 "translation.detectAutomatically" = "Tunnista automaattisesti";
 "shortcut.invalid" = "Käytä Komento-, Optio- tai Ctrl-näppäintä yhdessä toisen näppäimen kanssa.";
 "shortcut.recording" = "Syötä oikotie";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Lopeta käännöksen lukeminen";
 "speech.readSource" = "Lue lähdeteksti ääneen";
 "speech.readTranslation" = "Lue käännös ääneen";
-"sourceSelection.original" = "Alkuperäinen";
-"sourceSelection.title" = "Valitse lähdekieli";
-"sourceSelection.message" = "Tämän tekstin kieltä ei voitu tunnistaa varmasti.";
-"common.cancel" = "Peruuta";
-"common.translate" = "Käännä";
 "selectionError.title" = "Valittua tekstiä ei voitu lukea";
 "selectionError.guidance" = "Käytä Asetuksissa määritettyä oikotietä.";
-"translation.noLanguages" = "Käännöskieliä ei ole käytettävissä. Tarkista macOS:n kieliasetukset ja yritä uudelleen.";
 "translationFailure.unsupportedSource" = "Valitun tekstin kieltä ei tueta.";
 "translationFailure.unsupportedTarget" = "Valittua kohdekieltä ei tueta. Valitse toinen kieli Asetuksissa.";
 "translationFailure.unsupportedPair" = "Teksti saattaa olla jo kohdekielellä tai tätä kieliparia ei tueta.";

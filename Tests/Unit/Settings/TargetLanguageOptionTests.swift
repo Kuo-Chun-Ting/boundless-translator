@@ -37,21 +37,3 @@ func test_make_when_selected_language_is_unsupported_then_includes_selected_lang
     #expect(options.first?.id == "ja")
     #expect(options.first?.language.maximalIdentifier == "ja-Jpan-JP")
 }
-
-@Test
-func test_preferredIdentifier_when_suggestion_matches_supported_language_then_returns_suggestion() {
-    // Arrange
-    let supportedLanguages = [
-        Locale.Language(identifier: "en"),
-        Locale.Language(identifier: "zh-TW")
-    ]
-
-    // Act
-    let identifier = LanguageOption.preferredIdentifier(
-        supportedLanguages: supportedLanguages,
-        suggestedIdentifier: "zh-Hant"
-    )
-
-    // Assert
-    #expect(identifier == "zh-Hant")
-}

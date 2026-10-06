@@ -6,7 +6,6 @@
 "preferences.quit" = "Sair";
 "preferences.translateFrom" = "Traduzir de";
 "preferences.translateTo" = "Traduzir para";
-"translation.from" = "De";
 "translation.detectAutomatically" = "Detectar Automaticamente";
 "shortcut.invalid" = "Use Command, Option ou Control junto com outra tecla.";
 "shortcut.recording" = "Digitar Atalho";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Parar de Ler a Tradução";
 "speech.readSource" = "Ler o Texto Original em Voz Alta";
 "speech.readTranslation" = "Ler a Tradução em Voz Alta";
-"sourceSelection.original" = "Original";
-"sourceSelection.title" = "Escolher Idioma de Origem";
-"sourceSelection.message" = "Não foi possível identificar com segurança o idioma deste texto.";
-"common.cancel" = "Cancelar";
-"common.translate" = "Traduzir";
 "selectionError.title" = "Não foi possível ler o texto selecionado";
 "selectionError.guidance" = "Use o atalho configurado nos Ajustes.";
-"translation.noLanguages" = "Nenhum idioma de tradução está disponível. Verifique os ajustes de idioma do macOS e tente novamente.";
 "translationFailure.unsupportedSource" = "O idioma do texto selecionado não é compatível.";
 "translationFailure.unsupportedTarget" = "O idioma de destino selecionado não é compatível. Escolha outro idioma nos Ajustes.";
 "translationFailure.unsupportedPair" = "Talvez o texto já esteja no idioma de destino ou este par de idiomas não seja compatível.";

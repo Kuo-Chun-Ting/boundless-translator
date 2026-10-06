@@ -91,6 +91,72 @@ func test_dismissForApplicationActivation_when_boundlessTranslatorActivates_then
     fixture.window.orderOut(nil)
 }
 
+@Test(arguments: ["outsideClick", "otherApp"]) @MainActor
+func test_automaticDismissal_when_attachedSheetIsOpen_then_keepsTranslationVisible(trigger: String) throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    let sheet = makeTranslationTestSheet()
+    fixture.window.beginSheet(sheet, completionHandler: nil)
+    defer {
+        fixture.window.endSheet(sheet)
+        sheet.orderOut(nil)
+        fixture.window.orderOut(nil)
+    }
+    let pointInSheet = CGPoint(x: sheet.frame.midX, y: sheet.frame.minY + 10)
+    #expect(!fixture.window.frame.contains(pointInSheet))
+
+    // Act
+    if trigger == "outsideClick" {
+        fixture.controller.dismissForMouseDown(at: pointInSheet, in: sheet)
+    } else {
+        fixture.controller.dismissForApplicationActivation(
+            processIdentifier: ProcessInfo.processInfo.processIdentifier + 1
+        )
+    }
+
+    // Assert
+    #expect(fixture.window.isVisible)
+    #expect(fixture.coordinator.request != nil)
+}
+
+@Test(arguments: ["outsideClick", "otherApp"], [false, true]) @MainActor
+func test_automaticDismissal_when_attachedSheetEnds_then_respectsPinState(trigger: String, isPinned: Bool) throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    let sheet = makeTranslationTestSheet()
+    if isPinned { try pinWindow(fixture.window) }
+    fixture.window.beginSheet(sheet, completionHandler: nil)
+    fixture.window.endSheet(sheet)
+    sheet.orderOut(nil)
+    defer { fixture.window.orderOut(nil) }
+
+    // Act
+    if trigger == "outsideClick" {
+        fixture.controller.dismissForMouseDown(at: CGPoint(
+            x: fixture.window.frame.maxX + 10,
+            y: fixture.window.frame.maxY + 10
+        ))
+    } else {
+        fixture.controller.dismissForApplicationActivation(
+            processIdentifier: ProcessInfo.processInfo.processIdentifier + 1
+        )
+    }
+
+    // Assert
+    #expect(fixture.window.isVisible == isPinned)
+    #expect((fixture.coordinator.request != nil) == isPinned)
+}
+
+@MainActor
+private func makeTranslationTestSheet() -> NSWindow {
+    NSWindow(
+        contentRect: CGRect(x: 0, y: 0, width: 470, height: 400),
+        styleMask: [.titled],
+        backing: .buffered,
+        defer: false
+    )
+}
+
 @Test @MainActor
 func test_dismissForMouseDown_when_pointIsInsideWindow_then_keepsWindowVisible() throws {
     // Arrange
@@ -319,6 +385,67 @@ func test_dismiss_when_translationIsOpen_then_clearsRequestAndRemovesTaskHost(me
     #expect(fixture.coordinator.status == .idle)
     #expect(fixture.window.contentView == nil)
     #expect(!fixture.window.isVisible)
+}
+
+@Test(arguments: [false, true]) @MainActor
+func test_translate_when_appleReportsUserCancellation_then_closesTranslationWindow(isPinned: Bool) async throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    defer { fixture.window.orderOut(nil) }
+    if isPinned { try pinWindow(fixture.window) }
+    let request = try #require(fixture.coordinator.request)
+    let stub_runner = AppleTranslationRunner { _ in throw CocoaError(.userCancelled) }
+
+    // Act
+    await fixture.coordinator.translate(request, using: stub_runner)
+
+    // Assert
+    #expect(!fixture.window.isVisible)
+    #expect(fixture.window.contentView == nil)
+    #expect(fixture.coordinator.request == nil)
+    #expect(fixture.coordinator.status == .idle)
+}
+
+@Test(arguments: ["success", "taskCancellation", "failure"]) @MainActor
+func test_translate_when_appleDoesNotReportUserCancellation_then_keepsTranslationWindow(result: String) async throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    defer { fixture.window.close() }
+    let request = try #require(fixture.coordinator.request)
+    let stub_runner = AppleTranslationRunner { _ in
+        if result == "taskCancellation" { throw CancellationError() }
+        if result == "failure" { throw CocoaError(.fileReadUnknown) }
+        return TranslationOutput(translatedText: "你好", sourceLanguageIdentifier: "en", targetLanguageIdentifier: "zh-Hant")
+    }
+
+    // Act
+    await fixture.coordinator.translate(request, using: stub_runner)
+
+    // Assert
+    #expect(fixture.window.isVisible)
+    #expect(fixture.coordinator.request?.id == request.id)
+    #expect(fixture.window.contentView != nil)
+}
+
+@Test @MainActor
+func test_translate_when_replacedRequestReportsUserCancellation_then_keepsNewTranslationWindow() async throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    defer { fixture.window.close() }
+    let request = try #require(fixture.coordinator.request)
+    let stub_runner = AppleTranslationRunner { _ in
+        fixture.coordinator.updateSourceLanguage("fr")
+        throw CocoaError(.userCancelled)
+    }
+
+    // Act
+    await fixture.coordinator.translate(request, using: stub_runner)
+
+    // Assert
+    #expect(fixture.window.isVisible)
+    #expect(fixture.coordinator.request != nil)
+    #expect(fixture.coordinator.request?.id != request.id)
+    #expect(fixture.coordinator.status == .translating)
 }
 
 private struct TranslationWindowTestFixture {

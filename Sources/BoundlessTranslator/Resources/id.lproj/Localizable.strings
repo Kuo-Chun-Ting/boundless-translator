@@ -6,7 +6,6 @@
 "preferences.quit" = "Keluar";
 "preferences.translateFrom" = "Terjemahkan dari";
 "preferences.translateTo" = "Terjemahkan ke";
-"translation.from" = "Dari";
 "translation.detectAutomatically" = "Deteksi Otomatis";
 "shortcut.invalid" = "Gunakan Command, Option, atau Control bersama tombol lain.";
 "shortcut.recording" = "Ketik Pintasan";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Hentikan Pembacaan Terjemahan";
 "speech.readSource" = "Bacakan Teks Sumber";
 "speech.readTranslation" = "Bacakan Terjemahan";
-"sourceSelection.original" = "Asli";
-"sourceSelection.title" = "Pilih Bahasa Sumber";
-"sourceSelection.message" = "Bahasa teks ini tidak dapat diidentifikasi dengan yakin.";
-"common.cancel" = "Batal";
-"common.translate" = "Terjemahkan";
 "selectionError.title" = "Teks yang dipilih tidak dapat dibaca";
 "selectionError.guidance" = "Gunakan pintasan yang diatur di Pengaturan.";
-"translation.noLanguages" = "Tidak ada bahasa terjemahan yang tersedia. Periksa pengaturan bahasa macOS, lalu coba lagi.";
 "translationFailure.unsupportedSource" = "Bahasa teks yang dipilih tidak didukung.";
 "translationFailure.unsupportedTarget" = "Bahasa target yang dipilih tidak didukung. Pilih bahasa lain di Pengaturan.";
 "translationFailure.unsupportedPair" = "Teks mungkin sudah dalam bahasa target, atau pasangan bahasa ini tidak didukung.";

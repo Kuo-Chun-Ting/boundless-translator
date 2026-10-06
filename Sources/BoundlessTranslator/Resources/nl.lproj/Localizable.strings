@@ -6,7 +6,6 @@
 "preferences.quit" = "Stop";
 "preferences.translateFrom" = "Vertalen uit";
 "preferences.translateTo" = "Vertalen naar";
-"translation.from" = "Van";
 "translation.detectAutomatically" = "Automatisch detecteren";
 "shortcut.invalid" = "Gebruik Command, Option of Control samen met een andere toets.";
 "shortcut.recording" = "Voer toetscombinatie in";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "Stop voorlezen van vertaling";
 "speech.readSource" = "Lees brontekst voor";
 "speech.readTranslation" = "Lees vertaling voor";
-"sourceSelection.original" = "Origineel";
-"sourceSelection.title" = "Kies brontaal";
-"sourceSelection.message" = "De taal van deze tekst kon niet betrouwbaar worden vastgesteld.";
-"common.cancel" = "Annuleer";
-"common.translate" = "Vertaal";
 "selectionError.title" = "De geselecteerde tekst kon niet worden gelezen";
 "selectionError.guidance" = "Gebruik de toetscombinatie die in Instellingen is ingesteld.";
-"translation.noLanguages" = "Er zijn geen vertaaltalen beschikbaar. Controleer de taalinstellingen van macOS en probeer het opnieuw.";
 "translationFailure.unsupportedSource" = "De taal van de geselecteerde tekst wordt niet ondersteund.";
 "translationFailure.unsupportedTarget" = "De geselecteerde doeltaal wordt niet ondersteund. Kies een andere taal in Instellingen.";
 "translationFailure.unsupportedPair" = "De tekst staat mogelijk al in de doeltaal of dit taalpaar wordt niet ondersteund.";

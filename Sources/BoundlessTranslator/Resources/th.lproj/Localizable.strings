@@ -6,7 +6,6 @@
 "preferences.quit" = "ออก";
 "preferences.translateFrom" = "แปลจาก";
 "preferences.translateTo" = "แปลเป็น";
-"translation.from" = "จาก";
 "translation.detectAutomatically" = "ตรวจหาโดยอัตโนมัติ";
 "shortcut.invalid" = "ใช้ Command, Option หรือ Control ร่วมกับปุ่มอื่น";
 "shortcut.recording" = "ป้อนปุ่มลัด";
@@ -57,14 +56,8 @@
 "speech.stopTranslation" = "หยุดอ่านออกเสียงคำแปล";
 "speech.readSource" = "อ่านออกเสียงข้อความต้นฉบับ";
 "speech.readTranslation" = "อ่านออกเสียงคำแปล";
-"sourceSelection.original" = "ต้นฉบับ";
-"sourceSelection.title" = "เลือกภาษาต้นฉบับ";
-"sourceSelection.message" = "ไม่สามารถระบุภาษาของข้อความนี้ได้อย่างมั่นใจ";
-"common.cancel" = "ยกเลิก";
-"common.translate" = "แปล";
 "selectionError.title" = "ไม่สามารถอ่านข้อความที่เลือกได้";
 "selectionError.guidance" = "ใช้ปุ่มลัดที่ตั้งไว้ในการตั้งค่า";
-"translation.noLanguages" = "ไม่มีภาษาสำหรับการแปล ตรวจสอบการตั้งค่าภาษา macOS แล้วลองอีกครั้ง";
 "translationFailure.unsupportedSource" = "ไม่รองรับภาษาของข้อความที่เลือก";
 "translationFailure.unsupportedTarget" = "ไม่รองรับภาษาเป้าหมายที่เลือก เลือกภาษาอื่นในการตั้งค่า";
 "translationFailure.unsupportedPair" = "ข้อความอาจเป็นภาษาเป้าหมายอยู่แล้ว หรือไม่รองรับคู่ภาษานี้";
