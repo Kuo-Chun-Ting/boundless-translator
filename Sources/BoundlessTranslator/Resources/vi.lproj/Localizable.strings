@@ -28,7 +28,7 @@
 "screenshot.failed" = "Không thể chụp vùng màn hình. Hãy thử lại.";
 "screenshot.errorTitle" = "Không thể chụp ảnh màn hình";
 "screenshot.hintTitle" = "Dịch ảnh chụp màn hình";
-"screenshot.guidance" = "Di chuột lên một từ hoặc chọn văn bản để dịch. Bấm loa để nghe hoặc sách để tra từ điển. Chọn văn bản và nhấn %@ để mở cửa sổ dịch.";
+"screenshot.guidance" = "Di chuột lên một từ hoặc chọn văn bản để xem bản dịch. Bạn cũng có thể nghe văn bản gốc hoặc tra từ điển.";
 "screenshot.noTextTitle" = "Không nhận dạng được văn bản";
 "screenshot.noTextMessage" = "Hình ảnh có thể không chứa văn bản, văn bản không rõ hoặc ngôn ngữ chưa được hỗ trợ để nhận dạng văn bản.";
 "screenshot.languageLimitTitle" = "Giới hạn ngôn ngữ ảnh chụp";

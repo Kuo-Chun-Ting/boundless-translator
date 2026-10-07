@@ -28,7 +28,7 @@
 "screenshot.failed" = "Der Bildschirmbereich konnte nicht aufgenommen werden. Versuche es erneut.";
 "screenshot.errorTitle" = "Bildschirmfoto konnte nicht aufgenommen werden";
 "screenshot.hintTitle" = "Übersetzung von Screenshots";
-"screenshot.guidance" = "Zeige auf ein Wort oder markiere Text zum Übersetzen. Lautsprecher: vorlesen. Buch: nachschlagen. Markiere Text und drücke %@ für das Übersetzungsfenster.";
+"screenshot.guidance" = "Bewege den Mauszeiger über ein Wort oder markiere Text, um die Übersetzung zu sehen. Du kannst dir auch den Originaltext vorlesen lassen oder im Wörterbuch nachschlagen.";
 "screenshot.noTextTitle" = "Kein Text erkannt";
 "screenshot.noTextMessage" = "Das Bild enthält möglicherweise keinen Text, undeutlichen Text oder eine Sprache, die nicht für die Texterkennung unterstützt wird.";
 "screenshot.languageLimitTitle" = "Sprachbeschränkung bei Screenshots";

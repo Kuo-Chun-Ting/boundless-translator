@@ -28,7 +28,7 @@
 "screenshot.failed" = "Nie udało się zrobić zrzutu obszaru ekranu. Spróbuj ponownie.";
 "screenshot.errorTitle" = "Nie udało się zrobić zrzutu ekranu";
 "screenshot.hintTitle" = "Tłumaczenie zrzutu ekranu";
-"screenshot.guidance" = "Najedź na słowo lub zaznacz tekst, aby go przetłumaczyć. Kliknij głośnik, aby odsłuchać, lub książkę, aby otworzyć słownik. Zaznacz tekst i naciśnij %@, aby otworzyć okno tłumaczenia.";
+"screenshot.guidance" = "Najedź kursorem na słowo lub zaznacz tekst, aby zobaczyć tłumaczenie. Możesz też odsłuchać oryginalny tekst lub skorzystać ze słownika.";
 "screenshot.noTextTitle" = "Nie rozpoznano tekstu";
 "screenshot.noTextMessage" = "Obraz może nie zawierać tekstu, tekst może być niewyraźny lub jego język nie jest obsługiwany przy rozpoznawaniu tekstu.";
 "screenshot.languageLimitTitle" = "Ograniczenie języka zrzutu ekranu";

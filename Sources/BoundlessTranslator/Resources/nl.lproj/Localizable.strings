@@ -28,7 +28,7 @@
 "screenshot.failed" = "Het schermgebied kon niet worden vastgelegd. Probeer het opnieuw.";
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";
 "screenshot.hintTitle" = "Vertaling van schermafbeelding";
-"screenshot.guidance" = "Wijs een woord aan of selecteer tekst om te vertalen. Klik op de luidspreker om te luisteren of op het boek voor het woordenboek. Selecteer tekst en druk op %@ om het vertaalvenster te openen.";
+"screenshot.guidance" = "Beweeg de aanwijzer over een woord of selecteer tekst om de vertaling te zien. Je kunt ook de oorspronkelijke tekst laten voorlezen of het woordenboek gebruiken.";
 "screenshot.noTextTitle" = "Geen tekst herkend";
 "screenshot.noTextMessage" = "De afbeelding bevat mogelijk geen tekst, onduidelijke tekst of een taal die niet wordt ondersteund voor tekstherkenning.";
 "screenshot.languageLimitTitle" = "Taalbeperking voor schermafbeeldingen";

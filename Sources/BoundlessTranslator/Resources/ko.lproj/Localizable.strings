@@ -28,7 +28,7 @@
 "screenshot.failed" = "화면 영역을 캡처할 수 없습니다. 다시 시도하세요.";
 "screenshot.errorTitle" = "스크린샷을 캡처할 수 없습니다";
 "screenshot.hintTitle" = "스크린샷 번역";
-"screenshot.guidance" = "단어에 마우스를 올리거나 텍스트를 선택하면 번역됩니다. 스피커를 누르면 읽어 주고, 책을 누르면 사전을 엽니다. 텍스트를 선택한 뒤 %@을 누르면 번역 창이 열립니다.";
+"screenshot.guidance" = "단어 위에 마우스를 올리거나 텍스트를 선택하면 번역을 볼 수 있습니다. 원문을 듣거나 사전을 사용할 수도 있습니다.";
 "screenshot.noTextTitle" = "인식된 텍스트가 없습니다";
 "screenshot.noTextMessage" = "이미지에 텍스트가 없거나, 텍스트가 불분명하거나, 텍스트 인식을 지원하지 않는 언어일 수 있습니다.";
 "screenshot.languageLimitTitle" = "스크린샷 언어 제한";

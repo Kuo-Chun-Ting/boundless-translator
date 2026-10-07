@@ -28,7 +28,7 @@
 "screenshot.failed" = "Skærmområdet kunne ikke optages. Prøv igen.";
 "screenshot.errorTitle" = "Skærmbilledet kunne ikke tages";
 "screenshot.hintTitle" = "Oversættelse af skærmbillede";
-"screenshot.guidance" = "Hold markøren over et ord, eller markér tekst for at oversætte. Klik på højttaleren for at lytte eller bogen for at slå op. Markér tekst, og tryk på %@ for at åbne oversættelsesvinduet.";
+"screenshot.guidance" = "Hold markøren over et ord, eller markér tekst for at se oversættelsen. Du kan også få originalteksten læst op eller bruge ordbogen.";
 "screenshot.noTextTitle" = "Ingen tekst genkendt";
 "screenshot.noTextMessage" = "Billedet indeholder muligvis ingen tekst, uklar tekst eller et sprog, som tekstgenkendelse ikke understøtter.";
 "screenshot.languageLimitTitle" = "Sprogbegrænsning for skærmbilleder";

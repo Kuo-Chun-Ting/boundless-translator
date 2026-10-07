@@ -28,7 +28,7 @@
 "screenshot.failed" = "Det gick inte att ta en bild av skärmområdet. Försök igen.";
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";
 "screenshot.hintTitle" = "Översättning av skärmavbild";
-"screenshot.guidance" = "Håll pekaren över ett ord eller markera text för att översätta. Klicka på högtalaren för att lyssna eller boken för att slå upp. Markera text och tryck på %@ för att öppna översättningsfönstret.";
+"screenshot.guidance" = "Håll pekaren över ett ord eller markera text för att se översättningen. Du kan också få originaltexten uppläst eller använda ordboken.";
 "screenshot.noTextTitle" = "Ingen text identifierades";
 "screenshot.noTextMessage" = "Bilden kanske saknar text, innehåller otydlig text eller ett språk som inte stöds för textigenkänning.";
 "screenshot.languageLimitTitle" = "Språkbegränsning för skärmbilder";

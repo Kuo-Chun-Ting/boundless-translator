@@ -28,7 +28,7 @@
 "screenshot.failed" = "Nem sikerült rögzíteni a képernyőterületet. Próbálja újra.";
 "screenshot.errorTitle" = "Nem sikerült képernyőfotót készíteni";
 "screenshot.hintTitle" = "Képernyőkép fordítása";
-"screenshot.guidance" = "Fordításhoz vigye a mutatót egy szóra, vagy jelöljön ki szöveget. A hangszóróra kattintva meghallgathatja, a könyvre kattintva szótárazhatja. A fordítási ablakhoz jelöljön ki szöveget, és nyomja meg a %@ billentyűkombinációt.";
+"screenshot.guidance" = "Vigye a mutatót egy szóra vagy jelöljön ki szöveget a fordítás megtekintéséhez. Az eredeti szöveget fel is olvastathatja, vagy használhatja a szótárt.";
 "screenshot.noTextTitle" = "Nem sikerült szöveget felismerni";
 "screenshot.noTextMessage" = "Lehet, hogy a képen nincs szöveg, a szöveg nem elég tiszta, vagy a nyelve nem támogatott a szövegfelismeréshez.";
 "screenshot.languageLimitTitle" = "A képernyőkép nyelvi korlátja";

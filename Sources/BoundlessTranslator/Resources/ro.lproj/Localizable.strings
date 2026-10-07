@@ -28,7 +28,7 @@
 "screenshot.failed" = "Nu s-a putut captura regiunea ecranului. Încercați din nou.";
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";
 "screenshot.hintTitle" = "Traducerea capturii de ecran";
-"screenshot.guidance" = "Treceți cursorul peste un cuvânt sau selectați text pentru traducere. Apăsați difuzorul pentru a asculta sau cartea pentru dicționar. Selectați text și apăsați %@ pentru a deschide fereastra de traducere.";
+"screenshot.guidance" = "Treceți cursorul peste un cuvânt sau selectați text pentru a vedea traducerea. Puteți și asculta textul original sau consulta dicționarul.";
 "screenshot.noTextTitle" = "Nu a fost recunoscut niciun text";
 "screenshot.noTextMessage" = "Imaginea poate să nu conțină text, textul poate fi neclar sau limba sa nu este acceptată pentru recunoaștere.";
 "screenshot.languageLimitTitle" = "Limitarea limbii capturii";

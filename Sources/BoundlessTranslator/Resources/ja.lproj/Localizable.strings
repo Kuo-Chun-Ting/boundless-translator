@@ -28,7 +28,7 @@
 "screenshot.failed" = "画面の範囲を撮影できませんでした。もう一度お試しください。";
 "screenshot.errorTitle" = "スクリーンショットを撮影できませんでした";
 "screenshot.hintTitle" = "スクリーンショット翻訳";
-"screenshot.guidance" = "単語にポインタを合わせるか、文字を選択すると翻訳します。スピーカーで読み上げ、本で辞書を開きます。文字を選択して %@ を押すと翻訳ウインドウが開きます。";
+"screenshot.guidance" = "単語にカーソルを合わせるかテキストを選択すると翻訳が表示されます。原文の読み上げや辞書も使えます。";
 "screenshot.noTextTitle" = "テキストが認識されませんでした";
 "screenshot.noTextMessage" = "画像にテキストがない、テキストが不鮮明、またはテキスト認識に対応していない言語の可能性があります。";
 "screenshot.languageLimitTitle" = "スクリーンショットの言語制限";

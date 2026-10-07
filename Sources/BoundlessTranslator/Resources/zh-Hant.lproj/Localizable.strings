@@ -28,7 +28,7 @@
 "screenshot.failed" = "無法擷取螢幕範圍。請再試一次。";
 "screenshot.errorTitle" = "無法擷取螢幕截圖";
 "screenshot.hintTitle" = "截圖翻譯";
-"screenshot.guidance" = "停在單字上或選取文字即可翻譯。點喇叭朗讀、點書本查字典。選字後按 %@ 開啟翻譯視窗。";
+"screenshot.guidance" = "滑鼠停在單字上或選取文字即可查看翻譯，也可朗讀原文或查字典。";
 "screenshot.noTextTitle" = "沒有辨識到文字";
 "screenshot.noTextMessage" = "圖片中可能沒有文字、文字不夠清晰，或文字語言尚未支援。";
 "screenshot.languageLimitTitle" = "截圖語言限制";

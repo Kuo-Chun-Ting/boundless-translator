@@ -28,7 +28,7 @@
 "screenshot.failed" = "Oblasť obrazovky sa nepodarilo zachytiť. Skúste to znova.";
 "screenshot.errorTitle" = "Snímku obrazovky sa nepodarilo vytvoriť";
 "screenshot.hintTitle" = "Preklad snímky obrazovky";
-"screenshot.guidance" = "Ukážte na slovo alebo vyberte text na preklad. Kliknutím na reproduktor si text vypočujete, kliknutím na knihu otvoríte slovník. Vyberte text a stlačte %@ na otvorenie okna prekladu.";
+"screenshot.guidance" = "Ukážte kurzorom na slovo alebo vyberte text a zobrazí sa preklad. Môžete si tiež nechať prečítať pôvodný text alebo použiť slovník.";
 "screenshot.noTextTitle" = "Nebol rozpoznaný žiadny text";
 "screenshot.noTextMessage" = "Obrázok možno neobsahuje text, text je nejasný alebo jeho jazyk nie je podporovaný na rozpoznávanie.";
 "screenshot.languageLimitTitle" = "Jazykové obmedzenie snímky";

@@ -28,7 +28,7 @@
 "screenshot.failed" = "No se ha podido capturar el área de la pantalla. Vuelve a intentarlo.";
 "screenshot.errorTitle" = "No se ha podido realizar la captura de pantalla";
 "screenshot.hintTitle" = "Traducción de capturas de pantalla";
-"screenshot.guidance" = "Pasa el cursor sobre una palabra o selecciona texto para traducir. Pulsa el altavoz para escuchar o el libro para consultar el diccionario. Selecciona texto y pulsa %@ para abrir la ventana de traducción.";
+"screenshot.guidance" = "Pasa el cursor sobre una palabra o selecciona texto para ver su traducción. También puedes escuchar el texto original o consultar el diccionario.";
 "screenshot.noTextTitle" = "No se ha reconocido texto";
 "screenshot.noTextMessage" = "Es posible que la imagen no contenga texto, que sea poco claro o que su idioma no sea compatible con el reconocimiento de texto.";
 "screenshot.languageLimitTitle" = "Limitación de idioma de la captura";

@@ -28,7 +28,7 @@
 "screenshot.failed" = "Nije moguće snimiti područje zaslona. Pokušajte ponovno.";
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
 "screenshot.hintTitle" = "Prijevod snimke zaslona";
-"screenshot.guidance" = "Zadržite pokazivač na riječi ili odaberite tekst za prijevod. Kliknite zvučnik za slušanje ili knjigu za rječnik. Odaberite tekst i pritisnite %@ za otvaranje prozora za prijevod.";
+"screenshot.guidance" = "Zadržite pokazivač na riječi ili odaberite tekst za prikaz prijevoda. Možete poslušati i izvorni tekst ili koristiti rječnik.";
 "screenshot.noTextTitle" = "Nije prepoznat tekst";
 "screenshot.noTextMessage" = "Slika možda ne sadrži tekst, tekst je nejasan ili njegov jezik nije podržan za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezično ograničenje snimke zaslona";

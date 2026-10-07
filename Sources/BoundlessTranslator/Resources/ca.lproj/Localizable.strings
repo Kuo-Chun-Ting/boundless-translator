@@ -28,7 +28,7 @@
 "screenshot.failed" = "No s’ha pogut capturar l’àrea de la pantalla. Torna-ho a provar.";
 "screenshot.errorTitle" = "No s’ha pogut fer la captura de pantalla";
 "screenshot.hintTitle" = "Traducció de captures de pantalla";
-"screenshot.guidance" = "Passa el cursor sobre una paraula o selecciona text per traduir. Fes clic a l’altaveu per escoltar o al llibre per consultar el diccionari. Selecciona text i prem %@ per obrir la finestra de traducció.";
+"screenshot.guidance" = "Passa el cursor sobre una paraula o selecciona text per veure’n la traducció. També pots escoltar el text original o consultar el diccionari.";
 "screenshot.noTextTitle" = "No s’ha reconegut cap text";
 "screenshot.noTextMessage" = "Pot ser que la imatge no contingui text, que el text sigui poc clar o que l’idioma no sigui compatible amb el reconeixement.";
 "screenshot.languageLimitTitle" = "Limitació d’idioma de la captura";

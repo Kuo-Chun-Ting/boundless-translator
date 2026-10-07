@@ -28,7 +28,7 @@
 "screenshot.failed" = "Tidak dapat menangkap kawasan skrin. Cuba lagi.";
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
 "screenshot.hintTitle" = "Terjemahan Tangkapan Skrin";
-"screenshot.guidance" = "Letakkan kursor pada perkataan atau pilih teks untuk menterjemah. Klik pembesar suara untuk mendengar atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka tetingkap terjemahan.";
+"screenshot.guidance" = "Letakkan kursor pada perkataan atau pilih teks untuk melihat terjemahan. Anda juga boleh mendengar teks asal dibacakan atau menggunakan kamus.";
 "screenshot.noTextTitle" = "Tiada teks dikenal pasti";
 "screenshot.noTextMessage" = "Imej mungkin tidak mengandungi teks, teks kurang jelas, atau bahasanya tidak disokong untuk pengecaman teks.";
 "screenshot.languageLimitTitle" = "Had bahasa tangkapan skrin";

@@ -28,7 +28,7 @@
 "screenshot.failed" = "Could not capture the screen region. Try again.";
 "screenshot.errorTitle" = "Could not capture screenshot";
 "screenshot.hintTitle" = "Screenshot Translation";
-"screenshot.guidance" = "Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press %@ to open the translation window.";
+"screenshot.guidance" = "Hold the pointer over a word or select text to see its translation. You can also listen to the original text or look it up in the dictionary.";
 "screenshot.noTextTitle" = "No text recognized";
 "screenshot.noTextMessage" = "The image may contain no text, unclear text, or a language that isn't supported for text recognition.";
 "screenshot.languageLimitTitle" = "Screenshot language limitation";

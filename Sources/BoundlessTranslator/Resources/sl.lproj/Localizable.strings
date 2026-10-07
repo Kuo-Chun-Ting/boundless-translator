@@ -28,7 +28,7 @@
 "screenshot.failed" = "Območja zaslona ni bilo mogoče zajeti. Poskusite znova.";
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";
 "screenshot.hintTitle" = "Prevod posnetka zaslona";
-"screenshot.guidance" = "Za prevod postavite kazalec na besedo ali izberite besedilo. Kliknite zvočnik za poslušanje ali knjigo za slovar. Izberite besedilo in pritisnite %@ za okno s prevodom.";
+"screenshot.guidance" = "Postavite kazalec na besedo ali izberite besedilo za prikaz prevoda. Lahko tudi poslušate izvirno besedilo ali uporabite slovar.";
 "screenshot.noTextTitle" = "Besedilo ni bilo prepoznano";
 "screenshot.noTextMessage" = "Slika morda ne vsebuje besedila, besedilo ni jasno ali njegov jezik ni podprt za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezikovna omejitev posnetka";

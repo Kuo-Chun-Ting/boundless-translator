@@ -28,7 +28,7 @@
 "screenshot.failed" = "Impossible de capturer la zone de l’écran. Réessayez.";
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";
 "screenshot.hintTitle" = "Traduction de capture d’écran";
-"screenshot.guidance" = "Survolez un mot ou sélectionnez du texte pour le traduire. Cliquez sur le haut-parleur pour écouter ou sur le livre pour consulter le dictionnaire. Sélectionnez du texte et appuyez sur %@ pour ouvrir la fenêtre de traduction.";
+"screenshot.guidance" = "Survolez un mot avec le pointeur ou sélectionnez du texte pour voir sa traduction. Vous pouvez aussi écouter le texte original ou consulter le dictionnaire.";
 "screenshot.noTextTitle" = "Aucun texte reconnu";
 "screenshot.noTextMessage" = "L’image ne contient peut-être pas de texte, le texte manque de netteté ou sa langue n’est pas prise en charge pour la reconnaissance.";
 "screenshot.languageLimitTitle" = "Limite de langue des captures";

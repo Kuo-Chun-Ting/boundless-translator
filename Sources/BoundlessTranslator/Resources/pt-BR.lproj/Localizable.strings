@@ -28,7 +28,7 @@
 "screenshot.failed" = "Não foi possível capturar a área da tela. Tente novamente.";
 "screenshot.errorTitle" = "Não foi possível fazer a captura de tela";
 "screenshot.hintTitle" = "Tradução de captura de tela";
-"screenshot.guidance" = "Passe o cursor sobre uma palavra ou selecione texto para traduzir. Clique no alto-falante para ouvir ou no livro para consultar o dicionário. Selecione texto e pressione %@ para abrir a janela de tradução.";
+"screenshot.guidance" = "Passe o cursor sobre uma palavra ou selecione texto para ver a tradução. Você também pode ouvir o texto original ou consultar o dicionário.";
 "screenshot.noTextTitle" = "Nenhum texto reconhecido";
 "screenshot.noTextMessage" = "A imagem pode não conter texto, o texto pode estar pouco nítido ou seu idioma não ser compatível com o reconhecimento de texto.";
 "screenshot.languageLimitTitle" = "Limitação de idioma da captura";

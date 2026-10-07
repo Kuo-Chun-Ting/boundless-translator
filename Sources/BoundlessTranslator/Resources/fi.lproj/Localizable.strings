@@ -28,7 +28,7 @@
 "screenshot.failed" = "Näytön alueesta ei voitu ottaa kuvaa. Yritä uudelleen.";
 "screenshot.errorTitle" = "Näyttökuvaa ei voitu ottaa";
 "screenshot.hintTitle" = "Kuvakaappauksen käännös";
-"screenshot.guidance" = "Vie osoitin sanan päälle tai valitse teksti kääntääksesi. Kuuntele kaiuttimesta tai avaa sanakirja kirjasta. Valitse teksti ja paina %@ avataksesi käännösikkunan.";
+"screenshot.guidance" = "Vie osoitin sanan päälle tai valitse teksti nähdäksesi käännöksen. Voit myös kuunnella alkuperäisen tekstin tai käyttää sanakirjaa.";
 "screenshot.noTextTitle" = "Tekstiä ei tunnistettu";
 "screenshot.noTextMessage" = "Kuvassa ei ehkä ole tekstiä, teksti on epäselvää tai sen kieltä ei tueta tekstintunnistuksessa.";
 "screenshot.languageLimitTitle" = "Näyttökuvan kielirajoitus";

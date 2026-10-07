@@ -28,7 +28,7 @@
 "screenshot.failed" = "Ekranın seçilen bölümü yakalanamadı. Yeniden deneyin.";
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
 "screenshot.hintTitle" = "Ekran Görüntüsü Çevirisi";
-"screenshot.guidance" = "Çevirmek için bir sözcüğün üzerine gelin veya metin seçin. Dinlemek için hoparlöre, sözlük için kitaba tıklayın. Çeviri penceresini açmak için metni seçip %@ tuşlarına basın.";
+"screenshot.guidance" = "Çeviriyi görmek için imleci bir sözcüğün üzerine getirin veya metin seçin. Özgün metni dinleyebilir veya sözlüğü kullanabilirsiniz.";
 "screenshot.noTextTitle" = "Metin tanınmadı";
 "screenshot.noTextMessage" = "Görüntü metin içermiyor olabilir, metin net olmayabilir veya dili metin tanıma için desteklenmiyor olabilir.";
 "screenshot.languageLimitTitle" = "Ekran görüntüsü dil sınırlaması";
