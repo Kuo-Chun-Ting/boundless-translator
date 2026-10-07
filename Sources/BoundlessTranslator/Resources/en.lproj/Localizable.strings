@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Language Support";
 "usage.languageSupport.description" = "Interface language support matches macOS. macOS determines which languages can be translated between.";
 "usage.translateText.description" = "For selectable text, select it in another app and press %@ to translate.";
-"usage.translateImageText.description" = "For non-selectable text, press %@ to capture the area you want to translate. Hover over a word or select text to translate. Click the speaker to listen or the book to look up. Select text and press %@ to open the translation window.";
+"usage.translateImageText.description" = "Press %@ to capture the area you want to translate. Hold the pointer over a word or select text to see its translation. You can also listen to the original text or look it up in the dictionary.";
 "usage.lookUp.description" = "Select a word or phrase in the source text, then click the book icon.";
 "usage.listen.title" = "Read Aloud";
 "usage.listen.description" = "Read the source text or translation aloud.";

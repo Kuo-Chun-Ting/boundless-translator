@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Compatibilitat d’idiomes";
 "usage.languageSupport.description" = "La compatibilitat amb els idiomes de la interfície coincideix amb la de macOS. macOS determina entre quins idiomes es pot traduir.";
 "usage.translateText.description" = "Si el text es pot seleccionar, selecciona’l en una altra app i prem %@ per traduir-lo.";
-"usage.translateImageText.description" = "Si el text no es pot seleccionar, prem %@ per capturar la zona que vols traduir. Passa el cursor sobre una paraula o selecciona text per traduir. Fes clic a l’altaveu per escoltar o al llibre per consultar el diccionari. Selecciona text i prem %@ per obrir la finestra de traducció.";
+"usage.translateImageText.description" = "Prem %@ per capturar la zona que vols traduir. Passa el cursor sobre una paraula o selecciona text per veure’n la traducció. També pots escoltar el text original o consultar el diccionari.";
 "usage.lookUp.description" = "Selecciona una paraula o frase del text original i fes clic a la icona del llibre.";
 "usage.listen.title" = "Lectura en veu alta";
 "usage.listen.description" = "Llegeix en veu alta el text original o la traducció.";

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "语言支持";
 "usage.languageSupport.description" = "界面语言支持范围与 macOS 相同。哪些语言可以互相翻译，则由 macOS 决定。";
 "usage.translateText.description" = "可选字的情况下，在其他 App 中选取文字，按 %@ 翻译。";
-"usage.translateImageText.description" = "无法选字时，按 %@ 截取想翻译的区域。停在单词上或选取文字即可翻译。点喇叭朗读、点书本查词典。选字后按 %@ 打开翻译窗口。";
+"usage.translateImageText.description" = "按 %@ 截取想翻译的区域。将鼠标停在单词上或选取文字即可查看翻译，也可朗读原文或查词典。";
 "usage.lookUp.description" = "选择原文中的单词或短语，再点书本图标。";
 "usage.listen.title" = "朗读";
 "usage.listen.description" = "朗读原文或译文。";

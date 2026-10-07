@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Podpora jazyků";
 "usage.languageSupport.description" = "Podpora jazyků rozhraní odpovídá systému macOS. macOS určuje, mezi kterými jazyky lze překládat.";
 "usage.translateText.description" = "Pokud lze text vybrat, vyberte ho v jiné aplikaci a stisknutím %@ ho přeložte.";
-"usage.translateImageText.description" = "Pokud text nelze vybrat, stisknutím %@ zachyťte oblast, kterou chcete přeložit. Najeďte na slovo nebo vyberte text pro překlad. Kliknutím na reproduktor si text poslechnete, kliknutím na knihu otevřete slovník. Vyberte text a stiskněte %@ pro otevření okna překladu.";
+"usage.translateImageText.description" = "Stisknutím %@ zachyťte oblast, kterou chcete přeložit. Najeďte kurzorem na slovo nebo vyberte text a zobrazí se překlad. Můžete si také nechat přečíst původní text nebo použít slovník.";
 "usage.lookUp.description" = "Vyberte slovo nebo frázi ve zdrojovém textu a klikněte na ikonu knihy.";
 "usage.listen.title" = "Čtení nahlas";
 "usage.listen.description" = "Přečtěte nahlas původní text nebo překlad.";

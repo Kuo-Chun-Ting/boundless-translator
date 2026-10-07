@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Sprogunderstøttelse";
 "usage.languageSupport.description" = "Understøttelsen af brugerfladesprog svarer til macOS. macOS bestemmer, hvilke sprog der kan oversættes mellem.";
 "usage.translateText.description" = "Hvis teksten kan markeres, skal du markere den i en anden app og trykke på %@ for at oversætte.";
-"usage.translateImageText.description" = "Hvis teksten ikke kan markeres, skal du trykke på %@ for at tage et skærmbillede af det område, du vil oversætte. Hold markøren over et ord, eller markér tekst for at oversætte. Klik på højttaleren for at lytte eller bogen for at slå op. Markér tekst, og tryk på %@ for at åbne oversættelsesvinduet.";
+"usage.translateImageText.description" = "Tryk på %@ for at tage et skærmbillede af det område, du vil oversætte. Hold markøren over et ord, eller markér tekst for at se oversættelsen. Du kan også få originalteksten læst op eller bruge ordbogen.";
 "usage.lookUp.description" = "Vælg et ord eller en frase i kildeteksten, og klik på bogikonet.";
 "usage.listen.title" = "Læs højt";
 "usage.listen.description" = "Læs originalteksten eller oversættelsen højt.";

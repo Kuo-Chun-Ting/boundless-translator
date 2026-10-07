@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Compatibilitate lingvistică";
 "usage.languageSupport.description" = "Compatibilitatea cu limbile interfeței corespunde sistemului macOS. macOS stabilește între ce limbi se poate traduce.";
 "usage.translateText.description" = "Dacă textul poate fi selectat, selectează-l în altă aplicație și apasă %@ pentru traducere.";
-"usage.translateImageText.description" = "Dacă textul nu poate fi selectat, apăsați %@ pentru a captura zona pe care doriți să o traduceți. Treceți cursorul peste un cuvânt sau selectați text pentru traducere. Apăsați difuzorul pentru a asculta sau cartea pentru dicționar. Selectați text și apăsați %@ pentru a deschide fereastra de traducere.";
+"usage.translateImageText.description" = "Apăsați %@ pentru a captura zona pe care doriți să o traduceți. Treceți cursorul peste un cuvânt sau selectați text pentru a vedea traducerea. Puteți și asculta textul original sau consulta dicționarul.";
 "usage.lookUp.description" = "Selectați un cuvânt sau o expresie din textul sursă, apoi faceți clic pe pictograma cărții.";
 "usage.listen.title" = "Citire cu voce tare";
 "usage.listen.description" = "Citiți cu voce tare textul original sau traducerea.";

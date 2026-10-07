@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Dil Desteği";
 "usage.languageSupport.description" = "Arayüz dili desteği macOS ile aynıdır. Hangi diller arasında çeviri yapılabileceğini macOS belirler.";
 "usage.translateText.description" = "Metin seçilebiliyorsa başka bir uygulamada seçin ve çevirmek için %@ tuşlarına basın.";
-"usage.translateImageText.description" = "Seçilemeyen metinler için %@ tuşlarına basarak çevirmek istediğiniz alanı yakalayın. Çevirmek için bir sözcüğün üzerine gelin veya metin seçin. Dinlemek için hoparlöre, sözlük için kitaba tıklayın. Çeviri penceresini açmak için metni seçip %@ tuşlarına basın.";
+"usage.translateImageText.description" = "Çevirmek istediğiniz alanı yakalamak için %@ tuşlarına basın. Çeviriyi görmek için imleci bir sözcüğün üzerine getirin veya metin seçin. Özgün metni dinleyebilir veya sözlüğü kullanabilirsiniz.";
 "usage.lookUp.description" = "Kaynak metinde bir sözcük veya ifade seçin, ardından kitap simgesine tıklayın.";
 "usage.listen.title" = "Sesli Oku";
 "usage.listen.description" = "Kaynak metni veya çeviriyi sesli okuyun.";

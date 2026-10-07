@@ -154,7 +154,7 @@ struct UsageGuideItem: Identifiable {
                 title: localization.string("shortcut.screenshotTranslation"),
                 description: localization.string(
                     "usage.translateImageText.description",
-                    arguments: screenshotShortcutName, translationShortcutName
+                    arguments: screenshotShortcutName
                 )
             ),
             UsageGuideItem(

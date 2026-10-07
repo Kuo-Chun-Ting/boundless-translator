@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "言語サポート";
 "usage.languageSupport.description" = "インターフェイス言語の対応範囲はmacOSと同じです。どの言語間で翻訳できるかはmacOSによって決まります。";
 "usage.translateText.description" = "文字を選択できる場合は、ほかのアプリで文字を選択し、%@ を押して翻訳します。";
-"usage.translateImageText.description" = "選択できない文字は、%@ を押して翻訳したい範囲を撮影します。 単語にポインタを合わせるか、文字を選択すると翻訳します。スピーカーで読み上げ、本で辞書を開きます。文字を選択して %@ を押すと翻訳ウインドウが開きます。";
+"usage.translateImageText.description" = "%@ を押して翻訳したい範囲のスクリーンショットを撮ります。単語にカーソルを合わせるかテキストを選択すると翻訳が表示されます。原文の読み上げや辞書も使えます。";
 "usage.lookUp.description" = "原文の単語や語句を選択し、本のアイコンをクリックします。";
 "usage.listen.title" = "読み上げ";
 "usage.listen.description" = "原文または訳文を読み上げます。";

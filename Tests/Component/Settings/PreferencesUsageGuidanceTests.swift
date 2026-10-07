@@ -67,9 +67,9 @@ func test_usageGuideItems_when_created_then_describes_every_current_feature() th
     #expect(items.map(\.icon) == expectedIcons)
     #expect(items[0].description.contains("⇧⌘1"))
     #expect(items[1].description.contains("⇧⌘2"))
-    #expect(items[1].description.contains("⇧⌘1"))
+    #expect(!items[1].description.contains("⇧⌘1"))
     #expect(items[0].description.hasPrefix("For selectable text"))
-    #expect(items[1].description.hasPrefix("For non-selectable text"))
+    #expect(items[1].description.hasPrefix("Press ⇧⌘2"))
     #expect(items[1].description.contains("capture the area you want to translate"))
     #expect(
         items[2].description

@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Dukungan Bahasa";
 "usage.languageSupport.description" = "Dukungan bahasa antarmuka sama dengan macOS. macOS menentukan bahasa mana yang dapat diterjemahkan satu sama lain.";
 "usage.translateText.description" = "Jika teks bisa dipilih, pilih teks di app lain dan tekan %@ untuk menerjemahkan.";
-"usage.translateImageText.description" = "Untuk teks yang tidak dapat dipilih, tekan %@ untuk mengambil tangkapan layar area yang ingin diterjemahkan. Arahkan kursor ke kata atau pilih teks untuk menerjemahkan. Klik pengeras suara untuk mendengarkan atau buku untuk membuka kamus. Pilih teks dan tekan %@ untuk membuka jendela terjemahan.";
+"usage.translateImageText.description" = "Tekan %@ untuk mengambil tangkapan layar area yang ingin diterjemahkan. Arahkan kursor ke kata atau pilih teks untuk melihat terjemahannya. Anda juga dapat mendengarkan teks asli atau menggunakan kamus.";
 "usage.lookUp.description" = "Pilih kata atau frasa dalam teks sumber, lalu klik ikon buku.";
 "usage.listen.title" = "Bacakan Teks";
 "usage.listen.description" = "Bacakan teks asli atau terjemahannya.";

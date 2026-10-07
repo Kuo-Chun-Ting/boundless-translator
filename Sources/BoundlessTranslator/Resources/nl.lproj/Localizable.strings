@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Taalondersteuning";
 "usage.languageSupport.description" = "De ondersteuning voor interfacetalen komt overeen met macOS. macOS bepaalt tussen welke talen kan worden vertaald.";
 "usage.translateText.description" = "Als tekst selecteerbaar is, selecteer je deze in een andere app en druk je op %@ om te vertalen.";
-"usage.translateImageText.description" = "Als tekst niet selecteerbaar is, druk je op %@ om het te vertalen gebied vast te leggen. Wijs een woord aan of selecteer tekst om te vertalen. Klik op de luidspreker om te luisteren of op het boek voor het woordenboek. Selecteer tekst en druk op %@ om het vertaalvenster te openen.";
+"usage.translateImageText.description" = "Druk op %@ om het te vertalen gebied vast te leggen. Beweeg de aanwijzer over een woord of selecteer tekst om de vertaling te zien. Je kunt ook de oorspronkelijke tekst laten voorlezen of het woordenboek gebruiken.";
 "usage.lookUp.description" = "Selecteer een woord of woordgroep in de brontekst en klik op het boekpictogram.";
 "usage.listen.title" = "Voorlezen";
 "usage.listen.description" = "Lees de brontekst of vertaling voor.";

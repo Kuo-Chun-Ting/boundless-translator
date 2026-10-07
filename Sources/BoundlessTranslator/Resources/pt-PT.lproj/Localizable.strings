@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Suporte de idiomas";
 "usage.languageSupport.description" = "O suporte de idiomas da interface corresponde ao macOS. O macOS determina entre que idiomas é possível traduzir.";
 "usage.translateText.description" = "Se o texto for selecionável, selecione-o noutra aplicação e prima %@ para traduzir.";
-"usage.translateImageText.description" = "Se o texto não puder ser selecionado, prima %@ para capturar a área que pretende traduzir. Passe o cursor sobre uma palavra ou selecione texto para traduzir. Clique no altifalante para ouvir ou no livro para consultar o dicionário. Selecione texto e prima %@ para abrir a janela de tradução.";
+"usage.translateImageText.description" = "Prima %@ para capturar a área que pretende traduzir. Passe o cursor sobre uma palavra ou selecione texto para ver a tradução. Também pode ouvir o texto original ou consultar o dicionário.";
 "usage.lookUp.description" = "Selecione uma palavra ou expressão no texto original e clique no ícone do livro.";
 "usage.listen.title" = "Ler em voz alta";
 "usage.listen.description" = "Leia o texto original ou a tradução em voz alta.";

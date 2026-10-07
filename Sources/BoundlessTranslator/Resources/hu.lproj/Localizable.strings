@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Nyelvi támogatás";
 "usage.languageSupport.description" = "A kezelőfelület nyelvi támogatása megegyezik a macOS-éval. A macOS határozza meg, mely nyelvek között lehet fordítani.";
 "usage.translateText.description" = "Ha a szöveg kijelölhető, jelöld ki egy másik appban, majd nyomd meg a %@ billentyűkombinációt a fordításhoz.";
-"usage.translateImageText.description" = "Ha a szöveg nem jelölhető ki, nyomja meg a %@ billentyűkombinációt a fordítandó terület rögzítéséhez. Fordításhoz vigye a mutatót egy szóra, vagy jelöljön ki szöveget. A hangszóróra kattintva meghallgathatja, a könyvre kattintva szótárazhatja. A fordítási ablakhoz jelöljön ki szöveget, és nyomja meg a %@ billentyűkombinációt.";
+"usage.translateImageText.description" = "Nyomja meg a %@ billentyűkombinációt a fordítandó terület rögzítéséhez. Vigye a mutatót egy szóra vagy jelöljön ki szöveget a fordítás megtekintéséhez. Az eredeti szöveget fel is olvastathatja, vagy használhatja a szótárt.";
 "usage.lookUp.description" = "Jelöljön ki egy szót vagy kifejezést a forrásszövegben, majd kattintson a könyv ikonra.";
 "usage.listen.title" = "Felolvasás";
 "usage.listen.description" = "Olvassa fel az eredeti szöveget vagy a fordítást.";

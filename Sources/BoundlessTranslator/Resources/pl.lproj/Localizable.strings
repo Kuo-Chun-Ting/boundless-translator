@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Obsługa języków";
 "usage.languageSupport.description" = "Obsługa języków interfejsu odpowiada systemowi macOS. macOS określa, między którymi językami można tłumaczyć.";
 "usage.translateText.description" = "Jeśli tekst można zaznaczyć, zaznacz go w innej aplikacji i naciśnij %@, aby przetłumaczyć.";
-"usage.translateImageText.description" = "Jeśli tekstu nie można zaznaczyć, naciśnij %@, aby zrobić zrzut obszaru do przetłumaczenia. Najedź na słowo lub zaznacz tekst, aby go przetłumaczyć. Kliknij głośnik, aby odsłuchać, lub książkę, aby otworzyć słownik. Zaznacz tekst i naciśnij %@, aby otworzyć okno tłumaczenia.";
+"usage.translateImageText.description" = "Naciśnij %@, aby zrobić zrzut obszaru do przetłumaczenia. Najedź kursorem na słowo lub zaznacz tekst, aby zobaczyć tłumaczenie. Możesz też odsłuchać oryginalny tekst lub skorzystać ze słownika.";
 "usage.lookUp.description" = "Zaznacz słowo lub frazę w tekście źródłowym, a następnie kliknij ikonę książki.";
 "usage.listen.title" = "Czytanie na głos";
 "usage.listen.description" = "Odczytaj na głos tekst źródłowy lub tłumaczenie.";

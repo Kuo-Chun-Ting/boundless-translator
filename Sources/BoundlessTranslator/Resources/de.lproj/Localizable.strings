@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Sprachunterstützung";
 "usage.languageSupport.description" = "Die Unterstützung für Oberflächensprachen entspricht macOS. macOS bestimmt, zwischen welchen Sprachen übersetzt werden kann.";
 "usage.translateText.description" = "Bei auswählbarem Text wähle ihn in einer anderen App aus und drücke %@ zum Übersetzen.";
-"usage.translateImageText.description" = "Bei nicht auswählbarem Text drücke %@, um den gewünschten Bereich aufzunehmen. Zeige auf ein Wort oder markiere Text zum Übersetzen. Lautsprecher: vorlesen. Buch: nachschlagen. Markiere Text und drücke %@ für das Übersetzungsfenster.";
+"usage.translateImageText.description" = "Drücke %@, um den Bereich aufzunehmen, den du übersetzen möchtest. Bewege den Mauszeiger über ein Wort oder markiere Text, um die Übersetzung zu sehen. Du kannst dir auch den Originaltext vorlesen lassen oder im Wörterbuch nachschlagen.";
 "usage.lookUp.description" = "Wähle ein Wort oder eine Wortgruppe im Ausgangstext aus und klicke auf das Buchsymbol.";
 "usage.listen.title" = "Vorlesen";
 "usage.listen.description" = "Lies den Originaltext oder die Übersetzung vor.";

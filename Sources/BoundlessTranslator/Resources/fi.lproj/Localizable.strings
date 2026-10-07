@@ -18,7 +18,7 @@
 "usage.languageSupport.title" = "Kielituki";
 "usage.languageSupport.description" = "Käyttöliittymäkielten tuki vastaa macOS:n tukea. macOS määrittää, minkä kielten välillä voidaan kääntää.";
 "usage.translateText.description" = "Jos tekstin voi valita, valitse se toisessa apissa ja käännä painamalla %@.";
-"usage.translateImageText.description" = "Jos tekstiä ei voi valita, ota kuva käännettävästä alueesta painamalla %@. Vie osoitin sanan päälle tai valitse teksti kääntääksesi. Kuuntele kaiuttimesta tai avaa sanakirja kirjasta. Valitse teksti ja paina %@ avataksesi käännösikkunan.";
+"usage.translateImageText.description" = "Ota kuva käännettävästä alueesta painamalla %@. Vie osoitin sanan päälle tai valitse teksti nähdäksesi käännöksen. Voit myös kuunnella alkuperäisen tekstin tai käyttää sanakirjaa.";
 "usage.lookUp.description" = "Valitse sana tai ilmaus lähdetekstistä ja klikkaa kirjakuvaketta.";
 "usage.listen.title" = "Lue ääneen";
 "usage.listen.description" = "Lue alkuperäinen teksti tai käännös ääneen.";
