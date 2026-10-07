@@ -1,5 +1,8 @@
 # TODO
 
+- [x] 完成截圖翻譯收尾：更新 GUI 舊文案、三語 Support、README、示範文件與規格；同步 StoreKit 驗證例外。移除 hint 多餘的快捷鍵參數與顯示條件，保留截圖選字後按快捷鍵翻譯；Help 字典圖示改用共用來源。
+  - 文件經另一個 agent 審閱。Unit 237 項、Component 188 項（各兩種模式）與 Hint GUI 4 項皆通過。未重建 Build App、未產生 DMG、未發布 Support。
+
 - [x] 同步 48 個語系的 Help 截圖翻譯說明：保留截圖快捷鍵，沿用新版 hint，移除選字快捷鍵與圖示操作說明；刪除多餘的格式化參數並更新既有測試。經另一個 agent 審閱，尚無母語者校閱。48 份語言資源格式及與 hint 一致性檢查、Unit 237 項與 Component 188 項（兩種模式）皆通過；未做實際 UI 驗證、未重建 Build App、未產生 DMG、未 commit。
 
 - [x] 縮短 48 個語系的截圖翻譯 hint：明確說明滑鼠停在單字上或選取文字查看翻譯，簡述朗讀原文與字典功能，移除快捷鍵及圖示操作說明。全部語系經另一個 agent 依 concise-writing、humanizer-zh-tw、no-ai-slop 審閱並複查套用內容；尚無母語者校閱。同步更新既有文案測試與規格。48 份語言資源格式檢查、Unit 237 項與 Component 188 項（兩種模式）皆通過；未重建 Build App、未產生 DMG、未 commit。

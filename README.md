@@ -1,6 +1,6 @@
 # Boundless Translator
 
-Most translation apps make you copy text into another app. Boundless Translator translates selected text or screen content with one global shortcut.
+Boundless Translator translates selected text and screenshots without copying text into another app.
 
 ## Features
 
@@ -23,12 +23,12 @@ Most translation apps make you copy text into another app. Boundless Translator 
 
 1. Install Boundless Translator from the DMG, then launch the installed App.
 2. Select text in another app and press the shortcut. When needed, the Accessibility guide opens **System Settings → Privacy & Security → Accessibility**. Enable Boundless Translator; if it is missing, click **+** and choose the installed App.
-3. With no text selected, use the shortcut to capture a region. When needed, the Screen Recording guide starts Apple's permission flow. Quit and reopen the App if macOS requests it.
+3. Press the screenshot shortcut (`Command-Shift-2` by default) to capture a region. When needed, the Screen Recording guide starts Apple's permission flow. Quit and reopen the App if macOS requests it.
 
 ### Settings
 
 1. Open **Preferences…** from the menu bar.
-2. Set **Translate From**, **Translate To**, and the keyboard shortcut.
+2. Set **Translate From**, **Translate To**, and the keyboard shortcuts.
 3. Set **Language** for the app interface.
 
 **Language** uses **System Default** by default. It changes the app interface only. It does not change **Translate From** or **Translate To**.
@@ -44,10 +44,11 @@ The app interface supports the same languages as macOS. macOS provides translati
 
 1. Press the screenshot shortcut. The default is `Command-Shift-2`.
 2. Select a screen region.
-3. Select text in the screenshot window.
-4. Press the translation shortcut to translate it.
+3. Hold the pointer over a word or select text to see its translation.
 
-The shortcut can be changed in Settings. Existing saved shortcuts are preserved when the default changes.
+You can also listen to the original text or look it up in the dictionary.
+
+Both shortcuts can be changed in Settings. Existing saved shortcuts are preserved when the default changes.
 
 If prompted, allow Screen Recording for Boundless Translator in **System Settings → Privacy & Security**, then try again. You may need to quit and reopen the app.
 
@@ -87,7 +88,7 @@ GUI, E2E, StoreKit, language support, script and release checks have independent
 
 `Scripts/verify.sh` runs **all eight levels**, including real E2E and DMG release verification. It has no partial mode, attempts every level, and returns nonzero if any test fails or is skipped. It can build, notarize and temporarily install a DMG; it does not upload to App Store Connect.
 
-Local StoreKit has a known environment skip on macOS 26.5.2 (25F84) with Xcode 26.6 (17F113). This makes full Verify incomplete. See [StoreKit testing](app-store/storekit-testing.md). Actual store purchases still require acceptance in TestFlight.
+Local StoreKit has a known environment skip on macOS 26.5.2 (25F84) with Xcode 26.6 (17F113). Under the project’s current StoreKit exception, Verify passes when all other levels pass. See [StoreKit testing](app-store/storekit-testing.md). Actual store purchases still require acceptance in TestFlight.
 
 ### XCTest UI Automation
 

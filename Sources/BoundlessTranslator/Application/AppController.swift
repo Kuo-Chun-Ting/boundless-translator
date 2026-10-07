@@ -81,9 +81,6 @@ final class AppController {
             viewer.enableQuickTranslation(settings: settings, engine: translationEngine) { [weak self] in
                 self?.authorizeFeature() ?? false
             }
-            viewer.translationShortcutName = { [weak self] in
-                self?.translationShortcutController.definition.displayName ?? ""
-            }
             viewer.sourceLanguageIdentifier = { [weak self] in
                 self?.settings.sourceLanguageIdentifier
             }

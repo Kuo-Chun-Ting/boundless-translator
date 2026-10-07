@@ -54,7 +54,6 @@ final class HintFixtureDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func presentScreenshot() {
-        viewer.translationShortcutName = { "⌥T" }
         imageView.setAccessibilityChildren([imageAccessibility])
         viewer.present(image: makeImage(), pointerLocation: presentationPoint)
     }

@@ -2,9 +2,9 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test
-func test_instruction_whenShortcutIsCustomized_then_describesScreenshotFeaturesWithoutShortcut() {
+func test_instruction_whenLanguageIsEnglish_then_describesScreenshotFeatures() {
     // Arrange
-    let tip = ScreenshotTip(localization: AppLocalization(languageIdentifier: "en"), shortcut: "⌥T")
+    let tip = ScreenshotTip(localization: AppLocalization(languageIdentifier: "en"))
     // Act
     let instruction = tip.instruction
     // Assert
@@ -14,7 +14,7 @@ func test_instruction_whenShortcutIsCustomized_then_describesScreenshotFeaturesW
 @Test
 func test_instruction_whenLanguageIsTraditionalChinese_then_usesLocalizedSentence() {
     // Arrange
-    let tip = ScreenshotTip(localization: AppLocalization(languageIdentifier: "zh-Hant"), shortcut: "⇧⌘1")
+    let tip = ScreenshotTip(localization: AppLocalization(languageIdentifier: "zh-Hant"))
     // Act
     let instruction = tip.instruction
     // Assert

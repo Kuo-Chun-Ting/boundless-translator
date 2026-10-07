@@ -7,7 +7,7 @@ func test_hintList_when_widthIsReduced_then_reflowsBothLocalizedHints(language: 
     // Arrange
     let localization = AppLocalization(languageIdentifier: language)
     let limit = ScreenshotLanguageTip(localization: localization, sourceLanguageIdentifier: "hi")
-    let tutorial = ScreenshotTip(localization: localization, shortcut: "⇧⌘1")
+    let tutorial = ScreenshotTip(localization: localization)
     let items = [
         HintItem(id: "limit", title: limit.title, message: limit.message,
                  icon: Image(systemName: "exclamationmark.triangle"), onClose: { _ in }),
@@ -35,7 +35,7 @@ func test_hintView_when_measuredBeforePresentation_then_hasContentSize(language:
     // Arrange
     let localization = AppLocalization(languageIdentifier: language)
     let lookupTip = LookupTip(localization: localization)
-    let screenshotTip = ScreenshotTip(localization: localization, shortcut: "⇧⌘1")
+    let screenshotTip = ScreenshotTip(localization: localization)
     let controller = NSHostingController(rootView: HintView(
         title: screenshot ? screenshotTip.title : lookupTip.title,
         message: screenshot ? screenshotTip.message : lookupTip.message,
@@ -56,7 +56,7 @@ func test_hintView_when_measuredBeforePresentation_then_hasContentSize(language:
 func test_hintView_whenWidthIsReduced_then_wrapsControlsWithoutClippingText() {
     // Arrange
     let localization = AppLocalization(languageIdentifier: "de")
-    let tip = ScreenshotTip(localization: localization, shortcut: "⇧⌘1")
+    let tip = ScreenshotTip(localization: localization)
     func measure(width: CGFloat) -> CGSize {
         NSHostingController(rootView: HintView(
             title: tip.title, message: tip.message,

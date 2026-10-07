@@ -12,7 +12,7 @@ Boundless Translator requires an Apple silicon Mac with macOS 15 or later.
 ## How to translate
 
 - Select text in another app and press Command-Shift-1.
-- If you cannot select the text, press Command-Shift-2 to capture an area. Drag to select text in the screenshot window, then press Command-Shift-1.
+- If you cannot select the text, press Command-Shift-2 to capture an area. Hold the pointer over a word or select text to see its translation. You can also listen to the original text or look it up in the dictionary.
 - These are the default shortcuts. Open Preferences from the menu bar to change shortcuts, translation languages or the app language. Click "?" for instructions.
 
 ## Languages and recognition

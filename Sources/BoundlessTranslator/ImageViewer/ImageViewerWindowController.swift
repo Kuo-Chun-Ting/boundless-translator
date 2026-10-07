@@ -38,7 +38,6 @@ final class ImageViewerWindowController: NSWindowController,
         window?.isKeyWindow == true && content.hasActiveTextSelection
     }
 
-    var translationShortcutName: @MainActor () -> String = { "" }
     var sourceLanguageIdentifier: @MainActor () -> String? = { nil }
 
     private let screenshotTipController = ScreenshotTipController()
@@ -199,11 +198,8 @@ final class ImageViewerWindowController: NSWindowController,
         ) {
             hints.append(ScreenshotHint(id: "hint.screenshotLanguage", tip: tip))
         }
-        let shortcut = translationShortcutName()
-        if !shortcut.isEmpty {
-            hints.append(ScreenshotHint(id: "hint.screenshot", tip: ScreenshotTip(
-                localization: localization, shortcut: shortcut)))
-        }
+        hints.append(ScreenshotHint(id: "hint.screenshot", tip: ScreenshotTip(
+            localization: localization)))
         return hints
     }
 

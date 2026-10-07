@@ -22,7 +22,6 @@ struct HintControllerTests {
         let controller = ImageViewerWindowController(
             content: view, windowPresenter: ForegroundWindowPresenterSpy(),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings())
-        controller.translationShortcutName = { "⇧⌘1" }
         let window = try #require(controller.window)
         defer { controller.close() }
         controller.present(image: NSImage(size: CGSize(width: 200, height: 200)), pointerLocation: .zero)
@@ -45,7 +44,7 @@ struct HintControllerTests {
         #expect(view.image === image)
         #expect(view.imageRect == originalBounds)
         #expect(view.selectedText == "A B")
-        #expect(ScreenshotTip(localization: testEnglishLocalization, shortcut: "⇧⌘1").status == .available)
+        #expect(ScreenshotTip(localization: testEnglishLocalization).status == .available)
     }
 
     @Test
@@ -104,7 +103,6 @@ struct HintControllerTests {
             content: view, windowPresenter: ForegroundWindowPresenterSpy(),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             recognitionLanguages: { ["en-US"] })
-        controller.translationShortcutName = { "⇧⌘1" }
         controller.sourceLanguageIdentifier = { "hi" }
         let window = try #require(controller.window)
         defer { controller.close() }
@@ -129,7 +127,6 @@ struct HintControllerTests {
             content: view, windowPresenter: ForegroundWindowPresenterSpy(),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
             recognitionLanguages: { ["en-US"] })
-        controller.translationShortcutName = { "⇧⌘1" }
         controller.sourceLanguageIdentifier = { "hi" }
         let window = try #require(controller.window)
         defer { controller.close() }

@@ -12,7 +12,7 @@ Select text in another app and press your translation shortcut. The original tex
 
 ## Translate text you cannot select
 
-Capture the area you want to translate with the screenshot shortcut. In the captured image, select the text and press your translation shortcut. This works for text in images and app interfaces that you cannot select directly.
+Capture the area you want to translate with the screenshot shortcut. Hold the pointer over a word or select text in the captured image to see its translation. You can also listen to the original text or look it up in the dictionary.
 
 ## Look up words
 

@@ -159,7 +159,7 @@ struct UsageGuideItem: Identifiable {
             ),
             UsageGuideItem(
                 id: "lookUp",
-                icon: .text("📖"),
+                icon: .text(LookupActionOverlay.bookIcon),
                 title: localization.string("lookup.title"),
                 description: localization.string("usage.lookUp.description")
             ),
