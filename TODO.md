@@ -1,5 +1,7 @@
 # TODO
 
+- [x] 2026-10-07 發布字體調整版本：`54389fd` 已提交；App Store 1.0（Build 41）封存、驗證與上傳成功，Apple 後續處理及正式上架尚未確認。DMG 已完成公證與安裝後啟動驗證：`Build/Boundless Translator DMG Test.dmg`。StoreKit 依專案例外未驗證，其餘 Verify 項目全數通過。
+
 - [x] 同步 AGENTS.md／CLAUDE.md 的 StoreKit 驗證例外：目前沿用環境跳過規則，其餘 Verify 項目全數通過即可依使用者授權 commit／發布，報告仍註明 StoreKit 未驗證。已確認兩份指令一致；未修改測試腳本。
 
 - [x] 翻譯視窗的原文與譯文改用系統介面字體，保留原有預設大小與一般粗細；截圖字卡不變。
