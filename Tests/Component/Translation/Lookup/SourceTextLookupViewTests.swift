@@ -18,20 +18,10 @@ func test_init_when_configuring_source_text_then_uses_primary_label_color() thro
 }
 
 @Test @MainActor
-func test_init_when_configuring_source_text_then_uses_system_serif_font() throws {
+func test_init_when_configuring_source_text_then_uses_system_interface_font() throws {
     // Arrange
     let view = SourceTextLookupView()
-    let expectedDescriptor = try #require(
-        NSFont.systemFont(ofSize: NSFont.systemFontSize)
-            .fontDescriptor
-            .withDesign(.serif)
-    )
-    let expectedFont = try #require(
-        NSFont(
-            descriptor: expectedDescriptor,
-            size: NSFont.systemFontSize
-        )
-    )
+    let expectedFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
 
     // Act
     let scrollView = try #require(
@@ -40,7 +30,7 @@ func test_init_when_configuring_source_text_then_uses_system_serif_font() throws
     let textView = try #require(scrollView.documentView as? NSTextView)
 
     // Assert
-    #expect(textView.font?.fontName == expectedFont.fontName)
+    #expect(textView.font == expectedFont)
 }
 
 @Test @MainActor
@@ -196,6 +186,7 @@ func test_updateSelection_when_lookupActionMovesToFifthLine_then_buttonOwnsHitTe
     // Arrange
     let view = SourceTextLookupView()
     let window = makeWindow(hosting: view)
+    view.frame.size.height = 140
     view.updateText(
         "First line\nSecond line\nThird line\nFourth line\nFifth line"
     )

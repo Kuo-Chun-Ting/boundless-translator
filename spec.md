@@ -37,7 +37,7 @@ Read selected text through Accessibility in the background and run splitting out
 ## Translation Window
 
 - Show source and translated text in two equal, selectable panels.
-- Use the existing system serif font on a continuous native text background with a subtle central divider. Align each language menu and speech button with its text column using matching insets. On macOS 26, use native Liquid Glass controls; retain native controls on macOS 15.
+- Use the system interface font at the default system size and regular weight for both source and translated text on a continuous native text background with a subtle central divider. Align each language menu and speech button with its text column using matching insets. On macOS 26, use native Liquid Glass controls; retain native controls on macOS 15.
 - Grow the initial window height with content up to 440 points, then scroll overflowing text. The translation window remains resizable.
 - After the user resizes or zooms it, preserve that size for the current presentation even when translation or hint content changes. Both text columns reflow at their available width and retain their selection; increasing height reveals more text without changing font size.
 - Keep language menus and speech controls aligned with their respective panels when resized.

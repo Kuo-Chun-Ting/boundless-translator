@@ -2,17 +2,7 @@ import AppKit
 
 enum TranslationWindowStyle {
     static var contentFont: NSFont {
-        let systemFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
-        guard
-            let descriptor = systemFont.fontDescriptor.withDesign(.serif),
-            let serifFont = NSFont(
-                descriptor: descriptor,
-                size: NSFont.systemFontSize
-            )
-        else {
-            return systemFont
-        }
-        return serifFont
+        NSFont.systemFont(ofSize: NSFont.systemFontSize)
     }
 
     static let contentPadding: CGFloat = 18

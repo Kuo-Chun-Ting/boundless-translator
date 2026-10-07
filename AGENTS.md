@@ -9,7 +9,8 @@
 - 修改 GUI／E2E 測試時，加跑改過的案例；修改共用測試工具時，跑受影響的群組；修改腳本時，跑對應的 `Tests/Scripts/` 測試。
 - 只改文件時，檢查內容、引用與一致性，不跑 App 測試或產生 DMG。
 - 使用者指定驗證層級時，跑該入口；未指定案例則跑該層全部。入口與參數見 `Tests/README.md`。
-- 完整驗證或正式發布前跑 `Scripts/verify.sh`；失敗、跳過或環境不足均不算通過，不得略過或放寬測試。
+- 完整驗證或正式發布前跑 `Scripts/verify.sh`；除下列 StoreKit 例外，失敗、跳過或環境不足均不算通過。
+- 目前 StoreKit 沿用既有環境跳過規則；其餘項目全數通過即視為 Verify 通過，可依使用者授權 commit 或發布。即使腳本因此回傳非零，仍按此例外判定，並在報告註明 StoreKit 未驗證。
 - 只有使用者要求可安裝版本或發布驗證時才產生 DMG。建置與公證用 `Scripts/release_dmg.sh`；發布包與安裝後啟動驗證用 `Scripts/run_release_tests.sh`。
 - 使用者要求實際 UI 驗證時，操作修改後的 App 並附截圖；未驗證的畫面或操作要明確標示。
 - Codex 跑測試入口時，第一次就使用 `exec_command` 的 `sandbox_permissions: "require_escalated"`；讀檔與改檔使用預設沙盒。

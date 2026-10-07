@@ -4,19 +4,9 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_makeNSView_when_configuring_translated_text_then_uses_system_serif_font() throws {
+func test_makeNSView_when_configuring_translated_text_then_uses_system_interface_font() throws {
     // Arrange
-    let expectedDescriptor = try #require(
-        NSFont.systemFont(ofSize: NSFont.systemFontSize)
-            .fontDescriptor
-            .withDesign(.serif)
-    )
-    let expectedFont = try #require(
-        NSFont(
-            descriptor: expectedDescriptor,
-            size: NSFont.systemFontSize
-        )
-    )
+    let expectedFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
     let hostingView = NSHostingView(
         rootView: SelectableTranslationTextView(text: "Translated text")
     )
@@ -29,7 +19,7 @@ func test_makeNSView_when_configuring_translated_text_then_uses_system_serif_fon
     let textView = try #require(scrollView.documentView as? NSTextView)
 
     // Assert
-    #expect(textView.font?.fontName == expectedFont.fontName)
+    #expect(textView.font == expectedFont)
 }
 
 @Test @MainActor

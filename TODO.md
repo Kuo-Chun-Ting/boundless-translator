@@ -1,5 +1,12 @@
 # TODO
 
+- [x] 同步 AGENTS.md／CLAUDE.md 的 StoreKit 驗證例外：目前沿用環境跳過規則，其餘 Verify 項目全數通過即可依使用者授權 commit／發布，報告仍註明 StoreKit 未驗證。已確認兩份指令一致；未修改測試腳本。
+
+- [x] 翻譯視窗的原文與譯文改用系統介面字體，保留原有預設大小與一般粗細；截圖字卡不變。
+  - 驗證：Unit 237 項、Component 188 項，兩種模式皆通過。既有第五行字典測試因新字體行高而超出可見範圍，僅調高該案例的測試視窗後通過，未修改字典功能。
+  - 2026-10-07 完整 Verify：Unit、Component、Scripts、GUI（13 項）、E2E（6 項）、Languages、Release 通過；StoreKit 因既有環境規則跳過，整體為 7 通過、0 失敗、1 跳過，回傳非零。另以 `--force` 跑 StoreKit，5 項皆在 Apple `SKTestSession.buyProduct` 回傳 `unknown`；系統記錄購買成功但未回傳預期的交易 JWS，尚未釐清環境故障根因。驗證期間未修改程式碼或測試。使用者已確認 StoreKit 為目前驗證例外；其餘 7 項通過，符合 commit／發布條件。
+  - 本次 DMG 已完成公證、安裝後啟動驗證：`Build/Boundless Translator DMG Test.dmg`。Build 根目錄的獨立 App 未重建；未另做字型視覺驗收。
+
 - [x] 玻璃浮條改版：移除紙頁版與樣式切換；單一原生玻璃形狀包含指向原文的尖角，調整譯文比例、間距及淡色染色。
   - 驗證：尖角空間回歸測試先失敗、修改後通過；Unit 237 項、Component 188 項，兩種模式皆通過；單獨執行截圖 GUI 群組 9 項通過，已檢查深淺外觀 × 白／黑／彩色背景 × 長短文共 12 張實際 UI 截圖。先前與 Component 同跑的 GUI 因游標失敗而中止，分開重跑全組通過。已重建 `Build/Boundless Translator DMG Test.app`；macOS 15 備援材質未實測，未跑完整 Verify、未產生 DMG、未 commit。
 
