@@ -57,21 +57,53 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
     }
 
     func test_preview_when_movingFromWordToCard_then_actionsRemainClickable() throws {
-        // Arrange
-        move(coordinate(try word("TARGET"), "middle"))
+        // Arrange: distinct outputs make an accidental source change observable.
+        app.terminate()
+        app.launchEnvironment["IMAGE_TEXT_ECHO_SOURCE"] = "1"
+        app.launch()
+        XCTAssertTrue(waitFor { self.words().contains { $0.text == "TARGET" } })
+        let target = try word("TARGET")
+        let original = try word("ORIGINAL")
         let result = app.textViews["screenshotPreview.translation"]
-        XCTAssertTrue(waitFor { result.exists && result.value as? String == "Texte traduit" })
+        let card = app.dialogs["screenshotPreview"]
         let speech = app.buttons["screenshotPreview.speech"]
-        // Act
-        move(CGPoint(x: speech.frame.midX, y: speech.frame.midY))
-        pause(0.5)
-        speech.click()
+
+        for selected in [false, true] {
+            // Act: open the same card by hovering or selecting text.
+            if selected { try select("TARGET") }
+            else {
+                move(CGPoint(x: target.frame.minX + 1, y: target.frame.midY))
+                move(coordinate(target, "middle"))
+            }
+            XCTAssertTrue(waitFor { result.exists && result.value as? String == "TARGET" })
+            let frame = card.frame
+            let coveredText = original.frame.intersection(frame).insetBy(dx: 2, dy: 2)
+            XCTAssertFalse(coveredText.isNull, "The card must cover another OCR word")
+            XCTAssertGreaterThan(coveredText.height, 2)
+            // Move inside the card repeatedly, over a different word underneath it.
+            move(CGPoint(x: coveredText.midX - 1, y: coveredText.midY))
+            move(CGPoint(x: coveredText.midX + 1, y: coveredText.midY))
+            pause(0.6)
+            // Assert: the upper card owns these events, preserving source and position.
+            XCTAssertEqual(result.value as? String, "TARGET")
+            XCTAssertEqual(card.frame, frame)
+            XCTAssertEqual(selectedText, selected ? "TARGET" : "")
+            move(CGPoint(x: speech.frame.midX, y: speech.frame.midY))
+            pause(0.5)
+            speech.click()
+            XCTAssertEqual(result.value as? String, "TARGET")
+            XCTAssertTrue(speech.isEnabled)
+            let attachment = XCTAttachment(screenshot: app.windows["imageText.screenshot"].screenshot())
+            attachment.name = selected ? "selected-card-over-text" : "hover-card-over-text"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+        }
+        // Act: clearing selection and leaving the card restores ordinary source hover.
+        click(imageBlankPoint)
+        move(CGPoint(x: original.frame.minX + 1, y: original.frame.midY))
+        move(coordinate(original, "middle"))
         // Assert
-        XCTAssertTrue(result.exists)
-        XCTAssertTrue(speech.isEnabled)
-        XCTAssertEqual(selectedText, "")
-        attachPreview("hover-preview")
-        // Moving from the card to the title bar should dismiss an unselected preview.
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "ORIGINAL" })
         let window = app.windows["imageText.screenshot"]
         move(CGPoint(x: window.frame.minX + 150, y: window.frame.minY + 12))
         XCTAssertTrue(waitFor { !result.exists })
@@ -81,7 +113,9 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
         // Arrange
         move(coordinate(try word("TARGET"), "middle"))
         XCTAssertTrue(app.buttons["screenshotPreview.lookup"].waitForExistence(timeout: 5))
-        // Act
+        // Act: leave the hover card before selecting the source it covers.
+        move(imageBlankPoint)
+        XCTAssertTrue(waitFor { !self.app.dialogs["screenshotPreview"].exists })
         try select("ORIGINAL")
         // Assert
         XCTAssertEqual(selectedText, "ORIGINAL")
@@ -117,10 +151,10 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
         // Arrange
         try select("TARGET")
         switchAway()
-        // Act
-        try select("ORIGINAL")
+        // Act: WORDS remains uncovered when the existing preview returns with the app.
+        try select("WORDS")
         // Assert
-        XCTAssertEqual(selectedText, "ORIGINAL")
+        XCTAssertEqual(selectedText, "WORDS")
     }
 
     private func attachPreview(_ name: String) {

@@ -21,6 +21,9 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
             XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
             move(imageBlankPoint)
             XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 5, y: 5))
+            // Clear the old preview before selecting the source it covers.
+            click(imageBlankPoint)
+            XCTAssertTrue(waitFor { !self.app.dialogs["screenshotPreview"].exists })
             try select("ORIGINAL")
         }
     }
@@ -56,6 +59,9 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
             move(coordinate(try word("TARGET"), "center"))
             // Assert
             XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
+            // Clear the old preview before selecting the source it covers.
+            click(imageBlankPoint)
+            XCTAssertTrue(waitFor { !self.app.dialogs["screenshotPreview"].exists })
             try select("ORIGINAL")
             pressTranslate()
             XCTAssertEqual(translationSource, "ORIGINAL")

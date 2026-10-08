@@ -232,7 +232,9 @@ private final class ImageTextValueElement: NSView {
 private struct FixtureTranslationRunner: TranslationRunning {
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
         TranslationOutput(
-            translatedText: ProcessInfo.processInfo.environment["IMAGE_TEXT_TRANSLATION"] ?? "Texte traduit", sourceLanguageIdentifier: "en",
+            translatedText: ProcessInfo.processInfo.environment["IMAGE_TEXT_ECHO_SOURCE"] == "1"
+                ? request.text
+                : ProcessInfo.processInfo.environment["IMAGE_TEXT_TRANSLATION"] ?? "Texte traduit", sourceLanguageIdentifier: "en",
             targetLanguageIdentifier: "fr")
     }
 }

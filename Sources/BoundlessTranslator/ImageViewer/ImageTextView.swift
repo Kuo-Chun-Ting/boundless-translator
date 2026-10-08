@@ -99,7 +99,6 @@ final class ImageTextView: NSView {
         let center = NotificationCenter.default
         center.removeObserver(self)
         guard let window else { return }
-        window.acceptsMouseMovedEvents = true
         for name in [NSWindow.didBecomeKeyNotification, NSWindow.didResignKeyNotification] {
             center.addObserver(self, selector: #selector(focusChanged), name: name, object: window)
         }

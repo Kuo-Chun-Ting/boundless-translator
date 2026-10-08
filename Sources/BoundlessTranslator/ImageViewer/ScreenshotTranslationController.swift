@@ -216,6 +216,7 @@ final class ScreenshotTranslationPanel: NSPanel {
         isReleasedWhenClosed = false
         isOpaque = false
         backgroundColor = .clear
+        ignoresMouseEvents = false
         hasShadow = true
         hidesOnDeactivate = true
         acceptsMouseMovedEvents = true
