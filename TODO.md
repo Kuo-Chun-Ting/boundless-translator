@@ -1,5 +1,14 @@
 # TODO
 
+- [ ] 修正首次使用查字典時，在 Apple 提示按「繼續」後 Boundless 視窗消失的問題。
+- [ ] 修正截圖翻譯中，hover 單字或選取文字後，滑鼠向上移至字卡時觸發下層文字事件，導致字卡消失的問題。
+
+- [ ] 確認新版功能介紹圖：`docs/screenshot-demo/glass-updated/`、`space-gray-updated/`。沿用原版構圖與引導樣式，截圖翻譯分列單字、句子兩個結果，字典只留一個範例；背景與 Settings 保持原版。
+- [x] 製作選字翻譯 PDF 與手繪截圖素材；PDF 文字擷取正確，手繪圖通過 macOS OCR 辨識。
+- [x] 清除未採用的手繪圖、黑白便條及兩份生成提示，保留已確認的配色素材。
+- [x] 使用者確認奶油白與灰藍手寫素材，原圖及兩種背景預覽存於 `docs/screenshot-demo/capture-assets/palette-study/`；短文案通過 OCR，尚待實拍。
+- [ ] 使用 PDF 第二句與手繪圖片重拍選字翻譯、單字翻譯、整句翻譯及字典畫面，再更新介紹圖。
+
 - [x] 完成截圖翻譯收尾：更新 GUI 舊文案、三語 Support、README、示範文件與規格；同步 StoreKit 驗證例外。移除 hint 多餘的快捷鍵參數與顯示條件，保留截圖選字後按快捷鍵翻譯；Help 字典圖示改用共用來源。
   - 文件經另一個 agent 審閱。Unit 237 項、Component 188 項（各兩種模式）與 Hint GUI 4 項皆通過。未重建 Build App、未產生 DMG、未發布 Support。
 
