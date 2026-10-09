@@ -22,18 +22,6 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         attachScreen("screenshot-hover-translation", window: boundlessTranslator.dialogs["screenshotPreview"])
     }
 
-    func test_screenshotSelection_whenReturningAfterTranslation_thenFirstDragSelectsText() throws {
-        // Arrange
-        let screenshot = try prepareScreenshotAfterReturningFromAnotherApp()
-
-        // Act
-        let coverage = try dragToSelectText(in: screenshot)
-
-        // Assert
-        attachScreen("first-drag", window: screenshotWindow)
-        XCTAssertGreaterThan(coverage, 0.9, "The first drag after returning must select the English text.")
-    }
-
     func test_screenshotTranslation_whenReturningAfterTranslation_thenTranslatesSelectedText() throws {
         // Arrange
         let screenshot = try prepareScreenshotAfterReturningFromAnotherApp()
@@ -112,7 +100,7 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
 
     private func establishTextSelection(in screenshot: ScreenshotSelection) throws {
         let coverage = try dragToSelectText(in: screenshot)
-        attachScreen("selection-before-shortcut", window: screenshotWindow)
+        attachScreen("first-drag", window: screenshotWindow)
         XCTAssertGreaterThan(coverage, 0.9, "The first drag must select text before translation can be tested.")
     }
 

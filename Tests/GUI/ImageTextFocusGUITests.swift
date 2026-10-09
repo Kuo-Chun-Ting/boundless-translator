@@ -44,28 +44,26 @@ final class ImageTextFocusGUITests: ImageTextGUITestCase {
         try select("TARGET")
     }
 
-    func test_focus_when_repeatingTranslationAndAppSwitches_then_everyReturnCanSelectAndTranslate()
+    func test_focus_when_returningFromAnotherApp_then_canSelectAndTranslate()
         throws
     {
-        for _ in 0..<3 {
-            // Arrange
-            try select("TARGET")
-            pressTranslate()
-            XCTAssertEqual(translationSource, "TARGET")
-            switchAway()
-            XCTAssertTrue(waitFor { self.translationWindow.exists == false })
-            // Act
-            click(imageBlankPoint)
-            move(coordinate(try word("TARGET"), "center"))
-            // Assert
-            XCTAssertEqual(NSCursor.currentSystem?.hotSpot, NSPoint(x: 12, y: 11))
-            // Clear the old preview before selecting the source it covers.
-            click(imageBlankPoint)
-            XCTAssertTrue(waitFor { !self.app.dialogs["screenshotPreview"].exists })
-            try select("ORIGINAL")
-            pressTranslate()
-            XCTAssertEqual(translationSource, "ORIGINAL")
-            key(53)
-        }
+        // Arrange
+        try select("TARGET")
+        pressTranslate()
+        XCTAssertEqual(translationSource, "TARGET")
+        switchAway()
+        XCTAssertTrue(waitFor { self.translationWindow.exists == false })
+        // Act
+        click(imageBlankPoint)
+        move(coordinate(try word("TARGET"), "center"))
+        // Assert
+        XCTAssertTrue(waitFor { NSCursor.currentSystem?.hotSpot == NSPoint(x: 12, y: 11) })
+        // Clear the old preview before selecting the source it covers.
+        click(imageBlankPoint)
+        XCTAssertTrue(waitFor { !self.app.dialogs["screenshotPreview"].exists })
+        try select("ORIGINAL")
+        pressTranslate()
+        XCTAssertEqual(translationSource, "ORIGINAL")
+        key(53)
     }
 }

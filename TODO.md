@@ -1,5 +1,7 @@
 # TODO
 
+- [x] 精簡重複測試：App 切換由三輪改成一輪，合併 E2E 首次拖曳選字與翻譯檢查；GUI 保留兩組外觀，刪除重複的 12 組截圖案例及跳過設定。Production code 未修改。
+  - Unit 237 項、Component 188 項（各兩種模式）、GUI 入口腳本測試與修改的 E2E 通過。游標案例補上焦點前置條件，在另一個 App 取得焦點後執行通過；移除診斷後的最後一次 GUI 驗證已中止，未完成全組驗證。
 - [x] 整理測試名稱與位置：字典重設測試改名、7 個測試搬到對應模組、GUI 共用 App 目錄改名，移除 E2E 的 DMG 層；同步引用並跑完整 Verify。
 - [x] 新增 `Scripts/reset_lookup_dictionary.sh`：直接清除首次提示紀錄，保留其他設定，不備份；未執行實際重設，首次提示是否重現尚待確認。
 - [x] 將 Build App 入口移至 `Scripts/build_dmg_app.sh`，同步更新發布、E2E、文件路徑及 `BuildDmgAppTests.sh` 測試入口；建置行為不變。

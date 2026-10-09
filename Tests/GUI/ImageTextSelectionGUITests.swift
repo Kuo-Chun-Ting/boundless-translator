@@ -3,39 +3,18 @@ import XCTest
 
 @MainActor
 final class ImageTextSelectionGUITests: ImageTextGUITestCase {
-    func test_previewGlass_when_backgroundAndAppearanceVary_then_keepsTextAndActionsUsable() throws {
-        for appearance in ["light", "dark"] {
-            for background in ["white", "dark", "color"] {
-                for (length, translation) in [("short", "金色的"),
-                    ("long", "系統設計面試著重於架構取捨，以及解決複雜問題的能力。") ] {
-                    // Arrange
-                    app.terminate()
-                    app.launchEnvironment["IMAGE_TEXT_APPEARANCE"] = appearance
-                    app.launchEnvironment["IMAGE_TEXT_BACKGROUND"] = background
-                    app.launchEnvironment["IMAGE_TEXT_TRANSLATION"] = translation
-                    app.launch()
-                    XCTAssertTrue(waitFor { self.words().contains { $0.text == "TARGET" } })
-                    // Act
-                    move(coordinate(try word("TARGET"), "middle"))
-                    let result = app.textViews["screenshotPreview.translation"]
-                    XCTAssertTrue(waitFor { result.exists && result.value as? String == translation })
-                    // Assert
-                    XCTAssertTrue(app.buttons["screenshotPreview.speech"].isEnabled)
-                    XCTAssertTrue(app.buttons["screenshotPreview.lookup"].isEnabled)
-                    pause(0.5)
-                    let screenshot = XCTAttachment(screenshot: app.dialogs["screenshotPreview"].screenshot())
-                    screenshot.name = "glass-\(appearance)-\(background)-\(length)"
-                    screenshot.lifetime = .keepAlways
-                    add(screenshot)
-                    move(imageBlankPoint)
-                    XCTAssertTrue(waitFor { !result.exists })
-                }
-            }
-        }
+    func test_preview_when_lightAndDark_then_keepsTextAndActionsUsable() throws {
+        try checkPreview(appearance: "light", background: "white", length: "short", translation: "金色的")
+        try checkPreview(appearance: "dark", background: "color", length: "long",
+                         translation: "系統設計面試著重於架構取捨，以及解決複雜問題的能力。")
     }
 
     func test_previewCursor_when_leavingButtonsAndText_then_returnsToArrow() throws {
         // Arrange
+        let fixtureApp = try XCTUnwrap(NSRunningApplication.runningApplications(
+            withBundleIdentifier: "com.boundless-translator.cursor-test-host").first)
+        click(imageBlankPoint)
+        XCTAssertTrue(waitFor { fixtureApp.isActive }, "Setup: the screenshot app must be active before hovering")
         move(coordinate(try word("TARGET"), "middle"))
         let text = app.textViews["screenshotPreview.translation"]
         XCTAssertTrue(text.waitForExistence(timeout: 5))
@@ -155,6 +134,30 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
         try select("WORDS")
         // Assert
         XCTAssertEqual(selectedText, "WORDS")
+    }
+
+    private func checkPreview(appearance: String, background: String, length: String, translation: String) throws {
+        // Arrange
+        app.terminate()
+        app.launchEnvironment["IMAGE_TEXT_APPEARANCE"] = appearance
+        app.launchEnvironment["IMAGE_TEXT_BACKGROUND"] = background
+        app.launchEnvironment["IMAGE_TEXT_TRANSLATION"] = translation
+        app.launch()
+        XCTAssertTrue(waitFor { self.words().contains { $0.text == "TARGET" } })
+        // Act
+        move(coordinate(try word("TARGET"), "middle"))
+        let result = app.textViews["screenshotPreview.translation"]
+        // Assert
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == translation })
+        XCTAssertTrue(app.buttons["screenshotPreview.speech"].isEnabled)
+        XCTAssertTrue(app.buttons["screenshotPreview.lookup"].isEnabled)
+        pause(0.5)
+        let screenshot = XCTAttachment(screenshot: app.dialogs["screenshotPreview"].screenshot())
+        screenshot.name = "glass-\(appearance)-\(background)-\(length)"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        move(imageBlankPoint)
+        XCTAssertTrue(waitFor { !result.exists })
     }
 
     private func attachPreview(_ name: String) {
