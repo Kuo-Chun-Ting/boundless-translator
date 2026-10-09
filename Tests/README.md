@@ -48,7 +48,7 @@ Without selectors, each entry runs its entire level. Unknown/empty test selectio
 
 ## Environment and artifacts
 
-- GUI and E2E require an unlocked interactive Mac and XCTest automation permission. E2E also requires Accessibility, Screen Recording, translation models and the signing identity used by `Scripts/DMG/build_app.sh`.
+- GUI and E2E require an unlocked interactive Mac and XCTest automation permission. E2E also requires Accessibility, Screen Recording, translation models and the signing identity used by `Scripts/build_dmg_app.sh`.
 - E2E builds directly to `Build/E2E/App/Boundless Translator E2E.app`, with bundle ID `com.lillard.BoundlessTranslator.e2e`. It does not install or notarize a DMG. Test launches use separate shortcuts and preferences.
 - Permission setup is opt-in: `Scripts/run_e2e_tests.sh --from-permission-setup`. It resets only E2E permissions and pauses for macOS authorization. Neither normal E2E nor Verify resets permissions.
 - GUI results are under `Build/GUI/Results.*`; E2E results are under `Build/E2E/Results`. GUI/E2E reject missing, empty, failed or skipped results.

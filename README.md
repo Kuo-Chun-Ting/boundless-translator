@@ -66,7 +66,7 @@ Building requires:
 ```bash
 git clone https://github.com/Kuo-Chun-Ting/boundless-translator.git
 cd boundless-translator
-Scripts/DMG/build_app.sh
+Scripts/build_dmg_app.sh
 ```
 
 This uses the `BoundlessTranslator-DMG` Xcode scheme to build and publish `Build/Boundless Translator DMG Test.app`, with App Sandbox enabled and no subscription required. DMG Test releases use this build path; the App Store release uses an Xcode archive.

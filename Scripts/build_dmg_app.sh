@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly PROJECT_ROOT="${0:A:h:h:h}"
+readonly PROJECT_ROOT="${0:A:h:h}"
 source "${PROJECT_ROOT}/Scripts/DMG/signing.conf"
 
 readonly XCODE_PROJECT="${PROJECT_ROOT}/BoundlessTranslator.xcodeproj"

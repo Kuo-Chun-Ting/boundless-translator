@@ -3,7 +3,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h:h}"
-readonly BUILDER="${PROJECT_ROOT}/Scripts/DMG/build_app.sh"
+readonly BUILDER="${PROJECT_ROOT}/Scripts/build_dmg_app.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-translator-build-app-tests.XXXXXX)"
 readonly BUILD_ROOT="${TEMP_ROOT}/Build"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"

@@ -14,7 +14,7 @@ function run_tests {
 case "${1:-all}" in
     features)
         run_tests \
-            DMG/BuildApp \
+            DMG/BuildDmgApp \
             DMG/NotarizeDmg \
             DMG/PackageDmg \
             DMG/ReleaseDmg \
