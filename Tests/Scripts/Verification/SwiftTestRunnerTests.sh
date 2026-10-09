@@ -26,7 +26,7 @@ function run_tests {
     BOUNDLESS_TRANSLATOR_VERIFICATION_BUILD_ROOT="${TEMP_ROOT}/Build" \
         zsh "${PROJECT_ROOT}/Scripts/run_${level}_tests.sh" "$@"
 }
-function test_swift_runner_when_started_then_runs_only_its_target_in_both_modes {
+function test_swift_runner_when_started_then_runs_only_its_target_once {
     local level target
     for level in unit component; do
         # Arrange
@@ -36,10 +36,9 @@ function test_swift_runner_when_started_then_runs_only_its_target_in_both_modes 
         # Act
         run_tests "$level"
         # Assert
-        [[ "$(wc -l < "${MOCK_CALL_LOG}" | tr -d ' ')" == 2 ]]
+        [[ "$(wc -l < "${MOCK_CALL_LOG}" | tr -d ' ')" == 1 ]]
         [[ "$(sed -n '1p' "${MOCK_CALL_LOG}")" == *"--filter ${target}"* ]]
         [[ "$(sed -n '1p' "${MOCK_CALL_LOG}")" != *SUBSCRIPTION_REQUIRED* ]]
-        [[ "$(sed -n '2p' "${MOCK_CALL_LOG}")" == *'-DSUBSCRIPTION_REQUIRED'* ]]
     done
 }
 function test_swift_runner_when_build_fails_or_report_missing_then_returns_failure {
@@ -47,6 +46,6 @@ function test_swift_runner_when_build_fails_or_report_missing_then_returns_failu
     if FAIL_SWIFT=1 run_tests unit >/dev/null 2>&1; then return 1; fi
     if MISSING_REPORT=1 run_tests component >/dev/null 2>&1; then return 1; fi
 }
-test_swift_runner_when_started_then_runs_only_its_target_in_both_modes
+test_swift_runner_when_started_then_runs_only_its_target_once
 test_swift_runner_when_build_fails_or_report_missing_then_returns_failure
 print 'Swift test runner tests passed.'

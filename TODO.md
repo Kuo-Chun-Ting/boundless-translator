@@ -1,5 +1,8 @@
 # TODO
 
+- [x] 截圖 hover E2E 改用單次 XCUITest `hover()`，移除手動滑鼠事件；單一案例通過並經另一個 agent 審閱。App 程式碼未修改，單筆 CGEvent 失敗的原因尚未確認。
+- [x] Unit、Component 各跑一輪並共用建置結果；刪除訂閱編譯設定的 Unit 測試，改由 App Store 建置腳本檢查，未啟用訂閱限制時停止建置。其他 Verify 階段不變。
+  - Unit 236 項、Component 190 項、兩個受影響的腳本測試群組與 Xcode 專案檢查通過；實際 App Store 設定查詢及另一個 agent 審閱通過。未執行 App Store archive、完整 Verify 或產生 DMG。
 - [x] 精簡重複測試：App 切換由三輪改成一輪，合併 E2E 首次拖曳選字與翻譯檢查；GUI 保留兩組外觀，刪除重複的 12 組截圖案例及跳過設定。Production code 未修改。
   - Unit 237 項、Component 188 項（各兩種模式）、GUI 入口腳本測試與修改的 E2E 通過。游標案例補上焦點前置條件，在另一個 App 取得焦點後執行通過；移除診斷後的最後一次 GUI 驗證已中止，未完成全組驗證。
 - [x] 整理測試名稱與位置：字典重設測試改名、7 個測試搬到對應模組、GUI 共用 App 目錄改名，移除 E2E 的 DMG 層；同步引用並跑完整 Verify。

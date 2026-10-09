@@ -2,21 +2,6 @@ import Foundation
 import Testing
 @testable import BoundlessTranslator
 
-@Test @MainActor
-func test_configuration_when_creating_access_controller_then_uses_build_access_policy() {
-    // Arrange & Act
-    let controller = SubscriptionConfiguration.makeAccessController()
-
-    // Assert
-#if SUBSCRIPTION_REQUIRED
-    #expect(controller.requiresSubscription)
-    #expect(!controller.hasAccess)
-#else
-    #expect(!controller.requiresSubscription)
-    #expect(controller.hasAccess)
-#endif
-}
-
 @Test
 func test_configuration_when_product_or_public_policy_is_invalid_then_does_not_offer_purchase() {
     // Arrange

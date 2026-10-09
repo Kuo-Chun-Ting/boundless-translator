@@ -4,8 +4,8 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 
 | Entry | Scope |
 |---|---|
-| `Scripts/run_unit_tests.sh` | All Unit tests, in free and subscription compilation modes |
-| `Scripts/run_component_tests.sh` | All Component tests, in both modes |
+| `Scripts/run_unit_tests.sh` | All Unit tests once, without the subscription compile condition |
+| `Scripts/run_component_tests.sh` | All Component tests once, sharing the Unit build directory |
 | `Scripts/run_gui_tests.sh` | 14 default local UI cases: native event routing, translation/screenshot Lookup, resize, hint persistence and localized controls |
 | `Scripts/run_e2e_tests.sh` | Build the signed E2E App and test its complete product flows; no DMG packaging or installation |
 | `Scripts/run_storekit_tests.sh` | Local simulated purchases and subscription entitlements; no charges |
@@ -15,6 +15,8 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 | `Scripts/verify.sh` | Run all eight entries and report every failed or unavailable level |
 
 Normal code changes require Unit and Component before delivery. Other levels run on request, or to validate changes to those tests themselves. See [project workflow](../AGENTS.md). No entry uploads to App Store Connect.
+
+Subscription tests construct subscribed and unsubscribed states directly. App Store archiving checks the resolved `SUBSCRIPTION_REQUIRED` setting before building; Unit and Component do not repeat under that compile condition.
 
 ## Coverage boundaries
 
