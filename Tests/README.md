@@ -61,4 +61,4 @@ Without selectors, each entry runs its entire level. Unknown/empty test selectio
 
 ## Layout
 
-`Unit/` and `Component/` contain fast tests. `GUI/` contains local UI fixtures and cases; `E2E/DMG/` retains the existing product tests. `StoreKit/`, `LanguageSupport/` and `Scripts/` hold their respective checks. Public Shell entries live directly under `Scripts/`; shared test helpers live in `Scripts/Shared/`. Only `Tests/Scripts/` contains Shell tests. `Infrastructure/` contains Swift test support and Xcode configuration. `Fixtures/` contains shared data; feature-specific fixtures remain beside their tests.
+`Unit/` and `Component/` contain fast tests. `GUI/` contains local UI fixtures and cases; `E2E/` contains product tests. `StoreKit/`, `LanguageSupport/` and `Scripts/` hold their respective checks. Public Shell entries live directly under `Scripts/`; shared test helpers live in `Scripts/Shared/`. Only `Tests/Scripts/` contains Shell tests. `Infrastructure/` contains Swift test support and Xcode configuration. `Fixtures/` contains shared data; feature-specific fixtures remain beside their tests.

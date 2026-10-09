@@ -2,7 +2,7 @@
 set -euo pipefail
 
 readonly PROJECT_ROOT="${0:A:h:h:h}"
-readonly RESETTER="${PROJECT_ROOT}/Scripts/reset_apple_dictionary.sh"
+readonly RESETTER="${PROJECT_ROOT}/Scripts/reset_lookup_dictionary.sh"
 readonly TEMP_ROOT="$(mktemp -d /private/tmp/boundless-lookup-reset-tests.XXXXXX)"
 readonly PREFERENCES_PATH="${TEMP_ROOT}/com.apple.lookup.plist"
 readonly CALL_LOG="${TEMP_ROOT}/calls.log"
