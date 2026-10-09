@@ -22,7 +22,6 @@ final class ScreenshotTranslationController {
     private var hoverTarget: ImageTextPreviewTarget?
     private var hoverTask: Task<Void, Never>?
     private var dismissalTask: Task<Void, Never>?
-    private var preservesLookupCard = false
     private var cancelledTarget: ImageTextPreviewTarget?
 
     init(imageView: ImageTextView, settings: TranslationSettings,
@@ -44,7 +43,6 @@ final class ScreenshotTranslationController {
         card.onSpeech = { [weak self] in self?.toggleSpeech() }
         card.onLookup = { [weak self] in self?.showDefinition() }
         card.onPointerEntered = { [weak self] in
-            self?.preservesLookupCard = false
             self?.hoverTask?.cancel()
             self?.hoverTarget = nil
             self?.dismissalTask?.cancel()
@@ -70,8 +68,7 @@ final class ScreenshotTranslationController {
     }
 
     func hover(_ candidate: ImageTextPreviewTarget?) {
-        guard imageView?.window?.attachedSheet == nil else { return }
-        preservesLookupCard = false
+        guard !isPresentingSystemUI else { return }
         guard let candidate else {
             cancelledTarget = nil
             scheduleDismissal()
@@ -88,10 +85,9 @@ final class ScreenshotTranslationController {
     }
 
     func update(_ candidate: ImageTextPreviewTarget?) {
-        guard imageView?.window?.attachedSheet == nil else { return }
+        guard !isPresentingSystemUI else { return }
         if let candidate, let cancelledTarget,
            candidate.text == cancelledTarget.text, candidate.range == cancelledTarget.range { return }
-        preservesLookupCard = false
         hoverTask?.cancel()
         dismissalTask?.cancel()
         guard let candidate, let selectedText = try? SelectedText(candidate.text) else {
@@ -120,7 +116,6 @@ final class ScreenshotTranslationController {
         dismissalTask?.cancel()
         hoverTarget = nil
         target = nil
-        preservesLookupCard = false
         cancelledTarget = nil
         speech.stopPlayback()
         coordinator.cancel()
@@ -147,8 +142,6 @@ final class ScreenshotTranslationController {
         guard let target, let imageView else { return }
         dismissalTask?.cancel()
         hoverTask?.cancel()
-        // AppKit owns Lookup. Keep its card until pointer events return to our content.
-        preservesLookupCard = true
         let rect = imageView.viewRect(for: target.bounds)
         showNativeDefinition(imageView, target.text, CGPoint(x: rect.midX, y: rect.minY))
     }
@@ -173,7 +166,8 @@ final class ScreenshotTranslationController {
     }
 
     private var isPresentingSystemUI: Bool {
-        preservesLookupCard || imageView?.window?.attachedSheet != nil
+        guard let window = imageView?.window else { return false }
+        return WindowPresentationState(window: window, contentWindow: panel).isPresenting
     }
 
     private var localization: AppLocalization {

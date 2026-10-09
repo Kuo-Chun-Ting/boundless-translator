@@ -32,6 +32,7 @@
 		49E2D99B6E22D313DD5496BD /* Sources/BoundlessTranslator/Translation/Engines/Apple/AppleTranslationConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5572E8342E49B1561273E7 /* Sources/BoundlessTranslator/Translation/Engines/Apple/AppleTranslationConfigurationFactory.swift */; };
 		4DB7B454EC637994812C2586 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D91B66359CFDBB0AE4939A5 /* Sources/BoundlessTranslator/Translation/UI/TranslationPanel.swift */; };
 		4F7B268D8BCB025A4874625B /* Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86F736AD7DA46F0E8B3F1D5 /* Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift */; };
+		7D782CDA090810AA628B21DC /* Sources/BoundlessTranslator/Application/WindowPresentationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0996D1F93BB2385DCD4CC7E5 /* Sources/BoundlessTranslator/Application/WindowPresentationState.swift */; };
 		50DFE9CE26EA57D9BDF503E1 /* Sources/BoundlessTranslator/Translation/Speech/SpeechPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24A44CEC4AE106C26142076 /* Sources/BoundlessTranslator/Translation/Speech/SpeechPlayer.swift */; };
 		53AFF3CDE38DD3E9B9C4917E /* Sources/BoundlessTranslator/Translation/SupportedLanguageCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094056A25EE459A40ED73D4 /* Sources/BoundlessTranslator/Translation/SupportedLanguageCatalog.swift */; };
 		53DB0D4BE652ED8FCC165C4A /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FA658A1D3D983D2BCAA9FD /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelView.swift */; };
@@ -211,6 +212,7 @@
 		BF2BEAC32D3062826B30B27B /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "Sources/BoundlessTranslator/Resources/es-MX.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		C23D0D33B6028EDB61E279C2 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = Sources/BoundlessTranslator/Resources/ms.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		C86F736AD7DA46F0E8B3F1D5 /* Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift; sourceTree = SOURCE_ROOT; };
+		0996D1F93BB2385DCD4CC7E5 /* Sources/BoundlessTranslator/Application/WindowPresentationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/WindowPresentationState.swift; sourceTree = SOURCE_ROOT; };
 		CA5B86F3334FE093B2AA7F78 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "Sources/BoundlessTranslator/Resources/es-419.lproj/Localizable.strings"; sourceTree = SOURCE_ROOT; };
 		CAE0042B266A14F8005D41F4 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = Sources/BoundlessTranslator/Resources/el.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		CCAF251FE9E0F10F79C76064 /* Sources/BoundlessTranslator/Localization/InterfaceLanguageCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Localization/InterfaceLanguageCatalog.swift; sourceTree = SOURCE_ROOT; };
@@ -305,6 +307,7 @@
 				4E56FFCD7180A850FA2EF63E /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift */,
 				08FE90567E46AFDBE5BF4D3B /* Sources/BoundlessTranslator/Application/BoundlessTranslatorApp.swift */,
 				C86F736AD7DA46F0E8B3F1D5 /* Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift */,
+				0996D1F93BB2385DCD4CC7E5 /* Sources/BoundlessTranslator/Application/WindowPresentationState.swift */,
 				826C848514DBE8BC31B03298 /* Sources/BoundlessTranslator/Application/PermissionExplanation.swift */,
 				91E80385C16222EA2848BDB4 /* Sources/BoundlessTranslator/Application/PermissionGuideConfiguration.swift */,
 				EF7B7FF449F86E7E9EB554D5 /* Sources/BoundlessTranslator/Application/PermissionGuideView.swift */,
@@ -549,6 +552,7 @@
 				799D4C537E1435B6EF4751D6 /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift in Sources */,
 				9727FD474CA284D8ACD025D7 /* Sources/BoundlessTranslator/Application/BoundlessTranslatorApp.swift in Sources */,
 				4F7B268D8BCB025A4874625B /* Sources/BoundlessTranslator/Application/ForegroundWindowPresenter.swift in Sources */,
+				7D782CDA090810AA628B21DC /* Sources/BoundlessTranslator/Application/WindowPresentationState.swift in Sources */,
 				D3B1206E6C696D7A404ABFA6 /* Sources/BoundlessTranslator/Application/PermissionExplanation.swift in Sources */,
 				0C9148EAE27251E01F6E8505 /* Sources/BoundlessTranslator/Application/PermissionGuideConfiguration.swift in Sources */,
 				30D43933471C6B2E27917C36 /* Sources/BoundlessTranslator/Application/PermissionGuideView.swift in Sources */,

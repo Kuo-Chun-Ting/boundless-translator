@@ -147,6 +147,37 @@ func test_previewLookup_when_nativeLookupReturns_then_allowsAnotherTarget() asyn
     #expect(fixture.coordinator.sourceText == "B")
 }
 
+@Test(arguments: ["workspace", "card"]) @MainActor
+func test_preview_when_presentedWindowIsOpen_then_preservesTargetUntilWindowCloses(parent: String) async {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+    fixture.controller.update(fixture.target("A"))
+    let requestID = fixture.coordinator.request?.id
+    let child = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 300, height: 200),
+                         styleMask: [.titled], backing: .buffered, defer: false)
+    child.isReleasedWhenClosed = false
+    let owner = parent == "workspace" ? fixture.window : fixture.controller.panel
+    owner.addChildWindow(child, ordered: .above)
+    child.orderFront(nil)
+    defer {
+        owner.removeChildWindow(child)
+        child.orderOut(nil)
+    }
+    // Act: background hover must not replace the card during native UI.
+    fixture.controller.update(fixture.target("B"))
+    // Assert
+    #expect(fixture.coordinator.sourceText == "A")
+    #expect(fixture.coordinator.request?.id == requestID)
+    #expect(fixture.controller.panel.isVisible)
+    // Act: closing the native UI restores ordinary target changes.
+    owner.removeChildWindow(child)
+    child.orderOut(nil)
+    fixture.controller.update(fixture.target("B"))
+    // Assert
+    #expect(fixture.coordinator.sourceText == "B")
+}
+
 @Test @MainActor
 func test_previewCursor_when_dragLeavesText_then_arrowDoesNotClearSelection() async {
     // Arrange

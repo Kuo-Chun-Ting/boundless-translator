@@ -21,7 +21,6 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     private var interactionPolicy = WindowInteractionPolicy(kind: .translation)
     private var presentedKind = TranslationWindowKind.translation
     private var hasUserResized = false
-    private var isPresentingSheet = false
     private var mouseDownMonitor: MouseDownMonitor?
     private weak var translationCoordinator: TranslationCoordinator?
     private var userCancellationObservation: AnyCancellable?
@@ -217,7 +216,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
     }
 
     func dismissForMouseDown(at screenLocation: CGPoint, in eventWindow: NSWindow? = nil) {
-        guard window.isVisible, !isPresentingSheet else {
+        guard window.isVisible, !WindowPresentationState(window: window).isPresenting else {
             return
         }
         guard eventWindow !== window else {
@@ -239,7 +238,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         guard processIdentifier != ProcessInfo.processInfo.processIdentifier else {
             return
         }
-        guard window.isVisible, !isPresentingSheet else {
+        guard window.isVisible, !WindowPresentationState(window: window).isPresenting else {
             return
         }
         guard interactionPolicy.shouldDismissForOutsideClick(
@@ -249,14 +248,6 @@ final class TranslationWindowController: NSObject, NSWindowDelegate {
         }
 
         dismiss(nil)
-    }
-
-    func windowWillBeginSheet(_ notification: Notification) {
-        isPresentingSheet = true
-    }
-
-    func windowDidEndSheet(_ notification: Notification) {
-        isPresentingSheet = false
     }
 
     @objc

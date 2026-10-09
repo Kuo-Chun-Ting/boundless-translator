@@ -104,23 +104,30 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
 
     func test_previewLookup_when_closed_then_hoverCanContinue() throws {
         // Arrange
+        app.terminate()
+        app.launchEnvironment["IMAGE_TEXT_ECHO_SOURCE"] = "1"
+        app.launch()
+        XCTAssertTrue(waitFor { self.words().contains { $0.text == "TARGET" } })
         move(coordinate(try word("TARGET"), "middle"))
         let lookup = app.buttons["screenshotPreview.lookup"]
         XCTAssertTrue(lookup.waitForExistence(timeout: 5))
         // Act
         lookup.click()
-        pause(1)
-        attachPreview("native-dictionary")
+        continueLookupIfNeeded()
         // Assert
-        XCTAssertTrue(app.popovers.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.dialogs["screenshotPreview"].exists)
+        XCTAssertEqual(app.textViews["screenshotPreview.translation"].value as? String, "TARGET")
         XCTAssertEqual(selectedText, "")
+        attachPreview("lookup-after-continue")
         // Act: dismiss Apple's lookup and continue using the screenshot.
         key(53)
         XCTAssertTrue(waitFor { !self.app.popovers.firstMatch.exists })
         // TEXT is not covered by the card that remains above TARGET.
         move(coordinate(try word("TEXT"), "middle"))
         // Assert
-        XCTAssertTrue(waitFor { self.app.buttons["screenshotPreview.lookup"].exists })
+        XCTAssertTrue(waitFor {
+            self.app.textViews["screenshotPreview.translation"].value as? String == "TEXT"
+        })
         let preview = app.dialogs["screenshotPreview"]
         let nextWord = try word("TEXT")
         XCTAssertTrue(waitFor { preview.frame.maxY < nextWord.frame.minY })

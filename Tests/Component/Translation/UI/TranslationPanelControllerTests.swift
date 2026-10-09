@@ -157,6 +157,45 @@ private func makeTranslationTestSheet() -> NSWindow {
     )
 }
 
+@Test(arguments: ["outsideClick", "otherApp"]) @MainActor
+func test_automaticDismissal_when_childWindowIsOpen_then_keepsTranslationUntilChildCloses(trigger: String) throws {
+    // Arrange
+    let fixture = try makeTranslationWindowFixture()
+    let child = makeTranslationTestSheet()
+    child.isReleasedWhenClosed = false
+    child.setFrameOrigin(CGPoint(x: fixture.window.frame.maxX + 20, y: fixture.window.frame.minY))
+    fixture.window.addChildWindow(child, ordered: .above)
+    child.orderFront(nil)
+    defer {
+        fixture.window.removeChildWindow(child)
+        child.orderOut(nil)
+        fixture.window.orderOut(nil)
+    }
+    let outsidePoint = CGPoint(x: child.frame.midX, y: child.frame.midY)
+
+    // Act: AppKit forwards a click from the native child, or temporarily changes the active app.
+    if trigger == "outsideClick" {
+        fixture.controller.dismissForMouseDown(at: outsidePoint, in: child)
+    } else {
+        fixture.controller.dismissForApplicationActivation(processIdentifier: ProcessInfo.processInfo.processIdentifier + 1)
+    }
+    // Assert
+    #expect(fixture.window.isVisible)
+    #expect(fixture.coordinator.request != nil)
+
+    // Act: normal dismissal resumes after the child closes.
+    fixture.window.removeChildWindow(child)
+    child.orderOut(nil)
+    if trigger == "outsideClick" {
+        fixture.controller.dismissForMouseDown(at: outsidePoint)
+    } else {
+        fixture.controller.dismissForApplicationActivation(processIdentifier: ProcessInfo.processInfo.processIdentifier + 1)
+    }
+    // Assert
+    #expect(!fixture.window.isVisible)
+    #expect(fixture.coordinator.request == nil)
+}
+
 @Test @MainActor
 func test_dismissForMouseDown_when_pointIsInsideWindow_then_keepsWindowVisible() throws {
     // Arrange

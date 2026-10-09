@@ -98,6 +98,28 @@ class ImageTextGUITestCase: XCTestCase {
         XCTAssertTrue(waitFor { self.translationWindow.exists })
     }
 
+    var lookupContinueButton: XCUIElement {
+        let titles = ["Continue", "繼續", "继续"]
+        return app.buttons.matching(NSPredicate(format: "title IN %@ OR label IN %@", titles, titles)).firstMatch
+    }
+
+    func continueLookupIfNeeded() {
+        let result = app.popovers.firstMatch.webViews.firstMatch
+        XCTAssertTrue(waitFor {
+            self.lookupContinueButton.exists || result.exists
+        }, app.debugDescription)
+        if lookupContinueButton.exists {
+            let attachment = XCTAttachment(screenshot: app.screenshot())
+            attachment.name = "lookup-first-use"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            lookupContinueButton.click()
+        }
+        XCTAssertTrue(waitFor {
+            !self.lookupContinueButton.exists && result.exists
+        }, app.debugDescription)
+    }
+
     func move(_ p: CGPoint) {
         mouse(.mouseMoved, p)
         pause(0.2)
