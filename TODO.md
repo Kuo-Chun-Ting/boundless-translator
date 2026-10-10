@@ -1,5 +1,9 @@
 # TODO
 
+- [ ] 實測 macOS 27：用朋友相同的 App 版本、圖片與操作重現截圖選字問題，確認翻譯、字典、朗讀、權限流程及新版外觀，記錄結果。
+- [ ] 依官方文件整理 macOS 支援清單與功能限制，同步 README、Support 與 App Store 說明；實測結果另記，不混入官方支援判斷。
+  - 已核對建置設定與 API：最低 macOS 15、僅支援 M 系列晶片；已建立並部署 `macos-compatibility` skill。對外說明尚未更新。
+
 - [x] E2E 分成四個獨立案例：選字翻譯、截圖翻譯、切換 App、重新開啟 Settings；兩種外部編輯器共用一次啟動，截圖流程止於快捷鍵開啟翻譯視窗。修正第二次選字前未切回編輯器 App 的測試操作；production code 未修改。
   - 四個 E2E 全數通過，案例共約 64 秒；E2E／GUI 入口腳本測試、Xcode 專案檢查及另一個 agent 審閱通過。同步測試工作流：production code 跑 Unit、Component，只改測試則跑修改的層級。未跑完整 Verify、未產生 DMG。
 - [x] 截圖 hover E2E 改用單次 XCUITest `hover()`，移除手動滑鼠事件；單一案例通過並經另一個 agent 審閱。App 程式碼未修改，單筆 CGEvent 失敗的原因尚未確認。
