@@ -2,44 +2,32 @@ import ApplicationServices
 import XCTest
 
 final class SelectionTranslationE2ETests: BoundlessTranslatorE2ETestCase {
-    func test_accessibilitySelection_whenTranslationActionRuns_thenPresentsSelectedSourceText() {
+    func test_selectionTranslation_when_editorsExposeOrHideSelectedText_then_translatesBothSelections() {
         // Arrange
         launchBoundlessTranslator()
         launchFixture()
-        fixtureElement("fixture.selectAccessibilityText").click()
-        XCTAssertEqual(
-            systemSelectedText(),
-            "Accessibility selection sample",
-            "The fixture did not expose its selected text through macOS Accessibility."
-        )
-
-        // Act
-        triggerTranslationAction()
-
-        // Assert
-        let sourceText = appElement("translation.sourceText")
-        XCTAssertTrue(sourceText.waitForExistence(timeout: 10))
-        XCTAssertTrue(stringValue(of: sourceText).contains("Accessibility selection sample"))
-        assertTranslationAppears()
+        // Act & Assert
+        XCTContext.runActivity(named: "Translate from an editor exposing selected text") { _ in
+            fixtureElement("fixture.selectAccessibilityText").click()
+            XCTAssertEqual(systemSelectedText(), "Accessibility selection sample",
+                           "The fixture must expose its selected text through macOS Accessibility.")
+            translateAndCheckSelection("Accessibility selection sample")
+        }
+        XCTContext.runActivity(named: "Translate from a copy-only editor") { _ in
+            fixture.activate()
+            XCTAssertTrue(fixture.wait(for: .runningForeground, timeout: 5))
+            fixtureElement("fixture.selectCopyOnlyText").click()
+            XCTAssertTrue((systemSelectedText() ?? "").isEmpty,
+                          "The copy-only editor must not expose selected text through Accessibility.")
+            translateAndCheckSelection("Clipboard fallback sample")
+        }
     }
 
-    func test_copyOnlySelection_whenTranslationActionRuns_thenUsesClipboardFallback() {
-        // Arrange
-        launchBoundlessTranslator()
-        launchFixture()
-        fixtureElement("fixture.selectCopyOnlyText").click()
-        XCTAssertTrue(
-            (systemSelectedText() ?? "").isEmpty,
-            "The copy-only editor unexpectedly exposed its selected text through Accessibility."
-        )
-
-        // Act
+    private func translateAndCheckSelection(_ expectedSource: String) {
         triggerTranslationAction()
-
-        // Assert
         let sourceText = appElement("translation.sourceText")
         XCTAssertTrue(sourceText.waitForExistence(timeout: 10))
-        XCTAssertTrue(stringValue(of: sourceText).contains("Clipboard fallback sample"))
+        XCTAssertEqual(stringValue(of: sourceText).trimmingCharacters(in: .whitespacesAndNewlines), expectedSource)
         assertTranslationAppears()
     }
 

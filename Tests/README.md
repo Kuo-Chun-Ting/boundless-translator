@@ -14,7 +14,7 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 | `Scripts/run_release_tests.sh` | Build/notarize a DMG, then verify the package and launch an installed copy |
 | `Scripts/verify.sh` | Run all eight entries and report every failed or unavailable level |
 
-Normal code changes require Unit and Component before delivery. Other levels run on request, or to validate changes to those tests themselves. See [project workflow](../AGENTS.md). No entry uploads to App Store Connect.
+Production code changes require Unit and Component before delivery. Test-only changes run only the changed levels; GUI/E2E run the changed cases. Shared test tools require affected groups, and script changes require their Shell tests. Other levels run on request. See [project workflow](../AGENTS.md). No entry uploads to App Store Connect.
 
 Subscription tests construct subscribed and unsubscribed states directly. App Store archiving checks the resolved `SUBSCRIPTION_REQUIRED` setting before building; Unit and Component do not repeat under that compile condition.
 
@@ -25,9 +25,11 @@ Subscription tests construct subscribed and unsubscribed states directly. App St
 | Unit | Selection ranges, forward/reverse endpoints, row ordering, paragraph joining, preview targets and card positioning |
 | Component | Production views/controllers: selection, copy/translation input, delayed OCR, image replacement, hints and empty-recognition Alerts; preview cancellation, stale results, chunk failures, retry, speech/Lookup input and scrolling. Fixed screenshot inputs use real Vision recognition without another App. |
 | GUI (14 default cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; selection and translation after returning from another App; hover-card actions, selection and native Lookup return; translation survives native Lookup and resumes outside-click dismissal; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
-| E2E (5 cases) | Two selected-text routes, two screenshot regressions, and screenshot hover translation through real Apple Translation |
+| E2E (4 cases) | External-editor selection in both Accessibility-exposing and copy-only modes; screenshot translation; first drag and translation after returning from another App; Settings focus after reopening |
 
 Esc and the close button are two inputs to one closure regression. Geometry variations stay in fast tests. SwiftUI control placement and persistent tip lifecycle retain GUI coverage; size/color measurements and controller cleanup remain Component tests.
+
+The screenshot workflow ends after the shortcut opens the full translation window with the selected sentence. External-editor selection covers both editor modes in one launch. App switching and reopening Settings have independent cases, each preparing its own screenshot/translation state. Shared helpers reuse code, not runtime state between cases.
 
 ## Selecting cases
 
@@ -43,6 +45,7 @@ GUI and E2E accept one or more `TestClass[/testMethod]` selectors:
 ```sh
 Scripts/run_gui_tests.sh ImageTextFocusGUITests
 Scripts/run_gui_tests.sh HintPresentationGUITests
+Scripts/run_e2e_tests.sh SelectionTranslationE2ETests
 Scripts/run_e2e_tests.sh ScreenshotE2ETests
 ```
 

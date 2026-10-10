@@ -3,46 +3,51 @@ import ApplicationServices
 import XCTest
 
 final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
-    func test_screenshotPreview_when_hoveringRecognizedWord_then_showsAppleTranslation() throws {
+    func test_screenshotTranslation_when_hoveringAndSelecting_then_opensFullTranslationWithSelectedText() throws {
         // Arrange
-        launchBoundlessTranslator()
-        launchFixture()
-        captureFixtureScreenshot()
-        let workspace = appElement("imageWorkspace.text")
-        XCTAssertTrue(workspace.waitForExistence(timeout: 10))
-        // Act
-        let word = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.32, dy: 0.18))
-        word.hover()
-        // Assert: this is the quick card, not the full translation window.
-        let result = appElement("screenshotPreview.translation")
-        XCTAssertTrue(waitUntil(timeout: 60) {
-            result.exists && !self.stringValue(of: result).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        })
-        XCTAssertFalse(appElement("translation.sourceText").exists)
-        attachScreen("screenshot-hover-translation", window: boundlessTranslator.dialogs["screenshotPreview"])
+        let workspace = prepareScreenshot()
+        // Act & Assert
+        let hoverTranslation = XCTContext.runActivity(named: "Hover a word for a real quick translation") { _ in
+            checkHoverTranslation(in: workspace)
+        }
+        let screenshot = try XCTContext.runActivity(named: "Select a sentence and a word for quick translation") { _ in
+            let screenshot = try establishSentenceSelection(in: workspace)
+            let sentenceTranslation = waitForQuickTranslation(excluding: hoverTranslation)
+            selectSampleWord(in: workspace)
+            _ = waitForQuickTranslation(excluding: sentenceTranslation)
+            return screenshot
+        }
+        try XCTContext.runActivity(named: "Open full translation from the selected sentence") { _ in
+            try establishTextSelection(in: screenshot)
+            triggerTranslationAction()
+            let source = appElement("translation.sourceText")
+            XCTAssertTrue(source.waitForExistence(timeout: 10))
+            XCTAssertEqual(stringValue(of: source).trimmingCharacters(in: .whitespacesAndNewlines), "SCREENSHOT SAMPLE")
+        }
     }
 
-    func test_screenshotTranslation_whenReturningAfterTranslation_thenTranslatesSelectedText() throws {
+    func test_screenshotTranslation_when_returningFromAnotherApp_then_firstDragSelectsAndTranslates() throws {
         // Arrange
-        let screenshot = try prepareScreenshotAfterReturningFromAnotherApp()
-        try establishTextSelection(in: screenshot)
-
+        let screenshot = try prepareScreenshotAfterTranslatingWord()
+        switchToFixture()
         // Act
+        try returnToScreenshot(screenshot)
+        try establishTextSelection(in: screenshot)
         triggerTranslationAction()
-
         // Assert
-        XCTAssertTrue(waitForTranslation(of: "SCREENSHOT SAMPLE"), "The shortcut must translate text that is already selected.")
+        XCTAssertTrue(waitForTranslation(of: "SCREENSHOT SAMPLE"),
+                      "The shortcut must translate the sentence selected by the first drag.")
         attachScreen("translation-after-returning", window: boundlessTranslator.windows
             .containing(.any, identifier: "translation.sourceText").firstMatch)
     }
 
-    func test_settings_whenReopenedAfterScreenshotTranslationAndAppSwitch_thenReceivesKeyboardFocus() throws {
+    func test_settings_when_reopenedAfterScreenshotTranslationAndAppSwitch_then_receivesKeyboardFocus() throws {
         // Arrange
-        _ = try prepareScreenshotAfterReturningFromAnotherApp()
-
+        let screenshot = try prepareScreenshotAfterTranslatingWord()
+        switchToFixture()
+        try returnToScreenshot(screenshot)
         // Act
         try reopenBoundless()
-
         // Assert
         XCTAssertTrue(waitUntil { self.settingsHasKeyboardFocus() },
                       "Settings must receive keyboard focus without an extra click or activation request.")
@@ -53,31 +58,54 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         boundlessTranslator.windows["截圖翻譯"]
     }
 
-    private func prepareScreenshotAfterReturningFromAnotherApp() throws -> ScreenshotSelection {
+    private func prepareScreenshot() -> XCUIElement {
         launchBoundlessTranslator()
         launchFixture()
         captureFixtureScreenshot()
-        let screenshot = try establishInitialScreenshotSelection()
+        let workspace = appElement("imageWorkspace.text")
+        XCTAssertTrue(workspace.waitForExistence(timeout: 10))
+        return workspace
+    }
+
+    private func checkHoverTranslation(in workspace: XCUIElement) -> String {
+        workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.32, dy: 0.18)).hover()
+        let text = waitForQuickTranslation()
+        XCTAssertFalse(appElement("translation.sourceText").exists)
+        attachScreen("screenshot-hover-translation", window: boundlessTranslator.dialogs["screenshotPreview"])
+        workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.18)).hover()
+        XCTAssertTrue(waitUntil { !self.appElement("screenshotPreview.translation").exists })
+        return text
+    }
+
+    private func prepareScreenshotAfterTranslatingWord() throws -> ScreenshotSelection {
+        let workspace = prepareScreenshot()
+        let screenshot = try establishSentenceSelection(in: workspace)
+        // A prior word selection must not satisfy the subsequent full-sentence drag.
+        selectSampleWord(in: workspace)
         triggerTranslationAction()
-        XCTAssertTrue(waitForTranslation(of: "SAMPLE"), "Setup: the screenshot must translate successfully before switching apps.")
+        XCTAssertTrue(waitForTranslation(of: "SAMPLE"))
+        return screenshot
+    }
+
+    private func switchToFixture() {
         let fixtureFrame = fixture.windows["Boundless Translator E2E Fixture"].frame
         postMouseClick(at: CGPoint(x: fixtureFrame.midX, y: fixtureFrame.minY + 10))
         XCTAssertTrue(fixture.wait(for: .runningForeground, timeout: 5),
                       "Setup: clicking the fixture must switch to the other app.")
         XCTAssertTrue(waitUntil { !self.appElement("translation.sourceText").exists })
+    }
+
+    private func returnToScreenshot(_ screenshot: ScreenshotSelection) throws {
         XCTAssertTrue(screenshot.workspace.exists)
         // XCUI clicks activate the app automatically; use physical mouse events instead.
         postMouseClick(at: screenshot.returnPoint)
         let initialCoverage = try screenshot.highlight.coverage(in: screenshot.workspace.screenshot())
         XCTAssertLessThan(initialCoverage, 0.9, "Setup: the entire sentence must not already be selected.")
-        return screenshot
     }
 
-    private func establishInitialScreenshotSelection() throws -> ScreenshotSelection {
-        let workspace = appElement("imageWorkspace.text")
-        XCTAssertTrue(workspace.waitForExistence(timeout: 10))
+    private func establishSentenceSelection(in workspace: XCUIElement) throws -> ScreenshotSelection {
         // The fixture's first glyph starts at 13.5% of the image width.
-        // Begin inside the first glyph of SAMPLE.
+        // Begin inside the first glyph of the sample line.
         let start = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.14, dy: 0.18)).screenPoint
         let end = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.18)).screenPoint
         let returnPoint = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.18)).screenPoint
@@ -85,11 +113,13 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         postMouseDrag(from: start, to: end)
         let highlight = try SelectionHighlightReference(unselected: unselected, selected: workspace.screenshot())
         XCTAssertGreaterThan(highlight.points.count, 20, "The initial selection must have a visible highlight.")
-        // Translate just one word initially, so retaining it cannot satisfy the next full-sentence drag.
-        let sampleWord = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.70, dy: 0.18)).screenPoint
-        postMouseClick(at: sampleWord, count: 2)
         return ScreenshotSelection(workspace: workspace, selectionStart: start, selectionEnd: end,
                                    returnPoint: returnPoint, highlight: highlight)
+    }
+
+    private func selectSampleWord(in workspace: XCUIElement) {
+        let point = workspace.coordinate(withNormalizedOffset: CGVector(dx: 0.70, dy: 0.18)).screenPoint
+        postMouseClick(at: point, count: 2)
     }
 
     private func dragToSelectText(in screenshot: ScreenshotSelection) throws -> Double {
@@ -100,8 +130,18 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
 
     private func establishTextSelection(in screenshot: ScreenshotSelection) throws {
         let coverage = try dragToSelectText(in: screenshot)
-        attachScreen("first-drag", window: screenshotWindow)
-        XCTAssertGreaterThan(coverage, 0.9, "The first drag must select text before translation can be tested.")
+        attachScreen("sentence-selection", window: screenshotWindow)
+        XCTAssertGreaterThan(coverage, 0.9, "The drag must select the full sentence before translation can be tested.")
+    }
+
+    private func waitForQuickTranslation(excluding previousTranslation: String = "") -> String {
+        let result = appElement("screenshotPreview.translation")
+        XCTAssertTrue(waitUntil(timeout: 60) {
+            guard result.exists else { return false }
+            let text = self.stringValue(of: result).trimmingCharacters(in: .whitespacesAndNewlines)
+            return !text.isEmpty && text != previousTranslation
+        }, "The quick card must show a new translation for the current text.")
+        return stringValue(of: result).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func waitForTranslation(of expectedSource: String) -> Bool {

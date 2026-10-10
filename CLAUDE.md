@@ -5,8 +5,8 @@
 - 直接修改目前分支；只有使用者要求時才建立或使用 worktree。
 - 供使用者執行的 Shell 入口放在 `Scripts/` 第一層，共用工具放在 `Scripts/Shared/`；`Tests/` 僅 `Tests/Scripts/` 放 Shell 測試。
 - 兩個測試 App 交換的檔案放在專案 `Build/` 共用目錄。
-- 修改程式碼或測試後，交付前跑 `Scripts/run_unit_tests.sh` 和 `Scripts/run_component_tests.sh`；其他層級預設不跑。
-- 修改 GUI／E2E 測試時，加跑改過的案例；修改共用測試工具時，跑受影響的群組；修改腳本時，跑對應的 `Tests/Scripts/` 測試。
+- 修改 production code 後，交付前跑 `Scripts/run_unit_tests.sh` 和 `Scripts/run_component_tests.sh`；其他層級預設不跑。
+- 只改測試時，僅跑修改的層級；GUI／E2E 跑改過的案例。修改共用測試工具時，跑受影響的群組；修改腳本時，跑對應的 `Tests/Scripts/` 測試。
 - 只改文件時，檢查內容、引用與一致性，不跑 App 測試或產生 DMG。
 - 使用者指定驗證層級時，跑該入口；未指定案例則跑該層全部。入口與參數見 `Tests/README.md`。
 - 完整驗證或正式發布前跑 `Scripts/verify.sh`，除 StoreKit 外，其餘項目全部成功即視為通過。
