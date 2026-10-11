@@ -81,6 +81,7 @@ final class ImageViewerWindowController: NSWindowController,
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
         window.contentMinSize = CGSize(width: 420, height: 300)
+        WindowBranding.install(on: window, identifier: "screenshotWindow")
         let container = NSView(frame: window.contentLayoutRect)
         content.view.frame = container.bounds
         content.view.autoresizingMask = [.width, .height]
@@ -95,10 +96,10 @@ final class ImageViewerWindowController: NSWindowController,
         screenshotTipController.onHeightChange = { [weak self] height in
             self?.reserveScreenshotHintSpace(height: height)
         }
-        updateWindowTitle(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
+        updateScreenshotHints(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
         languageCancellable = interfaceLanguageSettings.$languageIdentifier
             .sink { [weak self] languageIdentifier in
-                self?.updateWindowTitle(languageIdentifier: languageIdentifier)
+                self?.updateScreenshotHints(languageIdentifier: languageIdentifier)
             }
     }
 
@@ -225,12 +226,9 @@ final class ImageViewerWindowController: NSWindowController,
         )
     }
 
-    private func updateWindowTitle(languageIdentifier: String?) {
+    private func updateScreenshotHints(languageIdentifier: String?) {
         let resolvedIdentifier = interfaceLanguageSettings
             .resolvedLanguageIdentifier(for: languageIdentifier)
-        window?.title = AppLocalization(
-            languageIdentifier: resolvedIdentifier
-        ).string("shortcut.screenshotTranslation")
         screenshotTipController.update(
             localization: AppLocalization(languageIdentifier: resolvedIdentifier),
             hints: makeScreenshotHints(localization: AppLocalization(languageIdentifier: resolvedIdentifier))

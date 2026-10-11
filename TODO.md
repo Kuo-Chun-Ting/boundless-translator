@@ -1,5 +1,9 @@
 # TODO
 
+- [x] 統一翻譯、截圖、Settings、權限引導與訂閱視窗的品牌標題列：共用 18 pt 圖示與「Boundless Translator」，移除功能名稱；同步測試的視窗識別。
+  - 已整理 `WindowBranding` 降層。Unit 236 項、五種品牌標題列案例及修改的 GUI 案例通過；Component 185／191 項通過。移除品牌修改後，六個 Component 測項仍同樣失敗，截圖 E2E 仍在等待辨識完成時逾時；失敗與品牌修改無關，後續操作尚未驗證。
+- [ ] 查明 macOS 27 上六個語言選單 Component 測項失敗：找不到 `NSPopUpButton`；使用品牌修改前的程式重跑仍失敗。
+
 - [ ] 實測 macOS 27：用朋友相同的 App 版本、圖片與操作重現截圖選字問題，確認翻譯、字典、朗讀、權限流程及新版外觀，記錄結果。
 - [ ] 依官方文件整理 macOS 支援清單與功能限制，同步 README、Support 與 App Store 說明；實測結果另記，不混入官方支援判斷。
   - 已核對建置設定與 API：最低 macOS 15、僅支援 M 系列晶片；已建立並部署 `macos-compatibility` skill。對外說明尚未更新。

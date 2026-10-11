@@ -55,7 +55,7 @@ func test_init_when_preferencesWindowIsCreated_then_movesWindowToActiveSpace() t
     #expect(!window.styleMask.contains(.nonactivatingPanel))
     #expect(window.canBecomeKey)
     #expect(!window.hidesOnDeactivate)
-    #expect(window.title == "Boundless Translator Settings")
+    #expect(window.title == "Boundless Translator")
     #expect(window.titleVisibility == .hidden)
     #expect(window.titlebarAccessoryViewControllers.count == 1)
     #expect(window.contentLayoutRect.size == PreferencesWindowStyle.contentSize)
@@ -95,7 +95,7 @@ func test_present_when_pointerScreenFrameIsProvided_then_centersWindowInThatFram
 }
 
 @Test @MainActor
-func test_languageIdentifier_when_changed_then_updatesOpenPreferencesWindowTitle() throws {
+func test_languageIdentifier_when_changed_then_preservesPreferencesBrandTitle() throws {
     // Arrange
     let suiteName = "PreferencesWindowLanguageTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
@@ -112,11 +112,11 @@ func test_languageIdentifier_when_changed_then_updatesOpenPreferencesWindowTitle
         supportedLanguageCatalog: makeStubLanguageCatalog()
     )
     let window = try #require(controller.window)
-    #expect(window.title == "Boundless Translator Settings")
+    #expect(window.title == "Boundless Translator")
 
     // Act
     interfaceLanguageSettings.languageIdentifier = "zh-Hant"
 
     // Assert
-    #expect(window.title == "Boundless Translator 設定")
+    #expect(window.title == "Boundless Translator")
 }

@@ -171,7 +171,7 @@ func test_windowWillClose_whenWorkspaceCloses_then_clearsSelection() {
 }
 
 @Test @MainActor
-func test_languageIdentifier_when_changed_then_updatesOpenImageViewerTitle() throws {
+func test_languageIdentifier_when_changed_then_preservesImageViewerBrandTitle() throws {
     // Arrange
     let suiteName = "ImageViewerLanguageTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
@@ -185,13 +185,13 @@ func test_languageIdentifier_when_changed_then_updatesOpenImageViewerTitle() thr
         interfaceLanguageSettings: interfaceLanguageSettings
     )
     let window = try #require(fixture.controller.window)
-    #expect(window.title == "Screenshot Translation")
+    #expect(window.title == "Boundless Translator")
 
     // Act
     interfaceLanguageSettings.languageIdentifier = "zh-Hant"
 
     // Assert
-    #expect(window.title == "截圖翻譯")
+    #expect(window.title == "Boundless Translator")
 }
 
 @MainActor

@@ -18,6 +18,7 @@ final class TranslationWindow: NSWindow {
             defer: false
         )
         acceptsMouseMovedEvents = true
+        WindowBranding.install(on: self, identifier: "translationWindow")
     }
 
     @available(*, unavailable)

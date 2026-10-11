@@ -15,7 +15,7 @@ final class SubscriptionWindowController: NSWindowController {
             contentRect: CGRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable], backing: .buffered, defer: false
         )
-        window.title = AppBrand.displayName
+        WindowBranding.install(on: window, identifier: "subscriptionWindow")
         window.isReleasedWhenClosed = false
         window.collectionBehavior = [.moveToActiveSpace]
         let configuration = SubscriptionConfiguration.current

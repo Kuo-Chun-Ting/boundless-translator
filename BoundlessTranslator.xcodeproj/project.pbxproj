@@ -110,6 +110,7 @@
 		572BE9718A68F3D8B693F491 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5296DB8803B95C1779036160; };
 		ADB8B32B2BDE15723140120D /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E288DEFBB826E79252158A8; };
 		F8DD5994994A4F8F847F5A38 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC8BEE88306B60F60D7F364; };
+		BA1D00000000000000000001 /* WindowBranding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1D00000000000000000002; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -264,6 +265,7 @@
 		5296DB8803B95C1779036160 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift; sourceTree = SOURCE_ROOT; };
 		1E288DEFBB826E79252158A8 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift; sourceTree = SOURCE_ROOT; };
 		1FC8BEE88306B60F60D7F364 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift; sourceTree = SOURCE_ROOT; };
+		BA1D00000000000000000002 /* WindowBranding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/WindowBranding.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,7 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				40CC03C9BCB48488089A9EE9 /* AppControlStyle.swift */,
-				5C206A0EE7214E279BEA9D70 /* HintView.swift */, 037EBBE72BAA4EF9FCC0AC98, B30B70C9ED71D40074C2EE12, 988C839710CC62FD7916C58C, BB0F48F5D1954E8B931652B2,
+				5C206A0EE7214E279BEA9D70 /* HintView.swift */, 037EBBE72BAA4EF9FCC0AC98, B30B70C9ED71D40074C2EE12, 988C839710CC62FD7916C58C, BB0F48F5D1954E8B931652B2, BA1D00000000000000000002,
 				AE9956D17D86815BB7C30066 /* Sources/BoundlessTranslator/Application/AppController.swift */,
 				043A5FB33203FD8EC61FEF2F /* Sources/BoundlessTranslator/Application/AppDelegate.swift */,
 				4E56FFCD7180A850FA2EF63E /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift */,
@@ -546,7 +548,7 @@
 				0BDEA8BD4D6E93C9CDAE5F11,
 				D28BABCC7CCA81316979D22F,
 				E64036AFB7FFEEF07E4DCE7C /* AppControlStyle.swift in Sources */,
-				CB712F468DDD48C1B578D883 /* HintView.swift in Sources */, BB0F48F5D1954E8B931652B1,
+				CB712F468DDD48C1B578D883 /* HintView.swift in Sources */, BB0F48F5D1954E8B931652B1, BA1D00000000000000000001,
 				29EC1FEDE045C99581AC25B7 /* Sources/BoundlessTranslator/Application/AppController.swift in Sources */,
 				E02A10F40359FAC98596F09C /* Sources/BoundlessTranslator/Application/AppDelegate.swift in Sources */,
 				799D4C537E1435B6EF4751D6 /* Sources/BoundlessTranslator/Application/ApplicationOpenCoordinator.swift in Sources */,

@@ -118,7 +118,7 @@ final class HintPresentationGUITests: XCTestCase {
             "Hold the pointer over a word or select text to see its translation. You can also listen to the original text or look it up in the dictionary.")).firstMatch
 
         // Act & Assert
-        let screenshotWindow = app.windows["Screenshot Translation"]
+        let screenshotWindow = app.windows["screenshotWindow"]
         checkHintLifecycle(hint: hint, readyElement: screenshotWindow) {
             self.assertScreenshotHintPosition(relativeTo: screenshotWindow)
         }

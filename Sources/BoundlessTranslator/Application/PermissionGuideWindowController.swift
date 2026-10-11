@@ -18,7 +18,7 @@ final class PermissionGuideWindowController: NSWindowController, NSWindowDelegat
             backing: .buffered,
             defer: false
         )
-        window.title = AppBrand.displayName
+        WindowBranding.install(on: window, identifier: "permissionGuideWindow")
         window.isReleasedWhenClosed = false
         window.collectionBehavior = [.moveToActiveSpace]
         super.init(window: window)

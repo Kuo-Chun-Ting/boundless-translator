@@ -8,7 +8,6 @@ final class PreferencesWindowController: NSWindowController {
     private let pointerScreenVisibleFrame: @MainActor () -> CGRect?
     private let windowPresenter: any ForegroundWindowPresenting
     private var languageCancellable: AnyCancellable?
-    private let titleLabel = NSTextField(labelWithString: "")
     private let tipController = SettingsTipController()
 
     init(
@@ -68,12 +67,10 @@ final class PreferencesWindowController: NSWindowController {
             )
         )
         super.init(window: window)
-        configureTitlebar(window)
-        updateWindowTitle(languageIdentifier: interfaceLanguageSettings.languageIdentifier)
+        WindowBranding.install(on: window, identifier: "settingsWindow")
         resizeWindowForLanguage()
         languageCancellable = interfaceLanguageSettings.$languageIdentifier
-            .sink { [weak self] languageIdentifier in
-                self?.updateWindowTitle(languageIdentifier: languageIdentifier)
+            .sink { [weak self] _ in
                 // Published sends before the value is stored. Resize after SwiftUI
                 // can read the new language, avoiding layout with the old value.
                 Task { @MainActor [weak self] in
@@ -107,39 +104,6 @@ final class PreferencesWindowController: NSWindowController {
                 y: visibleFrame.midY - window.frame.height / 2
             )
         )
-    }
-
-    private func configureTitlebar(_ window: NSWindow) {
-        window.titleVisibility = .hidden
-        let icon = NSImageView(image: AppBrand.spriteImage)
-        icon.imageScaling = .scaleProportionallyUpOrDown
-        icon.setAccessibilityElement(false)
-        titleLabel.font = .systemFont(ofSize: NSFont.systemFontSize, weight: .semibold)
-        titleLabel.setAccessibilityIdentifier("preferencesTitle")
-        let stack = NSStackView(views: [icon, titleLabel])
-        stack.spacing = 6
-        stack.alignment = .centerY
-        NSLayoutConstraint.activate([
-            icon.widthAnchor.constraint(equalToConstant: 18),
-            icon.heightAnchor.constraint(equalToConstant: 18),
-        ])
-        let accessory = NSTitlebarAccessoryViewController()
-        accessory.layoutAttribute = .left
-        accessory.view = stack
-        window.addTitlebarAccessoryViewController(accessory)
-    }
-
-    private func updateWindowTitle(languageIdentifier: String?) {
-        let resolvedIdentifier = interfaceLanguageSettings
-            .resolvedLanguageIdentifier(for: languageIdentifier)
-        window?.title = AppLocalization(
-            languageIdentifier: resolvedIdentifier
-        ).string("preferences.windowTitle")
-        titleLabel.stringValue = window?.title ?? ""
-        if let window, let titleView = window.titlebarAccessoryViewControllers.first?.view {
-            let titlebarHeight = window.frame.height - window.contentLayoutRect.height
-            titleView.setFrameSize(NSSize(width: titleView.fittingSize.width, height: titlebarHeight))
-        }
     }
 
     private func resizeWindowForLanguage() {

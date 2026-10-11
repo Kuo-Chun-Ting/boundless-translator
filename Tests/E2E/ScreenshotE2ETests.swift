@@ -51,11 +51,11 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         // Assert
         XCTAssertTrue(waitUntil { self.settingsHasKeyboardFocus() },
                       "Settings must receive keyboard focus without an extra click or activation request.")
-        attachScreen("settings-after-reopening", window: boundlessTranslator.windows["Boundless Translator 設定"])
+        attachScreen("settings-after-reopening", window: boundlessTranslator.windows["settingsWindow"])
     }
 
     private var screenshotWindow: XCUIElement {
-        boundlessTranslator.windows["截圖翻譯"]
+        boundlessTranslator.windows["screenshotWindow"]
     }
 
     private func prepareScreenshot() -> XCUIElement {
@@ -171,8 +171,8 @@ final class ScreenshotE2ETests: BoundlessTranslatorE2ETestCase {
         let active = runningBoundless.isActive
         let app = AXUIElementCreateApplication(runningBoundless.processIdentifier)
         guard let focused = axValue(app, kAXFocusedWindowAttribute) else { return false }
-        let title = axValue(focused as! AXUIElement, kAXTitleAttribute) as? String
-        return active && title == "Boundless Translator 設定"
+        let identifier = axValue(focused as! AXUIElement, kAXIdentifierAttribute) as? String
+        return active && identifier == "settingsWindow"
     }
 
     private func axValue(_ element: AXUIElement, _ attribute: String) -> CFTypeRef? {

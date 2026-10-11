@@ -60,6 +60,8 @@ func test_configureChrome_when_auxiliary_content_follows_translation_then_restor
     #expect(window.isOpaque)
     #expect(window.backgroundColor == .windowBackgroundColor)
     #expect(!toolbar.isVisible)
+    #expect(window.title == "Boundless Translator")
+    #expect(window.titlebarAccessoryViewControllers.count == 1)
 }
 
 @Test @MainActor
