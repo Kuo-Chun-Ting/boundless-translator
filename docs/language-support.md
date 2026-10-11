@@ -1,5 +1,20 @@
 # Language support reference
 
+## User-facing language lists (planned)
+
+- List support separately for selected-text translation, screenshot translation and App interface. Distinguish screenshot source and target languages.
+- In the App, use the Mac's current translation and image-recognition support for language lists; use bundled localizations for interface languages.
+- Public documentation explains that macOS and model readiness affect availability. Do not promise a fixed translation or screenshot language count or maintain a list for every macOS version.
+- The snapshot below records one tested environment, not support on every Mac. Label any published test results with the macOS version.
+
+## Latest test result
+
+2026-10-11, macOS 27.0.1 (26A434): 48 translation directions and 25 OCR images passed. Unit tests passed, including the declared 48 interface locales, localization completeness and actual text loading.
+
+Translation and OCR use their own runtime language lists. Hebrew translation and OCR languages `ars`, `cs`, `mr`, `nn`, `ro`, `yue-Hans` and `yue-Hant` have no samples and were not exercised. These results do not establish translation quality or OCR accuracy for arbitrary input.
+
+## Earlier verified snapshot
+
 Snapshot: 2026-10-05, macOS 26.5.2. Counts combine regional variants and keep Simplified and Traditional Chinese separate. Availability depends on the user's Mac, macOS and model readiness.
 
 | Feature | Languages | Differences and requirements |

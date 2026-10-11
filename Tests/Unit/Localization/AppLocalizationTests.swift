@@ -130,6 +130,25 @@ func test_localizations_when_readingEverySupportedLanguage_then_haveCompleteKeys
     }
 }
 
+@Test
+func test_localizedString_when_each_supported_language_is_selected_then_loads_that_language_values() throws {
+    // Arrange
+    let languageIdentifiers = InterfaceLanguageCatalog.languageIdentifiers
+
+    for languageIdentifier in languageIdentifiers {
+        let expectedValues = try localizationDictionary(languageIdentifier: languageIdentifier)
+        let localization = AppLocalization(languageIdentifier: languageIdentifier)
+
+        for (key, expectedValue) in expectedValues {
+            // Act
+            let actualValue = localization.string(key)
+
+            // Assert
+            #expect(actualValue == expectedValue, "\(languageIdentifier): \(key)")
+        }
+    }
+}
+
 private func localizationDictionary(
     languageIdentifier: String
 ) throws -> [String: String] {

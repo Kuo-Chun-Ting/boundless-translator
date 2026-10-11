@@ -77,7 +77,10 @@ func test_show_when_appleReturnsDetectedSource_then_displaysItAndAllowsExplicitR
     let window = try #require(presenter.presentedWindows.first)
     let content = try #require(window.contentView)
     content.layoutSubtreeIfNeeded()
-    let menu = try #require(findViews(NSPopUpButton.self, in: content).first { $0.title == "English (Auto)" })
+    window.orderFront(nil)
+    let menu = try #require(try await findAccessibilityMenus(in: content).first {
+        $0.identifier == "sourceLanguageMenu" && $0.value == "English (Detected)"
+    })
 
     // Assert
     #expect(receivedRequests.first?.sourceLanguageIdentifier == nil)
@@ -85,11 +88,10 @@ func test_show_when_appleReturnsDetectedSource_then_displaysItAndAllowsExplicitR
     #expect(findViews(NSTextView.self, in: content).contains { $0.string == "test" })
 
     // Act
-    let choices = try #require(menu.menu)
-    let japanese = try #require(choices.items.firstIndex { $0.title == "Japanese" })
-    choices.performActionForItem(at: japanese)
+    let previousSelection = try await menu.selectItem(titled: "Japanese")
 
     // Assert
+    #expect(previousSelection == "English (Auto)")
     #expect(coordinator.request?.sourceLanguageIdentifier == "ja")
     #expect(coordinator.request?.targetLanguageIdentifier == "zh-Hant")
     #expect(coordinator.request?.text == "test")

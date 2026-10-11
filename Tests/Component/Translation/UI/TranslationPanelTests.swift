@@ -446,7 +446,7 @@ func test_targetSpeechButton_when_translationIsUnavailable_then_keepsHiddenSlot(
 @Test(arguments: [560.0, 900.0]) @MainActor
 func test_languageControls_when_windowResizes_then_speechButtonsAlignWithTheirColumns(
     width: Double
-) throws {
+) async throws {
     // Arrange
     let speechPlayer = WindowSpeechPlayerMock(
         supportedLanguageIdentifiers: ["en", "zh-Hant"]
@@ -463,6 +463,9 @@ func test_languageControls_when_windowResizes_then_speechButtonsAlignWithTheirCo
         speechController: speechController
     )
     hostingView.frame.size.width = width
+    let window = NSWindow(contentRect: hostingView.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+    window.contentView = hostingView
+    defer { window.orderOut(nil) }
 
     // Act
     hostingView.layoutSubtreeIfNeeded()
@@ -480,7 +483,7 @@ func test_languageControls_when_windowResizes_then_speechButtonsAlignWithTheirCo
     )
     let sourceFrame = sourceButton.convert(sourceButton.bounds, to: hostingView)
     let targetFrame = targetButton.convert(targetButton.bounds, to: hostingView)
-    let languageMenus = descendants(of: NSPopUpButton.self, in: hostingView)
+    let languageMenus = try await findAccessibilityMenus(in: hostingView)
     let controlRowCenter = hostingView.isFlipped ? 26 : hostingView.bounds.height - 26
 
     // Assert
@@ -494,7 +497,7 @@ func test_languageControls_when_windowResizes_then_speechButtonsAlignWithTheirCo
     #expect(abs(sourceFrame.midY - controlRowCenter) < 1)
     #expect(languageMenus.count == 2)
     for menu in languageMenus {
-        let frame = menu.convert(menu.bounds, to: hostingView)
+        let frame = try menu.frame(in: hostingView)
         #expect(abs(frame.midY - controlRowCenter) < 1)
     }
 }

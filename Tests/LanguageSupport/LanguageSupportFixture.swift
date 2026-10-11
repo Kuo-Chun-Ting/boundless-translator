@@ -20,13 +20,25 @@ struct LanguageSupportFixture: Decodable, Sendable, CustomTestStringConvertible 
     }
 
     static func translationFixtures() async throws -> [Self] {
-        let capabilities = try await LanguageSupportCapabilities.load()
-        return try load().filter { capabilities.translationGroups.contains($0.id) }
+        let languages = await TranslationEngine.apple.loadLanguages()
+        let supported = Set(languages.map { languageGroup($0.minimalIdentifier) })
+        let fixtures = try load().filter { supported.contains($0.id) }
+        print("ENVIRONMENT: \(ProcessInfo.processInfo.operatingSystemVersionString)")
+        print("Translation languages: \(supported.sorted())")
+        print("Translation languages not exercised: \(supported.subtracting(fixtures.map(\.id)).sorted())")
+        return fixtures
     }
 
-    static func ocrFixtures() async throws -> [Self] {
-        let capabilities = try await LanguageSupportCapabilities.load()
-        return try load().filter { capabilities.screenshotGroups.contains($0.id) }
+    static func ocrFixtures() throws -> [Self] {
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.automaticallyDetectsLanguage = true
+        request.usesLanguageCorrection = true
+        let supported = Set(try request.supportedRecognitionLanguages().map(languageGroup))
+        let fixtures = try load().filter { supported.contains($0.id) && $0.ocrImage != nil }
+        print("OCR languages (Vision revision \(request.revision)): \(supported.sorted())")
+        print("OCR languages not exercised: \(supported.subtracting(fixtures.map(\.id)).sorted())")
+        return fixtures
     }
 
     static func languageGroup(_ identifier: String) -> String {
@@ -51,30 +63,5 @@ struct TranslationLanguagePair: Sendable, CustomTestStringConvertible {
         return fixtures.filter { $0.id != "en" }.flatMap {
             [Self(source: $0, target: english), Self(source: english, target: $0)]
         }
-    }
-}
-
-struct LanguageSupportCapabilities: Sendable {
-    let translation: [String]
-    let ocr: [String]
-    let interface: [String]
-    let ocrRevision: Int
-
-    var translationGroups: Set<String> { Set(translation.map(LanguageSupportFixture.languageGroup)) }
-    var ocrGroups: Set<String> { Set(ocr.map(LanguageSupportFixture.languageGroup)) }
-    var screenshotGroups: Set<String> { translationGroups.intersection(ocrGroups) }
-
-    static func load() async throws -> Self {
-        let request = VNRecognizeTextRequest()
-        request.recognitionLevel = .accurate
-        request.automaticallyDetectsLanguage = true
-        request.usesLanguageCorrection = true
-        let translation = await TranslationEngine.apple.loadLanguages()
-        return Self(
-            translation: translation.map(\.minimalIdentifier),
-            ocr: try request.supportedRecognitionLanguages(),
-            interface: InterfaceLanguageCatalog.languageIdentifiers,
-            ocrRevision: request.revision
-        )
     }
 }

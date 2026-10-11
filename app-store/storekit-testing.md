@@ -1,9 +1,9 @@
 # StoreKit 本機測試
 
-- 暫時跳過：macOS 26.5.2（25F84）＋ Xcode 26.6（17F113）這個組合的 5 個整合測試。
+- 本機 StoreKit 測試暫時一律跳過，不依 macOS 或 Xcode 版本自動恢復。
 - 已重現：`Product.purchase()` 回傳 verified 成功交易，但 `Transaction.currentEntitlements`、`Transaction.all` 都是空的。
 - 排查結果：直接呼叫 Apple API、改用 Apple 範例商品設定仍能重現；系統紀錄缺少 `original-transaction-id`。目前證據指向本機 StoreKit 測試環境，尚未證實確切根因。
 - 其他人的類似回報：[購買後有效交易沒有更新](https://developer.apple.com/forums/thread/820813)、[相同 macOS／Xcode 版本的 SKTestSession 異常](https://developer.apple.com/forums/thread/836842)。回報不等於本專案問題已獲 Apple 確認。
-- `Scripts/run_unit_tests.sh` 與 `Scripts/run_component_tests.sh` 都涵蓋訂閱編譯模式。`Scripts/verify.sh` 執行全部層級；StoreKit 跳過時仍執行其餘層級，最後仍回傳非零；依專案目前例外，除 StoreKit 外，其餘項目全部成功即視為 Verify 通過。
-- macOS 或 Xcode 版本／build 改變後自動恢復執行。手動重試：`Scripts/run_storekit_tests.sh --force`。
+- Unit 與 Component 直接建立訂閱狀態測試，不重跑訂閱編譯模式。`Scripts/verify.sh` 在 StoreKit 跳過後仍執行其餘層級，最後回傳非零；依專案例外，除 StoreKit 外，其餘項目全部成功即視為通過。
+- 手動重試：`Scripts/run_storekit_tests.sh --force`。
 - 正式簽章與後台商品就緒後，使用實際 TestFlight 版本驗證購買、試用、續訂、到期、退款與恢復購買；未完成前不能標記訂閱驗收完成。

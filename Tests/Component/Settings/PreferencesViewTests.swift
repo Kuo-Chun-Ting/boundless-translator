@@ -11,7 +11,7 @@ import Testing
 func test_preferencesView_when_localized_then_footerActionsFitOnOneRow(
     languageIdentifier: String,
     configuration: (subscription: Bool, overrideLanguage: Bool)
-) throws {
+) async throws {
     // Arrange
     let suite = "PreferencesLayout.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suite)!
@@ -65,15 +65,16 @@ func test_preferencesView_when_localized_then_footerActionsFitOnOneRow(
         #expect(abs(frame.midY - helpFrame.midY) < 3)
         #expect(language.isRightToLeft ? frame.minX > helpFrame.maxX : frame.maxX < helpFrame.minX)
     }
-    for picker in findViews(in: content, ofType: NSPopUpButton.self) {
-        let textWidth = (picker.title as NSString).size(withAttributes: [.font: picker.font ?? NSFont.systemFont(ofSize: 13)]).width
-        let titleRect = try #require(picker.cell?.titleRect(forBounds: picker.bounds))
-        #expect(titleRect.width >= textWidth - 0.5)
+    let pickers = try await findAccessibilityMenus(in: content)
+    #expect(pickers.count == 3)
+    for picker in pickers {
+        let requiredWidth = try await menuFittingWidth(for: picker.value, language: language)
+        #expect(picker.screenFrame.width >= requiredWidth - 0.5)
     }
 }
 
 @Test @MainActor
-func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() throws {
+func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() async throws {
     // Arrange
     let suiteName = "InterfaceLanguagePreferencesTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
@@ -93,8 +94,8 @@ func test_preferencesView_when_rendered_then_containsInterfaceLanguagePicker() t
 
     // Act
     contentView.layoutSubtreeIfNeeded()
-    let languagePickers = findViews(in: contentView, ofType: NSPopUpButton.self)
-        .filter { $0.title == "System Default — English" }
+    let languagePickers = try await findAccessibilityMenus(in: contentView)
+        .filter { $0.identifier == "interfaceLanguagePicker" && $0.value == "System Default — English" }
 
     // Assert
     #expect(languagePickers.count == 1)
@@ -119,24 +120,19 @@ func test_languageIdentifier_when_longLanguageSelected_then_openWindowResizesWit
 
     // Act
     language.languageIdentifier = "en-ZA"
-    for _ in 0..<50 {
-        if findViews(in: content, ofType: NSPopUpButton.self).contains(where: { $0.title.contains("South Africa") }) {
-            break
-        }
+    let deadline = ContinuousClock.now.advanced(by: .seconds(3))
+    var pickers = try await findAccessibilityMenus(in: content)
+    while !pickers.contains(where: { $0.value.contains("South Africa") }) && ContinuousClock.now < deadline {
         try await Task.sleep(for: .milliseconds(10))
-        content.layoutSubtreeIfNeeded()
+        pickers = try await findAccessibilityMenus(in: content)
     }
-    content.layoutSubtreeIfNeeded()
-    let picker = try #require(findViews(in: content, ofType: NSPopUpButton.self).first {
-        $0.title.contains("South Africa")
-    })
-    let textWidth = (picker.title as NSString).size(withAttributes: [.font: picker.font ?? NSFont.systemFont(ofSize: 13)]).width
+    let picker = try #require(pickers.first { $0.value.contains("South Africa") })
+    let requiredWidth = try await menuFittingWidth(for: picker.value, language: language)
 
     // Assert
     #expect(window.contentLayoutRect.width > originalWidth)
-    let titleRect = try #require(picker.cell?.titleRect(forBounds: picker.bounds))
-    #expect(titleRect.width >= textWidth - 0.5)
-    #expect(content.bounds.contains(picker.convert(picker.bounds, to: content)))
+    #expect(picker.screenFrame.width >= requiredWidth - 0.5)
+    #expect(content.bounds.contains(try picker.frame(in: content)))
 
     // Act
     language.languageIdentifier = "zh-Hant"
@@ -148,7 +144,7 @@ func test_languageIdentifier_when_longLanguageSelected_then_openWindowResizesWit
 }
 
 @Test @MainActor
-func test_preferencesView_when_rendered_then_alignsLanguagePickers() throws {
+func test_preferencesView_when_rendered_then_alignsLanguagePickers() async throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
@@ -160,10 +156,8 @@ func test_preferencesView_when_rendered_then_alignsLanguagePickers() throws {
 
     // Act
     contentView.layoutSubtreeIfNeeded()
-    let trailingEdges = findViews(in: contentView, ofType: NSPopUpButton.self)
-        .map { picker in
-            picker.convert(picker.bounds, to: contentView).maxX
-        }
+    let trailingEdges = try await findAccessibilityMenus(in: contentView)
+        .map { $0.screenFrame.maxX }
     let minimumEdge = try #require(trailingEdges.min())
     let maximumEdge = try #require(trailingEdges.max())
 
@@ -173,7 +167,7 @@ func test_preferencesView_when_rendered_then_alignsLanguagePickers() throws {
 }
 
 @Test @MainActor
-func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
+func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() async throws {
     // Arrange
     let controller = PreferencesWindowController(
         settings: TranslationSettings(),
@@ -186,8 +180,8 @@ func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
     // Act
     contentView.layoutSubtreeIfNeeded()
     let languagePicker = try #require(
-        findViews(in: contentView, ofType: NSPopUpButton.self)
-            .first { $0.title == "System Default — English" }
+        try await findAccessibilityMenus(in: contentView)
+            .first { $0.identifier == "interfaceLanguagePicker" }
     )
     let usageButton = try #require(
         findViews(
@@ -195,10 +189,7 @@ func test_preferencesView_when_rendered_then_placesUsageAfterLanguage() throws {
             accessibilityIdentifier: "usageHelpButton"
         ).first
     )
-    let languageY = languagePicker.convert(
-        languagePicker.bounds,
-        to: contentView
-    ).midY
+    let languageY = try languagePicker.frame(in: contentView).midY
     let usageY = usageButton.convert(usageButton.bounds, to: contentView).midY
 
     // Assert

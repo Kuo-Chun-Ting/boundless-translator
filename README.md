@@ -88,7 +88,7 @@ GUI, E2E, StoreKit, language support, script and release checks have independent
 
 `Scripts/verify.sh` runs **all eight levels**, including real E2E and DMG release verification. It has no partial mode, attempts every level, and returns nonzero if any test fails or is skipped. It can build, notarize and temporarily install a DMG; it does not upload to App Store Connect.
 
-Local StoreKit has a known environment skip on macOS 26.5.2 (25F84) with Xcode 26.6 (17F113). Under the project’s current StoreKit exception, Verify passes when all other levels pass. See [StoreKit testing](app-store/storekit-testing.md). Actual store purchases still require acceptance in TestFlight.
+Local StoreKit tests temporarily skip on every macOS/Xcode version. Use `Scripts/run_storekit_tests.sh --force` for diagnostics. Under the project’s current StoreKit exception, Verify passes when all other levels pass. See [StoreKit testing](app-store/storekit-testing.md). Actual store purchases still require acceptance in TestFlight.
 
 ### XCTest UI Automation
 

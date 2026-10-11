@@ -6,7 +6,7 @@ import Testing
 @Test(
     .enabled(if: LanguageSupportFixture.isEnabled, "Run Scripts/run_language_support_tests.sh"),
     .serialized,
-    arguments: try await LanguageSupportFixture.ocrFixtures()
+    arguments: try LanguageSupportFixture.ocrFixtures()
 )
 func test_recognize_when_image_contains_supported_language_then_returns_fixture_text(
     fixture: LanguageSupportFixture
