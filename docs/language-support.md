@@ -2,6 +2,8 @@
 
 ## User-facing language lists (planned)
 
+Public support wording and sources: [system and language support](product-support.md).
+
 - List support separately for selected-text translation, screenshot translation and App interface. Distinguish screenshot source and target languages.
 - In the App, use the Mac's current translation and image-recognition support for language lists; use bundled localizations for interface languages.
 - Public documentation explains that macOS and model readiness affect availability. Do not promise a fixed translation or screenshot language count or maintain a list for every macOS version.

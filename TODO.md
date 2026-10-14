@@ -10,10 +10,12 @@
   - macOS 27.0.1：48 個翻譯方向、25 張 OCR 圖片及 Unit 237 項通過；尚無範例的語言列於測試紀錄。Production code 未修改。
 - [ ] 調整截圖 E2E 的辨識等待：三個案例共用的前置流程只等 10 秒；診斷時約 25 秒才完成辨識，之後完整截圖流程通過，同包 App 再次啟動也通過。維持原本功能預期，釐清初始化耗時並訂定合理逾時；正式修正尚未進行。
 
-- [ ] 實測 macOS 27：用朋友相同的 App 版本、圖片與操作重現截圖選字問題，確認翻譯、字典、朗讀、權限流程及新版外觀，記錄結果。
+- [ ] 找 macOS 27 圖片文字辨識異常的可靠來源，整理可提供使用者的說明；依使用者要求不再重現或除錯。
+  - 已將 [TRex 與 MindClip 的官方更新紀錄](docs/product-support.md#macos-27-圖片文字辨識問題)合併至上線用支援文件，能佐證相似症狀；尚未找到 Apple 官方確認，不能宣稱已證明 Boundless 的故障原因。
   - macOS 27.0.1／Xcode 26.6：OCR 元件 7 組圖片通過；GUI 首次等待辨識逾時。診斷視窗辨識耗時 28.43 秒，採樣顯示 Apple 正在編譯辨識模型；完成後重開，同圖辨識 0.18 秒，hover、拖曳選字及字卡 GUI 通過。正式 App、朋友案例及 Preview 是否同因尚未確認；暫時診斷程式已移除。結果：`Build/GUI/Results.sVI5Sl/`。
 - [ ] 依官方文件整理 macOS 支援清單與功能限制，同步 README、Support 與 App Store 說明；實測結果另記，不混入官方支援判斷。
   - 已核對建置設定與 API：最低 macOS 15、僅支援 M 系列晶片；已建立並部署 `macos-compatibility` skill。對外說明尚未更新。
+  - 已整理 [上線用系統與語言支援資料](docs/product-support.md)：介面列 34 組語言（含地區版本共 48 個語系），圖片辨識收進截圖翻譯說明；翻譯與辨識依使用者的 Mac 提供。附 macOS 27 回報及 Vision 新舊介面說明；換新版不列為上線前必改。對外文件同步尚未完成。
 
 - [x] E2E 分成四個獨立案例：選字翻譯、截圖翻譯、切換 App、重新開啟 Settings；兩種外部編輯器共用一次啟動，截圖流程止於快捷鍵開啟翻譯視窗。修正第二次選字前未切回編輯器 App 的測試操作；production code 未修改。
   - 四個 E2E 全數通過，案例共約 64 秒；E2E／GUI 入口腳本測試、Xcode 專案檢查及另一個 agent 審閱通過。同步測試工作流：production code 跑 Unit、Component，只改測試則跑修改的層級。未跑完整 Verify、未產生 DMG。
@@ -26,16 +28,21 @@
 - [x] 新增 `Scripts/reset_lookup_dictionary.sh`：直接清除首次提示紀錄，保留其他設定，不備份；已在測試 Runner 外執行並重現首次提示。
 - [x] 將 Build App 入口移至 `Scripts/build_dmg_app.sh`，同步更新發布、E2E、文件路徑及 `BuildDmgAppTests.sh` 測試入口；建置行為不變。
 - [ ] 調整截圖翻譯與選字翻譯的字典定位：以書本圖示為定位依據，優先在上方顯示並保留圖示可見；先實測 Apple API 的定位限制。
+- [ ] 查字典期間保留選字翻譯的書本按鈕，結束後恢復原本顯示規則。GUI 已重現按鈕消失；診斷確認操作對象轉到 Apple Lookup 時，`WindowPresentationState.isPresenting` 為 true，但原文區失去焦點仍觸發隱藏。後續評估沿用共用判斷，補測保留與恢復；目前暫停，診斷與測試變更已移除，先完成介紹圖。
 - [ ] 全盤檢查 UI 事件處理：找出滑鼠追蹤、游標、焦點與視窗關閉中，用額外判斷、旗標或 override 補救自訂行為的地方，包含本次截圖字卡修正。逐項確認能否沿用系統或既有元件的行為，列出應移除、修正或保留的做法及理由。
 - [x] 修正首次查字典按「繼續」後翻譯視窗消失：翻譯視窗與截圖字卡共用 AppKit 附屬視窗狀態，暫停自動關閉與字卡替換，結束後恢復原本行為；移除手動旗標。
   - Unit 237 項、Component 190 項（各兩種模式）、2 個 Lookup GUI 案例與 Xcode 專案檢查通過。兩個 GUI 案例各自重設字典後驗證首次提示，並確認關閉字典後恢復操作；實測截圖存於 `Build/LookupReview/`。其他 Apple 提示未做實際操作驗證；未重建 Build App、未產生 DMG。
 - [x] 修正截圖翻譯中，hover 單字或選取文字後，滑鼠向上移至字卡時觸發下層文字事件，導致字卡消失的問題。 改由字卡面板接收自身事件，移除截圖多餘的滑鼠事件註冊與跨視窗判斷。
 
-- [ ] 確認新版功能介紹圖：`docs/screenshot-demo/glass-updated/`、`space-gray-updated/`。沿用原版構圖與引導樣式，截圖翻譯分列單字、句子兩個結果，字典只留一個範例；背景與 Settings 保持原版。
-- [x] 製作選字翻譯 PDF 與手繪截圖素材；PDF 文字擷取正確，手繪圖通過 macOS OCR 辨識。
-- [x] 清除未採用的手繪圖、黑白便條及兩份生成提示，保留已確認的配色素材。
-- [x] 使用者確認奶油白與灰藍手寫素材，原圖及兩種背景預覽存於 `docs/screenshot-demo/capture-assets/palette-study/`；短文案通過 OCR，尚待實拍。
-- [ ] 使用 PDF 第二句與手繪圖片重拍選字翻譯、單字翻譯、整句翻譯及字典畫面，再更新介紹圖。
+- [x] 功能介紹素材集中至 `docs/feature-showcase/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
+- [ ] 最後確認 Settings 功能介紹圖；選字翻譯暫定同尺寸自然構圖，字典採石墨灰柔和底色版。狀態見 `docs/feature-showcase/output/glass/README.md`。
+- [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 Dictionary 3、5；保留完整查詢文字及字典視窗。可編輯來源在 `docs/feature-showcase/layouts/`。
+- [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。完整／後半段光束兩版都保留。
+- [ ] 最後選定截圖功能介紹使用完整光束或後半段光束；兩版目前皆保留。
+- [x] 選字翻譯採 VS Code 第一頁、Preview 第二頁的同尺寸自然構圖，不放精靈，暖黃短斜直箭頭由左上指向右下。保留 Mac 選單列、App 工具列及完整翻譯視窗。
+- [x] 準備 VS Code 截圖用 README：`docs/feature-showcase/assets/demos/vscode/README.md`，沿用 PDF 的兩句文案。
+- [x] 清理功能介紹歷次試稿與根目錄重複截圖；只保留最新成圖、必要原始素材、可編輯排版與共用產圖腳本。目前直接以石墨灰 HTML 排版產圖。
+- [x] 更新選字翻譯示範 PDF：`docs/feature-showcase/assets/demos/boundless-selected-text-demo.pdf`，採用確認的兩句文案、12 pt 同字級，維持 960 × 540 pt 頁面、縮短上方留白及句距；已替換舊版並檢查排版與文字。
 
 - [x] 完成截圖翻譯收尾：更新 GUI 舊文案、三語 Support、README、示範文件與規格；同步 StoreKit 驗證例外。移除 hint 多餘的快捷鍵參數與顯示條件，保留截圖選字後按快捷鍵翻譯；Help 字典圖示改用共用來源。
   - 文件經另一個 agent 審閱。Unit 237 項、Component 188 項（各兩種模式）與 Hint GUI 4 項皆通過。未重建 Build App、未產生 DMG、未發布 Support。
@@ -175,3 +182,17 @@
 - [x] 將 App Store Archive、Validate、Distribute 三支獨立 shell 放在 `Scripts/AppStore/`，由第一層 `Scripts/release_app_store.sh` 依序執行；使用固定路徑、Xcode 自動簽章與 Build Number 管理。
 
 - [x] App Store 三支腳本分別顯示 Archive、Validate、Distribute 的開始與成功訊息；失敗時不顯示成功。
+
+- [x] 清理 Glass／Space Gray：各保留最新 8 張成圖及可編輯來源，更新索引與引用；完整／後半段光束兩版都保留，舊生成底圖已由直接產圖流程取代。
+
+- [x] 功能介紹產圖改為直接讀取 HTML、原始截圖及共用光束元件，移除舊底圖、重複成圖與階段性產圖程式；14 張重製逐像素一致，16 張交付成圖原檔均未更改。
+- [ ] Settings 現存 HTML 重製結果與原 PNG 有細微像素差異，後續調整 Settings 時一併確認；此次未覆蓋成圖。
+
+- [x] 功能介紹目錄統一為 `docs/feature-showcase/`，分成 `assets/`、`layouts/`、`output/`；成圖放在 `output/glass/` 與 `output/space-gray/`，移除 updated 命名，同步排版與產圖路徑。
+- [x] 選定 A「窄光束」，套用 VS Code／Preview 的 Glass 與太空灰共四張選字翻譯成圖；逐像素比對確認僅箭頭附近改變，其餘十二張成圖未變。
+
+
+
+- [x] 將八張截圖翻譯最新版（完整／尾端光束、Glass／太空灰）及四份 HTML 整合回正式位置，同步共用光束座標；移除 screenshot-subtitles 暫存目錄與專用產圖程式；正式來源重製八張均逐像素一致。
+
+- [x] 移除已採用或淘汰的兩組比較稿、舊 Screenshot 字樣 CSS 與專用字型，共 9 個檔案；同步文字樣式及 Output 說明，正式成圖保留。
