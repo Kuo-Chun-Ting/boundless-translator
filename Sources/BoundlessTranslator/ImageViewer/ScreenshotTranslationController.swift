@@ -3,7 +3,11 @@ import Combine
 import SwiftUI
 
 @MainActor
-final class ScreenshotTranslationController {
+final class ScreenshotTranslationController: ObservableObject {
+    @Published private(set) var sourceLanguageIdentifier: String?
+    @Published private(set) var targetLanguageIdentifier: String
+    var onSourceLanguageChange: () -> Void = {}
+
     typealias DefinitionPresenter = @MainActor (NSView, String, CGPoint) -> Void
 
     let panel = ScreenshotTranslationPanel()
@@ -33,6 +37,8 @@ final class ScreenshotTranslationController {
          }) {
         self.imageView = imageView
         self.settings = settings
+        sourceLanguageIdentifier = settings.sourceLanguageIdentifier
+        targetLanguageIdentifier = settings.targetLanguageIdentifier
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.coordinator = coordinator
         showNativeDefinition = showDefinition
@@ -43,9 +49,7 @@ final class ScreenshotTranslationController {
         card.onSpeech = { [weak self] in self?.toggleSpeech() }
         card.onLookup = { [weak self] in self?.showDefinition() }
         card.onPointerEntered = { [weak self] in
-            self?.hoverTask?.cancel()
-            self?.hoverTarget = nil
-            self?.dismissalTask?.cancel()
+            self?.cancelPendingHoverAndDismissal()
         }
         card.onPointerExited = { [weak self] in self?.scheduleDismissal() }
         coordinator.$status.combineLatest(coordinator.$partialOutput).sink { [weak self] status, output in
@@ -65,6 +69,32 @@ final class ScreenshotTranslationController {
     deinit {
         hoverTask?.cancel()
         dismissalTask?.cancel()
+    }
+
+    func cancelPendingHoverAndDismissal() {
+        hoverTask?.cancel()
+        hoverTarget = nil
+        dismissalTask?.cancel()
+    }
+
+    func resetLanguages() {
+        dismiss()
+        sourceLanguageIdentifier = settings.sourceLanguageIdentifier
+        targetLanguageIdentifier = settings.targetLanguageIdentifier
+        onSourceLanguageChange()
+    }
+
+    func updateSourceLanguage(_ identifier: String?) {
+        guard identifier != sourceLanguageIdentifier else { return }
+        sourceLanguageIdentifier = identifier
+        retranslateCurrentTarget()
+        onSourceLanguageChange()
+    }
+
+    func updateTargetLanguage(_ identifier: String) {
+        guard identifier != targetLanguageIdentifier else { return }
+        targetLanguageIdentifier = identifier
+        retranslateCurrentTarget()
     }
 
     func hover(_ candidate: ImageTextPreviewTarget?) {
@@ -98,8 +128,8 @@ final class ScreenshotTranslationController {
         speech.stopPlayback()
         coordinator.cancel()
         target = candidate
-        coordinator.submit(selectedText, sourceLanguageIdentifier: settings.sourceLanguageIdentifier,
-                           targetLanguageIdentifier: settings.targetLanguageIdentifier)
+        coordinator.submit(selectedText, sourceLanguageIdentifier: sourceLanguageIdentifier,
+                           targetLanguageIdentifier: targetLanguageIdentifier)
         guard coordinator.request != nil, let window = imageView?.window else {
             dismiss()
             return
@@ -163,6 +193,17 @@ final class ScreenshotTranslationController {
             visibleFrame: screen.visibleFrame)
         panel.setFrame(frame, display: true)
         panel.point(to: anchor)
+    }
+
+    private func retranslateCurrentTarget() {
+        hoverTask?.cancel()
+        dismissalTask?.cancel()
+        hoverTarget = nil
+        cancelledTarget = nil
+        speech.stopPlayback()
+        guard let target, let selectedText = try? SelectedText(target.text) else { return }
+        coordinator.submit(selectedText, sourceLanguageIdentifier: sourceLanguageIdentifier,
+                           targetLanguageIdentifier: targetLanguageIdentifier)
     }
 
     private var isPresentingSystemUI: Bool {

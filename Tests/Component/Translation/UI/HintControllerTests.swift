@@ -22,6 +22,11 @@ struct HintControllerTests {
         let controller = ImageViewerWindowController(
             content: view, windowPresenter: ForegroundWindowPresenterSpy(),
             interfaceLanguageSettings: makeTestInterfaceLanguageSettings())
+        let suite = "ScreenshotHeaderTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        controller.enableQuickTranslation(settings: TranslationSettings(defaults: defaults),
+                                         engine: makeStubTranslationEngine())
         let window = try #require(controller.window)
         defer { controller.close() }
         controller.present(image: NSImage(size: CGSize(width: 200, height: 200)), pointerLocation: .zero)
@@ -29,6 +34,14 @@ struct HintControllerTests {
         #expect(window.isVisible)
         let container = try #require(window.contentView)
         let hint = try await waitForHintList(in: container, count: 1)
+        let menus = try await findAccessibilityMenus(in: container)
+        let sourceMenu = try #require(menus.first { $0.identifier == "sourceLanguageMenu" })
+        let targetMenu = try #require(menus.first { $0.identifier == "targetLanguageMenu" })
+        let sourceFrame = try sourceMenu.frame(in: container)
+        #expect(sourceFrame.minY >= hint.frame.maxY)
+        #expect(abs(sourceFrame.midY - (try targetMenu.frame(in: container)).midY) < 1)
+        #expect(hint.frame.minY >= view.frame.maxY)
+        let menuTopInset = container.bounds.maxY - sourceFrame.maxY
         view.selectAll(nil)
         let image = view.image
         let originalBounds = view.imageRect
@@ -44,6 +57,7 @@ struct HintControllerTests {
         #expect(view.image === image)
         #expect(view.imageRect == originalBounds)
         #expect(view.selectedText == "A B")
+        #expect(abs(container.bounds.maxY - (try sourceMenu.frame(in: container)).maxY - menuTopInset) < 1)
         #expect(ScreenshotTip(localization: testEnglishLocalization).status == .available)
     }
 

@@ -44,6 +44,39 @@ func test_handleTranslationShortcut_when_selection_is_cancelled_then_does_not_ca
     #expect(mock_capture.captureCount == 0)
 }
 
+@Test(arguments: ["ja", nil]) @MainActor
+func test_translationLanguagesForSelection_when_screenshotSelectionIsActive_then_usesLocalPair(source: String?) {
+    // Arrange
+    let viewer = ImageViewerControllerStub()
+    viewer.isSelectionActive = true
+    viewer.translationLanguages = (source, "fr")
+    let controller = AppController(imageViewerController: viewer,
+                                   subscriptionAccess: makeUnrestrictedTestAccess())
+
+    // Act
+    let languages = controller.translationLanguagesForSelection()
+
+    // Assert
+    #expect(languages.source == source)
+    #expect(languages.target == "fr")
+}
+
+@Test @MainActor
+func test_translationLanguagesForSelection_when_screenshotIsInactive_then_usesSettings() {
+    // Arrange
+    let viewer = ImageViewerControllerStub()
+    viewer.translationLanguages = ("ja", "fr")
+    let controller = AppController(imageViewerController: viewer,
+                                   subscriptionAccess: makeUnrestrictedTestAccess())
+
+    // Act
+    let languages = controller.translationLanguagesForSelection()
+
+    // Assert
+    #expect(languages.source == controller.settings.sourceLanguageIdentifier)
+    #expect(languages.target == controller.settings.targetLanguageIdentifier)
+}
+
 @MainActor
 private final class SelectedTextReaderStub: SelectedTextReading {
     let result: Result<SelectedText, Error>
@@ -65,6 +98,7 @@ private final class ScreenshotCaptureMock: ScreenshotCapturing {
 private final class ImageViewerControllerStub: ImageViewerControlling {
     var isSelectionActive = false
     var selectedText = ""
+    var translationLanguages: (source: String?, target: String)?
     var presentationCount = 0
     func present(image: NSImage, pointerLocation: CGPoint) { presentationCount += 1 }
 }

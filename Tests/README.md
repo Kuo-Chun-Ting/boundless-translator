@@ -6,7 +6,7 @@ Run these commands from the repository root. Public entries live in `Scripts/`; 
 |---|---|
 | `Scripts/run_unit_tests.sh` | All Unit tests once, without the subscription compile condition |
 | `Scripts/run_component_tests.sh` | All Component tests once, sharing the Unit build directory |
-| `Scripts/run_gui_tests.sh` | 14 default local UI cases: native event routing, translation/screenshot Lookup, resize, hint persistence and localized controls |
+| `Scripts/run_gui_tests.sh` | 15 default local UI cases: native event routing, translation/screenshot Lookup, resize, hint persistence and localized controls |
 | `Scripts/run_e2e_tests.sh` | Build the signed E2E App and test its complete product flows; no DMG packaging or installation |
 | `Scripts/run_storekit_tests.sh` | Local simulated purchases and subscription entitlements; no charges |
 | `Scripts/run_language_support_tests.sh` | Real Apple Translation and OCR fixtures; requires ready translation models |
@@ -24,7 +24,7 @@ Subscription tests construct subscribed and unsubscribed states directly. App St
 |---|---|
 | Unit | Selection ranges, forward/reverse endpoints, row ordering, paragraph joining, preview targets and card positioning; declared interface languages, localization completeness and loading |
 | Component | Production views/controllers: selection, copy/translation input, delayed OCR, image replacement, hints and empty-recognition Alerts; preview cancellation, stale results, chunk failures, retry, speech/Lookup input and scrolling. Fixed screenshot inputs use real Vision recognition without another App. |
-| GUI (14 default cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; selection and translation after returning from another App; hover-card actions, selection and native Lookup return; translation survives native Lookup and resumes outside-click dismissal; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
+| GUI (15 default cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; selection and translation after returning from another App; hover-card actions, selection and native Lookup return; translation survives native Lookup and resumes outside-click dismissal; screenshot language menus preserve and retranslate the hover card; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
 | E2E (4 cases) | External-editor selection in both Accessibility-exposing and copy-only modes; screenshot translation; first drag and translation after returning from another App; Settings focus after reopening |
 
 Esc and the close button are two inputs to one closure regression. Geometry variations stay in fast tests. SwiftUI control placement and persistent tip lifecycle retain GUI coverage; size/color measurements and controller cleanup remain Component tests.

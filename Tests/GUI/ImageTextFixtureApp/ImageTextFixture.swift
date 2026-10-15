@@ -43,7 +43,7 @@ final class ImageTextFixtureDelegate: NSObject, NSApplicationDelegate {
             previewSettings.sourceLanguageIdentifier = "en"
             previewSettings.targetLanguageIdentifier = "fr"
             viewer.enableQuickTranslation(settings: previewSettings, engine: TranslationEngine(
-                loadLanguages: { [] },
+                loadLanguages: { ["en", "ja", "fr"].map { Locale.Language(identifier: $0) } },
                 makeTaskHost: { request, coordinator in
                     AnyView(Color.clear.task {
                         await coordinator.translate(request, using: FixtureTranslationRunner())
@@ -231,7 +231,13 @@ private final class ImageTextValueElement: NSView {
 
 private struct FixtureTranslationRunner: TranslationRunning {
     func translate(_ request: TranslationRequest) async throws -> TranslationOutput {
-        TranslationOutput(
+        if ProcessInfo.processInfo.environment["IMAGE_TEXT_ECHO_LANGUAGES"] == "1" {
+            return TranslationOutput(
+                translatedText: "\(request.sourceLanguageIdentifier ?? "auto")→\(request.targetLanguageIdentifier): \(request.text)",
+                sourceLanguageIdentifier: request.sourceLanguageIdentifier ?? "en",
+                targetLanguageIdentifier: request.targetLanguageIdentifier)
+        }
+        return TranslationOutput(
             translatedText: ProcessInfo.processInfo.environment["IMAGE_TEXT_ECHO_SOURCE"] == "1"
                 ? request.text
                 : ProcessInfo.processInfo.environment["IMAGE_TEXT_TRANSLATION"] ?? "Texte traduit", sourceLanguageIdentifier: "en",

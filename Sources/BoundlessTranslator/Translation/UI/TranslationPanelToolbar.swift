@@ -12,6 +12,31 @@ struct TranslationLanguageMenu: View {
     let role: TranslationLanguageRole
     let localization: AppLocalization
 
+    var body: some View {
+        TranslationLanguagePicker(
+            supportedLanguages: supportedLanguages, role: role, localization: localization,
+            selectedIdentifier: role == .source
+                ? coordinator.sourceLanguageIdentifier : coordinator.targetLanguageIdentifier,
+            sourceLanguageWasDetected: coordinator.request?.sourceLanguageWasDetected == true
+        ) { identifier in
+            guard let identifier else { return }
+            switch role {
+            case .source: coordinator.updateSourceLanguage(identifier)
+            case .target: coordinator.updateTargetLanguage(identifier)
+            }
+        }
+    }
+}
+
+struct TranslationLanguagePicker: View {
+    let supportedLanguages: [Locale.Language]
+    let role: TranslationLanguageRole
+    let localization: AppLocalization
+    let selectedIdentifier: String?
+    var sourceLanguageWasDetected = false
+    var allowsAutomaticSelection = false
+    let onSelect: (String?) -> Void
+
     private var formatter: TranslationLanguagePairFormatter {
         TranslationLanguagePairFormatter(
             locale: Locale(identifier: localization.languageIdentifier),
@@ -30,7 +55,7 @@ struct TranslationLanguageMenu: View {
 
     private var languagePicker: some View {
         Picker(accessibilityLabel, selection: selection) {
-            if role == .source && selectedIdentifier == nil {
+            if role == .source && (allowsAutomaticSelection || selectedIdentifier == nil) {
                 Text(verbatim: localization.string("translation.detectAutomatically")).tag("")
             }
             ForEach(options) { option in
@@ -57,16 +82,10 @@ struct TranslationLanguageMenu: View {
     }
 
     private func select(_ identifier: String) {
-        guard !identifier.isEmpty, identifier != selectedIdentifier else {
-            return
-        }
-
-        switch role {
-        case .source:
-            coordinator.updateSourceLanguage(identifier)
-        case .target:
-            coordinator.updateTargetLanguage(identifier)
-        }
+        let languageIdentifier = identifier.isEmpty ? nil : identifier
+        guard languageIdentifier != selectedIdentifier else { return }
+        guard languageIdentifier != nil || (role == .source && allowsAutomaticSelection) else { return }
+        onSelect(languageIdentifier)
     }
 
     private func optionTitle(_ option: LanguageOption) -> String {
@@ -81,10 +100,6 @@ struct TranslationLanguageMenu: View {
         )
     }
 
-    private var request: TranslationRequest? {
-        coordinator.request
-    }
-
     private var options: [LanguageOption] {
         guard let selectedIdentifier else {
             return supportedLanguages.map { LanguageOption(id: $0.minimalIdentifier, language: $0) }
@@ -94,15 +109,6 @@ struct TranslationLanguageMenu: View {
             supportedLanguages: supportedLanguages,
             selectedIdentifier: selectedIdentifier
         )
-    }
-
-    private var selectedIdentifier: String? {
-        switch role {
-        case .source:
-            coordinator.sourceLanguageIdentifier
-        case .target:
-            coordinator.targetLanguageIdentifier
-        }
     }
 
     private var title: String {
@@ -121,7 +127,7 @@ struct TranslationLanguageMenu: View {
     }
 
     private var badge: String? {
-        guard role == .source, request?.sourceLanguageWasDetected == true else {
+        guard role == .source, sourceLanguageWasDetected else {
             return nil
         }
 
@@ -143,7 +149,7 @@ struct TranslationLanguageMenu: View {
         case .source:
             return formatter.sourceDescription(
                 languageIdentifier: selectedIdentifier,
-                wasDetected: request?.sourceLanguageWasDetected == true
+                wasDetected: sourceLanguageWasDetected
             )
         case .target:
             return formatter.languageName(

@@ -1,5 +1,11 @@
 # TODO
 
+- [x] 截圖翻譯語言切換採第一版「標籤在上」：兩個選單靠左成組、方向箭頭置中，Hint 在下方；直接共用翻譯視窗的 `TranslationLanguagePicker`，標籤沿用 Settings localization。三版設計稿位於 `docs/ui-proposals/screenshot-language-controls/`。Unit 239 項、Component 197 項、相關 GUI 2 項通過；已檢查一般寬度與 420 pt 窄視窗的實際截圖。深色模式驗證涵蓋翻譯字卡，未檢查整條工具列的深色畫面；GUI 使用模擬翻譯，未驗證 Apple 真實翻譯與語言下載，未產生 DMG。
+
+- [ ] 研究截圖翻譯行為是否能取得著作權保護：針對「截圖後保留原圖，可反覆 hover 單字或選取句子查看翻譯」的流程，查明互動行為、介面設計與程式碼各自可受保護的範圍、是否需要申請或登記，以及是否應另評估專利；以預計上架地區的官方資料為依據，整理既有類似產品與需向智慧財產權專業人士確認的問題。
+
+- [x] 截圖視窗加入與翻譯視窗共用的來源／目標語言選單：放在品牌標題列下、Hint 上方，不加朗讀按鈕；當張截圖獨立設定，切換重翻目前字卡，後續 hover、選字及快捷鍵沿用，新截圖恢復 Settings。完整 Unit 239 項、Component 197 項及新增的 GUI 操作案例通過；GUI 使用模擬翻譯結果，未驗證 Apple 真實翻譯與語言下載流程。
+
 - [x] StoreKit 本機測試暫時一律跳過，移除 macOS／Xcode 版本判斷；保留 `--force` 手動診斷。StoreKit 入口與 Verify 流程的腳本測試通過，未執行真正 StoreKit 測試。
 
 - [x] 統一翻譯、截圖、Settings、權限引導與訂閱視窗的品牌標題列：共用 18 pt 圖示與「Boundless Translator」，移除功能名稱；同步測試的視窗識別。

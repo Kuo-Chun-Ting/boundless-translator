@@ -2,6 +2,111 @@ import AppKit
 import Testing
 @testable import BoundlessTranslator
 
+@Test @MainActor
+func test_preview_when_settingsChangeDuringScreenshot_then_keepsScreenshotLanguages() async throws {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+    fixture.settings.sourceLanguageIdentifier = "ja"
+    fixture.settings.targetLanguageIdentifier = "en"
+
+    // Act
+    fixture.controller.update(fixture.target("A"))
+
+    // Assert
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == "en")
+    #expect(fixture.coordinator.request?.targetLanguageIdentifier == "zh-Hant")
+}
+
+@Test @MainActor
+func test_updateSourceLanguage_when_cardIsVisible_then_retranslatesAndPersistsForNextWord() async throws {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+    fixture.controller.update(fixture.target("A"))
+    let previousID = fixture.coordinator.request?.id
+
+    // Act
+    fixture.controller.updateSourceLanguage("ja")
+
+    // Assert
+    #expect(fixture.coordinator.request?.id != previousID)
+    #expect(fixture.coordinator.sourceText == "A")
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == "ja")
+    #expect(fixture.controller.panel.isVisible)
+    #expect(fixture.settings.sourceLanguageIdentifier == "en")
+
+    // Act
+    fixture.controller.update(fixture.target("B"))
+
+    // Assert
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == "ja")
+}
+
+@Test @MainActor
+func test_updateTargetLanguage_when_noCardExists_then_appliesToNextSelectionWithoutChangingSettings() async {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+
+    // Act
+    fixture.controller.updateTargetLanguage("fr")
+
+    // Assert
+    #expect(fixture.coordinator.request == nil)
+    #expect(!fixture.controller.panel.isVisible)
+    #expect(fixture.settings.targetLanguageIdentifier == "zh-Hant")
+
+    // Act
+    fixture.controller.update(fixture.target("A B"))
+
+    // Assert
+    #expect(fixture.coordinator.request?.targetLanguageIdentifier == "fr")
+}
+
+@Test @MainActor
+func test_updateSourceLanguage_when_automaticIsSelected_then_restoresDetectionForEveryWord() async {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+    fixture.controller.update(fixture.target("A"))
+
+    // Act
+    fixture.controller.updateSourceLanguage(nil)
+
+    // Assert
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == nil)
+    #expect(fixture.coordinator.request?.sourceLanguageWasDetected == true)
+
+    // Act
+    fixture.controller.dismiss()
+    fixture.controller.update(fixture.target("B"))
+
+    // Assert
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == nil)
+}
+
+@Test @MainActor
+func test_resetLanguages_when_newScreenshotStarts_then_usesLatestSettingsAndClearsOldCard() async {
+    // Arrange
+    let fixture = await ScreenshotPreviewFixture()
+    defer { fixture.close() }
+    fixture.controller.updateSourceLanguage("ja")
+    fixture.controller.updateTargetLanguage("fr")
+    fixture.controller.update(fixture.target("A"))
+    fixture.settings.sourceLanguageIdentifier = nil
+    fixture.settings.targetLanguageIdentifier = "de"
+
+    // Act
+    fixture.controller.resetLanguages()
+    fixture.controller.update(fixture.target("B"))
+
+    // Assert
+    #expect(fixture.coordinator.sourceText == "B")
+    #expect(fixture.coordinator.request?.sourceLanguageIdentifier == nil)
+    #expect(fixture.coordinator.request?.targetLanguageIdentifier == "de")
+}
+
 @Test(arguments: ["A", "A B", "A complete sentence."]) @MainActor
 func test_preview_when_textChanges_then_submitsExactSourceAndConfiguredLanguages(text: String) async throws {
     // Arrange
@@ -202,6 +307,7 @@ final class ScreenshotPreviewFixture {
     let coordinator: TranslationCoordinator
     let mock_speech = PreviewSpeechMock()
     var controller: ScreenshotTranslationController!
+    var settings: TranslationSettings!
     var lookups: [String] = []
 
     init(authorize: @escaping @MainActor () -> Bool = { true }) async {
@@ -209,7 +315,7 @@ final class ScreenshotPreviewFixture {
         coordinator = TranslationCoordinator(splitter: TranslationTextSplitter(targetCharacters: 7), authorize: authorize)
         let suite = "ScreenshotPreviewTests.\(UUID())"
         let defaults = UserDefaults(suiteName: suite)!
-        let settings = TranslationSettings(defaults: defaults)
+        settings = TranslationSettings(defaults: defaults)
         settings.sourceLanguageIdentifier = "en"
         settings.targetLanguageIdentifier = "zh-Hant"
         controller = ScreenshotTranslationController(

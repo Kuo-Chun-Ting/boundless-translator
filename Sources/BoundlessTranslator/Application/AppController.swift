@@ -78,11 +78,9 @@ final class AppController {
             fallbackReader: selectedTextReader
         )
         if let viewer = resolvedImageViewerController as? ImageViewerWindowController {
-            viewer.enableQuickTranslation(settings: settings, engine: translationEngine) { [weak self] in
+            viewer.enableQuickTranslation(settings: settings, engine: translationEngine,
+                                          supportedLanguageCatalog: supportedLanguageCatalog) { [weak self] in
                 self?.authorizeFeature() ?? false
-            }
-            viewer.sourceLanguageIdentifier = { [weak self] in
-                self?.settings.sourceLanguageIdentifier
             }
         }
     }
@@ -110,7 +108,8 @@ final class AppController {
 
     func translate(
         _ selectedText: SelectedText,
-        sourceLanguageIdentifier: String?
+        sourceLanguageIdentifier: String?,
+        targetLanguageIdentifier: String? = nil
     ) async {
         await subscriptionAccess.loadIfNeeded()
         guard !Task.isCancelled else { return }
@@ -120,7 +119,7 @@ final class AppController {
         coordinator.submit(
             selectedText,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: settings.targetLanguageIdentifier
+            targetLanguageIdentifier: targetLanguageIdentifier ?? settings.targetLanguageIdentifier
         )
         windowController.show(
             coordinator: coordinator,
@@ -140,9 +139,11 @@ final class AppController {
             await subscriptionAccess.loadIfNeeded()
             guard !Task.isCancelled, authorizeFeature() else { return }
             do {
+                let languages = translationLanguagesForSelection()
                 let selectedText = try await selectedTextReader.readSelectedText()
                 try Task.checkCancellation()
-                await translate(selectedText, sourceLanguageIdentifier: settings.sourceLanguageIdentifier)
+                await translate(selectedText, sourceLanguageIdentifier: languages.source,
+                                targetLanguageIdentifier: languages.target)
             } catch is CancellationError {
                 return
             } catch {
@@ -150,6 +151,14 @@ final class AppController {
                 handleSelectionError(error)
             }
         }
+    }
+
+    func translationLanguagesForSelection() -> (source: String?, target: String) {
+        if imageViewerController.isSelectionActive,
+           let languages = imageViewerController.translationLanguages {
+            return languages
+        }
+        return (settings.sourceLanguageIdentifier, settings.targetLanguageIdentifier)
     }
 
     private func handleSelectionError(_ error: Error) {

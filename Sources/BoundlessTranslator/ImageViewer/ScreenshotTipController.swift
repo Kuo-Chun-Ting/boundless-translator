@@ -9,6 +9,7 @@ struct ScreenshotHint: Identifiable {
 
 @MainActor
 final class ScreenshotTipController {
+    var topInset: CGFloat = 0
     var onHeightChange: (CGFloat) -> Void = { _ in }
 
     private var hintView: NSHostingView<HintListView>?
@@ -79,7 +80,7 @@ final class ScreenshotTipController {
         view.rootView = rootView
         let height = ceil(view.fittingSize.height)
         onHeightChange(height)
-        view.frame = NSRect(x: 0, y: content.bounds.height - height, width: width, height: height)
+        view.frame = NSRect(x: 0, y: content.bounds.height - topInset - height, width: width, height: height)
     }
 
     private func makeItem(_ hint: ScreenshotHint) -> HintItem {

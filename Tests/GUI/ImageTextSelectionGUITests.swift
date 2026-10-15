@@ -3,6 +3,88 @@ import XCTest
 
 @MainActor
 final class ImageTextSelectionGUITests: ImageTextGUITestCase {
+    func test_languageMenus_when_hoverCardIsOpen_then_preserveAndRetranslateIt() throws {
+        // Arrange
+        app.terminate()
+        app.launchEnvironment["IMAGE_TEXT_ECHO_LANGUAGES"] = "1"
+        app.launch()
+        XCTAssertTrue(waitFor { self.words().contains { $0.text == "TARGET" } })
+        click(imageBlankPoint)
+        move(coordinate(try word("TARGET"), "middle"))
+        let result = app.textViews["screenshotPreview.translation"]
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "en→fr: TARGET" })
+        let screenshot = app.windows["imageText.screenshot"]
+        let sourceLabel = screenshot.staticTexts["Translate From"]
+        let targetLabel = screenshot.staticTexts["Translate To"]
+        XCTAssertTrue(sourceLabel.exists)
+        XCTAssertTrue(targetLabel.exists)
+        XCTAssertLessThan(sourceLabel.frame.maxY, screenshot.popUpButtons["sourceLanguageMenu"].frame.minY)
+        XCTAssertLessThan(targetLabel.frame.maxY, screenshot.popUpButtons["targetLanguageMenu"].frame.minY)
+
+        // Act: browsing the native menu must not dismiss the hovered word's card.
+        screenshot.popUpButtons["sourceLanguageMenu"].click()
+        let japanese = app.menuItems["Japanese"]
+        XCTAssertTrue(japanese.waitForExistence(timeout: 3))
+        japanese.hover()
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !result.exists }, object: nil)
+        dismissed.isInverted = true
+
+        // Assert
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 1), .completed)
+        japanese.click()
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "ja→fr: TARGET" })
+
+        // Verify returning to automatic without depending on the menu's screen placement.
+        screenshot.popUpButtons["sourceLanguageMenu"].click()
+        let automatic = app.menuItems["Detect Automatically"]
+        automatic.click()
+        move(imageBlankPoint)
+        XCTAssertTrue(waitFor { !result.exists })
+        move(coordinate(try word("TARGET"), "middle"))
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "auto→fr: TARGET" })
+        screenshot.popUpButtons["sourceLanguageMenu"].click()
+        app.menuItems["Japanese"].click()
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "ja→fr: TARGET" })
+
+        // Act
+        screenshot.popUpButtons["targetLanguageMenu"].click()
+        app.menuItems["English"].click()
+
+        // Assert
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "ja→en: TARGET" })
+        // Leave the card before hovering the other word underneath it.
+        move(imageBlankPoint)
+        move(CGPoint(x: imageBlankPoint.x + 5, y: imageBlankPoint.y))
+        XCTAssertTrue(waitFor { !result.exists })
+        move(coordinate(try word("ORIGINAL"), "middle"))
+        XCTAssertTrue(waitFor { result.exists && result.value as? String == "ja→en: ORIGINAL" })
+        let attachment = XCTAttachment(screenshot: screenshot.screenshot())
+        attachment.name = "screenshot-language-menus"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        let sourceMenu = screenshot.popUpButtons["sourceLanguageMenu"]
+        move(CGPoint(x: sourceMenu.frame.midX, y: sourceMenu.frame.midY))
+        move(CGPoint(x: screenshot.frame.maxX + 20, y: sourceMenu.frame.midY))
+        XCTAssertTrue(waitFor { !result.exists })
+
+        // The longer automatic option must remain usable at the screenshot's minimum width.
+        sourceMenu.click()
+        app.menuItems["Detect Automatically"].click()
+        let edge = screenshot.coordinate(withNormalizedOffset: .zero).withOffset(
+            CGVector(dx: screenshot.frame.width + 2, dy: screenshot.frame.height / 2))
+        edge.press(forDuration: 0.1, thenDragTo: edge.withOffset(
+            CGVector(dx: 400 - screenshot.frame.width, dy: 0)))
+        XCTAssertTrue(waitFor { screenshot.frame.width <= 422 })
+        let targetMenu = screenshot.popUpButtons["targetLanguageMenu"]
+        XCTAssertGreaterThanOrEqual(sourceMenu.frame.minX, screenshot.frame.minX)
+        XCTAssertLessThan(sourceMenu.frame.maxX, targetMenu.frame.minX)
+        XCTAssertLessThanOrEqual(targetMenu.frame.maxX, screenshot.frame.maxX)
+        let narrowAttachment = XCTAttachment(screenshot: screenshot.screenshot())
+        narrowAttachment.name = "screenshot-language-menus-narrow"
+        narrowAttachment.lifetime = .keepAlways
+        add(narrowAttachment)
+    }
+
     func test_preview_when_lightAndDark_then_keepsTextAndActionsUsable() throws {
         try checkPreview(appearance: "light", background: "white", length: "short", translation: "金色的")
         try checkPreview(appearance: "dark", background: "color", length: "long",
