@@ -193,6 +193,9 @@ final class SourceTextLookupView: NSView, NSTextViewDelegate {
     }
 
     private func updateLookupAction() {
+        if let window, WindowPresentationState(window: window).isPresenting {
+            return
+        }
         lookupActionOverlay.update(
             isActive: isSourceTextActive,
             selection: lookupSelection,

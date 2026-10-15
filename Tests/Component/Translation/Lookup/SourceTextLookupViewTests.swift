@@ -386,6 +386,44 @@ func test_origin_when_preferred_position_exceeds_bounds_then_keeps_button_inside
 }
 
 @Test @MainActor
+func test_makeFirstResponder_when_childWindowIsOpen_then_keepsLookupActionUntilChildCloses() throws {
+    // Arrange
+    let sourceLookupView = SourceTextLookupView()
+    let translationWindow = makeTranslationWindow(hosting: sourceLookupView)
+    sourceLookupView.updateText("She felt strong emotions.")
+    sourceLookupView.layoutSubtreeIfNeeded()
+    let sourceTextEditor = try sourceTextView(in: sourceLookupView)
+    #expect(translationWindow.makeFirstResponder(sourceTextEditor))
+    sourceLookupView.updateSelection(NSRange(location: 9, length: 15))
+    #expect(sourceLookupView.isLookupActionVisible)
+    let auxiliaryWindow = NSWindow(contentRect: .zero, styleMask: .borderless,
+                                   backing: .buffered, defer: false)
+    auxiliaryWindow.isReleasedWhenClosed = false
+    translationWindow.addChildWindow(auxiliaryWindow, ordered: .above)
+    auxiliaryWindow.orderFront(nil)
+    defer {
+        translationWindow.removeChildWindow(auxiliaryWindow)
+        auxiliaryWindow.orderOut(nil)
+        translationWindow.orderOut(nil)
+    }
+
+    // Act: Lookup takes focus while its child window is visible.
+    #expect(translationWindow.makeFirstResponder(nil))
+    sourceLookupView.layout()
+
+    // Assert
+    #expect(sourceLookupView.isLookupActionVisible)
+
+    // Act: the original visibility rules resume after Lookup closes.
+    translationWindow.removeChildWindow(auxiliaryWindow)
+    auxiliaryWindow.orderOut(nil)
+    sourceLookupView.layout()
+
+    // Assert
+    #expect(!sourceLookupView.isLookupActionVisible)
+}
+
+@Test @MainActor
 func test_layout_when_lookup_action_is_hidden_then_uses_card_content_padding() throws {
     // Arrange
     let view = SourceTextLookupView()
