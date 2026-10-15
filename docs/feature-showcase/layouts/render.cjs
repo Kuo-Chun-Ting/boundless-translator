@@ -7,7 +7,7 @@ const {PNG} = require('pngjs');
 const root = path.resolve(__dirname, '..');
 const write = process.argv.includes('--write');
 
-/** @returns {Array<{source: string, output: string, kind?: string, mode?: string}>} */
+/** @returns {Array<{source: string, output: string, kind?: string}>} */
 function listPages() {
   const pages = [];
   for (const theme of ['glass', 'space-gray']) {
@@ -21,10 +21,8 @@ function listPages() {
     });
     for (const kind of ['general', 'lettering']) {
       const prefix = kind === 'general' ? '02-screenshot-01-general-beam' : '02-screenshot-02-lettering-wizard-beam';
-      for (const mode of ['gold', 'connected']) {
-        pages.push({kind, mode, source: `layouts/${theme}/screenshot-${kind}.html`,
-          output: `${folder}/${prefix}-${mode}-graphite.png`});
-      }
+      pages.push({kind, source: `layouts/${theme}/screenshot-${kind}.html`,
+        output: `${folder}/${prefix}-connected-graphite.png`});
     }
   }
   return pages;
@@ -44,11 +42,11 @@ async function renderLayout(page, source) {
   return page.locator('.slide').screenshot();
 }
 
-/** @param {import('playwright').Page} page @param {Buffer} base @param {string} kind @param {string} mode @returns {Promise<Buffer>} */
-async function renderBeams(page, base, kind, mode) {
+/** @param {import('playwright').Page} page @param {Buffer} base @param {string} kind @returns {Promise<Buffer>} */
+async function renderBeams(page, base, kind) {
   await page.addScriptTag({path: path.join(__dirname, 'components/beams.js')});
   const result = await page.evaluate(options => window.drawBeams(options), {
-    url: 'data:image/png;base64,' + base.toString('base64'), kind, mode,
+    url: 'data:image/png;base64,' + base.toString('base64'), kind,
   });
   return Buffer.from(result.split(',')[1], 'base64');
 }
@@ -73,7 +71,7 @@ async function main() {
     let failures = 0;
     for (const job of listPages()) {
       let output = await renderLayout(page, job.source);
-      if (job.kind) output = await renderBeams(page, output, job.kind, job.mode);
+      if (job.kind) output = await renderBeams(page, output, job.kind);
       const destination = path.join(root, job.output);
       if (write) {
         fs.writeFileSync(destination, output);

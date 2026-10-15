@@ -37,8 +37,8 @@
 - [x] 功能介紹素材集中至 `docs/feature-showcase/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
 - [ ] 最後確認 Settings 功能介紹圖；選字翻譯暫定同尺寸自然構圖，字典採石墨灰柔和底色版。狀態見 `docs/feature-showcase/output/glass/README.md`。
 - [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 `dictionary_selected_text.jpg` 與 `dictionary_screenshot.jpg`；保留書本 icon、完整查詢文字及字典視窗，選字翻譯視窗左緣對齊小標題。可編輯來源在 `docs/feature-showcase/layouts/`。
-- [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。完整／後半段光束兩版都保留。
-- [ ] 最後選定截圖功能介紹使用完整光束或後半段光束；兩版目前皆保留。
+- [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。已確定使用完整光束。
+- [x] 截圖功能介紹確定使用完整光束；刪除 Glass／太空灰共四張短光束成圖與專用產圖邏輯，同步預覽索引及文件。
 - [x] 選字翻譯採 VS Code 第一頁、Preview 第二頁的同尺寸自然構圖，不放精靈，暖黃短斜直箭頭由左上指向右下。保留 Mac 選單列、App 工具列及完整翻譯視窗。
 - [x] 準備 VS Code 截圖用 README：`docs/feature-showcase/assets/demos/vscode/README.md`，沿用 PDF 的兩句文案。
 - [x] 清理功能介紹歷次試稿與根目錄重複截圖；只保留最新成圖、必要原始素材、可編輯排版與共用產圖腳本。目前直接以石墨灰 HTML 排版產圖。
@@ -183,7 +183,7 @@
 
 - [x] App Store 三支腳本分別顯示 Archive、Validate、Distribute 的開始與成功訊息；失敗時不顯示成功。
 
-- [x] 清理 Glass／Space Gray：各保留最新 8 張成圖及可編輯來源，更新索引與引用；完整／後半段光束兩版都保留，舊生成底圖已由直接產圖流程取代。
+- [x] 清理 Glass／Space Gray：各保留最新 6 張成圖及可編輯來源，更新索引與引用；截圖翻譯僅保留完整光束，舊生成底圖已由直接產圖流程取代。
 
 - [x] 功能介紹產圖改為直接讀取 HTML、原始截圖及共用光束元件，移除舊底圖、重複成圖與階段性產圖程式；14 張重製逐像素一致，16 張交付成圖原檔均未更改。
 - [ ] Settings 現存 HTML 重製結果與原 PNG 有細微像素差異，後續調整 Settings 時一併確認；此次未覆蓋成圖。

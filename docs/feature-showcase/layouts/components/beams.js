@@ -1,5 +1,5 @@
-/** @param {{url: string, kind: string, mode: string}} options @returns {Promise<string>} */
-window.drawBeams = async function ({url, kind, mode}) {
+/** @param {{url: string, kind: string}} options @returns {Promise<string>} */
+window.drawBeams = async function ({url, kind}) {
  const canvas = document.createElement('canvas');
  canvas.width = 2560;
  canvas.height = 1600;
@@ -18,7 +18,6 @@ window.drawBeams = async function ({url, kind, mode}) {
 function geometry(v){return{x:v.ix+v.sx*v.scale,y:v.iy+v.sy*v.scale,w:v.sw*v.scale,h:v.sh*v.scale};}
 function restoreCard(v){const c=drawingContext;c.save();c.translate(v.ix,v.iy);c.scale(v.scale,v.scale);c.beginPath();c.roundRect(v.sx-1,v.sy-1,v.sw+2,v.sh+2,41);c.moveTo(v.px-24,v.sy+v.sh-2);c.lineTo(v.px-7,v.py-2);c.quadraticCurveTo(v.px,v.py+4,v.px+7,v.py-2);c.lineTo(v.px+24,v.sy+v.sh-2);c.closePath();c.clip();c.setTransform(1.6,0,0,1.6,0,0);image(bases[params.theme-1],0,0,1600,1000);c.restore();}
 function ellipticalGlow(x,y,rx,ry,opacity){const c=drawingContext;c.save();c.translate(x,y);c.scale(rx,ry);const g=c.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,`rgba(255,232,176,${opacity})`);g.addColorStop(.25,`rgba(237,171,63,${opacity*.82})`);g.addColorStop(.6,`rgba(210,138,49,${opacity*.4})`);g.addColorStop(1,'rgba(208,129,44,0)');c.fillStyle=g;c.fillRect(-1,-1,2,2);c.restore();}
-function drawShortBeam(r){const c=drawingContext;const target={x:r.x+r.w*.16,y:r.y+r.h*.55};const wand={x:939,y:635};const angle=Math.atan2(target.y-wand.y,target.x-wand.x);const length=74*params.reach;const width=r.h*.59;c.save();c.translate(target.x,target.y);c.rotate(angle);const g=c.createLinearGradient(-length,0,8,0);g.addColorStop(0,'#e4ac4a00');g.addColorStop(.3,'#e4ac4a18');g.addColorStop(.7,'#e8b25566');g.addColorStop(.9,'#ffebbbc9');g.addColorStop(1,'#e2a14755');c.fillStyle=g;c.filter='blur(1.1px)';c.beginPath();c.moveTo(-length,-2);c.lineTo(10,-width);c.quadraticCurveTo(17,0,10,width);c.lineTo(-length,2);c.closePath();c.fill();c.restore();ellipticalGlow(target.x,target.y,23,22,.37);}
 function drawFullBeam(r){
  const c=drawingContext;
  const target={x:r.x+r.w*.16,y:r.y+r.h*.55};
@@ -43,7 +42,7 @@ function drawFullBeam(r){
  drawingContext.setTransform(1.6, 0, 0, 1.6, 0, 0);
  image(source, 0, 0, 1600, 1000);
  for (const card of cards) {
-  (mode === 'connected' ? drawFullBeam : drawShortBeam)(geometry(card));
+  drawFullBeam(geometry(card));
   restoreCard(card);
  }
  return canvas.toDataURL();

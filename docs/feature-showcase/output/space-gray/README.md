@@ -1,14 +1,12 @@
 # 太空灰 功能介紹圖
 
-保留 8 張最新成圖，尺寸為 2560 × 1600。截圖功能先展示 Can’t select it，再展示 General；完整與後半段光束兩版都保留。
+保留 6 張最新成圖，尺寸為 2560 × 1600。截圖功能先展示 Can’t select it，再展示 General；統一使用完整光束。
 
 | 內容 | 檔案 |
 | --- | --- |
 | 選字翻譯：VS Code | [PNG](01-selected-text-01-vscode-aligned.png) |
 | 選字翻譯：Preview | [PNG](01-selected-text-02-preview-aligned.png) |
-| Can’t select it：後半段光束 | [PNG](02-screenshot-02-lettering-wizard-beam-gold-graphite.png) |
 | Can’t select it：完整光束 | [PNG](02-screenshot-02-lettering-wizard-beam-connected-graphite.png) |
-| General：後半段光束 | [PNG](02-screenshot-01-general-beam-gold-graphite.png) |
 | General：完整光束 | [PNG](02-screenshot-01-general-beam-connected-graphite.png) |
 | 字典 | [PNG](03-dictionary-graphite.png) |
 | Settings：待最後確認 | [PNG](04-settings.png) |
