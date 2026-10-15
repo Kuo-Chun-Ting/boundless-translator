@@ -36,7 +36,7 @@
 
 - [x] 功能介紹素材集中至 `docs/feature-showcase/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
 - [ ] 最後確認 Settings 功能介紹圖；選字翻譯暫定同尺寸自然構圖，字典採石墨灰柔和底色版。狀態見 `docs/feature-showcase/output/glass/README.md`。
-- [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 Dictionary 3、5；保留完整查詢文字及字典視窗。可編輯來源在 `docs/feature-showcase/layouts/`。
+- [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 `dictionary_selected_text.jpg` 與 `dictionary_screenshot.jpg`；保留書本 icon、完整查詢文字及字典視窗，選字翻譯視窗左緣對齊小標題。可編輯來源在 `docs/feature-showcase/layouts/`。
 - [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。完整／後半段光束兩版都保留。
 - [ ] 最後選定截圖功能介紹使用完整光束或後半段光束；兩版目前皆保留。
 - [x] 選字翻譯採 VS Code 第一頁、Preview 第二頁的同尺寸自然構圖，不放精靈，暖黃短斜直箭頭由左上指向右下。保留 Mac 選單列、App 工具列及完整翻譯視窗。
