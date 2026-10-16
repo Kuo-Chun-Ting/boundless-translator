@@ -1,5 +1,7 @@
 # TODO
 
+- [x] 新增 `Scripts/reset_all_dmg.sh` 與 `Scripts/reset_all_app_store.sh`，依核准順序串接對應版本的 App data、權限、Lookup 重設；沿用既有腳本，不加額外錯誤處理。入口順序測試已先失敗再通過，ResetEntryPoints／ResetAppData／ResetPermissions／ResetLookupDictionary 四組 Shell 測試及 zsh 語法檢查通過，獨立 review 無待修正問題。測試使用替身，未重設實際資料或權限；未改 App 程式碼、未產生 DMG、未 commit。
+
 - [x] 提示 GUI 測試改為分層定位：先以提示卡 ID 找到卡片，再查詢卡片內的 Close／checkbox；移除額外的控制項 ID。多語系排版只查卡片內唯一控制項，不依賴順序或英文標籤。保留關閉目標提示不影響語言提示、另一種提示仍可顯示及啟動後 app.activate() 的檢查。Unit 246 項、Component 202 項、Hint GUI 4 項通過（Build/GUI/Results.Af6nGk/Local.xcresult），獨立 review 無待修正問題。未產生 DMG、未 commit。
 
 - [ ] 完成晃動效果的使用者實測確認：隔離診斷使用正式 Settings presenter，首次開啟、已開啟與關閉後重開均測到兩個選單約 9–9.5 pt 往返位移，介面語言選單不動，Reduce Motion 為 false。2026-10-16 23:30 的 Build App 程序於 23:30:27 啟動，但當次執行檔於 23:30:34 才建好；同時仍執行 Applications 正式版。需結束舊程序後只開最新 Build App 再確認兩個快捷鍵。暫時診斷測試已移除，本次未改 production code、未產生 DMG。
