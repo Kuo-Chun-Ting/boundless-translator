@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum PreferencesWindowStyle {
-    static let contentSize = CGSize(width: 430, height: 304)
+    static let contentSize = CGSize(width: 430, height: 310)
 
     @MainActor
     static func contentSize(
@@ -34,7 +34,9 @@ struct PreferencesView: View {
     @ObservedObject var supportedLanguageCatalog: SupportedLanguageCatalog
     let quitApplication: @MainActor @Sendable () -> Void
     var onShowSubscription: (@MainActor () -> Void)? = nil
+    var onLanguageSettingsAnchorReady: (@MainActor (NSView) -> Void)? = nil
     var onHelpButtonReady: (@MainActor (NSButton) -> Void)? = nil
+    var languageSetupReminderCount = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,7 +44,9 @@ struct PreferencesView: View {
                 TranslationPreferencesView(
                     settings: settings,
                     supportedLanguageCatalog: supportedLanguageCatalog,
-                    localization: localization
+                    localization: localization,
+                    onLanguageSettingsAnchorReady: onLanguageSettingsAnchorReady,
+                    languageSetupReminderCount: languageSetupReminderCount
                 )
 
                 Section {

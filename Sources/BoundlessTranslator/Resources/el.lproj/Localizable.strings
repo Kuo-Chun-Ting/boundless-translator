@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Κάντε κλικ στο ? για να δείτε πώς μεταφράζετε επιλεγμένο κείμενο και στιγμιότυπα οθόνης.";
+
+"translationLanguages.title" = "Ρυθμίσεις γλώσσας";
+"translationLanguages.guidance" = "Οι παραπάνω ρυθμίσεις γλώσσας ισχύουν μόνο για αυτό το παράθυρο. Ορίστε τις προεπιλεγμένες γλώσσες στις Ρυθμίσεις.";
+
+"translation.chooseLanguage" = "Επιλέξτε";
+"translationSetup.title" = "Γλώσσες μετάφρασης";
+"translationSetup.guidance" = "Ορίστε τις γλώσσες μετάφρασης και μετά χρησιμοποιήστε μια συντόμευση πληκτρολογίου για μετάφραση.";

@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Seçili metni ve ekran görüntülerini nasıl çevireceğinizi görmek için ? simgesine tıklayın.";
+
+"translationLanguages.title" = "Dil ayarları";
+"translationLanguages.guidance" = "Yukarıdaki dil ayarları yalnızca bu pencere için geçerlidir. Varsayılan dilleri Ayarlar’dan seçin.";
+
+"translation.chooseLanguage" = "Lütfen seçin";
+"translationSetup.title" = "Çeviri dilleri";
+"translationSetup.guidance" = "Çeviri dillerini ayarlayın, ardından klavye kısayoluyla çeviri yapın.";

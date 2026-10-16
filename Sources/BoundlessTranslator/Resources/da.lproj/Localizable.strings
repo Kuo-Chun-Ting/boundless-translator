@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Klik på ? for at se, hvordan du oversætter markeret tekst og skærmbilleder.";
+
+"translationLanguages.title" = "Sprogindstillinger";
+"translationLanguages.guidance" = "Sprogindstillingerne ovenfor gælder kun dette vindue. Vælg standardsprog i Indstillinger.";
+
+"translation.chooseLanguage" = "Vælg";
+"translationSetup.title" = "Oversættelsessprog";
+"translationSetup.guidance" = "Indstil oversættelsessprogene, og brug derefter en tastaturgenvej til at oversætte.";

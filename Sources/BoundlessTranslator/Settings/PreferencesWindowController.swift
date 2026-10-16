@@ -4,11 +4,14 @@ import SwiftUI
 
 @MainActor
 final class PreferencesWindowController: NSWindowController {
+    private let settings: TranslationSettings
     private let interfaceLanguageSettings: InterfaceLanguageSettings
     private let pointerScreenVisibleFrame: @MainActor () -> CGRect?
     private let windowPresenter: any ForegroundWindowPresenting
     private var languageCancellable: AnyCancellable?
     private let tipController = SettingsTipController()
+    private let languageSetupHintController = LanguageSetupHintController()
+    private var settingsCancellable: AnyCancellable?
 
     init(
         settings: TranslationSettings,
@@ -26,6 +29,7 @@ final class PreferencesWindowController: NSWindowController {
             NSApplication.shared.terminate(nil)
         }
     ) {
+        self.settings = settings
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.pointerScreenVisibleFrame = pointerScreenVisibleFrame ?? {
             let pointerLocation = NSEvent.mouseLocation
@@ -50,6 +54,7 @@ final class PreferencesWindowController: NSWindowController {
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false
         let tipController = self.tipController
+        let languageSetupHintController = self.languageSetupHintController
         window.contentView = NSHostingView(
             rootView: PreferencesView(
                 settings: settings,
@@ -59,6 +64,7 @@ final class PreferencesWindowController: NSWindowController {
                 supportedLanguageCatalog: supportedLanguageCatalog,
                 quitApplication: quitApplication,
                 onShowSubscription: onShowSubscription,
+                onLanguageSettingsAnchorReady: { languageSetupHintController.setAnchor($0) },
                 onHelpButtonReady: { button in
                     tipController.setAnchor(button, localization: AppLocalization(
                         languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
@@ -75,7 +81,13 @@ final class PreferencesWindowController: NSWindowController {
                 // can read the new language, avoiding layout with the old value.
                 Task { @MainActor [weak self] in
                     self?.resizeWindowForLanguage()
+                    self?.updateLanguageSetupHint()
                 }
+            }
+        settingsCancellable = settings.$sourceLanguageIdentifier
+            .combineLatest(settings.$targetLanguageIdentifier)
+            .sink { [weak self] _ in
+                Task { @MainActor [weak self] in self?.updateLanguageSetupHint() }
             }
     }
 
@@ -90,6 +102,24 @@ final class PreferencesWindowController: NSWindowController {
             windowPresenter.present(window)
             window.contentView?.layoutSubtreeIfNeeded()
             tipController.present(in: window)
+            updateLanguageSetupHint()
+        }
+    }
+
+    func presentForLanguageSetup() {
+        present()
+        guard let contentView = window?.contentView as? NSHostingView<PreferencesView> else { return }
+        contentView.rootView.languageSetupReminderCount += 1
+    }
+
+    private func updateLanguageSetupHint() {
+        guard let window, window.isVisible else { return }
+        if !settings.hasSelectedLanguages {
+            languageSetupHintController.present(in: window, localization: AppLocalization(
+                languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier
+            ))
+        } else {
+            languageSetupHintController.close()
         }
     }
 

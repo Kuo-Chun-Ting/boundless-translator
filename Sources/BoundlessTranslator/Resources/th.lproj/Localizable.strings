@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "คลิก ? เพื่อดูวิธีแปลข้อความที่เลือกและภาพหน้าจอ";
+
+"translationLanguages.title" = "การตั้งค่าภาษา";
+"translationLanguages.guidance" = "การตั้งค่าภาษาด้านบนมีผลกับหน้าต่างนี้เท่านั้น เลือกภาษาเริ่มต้นได้ในการตั้งค่า";
+
+"translation.chooseLanguage" = "โปรดเลือก";
+"translationSetup.title" = "ภาษาที่ใช้แปล";
+"translationSetup.guidance" = "ตั้งค่าภาษาสำหรับการแปล แล้วใช้ปุ่มลัดเพื่อแปล";

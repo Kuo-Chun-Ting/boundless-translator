@@ -25,7 +25,10 @@ struct HintControllerTests {
         let suite = "ScreenshotHeaderTests.\(UUID())"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        controller.enableQuickTranslation(settings: TranslationSettings(defaults: defaults),
+        let settings = TranslationSettings(defaults: defaults)
+        settings.sourceLanguageIdentifier = "en"
+        settings.targetLanguageIdentifier = "ja"
+        controller.enableQuickTranslation(settings: settings,
                                          engine: makeStubTranslationEngine())
         let window = try #require(controller.window)
         defer { controller.close() }
@@ -33,7 +36,7 @@ struct HintControllerTests {
         await viewAnalysis(view)
         #expect(window.isVisible)
         let container = try #require(window.contentView)
-        let hint = try await waitForHintList(in: container, count: 1)
+        let hint = try await waitForHintList(in: container, count: 2)
         let menus = try await findAccessibilityMenus(in: container)
         let sourceMenu = try #require(menus.first { $0.identifier == "sourceLanguageMenu" })
         let targetMenu = try #require(menus.first { $0.identifier == "targetLanguageMenu" })
@@ -49,6 +52,8 @@ struct HintControllerTests {
         let originalHeight = window.frame.height
         #expect(!hint.frame.intersects(view.frame))
         // Act
+        hint.rootView.items.first { $0.id == "hint.translationLanguages" }?.onClose(false)
+        #expect(hint.rootView.items.map(\.id) == ["hint.screenshot"])
         hint.rootView.items[0].onClose(false)
         // Assert
         #expect(hint.superview == nil)
@@ -59,6 +64,92 @@ struct HintControllerTests {
         #expect(view.selectedText == "A B")
         #expect(abs(container.bounds.maxY - (try sourceMenu.frame(in: container)).maxY - menuTopInset) < 1)
         #expect(ScreenshotTip(localization: testEnglishLocalization).status == .available)
+    }
+
+    @Test
+    func test_translationHints_when_languageHintIsClosed_then_preservesDictionaryAndReappearsNextWindow() async throws {
+        // Arrange
+        _ = Self.configure
+        let coordinator = TranslationCoordinator()
+        let content = TranslationWindowView(
+            coordinator: coordinator,
+            speechController: TranslationSpeechController(player: AppleSpeechPlayer()),
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
+            supportedLanguages: [], engine: makeStubTranslationEngine()
+        )
+        let host = NSHostingView(rootView: content)
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 900, height: 600),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.contentView = host
+        defer { window.close() }
+        _ = try await findAccessibilityMenus(in: host)
+        let languageHint = try await waitForHintElement(in: host, identifier: "hint.translationLanguages")
+        _ = try await waitForHintElement(in: host, identifier: "hint.dictionary")
+        let close = try #require(hintDescendants(languageHint).first {
+            $0.accessibilityRole?() == .button
+        })
+
+        // Act
+        #expect(close.accessibilityPerformPress?() == true)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while hintDescendants(host).contains(where: {
+            $0.accessibilityIdentifier?() == "hint.translationLanguages"
+        }) && ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        // Assert
+        #expect(!hintDescendants(host).contains {
+            $0.accessibilityIdentifier?() == "hint.translationLanguages"
+        })
+        _ = try await waitForHintElement(in: host, identifier: "hint.dictionary")
+        #expect(TranslationLanguageTip(localization: testEnglishLocalization).status == .available)
+        let reopened = NSHostingView(rootView: content)
+        window.contentView = reopened
+        _ = try await waitForHintElement(in: reopened, identifier: "hint.translationLanguages")
+    }
+
+    @Test
+    func test_settingsHints_when_languages_are_unset_then_help_hint_remains_independent() async throws {
+        // Arrange
+        _ = Self.configure
+        let suite = "IndependentSettingsHints.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let settings = TranslationSettings(defaults: defaults)
+        let controller = PreferencesWindowController(
+            settings: settings,
+            interfaceLanguageSettings: makeTestInterfaceLanguageSettings(),
+            translationShortcutController: makeTestTranslationShortcutController(),
+            supportedLanguageCatalog: makeStubLanguageCatalog(),
+            windowPresenter: ForegroundWindowPresenterSpy()
+        )
+        let window = try #require(controller.window)
+        defer { controller.close() }
+
+        // Act
+        controller.present()
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while (window.childWindows?.count ?? 0) < 2 && ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        // Assert
+        let helpPanel = try #require(window.childWindows?.first {
+            $0.contentView is NSHostingView<HintView>
+        })
+        #expect(window.childWindows?.contains { $0.identifier?.rawValue == "languageSetupHint" } == true)
+        let helpView = try #require(helpPanel.contentView as? NSHostingView<HintView>)
+        helpView.rootView.onClose(false)
+        settings.sourceLanguageIdentifier = "en"
+        settings.targetLanguageIdentifier = "ja"
+        let completionDeadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while window.childWindows?.isEmpty == false && ContinuousClock.now < completionDeadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(window.childWindows?.isEmpty != false)
+        #expect(SettingsTip(localization: testEnglishLocalization).status == .available)
     }
 
     @Test
@@ -123,10 +214,10 @@ struct HintControllerTests {
 
         // Act
         controller.present(image: NSImage(size: CGSize(width: 200, height: 200)), pointerLocation: .zero)
-        let list = try await waitForHintList(in: window.contentView!, count: 2)
+        let list = try await waitForHintList(in: window.contentView!, count: 3)
 
         // Assert
-        #expect(list.rootView.items.map(\.id) == ["hint.screenshotLanguage", "hint.screenshot"])
+        #expect(list.rootView.items.map(\.id) == ["hint.screenshotLanguage", "hint.translationLanguages", "hint.screenshot"])
         #expect(!list.frame.intersects(view.frame))
     }
 
@@ -146,7 +237,7 @@ struct HintControllerTests {
         defer { controller.close() }
         controller.present(image: NSImage(size: CGSize(width: 200, height: 200)), pointerLocation: .zero)
         await viewAnalysis(view)
-        let list = try await waitForHintList(in: window.contentView!, count: 2)
+        let list = try await waitForHintList(in: window.contentView!, count: 3)
         view.selectAll(nil)
         let imageSize = view.frame.size
         let imageRect = view.imageRect
@@ -156,7 +247,7 @@ struct HintControllerTests {
         list.rootView.items[0].onClose(false)
 
         // Assert
-        #expect(list.rootView.items.map(\.id) == ["hint.screenshot"])
+        #expect(list.rootView.items.map(\.id) == ["hint.translationLanguages", "hint.screenshot"])
         #expect(window.frame.height < windowHeight)
         #expect(view.frame.size == imageSize)
         #expect(view.imageRect == imageRect)
@@ -247,3 +338,19 @@ private func makeHintPair() -> [ScreenshotHint] {
 }
 
 private enum HintTestError: Error { case notPresented }
+
+@MainActor private func hintDescendants(_ element: AnyObject) -> [AnyObject] {
+    [element] + (element.accessibilityChildren?() ?? []).flatMap { hintDescendants($0 as AnyObject) }
+}
+
+@MainActor private func waitForHintElement(in view: NSView, identifier: String) async throws -> AnyObject {
+    let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+    while ContinuousClock.now < deadline {
+        view.layoutSubtreeIfNeeded()
+        if let element = hintDescendants(view).first(where: { $0.accessibilityIdentifier?() == identifier }) {
+            return element
+        }
+        try await Task.sleep(for: .milliseconds(10))
+    }
+    throw HintTestError.notPresented
+}

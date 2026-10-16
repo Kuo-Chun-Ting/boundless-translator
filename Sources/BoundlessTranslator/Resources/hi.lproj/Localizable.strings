@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "चुने हुए टेक्स्ट और स्क्रीनशॉट का अनुवाद करने का तरीका देखने के लिए ? पर क्लिक करें।";
+
+"translationLanguages.title" = "भाषा सेटिंग";
+"translationLanguages.guidance" = "ऊपर दी गई भाषा सेटिंग केवल इस विंडो पर लागू होती हैं। डिफ़ॉल्ट भाषाएँ सेटिंग्ज़ में चुनें।";
+
+"translation.chooseLanguage" = "कृपया चुनें";
+"translationSetup.title" = "अनुवाद की भाषाएँ";
+"translationSetup.guidance" = "पहले अनुवाद की भाषाएँ चुनें, फिर कीबोर्ड शॉर्टकट से अनुवाद करें।";

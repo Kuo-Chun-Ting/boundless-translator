@@ -16,10 +16,9 @@ final class HintPresentationGUITests: XCTestCase {
     func test_dictionaryHint_whenFirstUsed_then_appearsUntilUserDismisses() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "dictionary"
-        let hint = app.staticTexts["Dictionary"]
 
         // Act & Assert
-        checkHintLifecycle(hint: hint, readyElement: app.textViews["translation.sourceText"]) {
+        checkHintLifecycle(hintIdentifier: "hint.dictionary", readyElement: app.textViews["translation.sourceText"]) {
             self.assertDictionaryHintPosition()
         }
     }
@@ -32,10 +31,10 @@ final class HintPresentationGUITests: XCTestCase {
         app.activate()
         let source = app.textViews["translation.sourceText"]
         let target = app.textViews["translation.targetText"]
-        let hint = app.groups["hint.dictionary"].firstMatch
+        let hint = app.groups["hint.dictionary"]
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
         XCTAssertTrue(target.waitForExistence(timeout: 5))
-        let window = app.windows.firstMatch
+        let window = app.windows["translationWindow"]
         let originalWidth = window.frame.width
         let sourceWidth = source.frame.width
         let targetWidth = target.frame.width
@@ -79,7 +78,7 @@ final class HintPresentationGUITests: XCTestCase {
 
                 // Act
                 app.launch()
-                let hint = app.groups["hint.settings"].firstMatch
+                let hint = app.groups["hint.settings"]
                 XCTAssertTrue(hint.waitForExistence(timeout: 5))
 
                 // Assert
@@ -90,13 +89,15 @@ final class HintPresentationGUITests: XCTestCase {
                 for text in texts {
                     XCTAssertTrue(hint.frame.insetBy(dx: -1, dy: -1).contains(text.frame), text.label)
                 }
-                XCTAssertTrue(hint.checkBoxes.firstMatch.isHittable)
-                XCTAssertTrue(hint.buttons.firstMatch.isHittable)
-                XCTAssertFalse(hint.checkBoxes.firstMatch.frame.intersects(hint.buttons.firstMatch.frame))
+                let dismissOption = hint.checkBoxes.element
+                let closeButton = hint.buttons.element
+                XCTAssertTrue(dismissOption.isHittable)
+                XCTAssertTrue(closeButton.isHittable)
+                XCTAssertFalse(dismissOption.frame.intersects(closeButton.frame))
                 if language == "ar" {
-                    XCTAssertLessThan(hint.buttons.firstMatch.frame.midX, hint.checkBoxes.firstMatch.frame.midX)
+                    XCTAssertLessThan(closeButton.frame.midX, dismissOption.frame.midX)
                 } else {
-                    XCTAssertGreaterThan(hint.buttons.firstMatch.frame.midX, hint.checkBoxes.firstMatch.frame.midX)
+                    XCTAssertGreaterThan(closeButton.frame.midX, dismissOption.frame.midX)
                 }
                 let attachment = XCTAttachment(screenshot: app.screenshot())
                 attachment.name = "Settings hint \(language) \(appearance)"
@@ -114,44 +115,52 @@ final class HintPresentationGUITests: XCTestCase {
     func test_screenshotHint_whenFirstUsed_then_appearsUntilUserDismisses() {
         // Arrange
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = "screenshot"
-        let hint = app.staticTexts.matching(NSPredicate(format: "value == %@",
-            "Hold the pointer over a word or select text to see its translation. You can also listen to the original text or look it up in the dictionary.")).firstMatch
 
         // Act & Assert
         let screenshotWindow = app.windows["screenshotWindow"]
-        checkHintLifecycle(hint: hint, readyElement: screenshotWindow) {
+        checkHintLifecycle(hintIdentifier: "hint.screenshot", readyElement: screenshotWindow) {
             self.assertScreenshotHintPosition(relativeTo: screenshotWindow)
         }
     }
 
     private func checkHintLifecycle(
-        hint: XCUIElement,
+        hintIdentifier: String,
         readyElement: XCUIElement,
         checkPosition: () -> Void = {}
     ) {
+        let hint = app.groups[hintIdentifier]
+        let closeButton = hint.buttons["Close"]
+        let dismissOption = hint.checkBoxes["Don’t show again"]
+        let languageHint = app.groups["hint.translationLanguages"]
         app.launch()
+        app.activate()
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
+        XCTAssertTrue(languageHint.waitForExistence(timeout: 5))
         XCTAssertTrue(hint.isHittable)
         captureHint()
 
         app.terminate()
         app.launch()
+        app.activate()
         XCTAssertTrue(hint.waitForExistence(timeout: 5), "Reopening without dismissing must preserve the hint.")
-        app.buttons["Close"].firstMatch.click()
+        closeButton.click()
         XCTAssertTrue(hint.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(languageHint.exists, "Closing the target hint must preserve the language hint.")
 
         app.terminate()
         app.launch()
+        app.activate()
         XCTAssertTrue(readyElement.waitForExistence(timeout: 5))
         XCTAssertTrue(hint.waitForExistence(timeout: 5), "Closing without the checkbox must allow the hint next time.")
         checkPosition()
-        app.checkBoxes["Don’t show again"].firstMatch.click()
+        dismissOption.click()
         XCTAssertTrue(hint.exists, "Checking the option must not close the hint.")
-        app.buttons["Close"].firstMatch.click()
+        closeButton.click()
         XCTAssertTrue(hint.waitForNonExistence(timeout: 5))
 
         app.terminate()
         app.launch()
+        app.activate()
         XCTAssertTrue(readyElement.waitForExistence(timeout: 5))
         XCTAssertFalse(hint.waitForExistence(timeout: 2), "Only closing with the checkbox selected hides the hint permanently.")
 
@@ -159,16 +168,18 @@ final class HintPresentationGUITests: XCTestCase {
         let otherKind = app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] == "dictionary" ? "screenshot" : "dictionary"
         app.launchEnvironment["BOUNDLESS_TRANSLATOR_HINT_KIND"] = otherKind
         app.launch()
-        XCTAssertTrue(app.checkBoxes["Don’t show again"].firstMatch.waitForExistence(timeout: 5),
+        app.activate()
+        XCTAssertTrue(app.groups["hint.\(otherKind)"].waitForExistence(timeout: 5),
                       "Permanently dismissing one hint must not hide the other.")
     }
 
     private func assertDictionaryHintPosition() {
-        let hint = app.groups["hint.dictionary"].firstMatch
+        let hint = app.groups["hint.dictionary"]
         XCTAssertTrue(hint.exists)
+        XCTAssertTrue(hint.staticTexts["Dictionary"].exists)
         let hintFrame = hintSurfaceFrame(hint)
         let sourceFrame = app.textViews["translation.sourceText"].frame
-        let windowFrame = app.windows.firstMatch.frame
+        let windowFrame = app.windows["translationWindow"].frame
         XCTAssertGreaterThan(hintFrame.height, 50, "Measure the whole hint, including its message and close button.")
         XCTAssertTrue(windowFrame.contains(hintFrame), "Keep the whole hint inside the translation window.")
         XCTAssertLessThanOrEqual(hintFrame.maxX, windowFrame.midX + 2, "Keep the hint in the source column.")
@@ -176,7 +187,7 @@ final class HintPresentationGUITests: XCTestCase {
     }
 
     private func assertScreenshotHintPosition(relativeTo window: XCUIElement) {
-        let hint = app.groups["hint.screenshot"].firstMatch
+        let hint = app.groups["hint.screenshot"]
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
         XCTAssertTrue(hint.staticTexts["Screenshot Translation"].exists)
         XCTAssertTrue(hint.staticTexts.matching(NSPredicate(format: "value == %@",

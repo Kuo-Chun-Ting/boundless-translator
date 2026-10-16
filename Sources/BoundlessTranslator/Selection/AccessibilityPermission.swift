@@ -3,14 +3,15 @@ import AppKit
 
 @MainActor
 enum AccessibilityPermission {
+    @discardableResult
     static func requestIfNeeded(
         isGranted: () -> Bool = { AXIsProcessTrusted() },
         explain: () -> Bool = {
             PermissionExplanation.confirm(permission: .accessibility)
         },
         openSettings: (URL) -> Bool = { NSWorkspace.shared.open($0) }
-    ) {
-        _ = PermissionExplanation.requestPermission(
+    ) -> Bool {
+        PermissionExplanation.requestPermission(
             isGranted: isGranted,
             explain: explain,
             request: {

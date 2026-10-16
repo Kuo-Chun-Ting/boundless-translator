@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Нажмите ?, чтобы узнать, как переводить выделенный текст и снимки экрана.";
+
+"translationLanguages.title" = "Языковые настройки";
+"translationLanguages.guidance" = "Языковые настройки выше действуют только в этом окне. Языки по умолчанию выберите в Настройках.";
+
+"translation.chooseLanguage" = "Выберите";
+"translationSetup.title" = "Языки перевода";
+"translationSetup.guidance" = "Настройте языки перевода, затем переводите с помощью сочетания клавиш.";

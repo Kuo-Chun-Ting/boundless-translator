@@ -2,10 +2,11 @@ import AppKit
 
 @MainActor
 final class AppController {
-    let settings = TranslationSettings()
+    let settings: TranslationSettings
     let interfaceLanguageSettings: InterfaceLanguageSettings
 
     let subscriptionAccess: SubscriptionAccessController
+    private let onLanguageSetupRequired: (@MainActor () -> Void)?
     private let onSubscriptionRequired: (@MainActor () -> Void)?
     private lazy var subscriptionWindowController = SubscriptionWindowController(
         access: subscriptionAccess, interfaceLanguageSettings: interfaceLanguageSettings
@@ -35,6 +36,7 @@ final class AppController {
         supportedLanguageCatalog: supportedLanguageCatalog,
         onShowSubscription: subscriptionAction
     )
+    private let requestSelectionPermission: @MainActor () -> Bool
     private let selectedTextReader: any SelectedTextReading
     private let screenshotCapture: any ScreenshotCapturing
     private let imageViewerController: any ImageViewerControlling
@@ -47,17 +49,22 @@ final class AppController {
     }
 
     init(
+        settings: TranslationSettings = TranslationSettings(),
         translationEngine: TranslationEngine = .apple,
         selectedTextReader: any SelectedTextReading = SelectedTextResolver(
             primaryReader: AccessibilitySelectedTextReader(),
             fallbackReader: ClipboardSelectedTextReader(copier: SystemSelectedTextCopier())
         ),
         screenshotCapture: any ScreenshotCapturing = SystemScreenshotCapture(),
+        requestSelectionPermission: @escaping @MainActor () -> Bool = { AccessibilityPermission.requestIfNeeded() },
         imageViewerController: (any ImageViewerControlling)? = nil,
         interfaceLanguageSettings: InterfaceLanguageSettings = InterfaceLanguageSettings(),
         subscriptionAccess: SubscriptionAccessController? = nil,
-        onSubscriptionRequired: (@MainActor () -> Void)? = nil
+        onSubscriptionRequired: (@MainActor () -> Void)? = nil,
+        onLanguageSetupRequired: (@MainActor () -> Void)? = nil
     ) {
+        self.settings = settings
+        self.onLanguageSetupRequired = onLanguageSetupRequired
         self.translationEngine = translationEngine
         self.subscriptionAccess = subscriptionAccess ?? SubscriptionConfiguration.makeAccessController()
         self.onSubscriptionRequired = onSubscriptionRequired
@@ -66,6 +73,7 @@ final class AppController {
         )
         self.interfaceLanguageSettings = interfaceLanguageSettings
         self.screenshotCapture = screenshotCapture
+        self.requestSelectionPermission = requestSelectionPermission
         let resolvedImageViewerController = imageViewerController
             ?? ImageViewerWindowController(
                 interfaceLanguageSettings: interfaceLanguageSettings
@@ -92,8 +100,8 @@ final class AppController {
 
         Task {
             let supportedLanguages = await supportedLanguageCatalog.load()
-            settings.validateSourceLanguage(supportedLanguages: supportedLanguages)
-            settings.validateTargetLanguage(supportedLanguages: supportedLanguages)
+            settings.resetUnsupportedSourceLanguage(supportedLanguages: supportedLanguages)
+            settings.resetUnsupportedTargetLanguage(supportedLanguages: supportedLanguages)
         }
     }
 
@@ -114,12 +122,14 @@ final class AppController {
         await subscriptionAccess.loadIfNeeded()
         guard !Task.isCancelled else { return }
         guard authorizeFeature() else { return }
+        let targetLanguage = targetLanguageIdentifier ?? settings.targetLanguageIdentifier
+        guard requireSelectedLanguages(source: sourceLanguageIdentifier, target: targetLanguage) else { return }
         let supportedLanguages = await supportedLanguageCatalog.load()
         guard !Task.isCancelled else { return }
         coordinator.submit(
             selectedText,
             sourceLanguageIdentifier: sourceLanguageIdentifier,
-            targetLanguageIdentifier: targetLanguageIdentifier ?? settings.targetLanguageIdentifier
+            targetLanguageIdentifier: targetLanguage
         )
         windowController.show(
             coordinator: coordinator,
@@ -138,8 +148,10 @@ final class AppController {
             defer { shortcutTask = nil }
             await subscriptionAccess.loadIfNeeded()
             guard !Task.isCancelled, authorizeFeature() else { return }
+            guard imageViewerController.isSelectionActive || requestSelectionPermission() else { return }
+            let languages = translationLanguagesForSelection()
+            guard requireSelectedLanguages(source: languages.source, target: languages.target) else { return }
             do {
-                let languages = translationLanguagesForSelection()
                 let selectedText = try await selectedTextReader.readSelectedText()
                 try Task.checkCancellation()
                 await translate(selectedText, sourceLanguageIdentifier: languages.source,
@@ -187,8 +199,24 @@ final class AppController {
         guard !isCapturingScreenshot else { return }
         isCapturingScreenshot = true
         defer { isCapturingScreenshot = false }
+        try screenshotCapture.ensurePermission()
+        guard requireSelectedLanguages(source: settings.sourceLanguageIdentifier,
+                                       target: settings.targetLanguageIdentifier) else { return }
         guard let image = try await screenshotCapture.captureRegion() else { return }
         imageViewerController.present(image: image, pointerLocation: NSEvent.mouseLocation)
+    }
+
+    private func requireSelectedLanguages(source: String?, target: String) -> Bool {
+        guard source != TranslationSettings.unselectedLanguageIdentifier,
+              target != TranslationSettings.unselectedLanguageIdentifier else {
+            if let onLanguageSetupRequired {
+                onLanguageSetupRequired()
+            } else {
+                preferencesWindowController.presentForLanguageSetup()
+            }
+            return false
+        }
+        return true
     }
 
     private func authorizeFeature() -> Bool {

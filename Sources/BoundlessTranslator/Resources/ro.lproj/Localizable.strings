@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Apasă pe ? pentru a vedea cum traduci textul selectat și capturile de ecran.";
+
+"translationLanguages.title" = "Configurări de limbă";
+"translationLanguages.guidance" = "Setările de limbă de mai sus se aplică doar acestei ferestre. Alege limbile implicite în Configurări.";
+
+"translation.chooseLanguage" = "Selectați";
+"translationSetup.title" = "Limbi de traducere";
+"translationSetup.guidance" = "Setați limbile de traducere, apoi folosiți o scurtătură de tastatură pentru a traduce.";

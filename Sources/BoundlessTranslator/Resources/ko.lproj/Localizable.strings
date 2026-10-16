@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "?를 클릭하여 선택한 텍스트와 스크린샷을 번역하는 방법을 확인하세요.";
+
+"translationLanguages.title" = "언어 설정";
+"translationLanguages.guidance" = "위의 언어 설정은 현재 윈도우에만 적용됩니다. 기본 언어는 설정에서 변경하세요.";
+
+"translation.chooseLanguage" = "선택하세요";
+"translationSetup.title" = "번역 언어";
+"translationSetup.guidance" = "번역 언어를 설정한 다음 키보드 단축키로 번역하세요.";

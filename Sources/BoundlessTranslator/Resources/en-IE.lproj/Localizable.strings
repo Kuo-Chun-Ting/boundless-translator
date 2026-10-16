@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Click ? to see how to translate selected text and screenshots.";
+
+"translationLanguages.title" = "Language settings";
+"translationLanguages.guidance" = "The language settings above apply only to this window. Set defaults in Preferences.";
+
+"translation.chooseLanguage" = "Please select";
+"translationSetup.title" = "Translation languages";
+"translationSetup.guidance" = "Set translation languages, then use a shortcut to translate.";

@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Kliknutím na ? zistíte, ako prekladať vybraný text a snímky obrazovky.";
+
+"translationLanguages.title" = "Nastavenia jazyka";
+"translationLanguages.guidance" = "Vyššie uvedené nastavenia jazykov platia len pre toto okno. Predvolené jazyky vyberte v Nastaveniach.";
+
+"translation.chooseLanguage" = "Vyberte";
+"translationSetup.title" = "Jazyky prekladu";
+"translationSetup.guidance" = "Nastavte jazyky prekladu a potom prekladajte pomocou klávesovej skratky.";

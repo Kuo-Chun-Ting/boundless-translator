@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Kattints a ? gombra a kijelölt szöveg és a képernyőképek fordításának megismeréséhez.";
+
+"translationLanguages.title" = "Nyelvi beállítások";
+"translationLanguages.guidance" = "A fenti nyelvi beállítások csak erre az ablakra érvényesek. Az alapértelmezett nyelveket a Beállításokban választhatja ki.";
+
+"translation.chooseLanguage" = "Válasszon";
+"translationSetup.title" = "Fordítási nyelvek";
+"translationSetup.guidance" = "Állítsa be a fordítás nyelveit, majd fordítson billentyűparanccsal.";

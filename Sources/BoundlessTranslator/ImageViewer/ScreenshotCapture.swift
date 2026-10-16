@@ -2,6 +2,7 @@ import AppKit
 
 @MainActor
 protocol ScreenshotCapturing {
+    func ensurePermission() throws
     func captureRegion() async throws -> NSImage?
 }
 
@@ -29,8 +30,12 @@ struct SystemScreenshotCapture: ScreenshotCapturing {
         self.runCapture = runCapture
     }
 
-    func captureRegion() async throws -> NSImage? {
+    func ensurePermission() throws {
         guard requestPermission() else { throw ScreenshotCaptureError.permissionRequired }
+    }
+
+    func captureRegion() async throws -> NSImage? {
+        try ensurePermission()
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("BoundlessScreenshot-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)

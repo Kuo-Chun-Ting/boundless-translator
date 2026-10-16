@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "انقر على ؟ لمعرفة كيفية ترجمة النص المحدد ولقطات الشاشة.";
+
+"translationLanguages.title" = "إعدادات اللغة";
+"translationLanguages.guidance" = "إعدادات اللغة أعلاه تخص هذه النافذة فقط. اضبط اللغات الافتراضية في الإعدادات.";
+
+"translation.chooseLanguage" = "يرجى الاختيار";
+"translationSetup.title" = "لغات الترجمة";
+"translationSetup.guidance" = "اضبط لغات الترجمة، ثم استخدم اختصار لوحة المفاتيح للترجمة.";

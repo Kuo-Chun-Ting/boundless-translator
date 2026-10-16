@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Fai clic su ? per vedere come tradurre testo selezionato e schermate.";
+
+"translationLanguages.title" = "Impostazioni lingua";
+"translationLanguages.guidance" = "Le lingue selezionate sopra si applicano solo a questa finestra. Scegli quelle predefinite nelle Impostazioni.";
+
+"translation.chooseLanguage" = "Seleziona";
+"translationSetup.title" = "Lingue di traduzione";
+"translationSetup.guidance" = "Imposta le lingue di traduzione, poi usa una scorciatoia da tastiera per tradurre.";

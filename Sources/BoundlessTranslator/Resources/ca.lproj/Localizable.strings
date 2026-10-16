@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Fes clic a ? per veure com traduir text seleccionat i captures de pantalla.";
+
+"translationLanguages.title" = "Configuració d’idioma";
+"translationLanguages.guidance" = "Els idiomes seleccionats a dalt només s’apliquen a aquesta finestra. Tria els idiomes per defecte a Configuració.";
+
+"translation.chooseLanguage" = "Selecciona";
+"translationSetup.title" = "Idiomes de traducció";
+"translationSetup.guidance" = "Configura els idiomes de traducció i després fes servir una drecera de teclat per traduir.";

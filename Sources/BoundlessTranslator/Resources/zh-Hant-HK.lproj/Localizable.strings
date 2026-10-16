@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "允許";
 
 "usage.guidance" = "點「？」查看選字與截圖翻譯的使用方式。";
+
+"translationLanguages.title" = "語言設定";
+"translationLanguages.guidance" = "上方的語言設定僅適用於目前視窗。預設值請到「設定」調整。";
+
+"translation.chooseLanguage" = "請選擇";
+"translationSetup.title" = "翻譯語言";
+"translationSetup.guidance" = "先設定翻譯語言，再透過快捷鍵翻譯。";

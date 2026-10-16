@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Klicke auf ?, um zu sehen, wie du ausgewählten Text und Screenshots übersetzt.";
+
+"translationLanguages.title" = "Spracheinstellungen";
+"translationLanguages.guidance" = "Die Spracheinstellungen oben gelten nur für dieses Fenster. Standardsprachen wählen Sie in den Einstellungen.";
+
+"translation.chooseLanguage" = "Bitte auswählen";
+"translationSetup.title" = "Übersetzungssprachen";
+"translationSetup.guidance" = "Lege die Übersetzungssprachen fest und übersetze dann per Tastenkürzel.";

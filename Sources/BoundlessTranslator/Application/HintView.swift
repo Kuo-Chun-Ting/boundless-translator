@@ -11,7 +11,7 @@ struct HintItem: Identifiable {
 
 struct HintListView: View {
     let items: [HintItem]
-    let width: CGFloat
+    let width: CGFloat?
     let localization: AppLocalization
 
     var body: some View {
@@ -85,16 +85,7 @@ struct HintView: View {
     }
 
     private var description: some View {
-        HStack(alignment: .top, spacing: 12) {
-            icon.resizable().scaledToFit()
-                .frame(width: 28, height: 28)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 3) {
-                title.font(.headline)
-                message.font(.subheadline).foregroundStyle(.secondary)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-        }
+        HintDescription(title: title, message: message, icon: icon)
     }
 
     private var dismissOption: some View {
@@ -115,5 +106,24 @@ struct HintView: View {
         .buttonStyle(.plain)
         .help(localization.string("hint.close"))
         .accessibilityLabel(localization.string("hint.close"))
+    }
+}
+
+struct HintDescription: View {
+    let title: Text
+    let message: Text?
+    let icon: Image
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            icon.resizable().scaledToFit()
+                .frame(width: 28, height: 28)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                title.font(.headline)
+                message.font(.subheadline).foregroundStyle(.secondary)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }

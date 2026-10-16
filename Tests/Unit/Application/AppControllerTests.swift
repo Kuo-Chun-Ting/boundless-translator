@@ -6,11 +6,20 @@ import Testing
 func test_handleTranslationShortcut_when_no_text_is_selected_then_does_not_capture_screenshot() async {
     // Arrange
     let mock_capture = ScreenshotCaptureMock()
+    let suite = "ReadySelectionTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let settings = TranslationSettings(defaults: defaults)
+    settings.sourceLanguageIdentifier = "en"
+    settings.targetLanguageIdentifier = "ja"
     let controller = AppController(
+        settings: settings,
         selectedTextReader: SelectedTextReaderStub(result: .failure(SelectedTextReadError.noSelection)),
         screenshotCapture: mock_capture,
+        requestSelectionPermission: { true },
         imageViewerController: ImageViewerControllerStub(),
-        subscriptionAccess: makeUnrestrictedTestAccess()
+        subscriptionAccess: makeUnrestrictedTestAccess(),
+        onLanguageSetupRequired: {}
     )
 
     // Act
@@ -27,11 +36,20 @@ func test_handleTranslationShortcut_when_no_text_is_selected_then_does_not_captu
 func test_handleTranslationShortcut_when_selection_is_cancelled_then_does_not_capture_screenshot() async {
     // Arrange
     let mock_capture = ScreenshotCaptureMock()
+    let suite = "ReadySelectionTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let settings = TranslationSettings(defaults: defaults)
+    settings.sourceLanguageIdentifier = "en"
+    settings.targetLanguageIdentifier = "ja"
     let controller = AppController(
+        settings: settings,
         selectedTextReader: SelectedTextReaderStub(result: .failure(CancellationError())),
         screenshotCapture: mock_capture,
+        requestSelectionPermission: { true },
         imageViewerController: ImageViewerControllerStub(),
-        subscriptionAccess: makeUnrestrictedTestAccess()
+        subscriptionAccess: makeUnrestrictedTestAccess(),
+        onLanguageSetupRequired: {}
     )
 
     // Act
@@ -88,6 +106,8 @@ private final class SelectedTextReaderStub: SelectedTextReading {
 private final class ScreenshotCaptureMock: ScreenshotCapturing {
     private(set) var captureCount = 0
 
+    func ensurePermission() throws {}
+
     func captureRegion() async throws -> NSImage? {
         captureCount += 1
         return nil
@@ -101,4 +121,95 @@ private final class ImageViewerControllerStub: ImageViewerControlling {
     var translationLanguages: (source: String?, target: String)?
     var presentationCount = 0
     func present(image: NSImage, pointerLocation: CGPoint) { presentationCount += 1 }
+}
+
+@Test(arguments: [("", "ja"), ("en", ""), ("", "")]) @MainActor
+func test_translate_when_language_is_missing_then_opens_setup_without_calling_engine(source: String, target: String) async throws {
+    // Arrange
+    let suite = "TranslationSetupTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let settings = TranslationSettings(defaults: defaults)
+    settings.sourceLanguageIdentifier = source
+    settings.targetLanguageIdentifier = target
+    var setupCount = 0
+    let controller = AppController(
+        settings: settings,
+        translationEngine: TranslationEngine(loadLanguages: {
+            Issue.record("An incomplete language pair must not reach the engine")
+            return []
+        }, makeTaskHost: { _, _ in fatalError("Unexpected translation") }),
+        requestSelectionPermission: { true },
+        imageViewerController: ImageViewerControllerStub(),
+        subscriptionAccess: makeUnrestrictedTestAccess(),
+        onLanguageSetupRequired: { setupCount += 1 }
+    )
+
+    // Act
+    await controller.translate(try SelectedText("Hello"), sourceLanguageIdentifier: source)
+
+    // Assert
+    #expect(setupCount == 1)
+}
+
+@Test @MainActor
+func test_handleTranslationShortcut_when_languages_are_missing_then_opens_setup_without_reading_selection() async throws {
+    // Arrange
+    let suite = "SelectionSetupTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    var events: [String] = []
+    let controller = AppController(
+        settings: TranslationSettings(defaults: defaults),
+        selectedTextReader: SetupSelectionReaderMock { events.append("readSelection") },
+        requestSelectionPermission: { true },
+        imageViewerController: ImageViewerControllerStub(),
+        subscriptionAccess: makeUnrestrictedTestAccess(),
+        onLanguageSetupRequired: { events.append("showSettings") }
+    )
+
+    // Act
+    controller.handleTranslationShortcut()
+    let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+    while !events.contains("showSettings") && ContinuousClock.now < deadline { await Task.yield() }
+
+    // Assert
+    #expect(events == ["showSettings"])
+}
+
+@MainActor
+private final class SetupSelectionReaderMock: SelectedTextReading {
+    let onRead: () -> Void
+    init(onRead: @escaping () -> Void) { self.onRead = onRead }
+    func readSelectedText() async throws -> SelectedText {
+        onRead()
+        return try SelectedText("Hello")
+    }
+}
+
+@Test(arguments: [false, true]) @MainActor
+func test_handleTranslationShortcut_when_setup_is_missing_then_requires_accessibility_only_for_external_selection(isScreenshotActive: Bool) async throws {
+    // Arrange
+    let suite = "SelectionPermissionSetupTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let viewer = ImageViewerControllerStub()
+    viewer.isSelectionActive = isScreenshotActive
+    var events: [String] = []
+    let controller = AppController(
+        settings: TranslationSettings(defaults: defaults),
+        selectedTextReader: SetupSelectionReaderMock { events.append("readSelection") },
+        requestSelectionPermission: { events.append("permissionDenied"); return false },
+        imageViewerController: viewer,
+        subscriptionAccess: makeUnrestrictedTestAccess(),
+        onLanguageSetupRequired: { events.append("showSettings") }
+    )
+
+    // Act
+    controller.handleTranslationShortcut()
+    let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+    while events.isEmpty && ContinuousClock.now < deadline { await Task.yield() }
+
+    // Assert
+    #expect(events == (isScreenshotActive ? ["showSettings"] : ["permissionDenied"]))
 }

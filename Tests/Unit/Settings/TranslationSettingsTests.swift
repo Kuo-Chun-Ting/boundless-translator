@@ -3,7 +3,7 @@ import Testing
 @testable import BoundlessTranslator
 
 @Test @MainActor
-func test_init_when_value_is_missing_then_defaults_to_traditional_chinese() {
+func test_init_when_value_is_missing_then_requires_target_selection() {
     // Arrange
     let fixture_defaults = makeIsolatedDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -12,11 +12,11 @@ func test_init_when_value_is_missing_then_defaults_to_traditional_chinese() {
     let settings = TranslationSettings(defaults: fixture_defaults.defaults)
 
     // Assert
-    #expect(settings.targetLanguageIdentifier == "zh-Hant")
+    #expect(settings.targetLanguageIdentifier == "")
 }
 
 @Test @MainActor
-func test_init_when_source_language_is_missing_then_defaults_to_detection() {
+func test_init_when_source_language_is_missing_then_requires_source_selection() {
     // Arrange
     let fixture_defaults = makeIsolatedDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -25,7 +25,7 @@ func test_init_when_source_language_is_missing_then_defaults_to_detection() {
     let settings = TranslationSettings(defaults: fixture_defaults.defaults)
 
     // Assert
-    #expect(settings.sourceLanguageIdentifier == nil)
+    #expect(settings.sourceLanguageIdentifier == "")
 }
 
 @Test @MainActor
@@ -59,7 +59,7 @@ func test_sourceLanguageIdentifier_when_changed_then_persists_for_next_instance(
 }
 
 @Test @MainActor
-func test_validateTargetLanguage_when_stored_language_is_unsupported_then_resets_and_persists_default() {
+func test_resetUnsupportedTargetLanguage_when_stored_language_is_unsupported_then_clears_and_persists_selection() {
     // Arrange
     let fixture_defaults = makeIsolatedDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -71,16 +71,16 @@ func test_validateTargetLanguage_when_stored_language_is_unsupported_then_resets
     ]
 
     // Act
-    settings.validateTargetLanguage(supportedLanguages: supportedLanguages)
+    settings.resetUnsupportedTargetLanguage(supportedLanguages: supportedLanguages)
     let restoredSettings = TranslationSettings(defaults: fixture_defaults.defaults)
 
     // Assert
-    #expect(settings.targetLanguageIdentifier == "zh-Hant")
-    #expect(restoredSettings.targetLanguageIdentifier == "zh-Hant")
+    #expect(settings.targetLanguageIdentifier == "")
+    #expect(restoredSettings.targetLanguageIdentifier == "")
 }
 
 @Test @MainActor
-func test_validateTargetLanguage_when_default_is_unsupported_then_uses_first_supported_language() {
+func test_resetUnsupportedTargetLanguage_when_stored_language_is_unsupported_then_requires_selection() {
     // Arrange
     let fixture_defaults = makeIsolatedDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -89,14 +89,14 @@ func test_validateTargetLanguage_when_default_is_unsupported_then_uses_first_sup
     let supportedLanguages = [Locale.Language(identifier: "ja")]
 
     // Act
-    settings.validateTargetLanguage(supportedLanguages: supportedLanguages)
+    settings.resetUnsupportedTargetLanguage(supportedLanguages: supportedLanguages)
 
     // Assert
-    #expect(settings.targetLanguageIdentifier == "ja")
+    #expect(settings.targetLanguageIdentifier == "")
 }
 
 @Test @MainActor
-func test_validateSourceLanguage_when_stored_language_is_unsupported_then_resets_to_detection() {
+func test_resetUnsupportedSourceLanguage_when_stored_language_is_unsupported_then_requires_source_selection() {
     // Arrange
     let fixture_defaults = makeIsolatedDefaults()
     defer { fixture_defaults.cleanUp() }
@@ -108,11 +108,27 @@ func test_validateSourceLanguage_when_stored_language_is_unsupported_then_resets
     ]
 
     // Act
-    settings.validateSourceLanguage(supportedLanguages: supportedLanguages)
+    settings.resetUnsupportedSourceLanguage(supportedLanguages: supportedLanguages)
     let restoredSettings = TranslationSettings(defaults: fixture_defaults.defaults)
 
     // Assert
-    #expect(settings.sourceLanguageIdentifier == nil)
+    #expect(settings.sourceLanguageIdentifier == "")
+    #expect(restoredSettings.sourceLanguageIdentifier == "")
+}
+
+@Test @MainActor
+func test_sourceLanguageIdentifier_when_automatic_is_selected_then_restores_automatic() {
+    // Arrange
+    let fixture_defaults = makeIsolatedDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let settings = TranslationSettings(defaults: fixture_defaults.defaults)
+    settings.sourceLanguageIdentifier = "ja"
+
+    // Act
+    settings.sourceLanguageIdentifier = nil
+    let restoredSettings = TranslationSettings(defaults: fixture_defaults.defaults)
+
+    // Assert
     #expect(restoredSettings.sourceLanguageIdentifier == nil)
 }
 
@@ -130,4 +146,19 @@ private func makeIsolatedDefaults() -> IsolatedDefaults {
     let defaults = UserDefaults(suiteName: suiteName)!
     defaults.removePersistentDomain(forName: suiteName)
     return IsolatedDefaults(suiteName: suiteName, defaults: defaults)
+}
+
+@Test(arguments: [("", "", false), ("en", "", false), ("", "ja", false), ("en", "ja", true), (nil, "ja", true), (nil, "", false)]) @MainActor
+func test_hasSelectedLanguages_when_pair_changes_then_only_complete_pairs_are_ready(source: String?, target: String, expected: Bool) {
+    // Arrange
+    let fixture_defaults = makeIsolatedDefaults()
+    defer { fixture_defaults.cleanUp() }
+    let settings = TranslationSettings(defaults: fixture_defaults.defaults)
+
+    // Act
+    settings.sourceLanguageIdentifier = source
+    settings.targetLanguageIdentifier = target
+
+    // Assert
+    #expect(settings.hasSelectedLanguages == expected)
 }

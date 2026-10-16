@@ -81,6 +81,8 @@ private final class SubscriptionSelectionReaderMock: SelectedTextReading {
 @MainActor
 private final class SubscriptionScreenshotMock: ScreenshotCapturing {
     var captureCount = 0
+    func ensurePermission() throws {}
+
     func captureRegion() async throws -> NSImage? {
         captureCount += 1
         return nil
@@ -90,6 +92,12 @@ private final class SubscriptionScreenshotMock: ScreenshotCapturing {
 @Test @MainActor
 func test_captureScreenshot_when_subscription_is_still_loading_then_waits_and_continues_for_subscriber() async throws {
     // Arrange
+    let suite = "SubscribedCaptureSettings.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let settings = TranslationSettings(defaults: defaults)
+    settings.sourceLanguageIdentifier = "en"
+    settings.targetLanguageIdentifier = "ja"
     let stub_store = DelayedInitialSubscriptionProvider()
     let access = SubscriptionAccessController(productID: "annual", provider: stub_store)
     let refresh = Task { await access.refresh() }
@@ -97,6 +105,7 @@ func test_captureScreenshot_when_subscription_is_still_loading_then_waits_and_co
     let mock_capture = SubscriptionScreenshotMock()
     var presentations = 0
     let controller = AppController(
+        settings: settings,
         screenshotCapture: mock_capture,
         subscriptionAccess: access,
         onSubscriptionRequired: { presentations += 1 }

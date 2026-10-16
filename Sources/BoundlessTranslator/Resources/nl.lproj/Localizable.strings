@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Klik op ? om te zien hoe je geselecteerde tekst en schermafbeeldingen vertaalt.";
+
+"translationLanguages.title" = "Taalinstellingen";
+"translationLanguages.guidance" = "De taalinstellingen hierboven gelden alleen voor dit venster. Kies standaardtalen in Instellingen.";
+
+"translation.chooseLanguage" = "Selecteer";
+"translationSetup.title" = "Vertaaltalen";
+"translationSetup.guidance" = "Stel de vertaaltalen in en vertaal daarna met een sneltoets.";

@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "לחץ על ? כדי לראות איך לתרגם טקסט מסומן וצילומי מסך.";
+
+"translationLanguages.title" = "הגדרות שפה";
+"translationLanguages.guidance" = "הגדרות השפה שלמעלה חלות רק על חלון זה. ניתן לבחור שפות ברירת מחדל בהגדרות.";
+
+"translation.chooseLanguage" = "נא לבחור";
+"translationSetup.title" = "שפות התרגום";
+"translationSetup.guidance" = "יש להגדיר את שפות התרגום, ואז להשתמש בקיצור מקשים כדי לתרגם.";

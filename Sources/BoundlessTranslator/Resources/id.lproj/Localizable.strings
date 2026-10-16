@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Klik ? untuk melihat cara menerjemahkan teks yang dipilih dan tangkapan layar.";
+
+"translationLanguages.title" = "Pengaturan bahasa";
+"translationLanguages.guidance" = "Pengaturan bahasa di atas hanya berlaku untuk jendela ini. Pilih bahasa default di Pengaturan.";
+
+"translation.chooseLanguage" = "Silakan pilih";
+"translationSetup.title" = "Bahasa terjemahan";
+"translationSetup.guidance" = "Atur bahasa terjemahan, lalu gunakan pintasan keyboard untuk menerjemahkan.";

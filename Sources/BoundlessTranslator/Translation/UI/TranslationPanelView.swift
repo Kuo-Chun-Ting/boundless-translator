@@ -7,7 +7,9 @@ struct TranslationWindowView: View {
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     @State private var isShowingLookupTip = false
     @State private var lookupTipClosed = false
-    @State private var lookupTipHeight: CGFloat = 0
+    @State private var isShowingLanguageTip = false
+    @State private var languageTipClosed = false
+    @State private var hintsHeight: CGFloat = 0
     @State private var failureHeight: CGFloat = 0
 
     let supportedLanguages: [Locale.Language]
@@ -59,8 +61,16 @@ struct TranslationWindowView: View {
             for await shouldDisplay in lookupTip.shouldDisplayUpdates {
                 guard !Task.isCancelled else { return }
                 isShowingLookupTip = shouldDisplay && !lookupTipClosed
-                if !shouldDisplay { lookupTipHeight = 0 }
             }
+        }
+        .task {
+            for await shouldDisplay in languageTip.shouldDisplayUpdates {
+                guard !Task.isCancelled else { return }
+                isShowingLanguageTip = shouldDisplay && !languageTipClosed
+            }
+        }
+        .onChange(of: hintItems.isEmpty) { _, isEmpty in
+            if isEmpty { hintsHeight = 0 }
         }
     }
 
@@ -152,19 +162,11 @@ struct TranslationWindowView: View {
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            if isShowingLookupTip {
+            if !hintItems.isEmpty {
                 Divider()
-                HintView(
-                    title: lookupTip.title,
-                    message: lookupTip.message,
-                    icon: Image(nsImage: AppBrand.spriteImage),
-                    width: nil,
-                    localization: localization,
-                    identifier: "hint.dictionary",
-                    onClose: closeLookupTip
-                )
+                HintListView(items: hintItems, width: nil, localization: localization)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: {
-                    lookupTipHeight = $0
+                    hintsHeight = $0
                 }
             }
         }
@@ -180,7 +182,33 @@ struct TranslationWindowView: View {
         if doNotShowAgain { lookupTip.invalidate(reason: .tipClosed) }
         lookupTipClosed = true
         isShowingLookupTip = false
-        lookupTipHeight = 0
+    }
+
+    private func closeLanguageTip(doNotShowAgain: Bool) {
+        if doNotShowAgain { languageTip.invalidate(reason: .tipClosed) }
+        languageTipClosed = true
+        isShowingLanguageTip = false
+    }
+
+    private var hintItems: [HintItem] {
+        var items: [HintItem] = []
+        if isShowingLanguageTip {
+            items.append(HintItem(
+                id: "hint.translationLanguages", title: languageTip.title, message: languageTip.message,
+                icon: Image(nsImage: AppBrand.spriteImage), onClose: closeLanguageTip
+            ))
+        }
+        if isShowingLookupTip {
+            items.append(HintItem(
+                id: "hint.dictionary", title: lookupTip.title, message: lookupTip.message,
+                icon: Image(nsImage: AppBrand.spriteImage), onClose: closeLookupTip
+            ))
+        }
+        return items
+    }
+
+    private var languageTip: TranslationLanguageTip {
+        TranslationLanguageTip(localization: localization)
     }
 
     private var lookupTip: LookupTip {
@@ -231,7 +259,7 @@ struct TranslationWindowView: View {
             sourceText: coordinator.sourceText,
             status: coordinator.status,
             partialOutput: coordinator.partialOutput,
-            sourceAccessoryHeight: lookupTipHeight,
+            sourceAccessoryHeight: hintsHeight,
             targetStatusHeight: failureHeight,
             localization: localization
         )

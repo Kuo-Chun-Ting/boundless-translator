@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Bấm ? để xem cách dịch văn bản đã chọn và ảnh chụp màn hình.";
+
+"translationLanguages.title" = "Cài đặt ngôn ngữ";
+"translationLanguages.guidance" = "Cài đặt ngôn ngữ ở trên chỉ áp dụng cho cửa sổ này. Chọn ngôn ngữ mặc định trong Cài đặt.";
+
+"translation.chooseLanguage" = "Vui lòng chọn";
+"translationSetup.title" = "Ngôn ngữ dịch";
+"translationSetup.guidance" = "Đặt ngôn ngữ dịch, rồi dùng phím tắt để dịch.";

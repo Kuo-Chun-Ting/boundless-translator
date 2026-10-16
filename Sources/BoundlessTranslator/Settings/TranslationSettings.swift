@@ -3,11 +3,15 @@ import Foundation
 
 @MainActor
 final class TranslationSettings: ObservableObject {
-    static let defaultTargetLanguageIdentifier = "zh-Hant"
+    static let unselectedLanguageIdentifier = ""
+    private static let automaticSourceLanguageValue = "automatic"
 
     @Published var sourceLanguageIdentifier: String? {
         didSet {
-            defaults.set(sourceLanguageIdentifier, forKey: sourceLanguageKey)
+            defaults.set(
+                sourceLanguageIdentifier ?? Self.automaticSourceLanguageValue,
+                forKey: sourceLanguageKey
+            )
         }
     }
 
@@ -17,52 +21,49 @@ final class TranslationSettings: ObservableObject {
         }
     }
 
+    var hasSelectedLanguages: Bool {
+        sourceLanguageIdentifier != Self.unselectedLanguageIdentifier
+            && targetLanguageIdentifier != Self.unselectedLanguageIdentifier
+    }
+
     private let defaults: UserDefaults
     private let sourceLanguageKey = "sourceLanguageIdentifier"
     private let targetLanguageKey = "targetLanguageIdentifier"
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        sourceLanguageIdentifier = defaults.string(forKey: sourceLanguageKey)
+        let savedSourceLanguage = defaults.string(forKey: sourceLanguageKey) ?? Self.unselectedLanguageIdentifier
+        sourceLanguageIdentifier = savedSourceLanguage == Self.automaticSourceLanguageValue
+            ? nil : savedSourceLanguage
         targetLanguageIdentifier = defaults.string(forKey: targetLanguageKey)
-            ?? Self.defaultTargetLanguageIdentifier
+            ?? Self.unselectedLanguageIdentifier
     }
 
-    func validateSourceLanguage(supportedLanguages: [Locale.Language]) {
-        guard let sourceLanguageIdentifier, !supportedLanguages.isEmpty else {
+    func resetUnsupportedSourceLanguage(supportedLanguages: [Locale.Language]) {
+        guard let sourceLanguageIdentifier, !sourceLanguageIdentifier.isEmpty,
+              !supportedLanguages.isEmpty else {
             return
         }
 
-        let sourceLanguage = Locale.Language(identifier: sourceLanguageIdentifier)
-        let isSupported = supportedLanguages.contains {
-            $0.maximalIdentifier == sourceLanguage.maximalIdentifier
-        }
-        if !isSupported {
-            self.sourceLanguageIdentifier = nil
-        }
+        guard !isLanguageSupported(sourceLanguageIdentifier, in: supportedLanguages) else { return }
+
+        self.sourceLanguageIdentifier = Self.unselectedLanguageIdentifier
     }
 
-    func validateTargetLanguage(supportedLanguages: [Locale.Language]) {
-        guard !supportedLanguages.isEmpty else {
+    func resetUnsupportedTargetLanguage(supportedLanguages: [Locale.Language]) {
+        guard !targetLanguageIdentifier.isEmpty, !supportedLanguages.isEmpty else {
             return
         }
 
-        let selectedLanguage = Locale.Language(identifier: targetLanguageIdentifier)
-        if supportedLanguages.contains(where: {
+        guard !isLanguageSupported(targetLanguageIdentifier, in: supportedLanguages) else { return }
+
+        targetLanguageIdentifier = Self.unselectedLanguageIdentifier
+    }
+
+    private func isLanguageSupported(_ identifier: String, in supportedLanguages: [Locale.Language]) -> Bool {
+        let selectedLanguage = Locale.Language(identifier: identifier)
+        return supportedLanguages.contains {
             $0.maximalIdentifier == selectedLanguage.maximalIdentifier
-        }) {
-            return
-        }
-
-        let defaultLanguage = Locale.Language(
-            identifier: Self.defaultTargetLanguageIdentifier
-        )
-        if supportedLanguages.contains(where: {
-            $0.maximalIdentifier == defaultLanguage.maximalIdentifier
-        }) {
-            targetLanguageIdentifier = Self.defaultTargetLanguageIdentifier
-        } else if let firstSupportedLanguage = supportedLanguages.first {
-            targetLanguageIdentifier = firstSupportedLanguage.minimalIdentifier
         }
     }
 }

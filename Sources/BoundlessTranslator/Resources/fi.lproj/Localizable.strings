@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Näet valitun tekstin ja näyttökuvien kääntämisohjeet klikkaamalla ?-painiketta.";
+
+"translationLanguages.title" = "Kieliasetukset";
+"translationLanguages.guidance" = "Yllä olevat kieliasetukset koskevat vain tätä ikkunaa. Valitse oletuskielet Asetuksissa.";
+
+"translation.chooseLanguage" = "Valitse";
+"translationSetup.title" = "Käännöskielet";
+"translationSetup.guidance" = "Valitse käännöskielet ja käännä sitten pikanäppäimellä.";

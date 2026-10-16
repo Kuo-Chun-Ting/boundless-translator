@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "Clique em ? para ver como traduzir texto selecionado e capturas de tela.";
+
+"translationLanguages.title" = "Configurações de idioma";
+"translationLanguages.guidance" = "Os idiomas selecionados acima valem apenas para esta janela. Escolha os idiomas padrão nos Ajustes.";
+
+"translation.chooseLanguage" = "Selecione";
+"translationSetup.title" = "Idiomas de tradução";
+"translationSetup.guidance" = "Defina os idiomas de tradução e depois use um atalho de teclado para traduzir.";

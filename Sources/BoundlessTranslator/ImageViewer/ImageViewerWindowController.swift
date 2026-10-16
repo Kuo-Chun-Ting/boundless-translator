@@ -243,6 +243,8 @@ final class ImageViewerWindowController: NSWindowController,
         ) {
             hints.append(ScreenshotHint(id: "hint.screenshotLanguage", tip: tip))
         }
+        hints.append(ScreenshotHint(id: "hint.translationLanguages", tip: TranslationLanguageTip(
+            localization: localization)))
         hints.append(ScreenshotHint(id: "hint.screenshot", tip: ScreenshotTip(
             localization: localization)))
         return hints

@@ -102,3 +102,10 @@
 "permission.allowScreenRecording" = "Allow";
 
 "usage.guidance" = "「？」をクリックして、選択したテキストやスクリーンショットの翻訳方法を確認できます。";
+
+"translationLanguages.title" = "言語設定";
+"translationLanguages.guidance" = "上の言語設定は、このウインドウにのみ適用されます。デフォルトの言語は「設定」で変更できます。";
+
+"translation.chooseLanguage" = "選択してください";
+"translationSetup.title" = "翻訳言語";
+"translationSetup.guidance" = "翻訳言語を設定してから、キーボードショートカットで翻訳してください。";
