@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 
 @MainActor
 final class ImageTextView: NSView {
@@ -9,8 +10,13 @@ final class ImageTextView: NSView {
     private(set) var selection: NSRange?
     var onAnalysisCompletion: ((ImageTextDocument?) -> Void)?
     var quickTranslation: ScreenshotTranslationController?
+    var recognitionProgressMessage = AppLocalization(languageIdentifier: "en").string("screenshot.recognizing") {
+        didSet { recognitionProgressView?.rootView = ImageRecognitionProgressView(message: recognitionProgressMessage) }
+    }
     private let analysisProvider: AnalysisProvider
     private var analysisTask: Task<Void, Never>?
+    private var recognitionProgressTask: Task<Void, Never>?
+    private var recognitionProgressView: NSHostingView<ImageRecognitionProgressView>?
     private var pointerDown: CGPoint?
     private var previousDragPoint = CGPoint.zero
     private var hasReachedText = false
@@ -62,20 +68,23 @@ final class ImageTextView: NSView {
 
     deinit {
         analysisTask?.cancel()
+        recognitionProgressTask?.cancel()
         NotificationCenter.default.removeObserver(self)
     }
 
     func display(_ image: NSImage) {
-        analysisTask?.cancel()
+        cancelAnalysis()
         self.image = image
         document = ImageTextDocument(text: "", words: [])
         clearSelection()
         setAccessibilityValue("")
         setAccessibilityIdentifier("imageWorkspace.loading")
+        scheduleRecognitionProgress()
         let provider = analysisProvider
         analysisTask = Task { @MainActor [weak self] in
             let result = try? await provider(image)
             guard let self, !Task.isCancelled else { return }
+            hideRecognitionProgress()
             document = result ?? ImageTextDocument(text: "", words: [])
             setAccessibilityValue(document.text)
             setAccessibilityIdentifier(
@@ -83,6 +92,12 @@ final class ImageTextView: NSView {
             refreshSelectionDisplay()
             onAnalysisCompletion?(result)
         }
+    }
+
+    func cancelAnalysis() {
+        analysisTask?.cancel()
+        analysisTask = nil
+        hideRecognitionProgress()
     }
 
     func clearSelection() {
@@ -248,6 +263,35 @@ final class ImageTextView: NSView {
 
     func cursor(atImagePoint point: CGPoint) -> NSCursor {
         document.selectionRegions.contains { $0.bounds.contains(point) } ? .iBeam : .arrow
+    }
+
+    private func scheduleRecognitionProgress() {
+        recognitionProgressTask = Task { @MainActor [weak self] in
+            do { try await Task.sleep(for: .milliseconds(500)) }
+            catch { return }
+            guard !Task.isCancelled else { return }
+            self?.showRecognitionProgress()
+        }
+    }
+
+    private func showRecognitionProgress() {
+        let overlay = NSHostingView(rootView: ImageRecognitionProgressView(message: recognitionProgressMessage))
+        overlay.translatesAutoresizingMaskIntoConstraints = false
+        overlay.setAccessibilityIdentifier("imageWorkspace.recognitionProgress")
+        addSubview(overlay)
+        NSLayoutConstraint.activate([
+            overlay.centerXAnchor.constraint(equalTo: centerXAnchor),
+            overlay.centerYAnchor.constraint(equalTo: centerYAnchor),
+            overlay.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, constant: -32),
+        ])
+        recognitionProgressView = overlay
+    }
+
+    private func hideRecognitionProgress() {
+        recognitionProgressTask?.cancel()
+        recognitionProgressTask = nil
+        recognitionProgressView?.removeFromSuperview()
+        recognitionProgressView = nil
     }
 
     private func imagePoint(for event: NSEvent) -> CGPoint {

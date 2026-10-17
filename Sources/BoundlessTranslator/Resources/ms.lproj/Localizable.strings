@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Tidak dapat mengambil tangkapan skrin";
 "screenshot.hintTitle" = "Terjemahan Tangkapan Skrin";
 "screenshot.guidance" = "Letakkan kursor pada perkataan atau pilih teks untuk melihat terjemahan. Anda juga boleh mendengar teks asal dibacakan atau menggunakan kamus.";
+"screenshot.recognizing" = "Menyediakan model pengecaman teks…";
 "screenshot.noTextTitle" = "Tiada teks dikenal pasti";
 "screenshot.noTextMessage" = "Imej mungkin tidak mengandungi teks, teks kurang jelas, atau bahasanya tidak disokong untuk pengecaman teks.";
 "screenshot.languageLimitTitle" = "Had bahasa tangkapan skrin";

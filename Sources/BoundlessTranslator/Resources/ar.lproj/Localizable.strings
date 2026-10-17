@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "تعذر التقاط لقطة شاشة";
 "screenshot.hintTitle" = "ترجمة لقطة الشاشة";
 "screenshot.guidance" = "مرّر المؤشر فوق كلمة أو حدّد نصًا لعرض الترجمة. يمكنك أيضًا الاستماع إلى النص الأصلي أو استخدام القاموس.";
+"screenshot.recognizing" = "جارٍ تجهيز نماذج التعرّف على النص…";
 "screenshot.noTextTitle" = "لم يتم التعرف على نص";
 "screenshot.noTextMessage" = "قد لا تحتوي الصورة على نص، أو قد يكون النص غير واضح، أو بلغته غير المدعومة للتعرف على النص.";
 "screenshot.languageLimitTitle" = "قيود لغة لقطة الشاشة";

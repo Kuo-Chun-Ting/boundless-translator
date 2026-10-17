@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Impossibile acquisire l’istantanea";
 "screenshot.hintTitle" = "Traduzione di istantanee";
 "screenshot.guidance" = "Passa il puntatore su una parola o seleziona del testo per vedere la traduzione. Puoi anche ascoltare il testo originale o consultare il dizionario.";
+"screenshot.recognizing" = "Preparazione dei modelli di riconoscimento del testo…";
 "screenshot.noTextTitle" = "Nessun testo riconosciuto";
 "screenshot.noTextMessage" = "L’immagine potrebbe non contenere testo, il testo potrebbe essere poco chiaro o la sua lingua non essere supportata per il riconoscimento.";
 "screenshot.languageLimitTitle" = "Limite di lingua delle schermate";

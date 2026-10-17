@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Nije moguće napraviti snimku zaslona";
 "screenshot.hintTitle" = "Prijevod snimke zaslona";
 "screenshot.guidance" = "Zadržite pokazivač na riječi ili odaberite tekst za prikaz prijevoda. Možete poslušati i izvorni tekst ili koristiti rječnik.";
+"screenshot.recognizing" = "Priprema modela za prepoznavanje teksta…";
 "screenshot.noTextTitle" = "Nije prepoznat tekst";
 "screenshot.noTextMessage" = "Slika možda ne sadrži tekst, tekst je nejasan ili njegov jezik nije podržan za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezično ograničenje snimke zaslona";

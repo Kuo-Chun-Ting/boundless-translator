@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Posnetka zaslona ni bilo mogoče zajeti";
 "screenshot.hintTitle" = "Prevod posnetka zaslona";
 "screenshot.guidance" = "Postavite kazalec na besedo ali izberite besedilo za prikaz prevoda. Lahko tudi poslušate izvirno besedilo ali uporabite slovar.";
+"screenshot.recognizing" = "Priprava modelov za prepoznavanje besedila…";
 "screenshot.noTextTitle" = "Besedilo ni bilo prepoznano";
 "screenshot.noTextMessage" = "Slika morda ne vsebuje besedila, besedilo ni jasno ali njegov jezik ni podprt za prepoznavanje.";
 "screenshot.languageLimitTitle" = "Jezikovna omejitev posnetka";

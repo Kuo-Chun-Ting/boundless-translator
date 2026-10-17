@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Ekran resmi çekilemedi";
 "screenshot.hintTitle" = "Ekran Görüntüsü Çevirisi";
 "screenshot.guidance" = "Çeviriyi görmek için imleci bir sözcüğün üzerine getirin veya metin seçin. Özgün metni dinleyebilir veya sözlüğü kullanabilirsiniz.";
+"screenshot.recognizing" = "Metin tanıma modelleri hazırlanıyor…";
 "screenshot.noTextTitle" = "Metin tanınmadı";
 "screenshot.noTextMessage" = "Görüntü metin içermiyor olabilir, metin net olmayabilir veya dili metin tanıma için desteklenmiyor olabilir.";
 "screenshot.languageLimitTitle" = "Ekran görüntüsü dil sınırlaması";

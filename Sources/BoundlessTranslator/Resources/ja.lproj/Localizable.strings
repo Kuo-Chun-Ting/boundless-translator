@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "スクリーンショットを撮影できませんでした";
 "screenshot.hintTitle" = "スクリーンショット翻訳";
 "screenshot.guidance" = "単語にカーソルを合わせるかテキストを選択すると翻訳が表示されます。原文の読み上げや辞書も使えます。";
+"screenshot.recognizing" = "文字認識モデルを準備中…";
 "screenshot.noTextTitle" = "テキストが認識されませんでした";
 "screenshot.noTextMessage" = "画像にテキストがない、テキストが不鮮明、またはテキスト認識に対応していない言語の可能性があります。";
 "screenshot.languageLimitTitle" = "スクリーンショットの言語制限";

@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Bildschirmfoto konnte nicht aufgenommen werden";
 "screenshot.hintTitle" = "Übersetzung von Screenshots";
 "screenshot.guidance" = "Bewege den Mauszeiger über ein Wort oder markiere Text, um die Übersetzung zu sehen. Du kannst dir auch den Originaltext vorlesen lassen oder im Wörterbuch nachschlagen.";
+"screenshot.recognizing" = "Texterkennungsmodelle werden vorbereitet…";
 "screenshot.noTextTitle" = "Kein Text erkannt";
 "screenshot.noTextMessage" = "Das Bild enthält möglicherweise keinen Text, undeutlichen Text oder eine Sprache, die nicht für die Texterkennung unterstützt wird.";
 "screenshot.languageLimitTitle" = "Sprachbeschränkung bei Screenshots";

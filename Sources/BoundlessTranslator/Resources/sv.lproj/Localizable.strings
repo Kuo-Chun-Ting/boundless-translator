@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Det gick inte att ta en skärmavbild";
 "screenshot.hintTitle" = "Översättning av skärmavbild";
 "screenshot.guidance" = "Håll pekaren över ett ord eller markera text för att se översättningen. Du kan också få originaltexten uppläst eller använda ordboken.";
+"screenshot.recognizing" = "Förbereder modeller för textigenkänning…";
 "screenshot.noTextTitle" = "Ingen text identifierades";
 "screenshot.noTextMessage" = "Bilden kanske saknar text, innehåller otydlig text eller ett språk som inte stöds för textigenkänning.";
 "screenshot.languageLimitTitle" = "Språkbegränsning för skärmbilder";

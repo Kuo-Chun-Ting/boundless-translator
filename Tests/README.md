@@ -23,7 +23,7 @@ Subscription tests construct subscribed and unsubscribed states directly. App St
 | Level | Responsibility |
 |---|---|
 | Unit | Selection ranges, forward/reverse endpoints, row ordering, paragraph joining, preview targets and card positioning; declared interface languages, localization completeness and loading |
-| Component | Production views/controllers: selection, copy/translation input, delayed OCR, image replacement, hints and empty-recognition Alerts; preview cancellation, stale results, chunk failures, retry, speech/Lookup input and scrolling. Fixed screenshot inputs use real Vision recognition without another App. |
+| Component | Production views/controllers: selection, copy/translation input, delayed OCR and its 0.5-second progress indicator, image replacement/closure, hints and empty-recognition Alerts; preview cancellation, stale results, chunk failures, retry, speech/Lookup input and scrolling. Fixed screenshot inputs use real Vision recognition without another App. |
 | GUI (15 default cases) | First drag into an inactive window; translation closure restores cursor/selection; source click is delivered; selection and translation after returning from another App; hover-card actions, selection and native Lookup return; translation survives native Lookup and resumes outside-click dismissal; screenshot language menus preserve and retranslate the hover card; native border resize; dictionary/screenshot dismissal across restarts; localized Settings controls fit in light/dark mode |
 | E2E (4 cases) | External-editor selection in both Accessibility-exposing and copy-only modes; screenshot translation; first drag and translation after returning from another App; Settings focus after reopening |
 
@@ -32,6 +32,8 @@ Esc and the close button are two inputs to one closure regression. Geometry vari
 The screenshot workflow ends after the shortcut opens the full translation window with the selected sentence. External-editor selection covers both editor modes in one launch. App switching and reopening Settings have independent cases, each preparing its own screenshot/translation state. Shared helpers reuse code, not runtime state between cases.
 
 ## Selecting cases
+
+To clear only an App's OCR model cache, run `Scripts/reset_ocr_cache_dmg.sh` or `Scripts/reset_ocr_cache_app_store.sh` (also covers TestFlight). Each quits its App and preserves language settings, permissions and Lookup records. For E2E, use `Scripts/Shared/reset_ocr_cache.sh e2e`. The next recognition may take longer. Script coverage runs with `zsh Tests/Scripts/ResetOCRCacheTests.sh`; it intercepts quit/delete commands and does not clear real App data.
 
 Unit and Component accept one optional test-name regular expression:
 

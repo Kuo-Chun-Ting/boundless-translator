@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "无法截屏";
 "screenshot.hintTitle" = "截图翻译";
 "screenshot.guidance" = "将鼠标停在单词上或选取文字即可查看翻译，也可朗读原文或查词典。";
+"screenshot.recognizing" = "正在准备识别模型…";
 "screenshot.noTextTitle" = "未识别到文字";
 "screenshot.noTextMessage" = "图片中可能没有文字、文字不够清晰，或文字语言尚未受支持。";
 "screenshot.languageLimitTitle" = "截图语言限制";

@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Snímku obrazovky sa nepodarilo vytvoriť";
 "screenshot.hintTitle" = "Preklad snímky obrazovky";
 "screenshot.guidance" = "Ukážte kurzorom na slovo alebo vyberte text a zobrazí sa preklad. Môžete si tiež nechať prečítať pôvodný text alebo použiť slovník.";
+"screenshot.recognizing" = "Príprava modelov rozpoznávania textu…";
 "screenshot.noTextTitle" = "Nebol rozpoznaný žiadny text";
 "screenshot.noTextMessage" = "Obrázok možno neobsahuje text, text je nejasný alebo jeho jazyk nie je podporovaný na rozpoznávanie.";
 "screenshot.languageLimitTitle" = "Jazykové obmedzenie snímky";

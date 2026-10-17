@@ -170,6 +170,7 @@ final class ImageViewerWindowController: NSWindowController,
 
     func windowWillClose(_ notification: Notification) {
         screenshotTipController.close()
+        (content as? ImageTextView)?.cancelAnalysis()
         content.clearSelection()
     }
 
@@ -277,6 +278,8 @@ final class ImageViewerWindowController: NSWindowController,
     private func updateScreenshotHints(languageIdentifier: String?) {
         let resolvedIdentifier = interfaceLanguageSettings
             .resolvedLanguageIdentifier(for: languageIdentifier)
+        (content as? ImageTextView)?.recognitionProgressMessage = AppLocalization(
+            languageIdentifier: resolvedIdentifier).string("screenshot.recognizing")
         screenshotTipController.update(
             localization: AppLocalization(languageIdentifier: resolvedIdentifier),
             hints: makeScreenshotHints(localization: AppLocalization(languageIdentifier: resolvedIdentifier))

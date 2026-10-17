@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Schermafbeelding kon niet worden gemaakt";
 "screenshot.hintTitle" = "Vertaling van schermafbeelding";
 "screenshot.guidance" = "Beweeg de aanwijzer over een woord of selecteer tekst om de vertaling te zien. Je kunt ook de oorspronkelijke tekst laten voorlezen of het woordenboek gebruiken.";
+"screenshot.recognizing" = "Modellen voor tekstherkenning voorbereiden…";
 "screenshot.noTextTitle" = "Geen tekst herkend";
 "screenshot.noTextMessage" = "De afbeelding bevat mogelijk geen tekst, onduidelijke tekst of een taal die niet wordt ondersteund voor tekstherkenning.";
 "screenshot.languageLimitTitle" = "Taalbeperking voor schermafbeeldingen";

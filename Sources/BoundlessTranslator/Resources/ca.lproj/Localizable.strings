@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "No s’ha pogut fer la captura de pantalla";
 "screenshot.hintTitle" = "Traducció de captures de pantalla";
 "screenshot.guidance" = "Passa el cursor sobre una paraula o selecciona text per veure’n la traducció. També pots escoltar el text original o consultar el diccionari.";
+"screenshot.recognizing" = "S’estan preparant els models de reconeixement…";
 "screenshot.noTextTitle" = "No s’ha reconegut cap text";
 "screenshot.noTextMessage" = "Pot ser que la imatge no contingui text, que el text sigui poc clar o que l’idioma no sigui compatible amb el reconeixement.";
 "screenshot.languageLimitTitle" = "Limitació d’idioma de la captura";

@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Nu s-a putut realiza captura de ecran";
 "screenshot.hintTitle" = "Traducerea capturii de ecran";
 "screenshot.guidance" = "Treceți cursorul peste un cuvânt sau selectați text pentru a vedea traducerea. Puteți și asculta textul original sau consulta dicționarul.";
+"screenshot.recognizing" = "Se pregătesc modelele de recunoaștere a textului…";
 "screenshot.noTextTitle" = "Nu a fost recunoscut niciun text";
 "screenshot.noTextMessage" = "Imaginea poate să nu conțină text, textul poate fi neclar sau limba sa nu este acceptată pentru recunoaștere.";
 "screenshot.languageLimitTitle" = "Limitarea limbii capturii";

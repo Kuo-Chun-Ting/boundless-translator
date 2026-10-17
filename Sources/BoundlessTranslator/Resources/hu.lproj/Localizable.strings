@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Nem sikerült képernyőfotót készíteni";
 "screenshot.hintTitle" = "Képernyőkép fordítása";
 "screenshot.guidance" = "Vigye a mutatót egy szóra vagy jelöljön ki szöveget a fordítás megtekintéséhez. Az eredeti szöveget fel is olvastathatja, vagy használhatja a szótárt.";
+"screenshot.recognizing" = "Szövegfelismerési modellek előkészítése…";
 "screenshot.noTextTitle" = "Nem sikerült szöveget felismerni";
 "screenshot.noTextMessage" = "Lehet, hogy a képen nincs szöveg, a szöveg nem elég tiszta, vagy a nyelve nem támogatott a szövegfelismeréshez.";
 "screenshot.languageLimitTitle" = "A képernyőkép nyelvi korlátja";

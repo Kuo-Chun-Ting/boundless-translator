@@ -91,6 +91,7 @@
 		E403BB42D4798A45115C1642 /* Sources/BoundlessTranslator/Localization/AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0D674DB53A72655785BA0E /* Sources/BoundlessTranslator/Localization/AppLocalization.swift */; };
 		EA645516ABF148E5AC18A34E /* Sources/BoundlessTranslator/Subscription/SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC758DA797017934D7519072 /* Sources/BoundlessTranslator/Subscription/SubscriptionView.swift */; };
 		EC1E53D064BC6BA8F7BA23DA /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02409D0738175CC51E07AF81 /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift */; };
+		0A8C05DE93DB4C0C94AAB201 /* Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8C05DE93DB4C0C94AAB202 /* Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift */; };
 		ECFCCB465096B3D62AC592DA /* Sources/BoundlessTranslator/Settings/ShortcutPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DB6CAFD2DDC029559C29F0 /* Sources/BoundlessTranslator/Settings/ShortcutPreferencesView.swift */; };
 		EDAF241EF1E72130DE83DBFD /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E3EAD5AD1B89A8FDE1AA /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelController.swift */; };
 		F4E2AF64C11C50FDB3482D6F /* Sources/BoundlessTranslator/Settings/LanguageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E7CE35EB19348D50FD79A2 /* Sources/BoundlessTranslator/Settings/LanguageOption.swift */; };
@@ -117,6 +118,7 @@
 
 /* Begin PBXFileReference section */
 		02409D0738175CC51E07AF81 /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift; sourceTree = SOURCE_ROOT; };
+		0A8C05DE93DB4C0C94AAB202 /* Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift; sourceTree = SOURCE_ROOT; };
 		043A5FB33203FD8EC61FEF2F /* Sources/BoundlessTranslator/Application/AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		05EACEAF603663289362CD8E /* Sources/BoundlessTranslator/Translation/UI/TranslationPanelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Translation/UI/TranslationPanelContentView.swift; sourceTree = SOURCE_ROOT; };
 		08FE90567E46AFDBE5BF4D3B /* Sources/BoundlessTranslator/Application/BoundlessTranslatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BoundlessTranslator/Application/BoundlessTranslatorApp.swift; sourceTree = SOURCE_ROOT; };
@@ -330,6 +332,7 @@
 				3C19556856123C8BF5801AC8,
 				3809DE42D1BF5068D977036D,
 				02409D0738175CC51E07AF81 /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift */,
+				0A8C05DE93DB4C0C94AAB202 /* Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift */,
 				1FC8BEE88306B60F60D7F364 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift */,
 				1E288DEFBB826E79252158A8 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift */,
 				5296DB8803B95C1779036160 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift */,
@@ -577,6 +580,7 @@
 				12489BC041204119E649BD00,
 				D09E630A22D6B6FAAE0C1850,
 				EC1E53D064BC6BA8F7BA23DA /* Sources/BoundlessTranslator/ImageViewer/ImageTextView.swift in Sources */,
+				0A8C05DE93DB4C0C94AAB201 /* Sources/BoundlessTranslator/ImageViewer/ImageRecognitionProgressView.swift in Sources */,
 				F8DD5994994A4F8F847F5A38 /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationController.swift in Sources */,
 				ADB8B32B2BDE15723140120D /* Sources/BoundlessTranslator/ImageViewer/ScreenshotTranslationCard.swift in Sources */,
 				572BE9718A68F3D8B693F491 /* Sources/BoundlessTranslator/ImageViewer/ImageTextPreviewTarget.swift in Sources */,

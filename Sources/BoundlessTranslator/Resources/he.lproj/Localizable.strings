@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "לא ניתן לצלם צילום מסך";
 "screenshot.hintTitle" = "תרגום צילום מסך";
 "screenshot.guidance" = "רחפו עם העכבר מעל מילה או בחרו טקסט כדי לראות את התרגום. אפשר גם להאזין לטקסט המקורי או להשתמש במילון.";
+"screenshot.recognizing" = "מכין מודלים לזיהוי טקסט…";
 "screenshot.noTextTitle" = "לא זוהה טקסט";
 "screenshot.noTextMessage" = "ייתכן שאין טקסט בתמונה, שהטקסט אינו ברור או שהשפה אינה נתמכת בזיהוי טקסט.";
 "screenshot.languageLimitTitle" = "מגבלת שפה בצילום מסך";

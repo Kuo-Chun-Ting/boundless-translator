@@ -29,6 +29,7 @@
 "screenshot.errorTitle" = "Impossible de réaliser la capture d’écran";
 "screenshot.hintTitle" = "Traduction de capture d’écran";
 "screenshot.guidance" = "Survolez un mot avec le pointeur ou sélectionnez du texte pour voir sa traduction. Vous pouvez aussi écouter le texte original ou consulter le dictionnaire.";
+"screenshot.recognizing" = "Préparation des modèles de reconnaissance de texte…";
 "screenshot.noTextTitle" = "Aucun texte reconnu";
 "screenshot.noTextMessage" = "L’image ne contient peut-être pas de texte, le texte manque de netteté ou sa langue n’est pas prise en charge pour la reconnaissance.";
 "screenshot.languageLimitTitle" = "Limite de langue des captures";
