@@ -11,9 +11,55 @@ window.drawBeams = async function ({url, kind}) {
  const bases = [source];
  const image = (img, x, y, width, height) => drawingContext.drawImage(img, x, y, width, height);
  const configurations = {
-  lettering: [{sx:688,sy:468,sw:299,sh:100,px:837,py:586,ix:970,iy:360,scale:530/2004},{sx:783,sy:165,sw:399,sh:99,px:982,py:283,ix:970,iy:686,scale:530/1998}],
-  general: [{sx:820,sy:525,sw:300,sh:99,px:970,py:643,ix:1010,iy:316,scale:370/1926},{sx:547,sy:511,sw:850,sh:195,px:970,py:725,ix:1010,iy:690,scale:370/1938}]
- };
+  "general": [
+    {
+      "sx": 848,
+      "sy": 478,
+      "sw": 298,
+      "sh": 98,
+      "px": 997,
+      "py": 595,
+      "ix": 1010,
+      "iy": 316,
+      "scale": 0.17482517482517482
+    },
+    {
+      "sx": 571,
+      "sy": 465,
+      "sw": 850,
+      "sh": 195,
+      "px": 996,
+      "py": 679,
+      "ix": 1010,
+      "iy": 685,
+      "scale": 0.17482517482517482
+    }
+  ],
+  "lettering": [
+    {
+      "sx": 695,
+      "sy": 512,
+      "sw": 298,
+      "sh": 98,
+      "px": 844,
+      "py": 628,
+      "ix": 970,
+      "iy": 360,
+      "scale": 0.265
+    },
+    {
+      "sx": 807,
+      "sy": 183,
+      "sw": 398,
+      "sh": 98,
+      "px": 1006,
+      "py": 300,
+      "ix": 970,
+      "iy": 698,
+      "scale": 0.265
+    }
+  ]
+};
  const cards = configurations[kind];
 function geometry(v){return{x:v.ix+v.sx*v.scale,y:v.iy+v.sy*v.scale,w:v.sw*v.scale,h:v.sh*v.scale};}
 function restoreCard(v){const c=drawingContext;c.save();c.translate(v.ix,v.iy);c.scale(v.scale,v.scale);c.beginPath();c.roundRect(v.sx-1,v.sy-1,v.sw+2,v.sh+2,41);c.moveTo(v.px-24,v.sy+v.sh-2);c.lineTo(v.px-7,v.py-2);c.quadraticCurveTo(v.px,v.py+4,v.px+7,v.py-2);c.lineTo(v.px+24,v.sy+v.sh-2);c.closePath();c.clip();c.setTransform(1.6,0,0,1.6,0,0);image(bases[params.theme-1],0,0,1600,1000);c.restore();}

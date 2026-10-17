@@ -90,7 +90,10 @@
 - [x] 修正截圖翻譯中，hover 單字或選取文字後，滑鼠向上移至字卡時觸發下層文字事件，導致字卡消失的問題。 改由字卡面板接收自身事件，移除截圖多餘的滑鼠事件註冊與跨視窗判斷。
 
 - [x] 功能介紹素材集中至 `docs/feature-showcase/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
-- [ ] 最後確認 Settings 功能介紹圖；選字翻譯暫定同尺寸自然構圖，字典採石墨灰柔和底色版。狀態見 `docs/feature-showcase/output/glass/README.md`。
+- [x] 使用者確認 Settings、選字翻譯與字典功能介紹排版，最新成圖已整合至正式 output。
+- [x] 審查 Glass／Space Gray 共十二張正式成圖的文案、畫面與上傳格式：皆為 2560 × 1600；截圖翻譯圖的 Alpha 通道及「Hover a word」用語問題已修正。
+- [x] 產出六張 `-Update` 比較圖及對應 HTML：兩種主題的 Settings 從原始截圖等比例縮小 10%，四張截圖翻譯改為「Hover over a word」；Update PNG 均無 Alpha 通道、重製零像素差異。十二張原圖已恢復並逐位元組確認與修改前相同。
+- [x] 將使用者確認的六張 Update 圖及對應 HTML 升為正式版，移除比較檔與專用入口；簡化兩種主題的成圖檔名，選字與截圖翻譯均保留編號及情境名稱：截圖使用 `02-screenshot-1-cant-select.png`、`02-screenshot-2-general.png`，同步產圖程式、文件與預覽引用。十二張正式圖重製零像素差異、無 Alpha 通道，檔案引用檢查通過。
 - [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 `dictionary_selected_text.jpg` 與 `dictionary_screenshot.jpg`；保留書本 icon、完整查詢文字及字典視窗，選字翻譯視窗左緣對齊小標題。可編輯來源在 `docs/feature-showcase/layouts/`。
 - [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。已確定使用完整光束。
 - [x] 截圖功能介紹確定使用完整光束；刪除 Glass／太空灰共四張短光束成圖與專用產圖邏輯，同步預覽索引及文件。
@@ -241,7 +244,7 @@
 - [x] 清理 Glass／Space Gray：各保留最新 6 張成圖及可編輯來源，更新索引與引用；截圖翻譯僅保留完整光束，舊生成底圖已由直接產圖流程取代。
 
 - [x] 功能介紹產圖改為直接讀取 HTML、原始截圖及共用光束元件，移除舊底圖、重複成圖與階段性產圖程式；14 張重製逐像素一致，16 張交付成圖原檔均未更改。
-- [ ] Settings 現存 HTML 重製結果與原 PNG 有細微像素差異，後續調整 Settings 時一併確認；此次未覆蓋成圖。
+- [x] Settings 已換入確認後的新截圖與正式排版，HTML 重製結果與正式 PNG 逐像素一致。
 
 - [x] 功能介紹目錄統一為 `docs/feature-showcase/`，分成 `assets/`、`layouts/`、`output/`；成圖放在 `output/glass/` 與 `output/space-gray/`，移除 updated 命名，同步排版與產圖路徑。
 - [x] 選定 A「窄光束」，套用 VS Code／Preview 的 Glass 與太空灰共四張選字翻譯成圖；逐像素比對確認僅箭頭附近改變，其餘十二張成圖未變。
@@ -253,3 +256,5 @@
 - [x] 移除已採用或淘汰的兩組比較稿、舊 Screenshot 字樣 CSS 與專用字型，共 9 個檔案；同步文字樣式及 Output 說明，正式成圖保留。
 - [ ] 另開獨立 commit 整理字典按鈕與共用附屬視窗判斷的命名；不與本次字典顯示修正混在一起。
 - [x] 在 Can't select 原始圖片素材下方加入「We’ll make the text selectable.」，供重新截圖使用；註明換入新截圖時需移除排版中的重複補述。
+
+- [x] 將使用者確認的八張功能介紹圖升為正式版；六張新截圖取代 assets 舊素材，最新排版整合回八份正式 HTML 與共用光束元件。保留兩種主題各六張成圖，刪除比較頁、Update 專用程式、重複素材與根目錄六張截圖。十二張正式圖重製逐像素一致。

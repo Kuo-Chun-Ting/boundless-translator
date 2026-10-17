@@ -4,12 +4,12 @@
 
 | 內容 | 檔案 |
 | --- | --- |
-| 選字翻譯：VS Code | [PNG](01-selected-text-01-vscode-aligned.png) |
-| 選字翻譯：Preview | [PNG](01-selected-text-02-preview-aligned.png) |
-| Can’t select it：完整光束 | [PNG](02-screenshot-02-lettering-wizard-beam-connected-graphite.png) |
-| General：完整光束 | [PNG](02-screenshot-01-general-beam-connected-graphite.png) |
-| 字典 | [PNG](03-dictionary-graphite.png) |
-| Settings：待最後確認 | [PNG](04-settings.png) |
+| 選字翻譯：VS Code | [PNG](01-selection-1-vscode.png) |
+| 選字翻譯：Preview | [PNG](01-selection-2-preview.png) |
+| Can’t select it：完整光束 | [PNG](02-screenshot-1-cant-select.png) |
+| General：完整光束 | [PNG](02-screenshot-2-general.png) |
+| 字典 | [PNG](03-dictionary.png) |
+| Settings | [PNG](04-settings.png) |
 
 [預覽全部](index.html)。選字翻譯、Settings 與截圖的可編輯排版在 [layouts/space-gray](../../layouts/space-gray/)，共用光束元件在 [layouts/components](../../layouts/components/)，字典排版見[字典來源](../../layouts/dictionary.md)。產圖方式見[素材總覽](../../README.md)。
 

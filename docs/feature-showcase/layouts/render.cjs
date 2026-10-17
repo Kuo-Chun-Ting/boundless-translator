@@ -12,17 +12,20 @@ function listPages() {
   const pages = [];
   for (const theme of ['glass', 'space-gray']) {
     const folder = `output/${theme}`;
-    for (const name of ['01-selected-text-01-vscode-aligned', '01-selected-text-02-preview-aligned', '04-settings']) {
-      pages.push({source: `layouts/${theme}/${name}.html`, output: `${folder}/${name}.png`});
+    for (const [source, output] of [
+      ['01-selected-text-01-vscode-aligned', '01-selection-1-vscode'],
+      ['01-selected-text-02-preview-aligned', '01-selection-2-preview'],
+      ['04-settings', '04-settings'],
+    ]) {
+      pages.push({source: `layouts/${theme}/${source}.html`, output: `${folder}/${output}.png`});
     }
     pages.push({
       source: `layouts/${theme}/dictionary.html`,
-      output: `${folder}/03-dictionary-graphite.png`,
+      output: `${folder}/03-dictionary.png`,
     });
-    for (const kind of ['general', 'lettering']) {
-      const prefix = kind === 'general' ? '02-screenshot-01-general-beam' : '02-screenshot-02-lettering-wizard-beam';
+    for (const [kind, name] of [['lettering', '1-cant-select'], ['general', '2-general']]) {
       pages.push({kind, source: `layouts/${theme}/screenshot-${kind}.html`,
-        output: `${folder}/${prefix}-connected-graphite.png`});
+        output: `${folder}/02-screenshot-${name}.png`});
     }
   }
   return pages;
@@ -48,7 +51,8 @@ async function renderBeams(page, base, kind) {
   const result = await page.evaluate(options => window.drawBeams(options), {
     url: 'data:image/png;base64,' + base.toString('base64'), kind,
   });
-  return Buffer.from(result.split(',')[1], 'base64');
+  const image = PNG.sync.read(Buffer.from(result.split(',')[1], 'base64'));
+  return PNG.sync.write(image, {colorType: 2});
 }
 
 /** @param {Buffer} actual @param {Buffer} expected @returns {number} */
