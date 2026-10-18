@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="{{ page.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.kind != 'home' %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}</title>
+    <meta name="description" content="{{ site.description | escape }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  </head>
+  <body>
+    {% case page.lang %}
+      {% when 'zh-TW' %}
+        {% assign locale_path = '/zh-tw/' %}
+        {% assign support_label = '支援' %}
+        {% assign privacy_label = '隱私權政策' %}
+        {% assign language_label = '語言' %}
+        {% assign skip_label = '跳至內容' %}
+      {% when 'zh-CN' %}
+        {% assign locale_path = '/zh-cn/' %}
+        {% assign support_label = '支持' %}
+        {% assign privacy_label = '隐私政策' %}
+        {% assign language_label = '语言' %}
+        {% assign skip_label = '跳至内容' %}
+      {% else %}
+        {% assign locale_path = '/en/' %}
+        {% assign support_label = 'Support' %}
+        {% assign privacy_label = 'Privacy Policy' %}
+        {% assign language_label = 'Language' %}
+        {% assign skip_label = 'Skip to content' %}
+    {% endcase %}
+    <a class="skip-link" href="#content">{{ skip_label }}</a>
+    <header class="site-header">
+      <a class="site-name" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+      {% unless page.kind == 'home' %}
+        <nav aria-label="{{ support_label }} / {{ privacy_label }}" class="page-nav">
+          <a href="{{ locale_path | append: 'support/' | relative_url }}"{% if page.kind == 'support' %} aria-current="page"{% endif %}>{{ support_label }}</a>
+          <a href="{{ locale_path | append: 'privacy/' | relative_url }}"{% if page.kind == 'privacy' %} aria-current="page"{% endif %}>{{ privacy_label }}</a>
+        </nav>
+        <nav aria-label="{{ language_label }}" class="language-nav">
+          {% assign document_path = page.kind | append: '/' %}
+          <a lang="en" hreflang="en" href="{{ '/en/' | append: document_path | relative_url }}"{% if page.lang == 'en' %} aria-current="true"{% endif %}>English</a>
+          <a lang="zh-TW" hreflang="zh-TW" href="{{ '/zh-tw/' | append: document_path | relative_url }}"{% if page.lang == 'zh-TW' %} aria-current="true"{% endif %}>繁體中文</a>
+          <a lang="zh-CN" hreflang="zh-CN" href="{{ '/zh-cn/' | append: document_path | relative_url }}"{% if page.lang == 'zh-CN' %} aria-current="true"{% endif %}>简体中文</a>
+        </nav>
+      {% endunless %}
+    </header>
+    <main id="content">
+      {% unless page.kind == 'home' %}<h1>{{ page.title | escape }}</h1>{% endunless %}
+      {{ content }}
+    </main>
+    <footer class="site-footer">
+      <span>Chun Ting Kuo</span>
+      <a href="mailto:halila@me.com">halila@me.com</a>
+    </footer>
+  </body>
+</html>

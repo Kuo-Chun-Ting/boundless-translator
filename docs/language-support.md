@@ -15,6 +15,16 @@ Public support wording and sources: [system and language support](product-suppor
 
 Translation and OCR use their own runtime language lists. Hebrew translation and OCR languages `ars`, `cs`, `mr`, `nn`, `ro`, `yue-Hans` and `yue-Hant` have no samples and were not exercised. These results do not establish translation quality or OCR accuracy for arbitrary input.
 
+## Official translation model requirements
+
+Checked 2026-10-18:
+
+- Apple’s [traditional translation strategy](https://developer.apple.com/documentation/translation/translationsession/strategy/lowlatency) uses downloaded language models and works without Apple Intelligence. Manage downloads in System Settings → General → Language & Region → Translation Languages; see [Apple’s Mac translation guide](https://support.apple.com/guide/mac-help/mchldd8b3c15/mac).
+- The [`highFidelity` strategy API](https://developer.apple.com/documentation/translation/translationsession/strategy/highfidelity) was introduced in macOS 26.4; this dates the API, not the underlying models. It uses Apple Intelligence models, supports additional languages, and needs no separate language downloads once those models are ready. Without Apple Intelligence it falls back to traditional models; this does not establish availability of those additional languages.
+- Apple’s [system-wide translation list](https://www.apple.com/macos/feature-availability/#translate-system-wide-translation) does not classify every language by its Apple Intelligence requirement. Danish, Norwegian Bokmål and Swedish requiring Apple Intelligence is a project observation on macOS 26.5.2, not an official exhaustive list for all OS versions. Live Translation in Messages, FaceTime and Phone has separate feature-specific lists.
+- Apple documents device, OS, matching system/Siri language and region requirements in [Apple Intelligence setup](https://support.apple.com/121115). Public Support pages distinguish these conditions from project test results.
+- Production `AppleTranslationConfigurationFactory` sets source and target without overriding the preferred strategy. Apple’s [strategy documentation](https://developer.apple.com/documentation/translation/translationsession/strategy) says model selection can fall back according to device capabilities and language availability. Do not promise that every translation uses Apple Intelligence or that an unavailable language becomes available merely by enabling it.
+
 ## Earlier verified snapshot
 
 Snapshot: 2026-10-05, macOS 26.5.2. Counts combine regional variants and keep Simplified and Traditional Chinese separate. Availability depends on the user's Mac, macOS and model readiness.

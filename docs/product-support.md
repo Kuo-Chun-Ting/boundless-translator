@@ -1,18 +1,26 @@
 # 上線用系統與語言支援資料
 
-供 App Store、官網、Support 與功能介紹引用。整理日期：2026-10-11。
+供 App Store、官網、Support 與功能介紹引用。整理日期：2026-10-18。
 
 ## 支援範圍
 
 | 項目 | 對外說明 |
 |---|---|
-| macOS | 需要 macOS 15 或更新版本，目前包含 macOS 15、26、27。macOS 14 或更早版本不支援。 |
+| macOS | 需要 macOS 15 或更新版本；macOS 14 或更早版本不支援。 |
 | 晶片 | 需要 Apple M 系列晶片（M1 或更新）。Intel Mac 不支援。 |
 | 介面語言 | 提供 34 組介面語言，含地區版本共 48 個語系。同一版 App 在各支援的 macOS 上提供相同清單。 |
 | 翻譯語言 | 使用 Apple 翻譯功能，支援語言由使用者的 Mac 提供，App 會自動讀取。可在 Settings 的來源與目標語言選單查看。 |
 | 截圖翻譯 | 使用 Apple 的圖片文字辨識與翻譯功能，支援語言由使用者的 Mac 提供，App 會自動查詢。圖片中的原文須同時支援辨識與翻譯；目標語言沿用翻譯語言清單。來源語言不支援圖片辨識時，截圖視窗會顯示提示。 |
 
 翻譯與 OCR 不宣稱固定語言數量，也不列每個 macOS 版本的語言表。支援範圍可能隨系統更新改變。首次翻譯可能需要下載語言資源，部分語言需要啟用 Apple Intelligence 並完成模型下載。
+
+## 翻譯模型與 Apple Intelligence
+
+- 一般翻譯模型不要求 Apple Intelligence，但需要對應語言資料。可到「系統設定」→「一般」→「語言與地區」→「翻譯語言」管理下載。[Apple 翻譯說明](https://support.apple.com/zh-tw/guide/mac-help/mchldd8b3c15/mac)
+- Apple 的 [`highFidelity`](https://developer.apple.com/documentation/translation/translationsession/strategy/highfidelity) 翻譯策略 API 自 macOS 26.4 提供；這是 API 的引入版本。該策略使用 Apple Intelligence 模型並支援額外語言；模型下載完成後無須另下載語言包。未啟用 Apple Intelligence 時會退回一般模型，但不保證額外語言仍可使用。
+- 專案在 macOS 26.5.2 實測，丹麥文、挪威文（Bokmål）、瑞典文翻譯需要 Apple Intelligence。這三種語言是該環境的實測結果，不是 Apple 公布、適用所有版本的完整必要清單。
+- Apple 的[系統翻譯語言清單](https://www.apple.com/macos/feature-availability/#translate-system-wide-translation)列出可用語言，未逐一區分哪些要求 Apple Intelligence。「訊息」、FaceTime 與電話的即時翻譯是不同功能，不拿其語言清單代替本 App 的支援範圍。
+- Apple Intelligence 的裝置、系統、語言與地區條件依 [Apple 官方支援文件](https://support.apple.com/zh-tw/121115)。系統與 Siri 須使用同一個受支援語言；啟用後須等待模型下載。選字翻譯與截圖翻譯的目標語言共用翻譯模型條件，截圖原文另須支援圖片文字辨識。
 
 ## 介面語言清單
 
@@ -48,4 +56,5 @@ TRex 同時更換介面並加入其他處理，不能據此認定只換新版就
 - 翻譯：Apple [LanguageAvailability](https://developer.apple.com/documentation/translation/languageavailability)提供當下支援的語言，也能查詢指定來源與目標的支援、安裝狀態。
 - OCR：Apple [VNRecognizeTextRequest](https://developer.apple.com/documentation/vision/vnrecognizetextrequest)提供辨識語言清單。App 使用 accurate 模式、自動偵測語言與語言校正。
 - 實測紀錄見 [語言支援資料](language-support.md)，不作為所有 Mac 的固定支援清單。
-- 本文尚未套用至對外頁面。同步時移除 README「介面語言與 macOS 相同」與三語 Support「印地文不支援截圖辨識」的固定宣稱；後者已不符合 macOS 27.0.1 的實測結果。
+- 本文已同步至專案 README 與三語 Support 來源，移除「介面語言與 macOS 相同」及固定的印地文截圖辨識限制，補上首次語言設定、視窗內語言僅對目前視窗生效與辨識等待說明。本次尚未發布網站；公開頁面仍需部署後確認。
+- 2026-10-17 於 App Store Connect 核對 Build 49：最低 macOS 15.0、僅 arm64，內含 48 個語系。App 內操作說明的「介面語言與 macOS 相同」仍屬舊文案，本次未修改 App 資源。

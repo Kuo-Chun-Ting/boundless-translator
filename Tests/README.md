@@ -33,6 +33,8 @@ The screenshot workflow ends after the shortcut opens the full translation windo
 
 ## Selecting cases
 
+Website preview script tests run with `zsh Tests/Scripts/PreviewWebsiteTests.sh`. They use command substitutes to check dependency setup, paths containing spaces, loopback serving, browser launch and failure handling without starting a server or installing gems.
+
 To clear only an App's OCR model cache, run `Scripts/reset_ocr_cache_dmg.sh` or `Scripts/reset_ocr_cache_app_store.sh` (also covers TestFlight). Each quits its App and preserves language settings, permissions and Lookup records. For E2E, use `Scripts/Shared/reset_ocr_cache.sh e2e`. The next recognition may take longer. Script coverage runs with `zsh Tests/Scripts/ResetOCRCacheTests.sh`; it intercepts quit/delete commands and does not clear real App data.
 
 Unit and Component accept one optional test-name regular expression:

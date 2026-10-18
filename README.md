@@ -12,16 +12,16 @@ Boundless Translator translates selected text and screenshots without copying te
 
 ## Prerequisites
 
-- macOS 15 or later
-- Accessibility permission
+- An Apple silicon Mac (M1 or later) with macOS 15 or later; Intel Macs are not supported
+- Accessibility permission for selected text in other apps
 - Screen Recording permission for screenshots
-- Downloaded translation languages
+- Translation resources provided by macOS; follow Apple’s setup prompts when needed
 
 ## Usage
 
 ### First Use
 
-1. Install Boundless Translator from the DMG, then launch the installed App.
+1. Install and launch Boundless Translator. In **Preferences…**, choose **Translate From** and **Translate To**. These saved choices are used by newly opened translation and screenshot windows.
 2. Select text in another app and press the shortcut. When needed, the Accessibility guide opens **System Settings → Privacy & Security → Accessibility**. Enable Boundless Translator; if it is missing, click **+** and choose the installed App.
 3. Press the screenshot shortcut (`Command-Shift-2` by default) to capture a region. When needed, the Screen Recording guide starts Apple's permission flow. Quit and reopen the App if macOS requests it.
 
@@ -29,11 +29,15 @@ Boundless Translator translates selected text and screenshots without copying te
 
 1. Open **Preferences…** from the menu bar.
 2. Set **Translate From**, **Translate To**, and the keyboard shortcuts.
-3. Set **Language** for the app interface.
+3. Set **App Language** for the app interface.
 
-**Language** uses **System Default** by default. It changes the app interface only. It does not change **Translate From** or **Translate To**.
+**App Language** uses **System Default** by default. It changes the app interface only. It does not change **Translate From** or **Translate To**.
 
-The app interface supports the same languages as macOS. macOS provides translation languages and downloads.
+Changing languages in a translation or screenshot window affects only that window. Change them in **Preferences…** to save defaults for new windows.
+
+Interface languages come from the app’s bundled localizations. macOS provides the available translation languages; view them in **Translate From** and **Translate To**. Screenshot source text must also support image recognition on your Mac. Translation and image-recognition support can vary with macOS and available language resources.
+
+To translate Danish, Norwegian Bokmål or Swedish, turn on Apple Intelligence, Apple’s built-in AI feature. Available languages and setup requirements may vary with macOS. See [Support](docs/en/support.md#before-you-start) for setup steps and Apple’s device, language and region requirements.
 
 ### Translate Text
 
@@ -46,13 +50,25 @@ The app interface supports the same languages as macOS. macOS provides translati
 2. Select a screen region.
 3. Hold the pointer over a word or select text to see its translation.
 
-You can also listen to the original text or look it up in the dictionary.
+You can also listen to the original text or look it up in the dictionary. If recognition takes time, a progress indicator appears; wait until recognition finishes before selecting text.
 
 Both shortcuts can be changed in Settings. Existing saved shortcuts are preserved when the default changes.
 
 If prompted, allow Screen Recording for Boundless Translator in **System Settings → Privacy & Security**, then try again. You may need to quit and reopen the app.
 
 Release Control before finishing the selection: macOS uses it to send the capture to the clipboard instead of opening it in the app.
+
+## Preview the website
+
+From the project directory, run:
+
+```sh
+Scripts/preview_website.sh
+```
+
+The script builds `docs/` with Jekyll and opens the local website in your browser. Saved edits rebuild and refresh the preview. Press Control-C in the terminal to stop. No commit or push is needed.
+
+Requires Ruby 3.3 or later; on this Mac, the script uses Homebrew’s `ruby@3.3` when installed. To set up another Mac, run `brew install ruby@3.3` first. The first preview run downloads the gems listed in `docs/Gemfile`; generated pages and installed gems stay in `Build/Website/`.
 
 ## Build and Release
 
@@ -157,7 +173,7 @@ Quit the other edition, then install `Boundless Translator DMG Test.app` into Ap
 
 The App Store edition uses the same Xcode App target, Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. Direct distribution produces the subscription-free `Boundless Translator DMG Test` (`com.lillard.BoundlessTranslator.dmgtest`). TestFlight and App Store keep `Boundless Translator` (`com.lillard.BoundlessTranslator`). Each edition has separate settings and permission records.
 
-Complete the account, signing, product and public privacy-policy setup in the [App Store implementation plan](app-store/implementation-plan.md).
+Follow the [App Store checklist](app-store/implementation-plan.md). For the reasons, links and steps behind each task, see the [submission guide](app-store/submission-guide.md).
 
 Sign in once under **Xcode → Settings → Apple Accounts** with the Apple Account that belongs to the App Store Connect team. Xcode stores that session in the macOS Keychain and uses it to manage signing certificates and provisioning profiles; do not put an Apple Account password in this repository or a shell script.
 

@@ -1,9 +1,13 @@
 title: Boundless Translator
 description: Privacy policy and support
-theme: minima
 url: https://kuo-chun-ting.github.io
 baseurl: /boundless-translator
-header_pages: []
 exclude:
+  - Gemfile
+  - Gemfile.lock
   - reviews/
   - superpowers/
+  - feature-showcase/
+  - ocr-samples/
+  - language-support.md
+  - product-support.md
