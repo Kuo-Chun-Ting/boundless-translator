@@ -1,10 +1,10 @@
 # 預覽影片與功能介紹圖交接
 
-這份是影片與功能介紹圖唯一的需求和交接文件，記錄使用者到 v24-claude 為止的決定。
+這份是影片與功能介紹圖唯一的需求和交接文件，記錄目前採用版本與後續製作規則。
 
 ## 待辦
 
-- 截圖翻譯功能圖副標仍待確認；本次目錄搬遷保留現行文字與所有成品。
+- 截圖翻譯功能圖副標之後再處理，目前保留原文。
 - 不上傳或 push，commit 依使用者指示。
 
 ## 目標與素材
@@ -64,7 +64,7 @@
 ### 字典
 
 - 查詢詞依實際錄影：Preview 查 shortcut，菜單查「香ばしく」。
-- 釋義模糊處理，加上金色微塵和說明文字，跟功能介紹圖 [03-dictionary.png](image/glass-review/03-dictionary.png) 相同。
+- 釋義模糊處理，加上金色微塵和說明文字，跟功能介紹圖 [03-dictionary.png](image/03-dictionary.png) 相同。
 - 字典名稱、詞條、Open in Dictionary 保持清楚。
 - 釋義在任何一格都不能看清楚。彈窗從放大動畫的第一格就要蓋住。放大期間釋義還不在最終位置，所以要蓋住整個彈窗，直到彈窗停定。開始放大和停定的格數要查 `public/media/` 的 30 fps 代理檔確認，不用原始 MOV 的影格編號。
 
@@ -90,7 +90,7 @@
 - 答案顯而易見時直接做，不要問。例如功能名稱要停留比較久。
 - 設計影片時用 `remotion-create`、`remotion-markup`、`remotion-render`、`motion-design`，文案用 `concise-writing`、`humanizer-zh-tw`。
 - 只用 CLI 或無介面渲染，不操控使用者的桌面。
-- 每個新版本另存新檔，不覆蓋舊版。交付可編輯的來源、MP4 和 PNG。影片規格為 1920 × 1080、30 fps、H.264、小於 500 MB。
+- 每個新版本先另存供 review，不覆蓋正式版；使用者明確要求取代後，才更新 `video/preview.mp4` 或 `image/`。交付可編輯的來源、MP4 和 PNG。影片規格為 1920 × 1080、30 fps、H.264、小於 500 MB。
 - 交付前自己驗證，並回報沒驗證到的部分：
   - 逐格確認每個提示在動作前完整顯示，動作在預期的那一格開始，提示不遮擋操作。
   - 量測音效起點，對照畫面格數。
@@ -101,7 +101,8 @@
 
 ## 目前狀態
 
-- 最終版：`video/boundless-translator-glass-v24-claude-shoo.mp4`，29.9 秒。待確認版 `boundless-translator-glass-v25-claude-shoo.mp4` 只修正背景：SVG 往左飄移時，右側會逐漸露出底色白條，改為讓背景圖形畫到 SVG 範圍外。比較版 `boundless-translator-glass-v24-claude-woo.mp4` 只有字卡音效不同。
+- 正式影片：[preview.mp4](video/preview.mp4)，29.9 秒，保留背景白條修正，使用 shoo 字卡音效與底部單行署名。署名為 21 px、距底 34 px、灰藍色、不加粗；授權說明見 `src/video/licenses/README.md`。
+- 正式圖片：[Glass 四張圖](image/index.html)。截圖頁維持 1:1 構圖，副標之後再處理。太空灰與舊版成圖已清除，模板與來源仍保留。
 - 來源在 `src/video/src/scenes/`。要改哪個檔案、共用元件在哪裡，見 [影片來源 README](src/video/README.md)。
 - 截圖翻譯的四張字卡（hover 野菜、カレー、香ばしく，以及選整段的譯文）在翻譯出現那一格播字卡音效。「咻」提前 3 格播，讓卡牌落下的聲音落在字卡上。
 - 待使用者決定：
@@ -110,7 +111,7 @@
 
 ## 目錄與維護
 
-全部集中於 `app-store/`：`src/image/` 是功能圖程式，`src/video/` 是 React 影片專案，`image/`、`video/` 放各版成品，`assets/` 放素材。入口見 [README](README.md)。上架版本由各成品 README 註明，不另設定案目錄。
+全部集中於 `app-store/`：`src/image/` 是功能圖程式，`src/video/` 是 React 影片專案，`image/`、`video/` 放正式成品與尚待 review 的新版，`assets/` 放素材。入口見 [README](README.md)。上架版本由各成品 README 註明，不另設定案目錄。
 
 - 程式只維護一份，歷史交給 Git；成品每版另存；影片拒絕覆蓋既有檔案，功能圖用 `--write --out <新目錄>` 另存，目錄已存在即拒絕寫入。只有已 commit 的檔案才能從 Git 還原。
 - Node 套件、lockfile 與設定留在各子專案。`node_modules/`、影片 `out/`、`public/media/` 不納入 Git；原始素材、可編輯來源、音訊授權與成品保留。
@@ -130,5 +131,5 @@
 
 - 只改製作子專案時，不跑 Swift App 測試、不產生 DMG。
 - 影片跑 `npm run lint`、`npx remotion compositions src/index.ts`；目錄整理前後用同一環境渲染相同格數 PNG 比對，另核對時序與聲音。已有 MP4 不重製，用雜湊確認未變。
-- 功能圖跑 `npm run check`，涵蓋舊版 Glass／Space Gray 及新版兩種主題，共 16 張；比對時不加 `--write`。
+- 功能圖跑 `npm run check`，只比對正式 Glass 四張；太空灰與舊模板用 `--write --out <新目錄>` 驗證另存能力；比對時不加 `--write`。
 - 每次改動畫面或聲音，仍按上方「工作方式與交付」檢查及請另一個 agent review。

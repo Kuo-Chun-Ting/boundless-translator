@@ -1,12 +1,14 @@
 # 功能介紹圖
 
-目前採用新版 [Glass](glass-review/index.html) 與 [Space Gray](space-gray-review/index.html)，各四張：
+正式採用 [Glass 四張圖](index.html)，尺寸皆為 2560 × 1600：
 
-- `01-selection.png`：選字翻譯。
-- `02-screenshot.png`：截圖翻譯，採用 1:1 構圖；副標文案仍待確認。
-- `03-dictionary.png`：字典整合，釋義以金色光塵遮蔽。
-- `04-settings.png`：設定。
+- [01-selection.png](01-selection.png)：選字翻譯。
+- [02-screenshot.png](02-screenshot.png)：截圖翻譯，採用 1:1 構圖。
+- [03-dictionary.png](03-dictionary.png)：字典整合，釋義以金色光塵遮蔽。
+- [04-settings.png](04-settings.png)：設定。
 
-上架前需確認主題及截圖頁副標。`glass/`、`space-gray/` 是保留的舊版參考，不是這次預定上架的組合。
+截圖頁副標之後再處理，目前保留原文。太空灰與舊版成圖已清除，製作模板仍保留。
+
+新版先另存供 review；使用者明確要求取代後，才更新 `image/` 的正式檔案。提交依使用者指示，只有已提交版本能從 Git 找回。
 
 [製作方式](../src/image/README.md) · [需求](../HANDOFF.md)

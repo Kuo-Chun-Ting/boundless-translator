@@ -451,3 +451,13 @@
 - [x] 依 Claude 搬遷 review 補上功能圖另存：`--write --out` 必須指定新目錄，拒絕覆蓋；同步文件、移除版本註解，操作音效目錄改為 `sfx/ui/`。16 張圖比對零差異，12 張暫存另存與防覆蓋測試通過，影片 lint／型別與組合檢查通過，成品及音效內容未變。回覆見 `app-store/app_store_move_responsed_by_codex.md`；未修改 App、未 commit／上傳或產生 DMG。
 
 - [x] 修正影片背景右側逐漸出現的白條：背景 SVG 往左飄 48 px 時露出底色，改為 `overflow="visible"` 並延長頂端白線。輸出 `app-store/video/boundless-translator-glass-v25-claude-shoo.mp4`（29.9 秒），音軌與 v24 相同，左側 1800 px 每格 PSNR ≥ 53.8 dB（僅壓縮差異），右緣已填滿；lint、完整解碼與規格檢查通過。未即時播放，待使用者確認是否取代最終版。
+
+- [x] 將 v25 兩版影片改名為 `preview-v25-shoo.mp4`、`preview-v25-woo.mp4`，同步成品清單、製作說明與交接引用；改名前後 SHA-256 相同，影片內容未變。
+- [x] 另存 preview-v26-shoo.mp4／preview-v26-woo.mp4：片尾補齊 Easy Lemon 的作者、來源、CC BY 4.0 網址與節錄／淡入淡出說明，署名放大為三行並隨片尾一起淡入。同步授權紀錄與成品／來源／交接索引。Lint、TypeScript、完整解碼、兩版輸出規格檢查通過；音軌解碼雜湊與各自 v25 相同，舊檔雜湊不變。本人與另一 agent 已目視檢查片尾，未重新連續播放全片或聆聽；片尾維持 1.5 秒，正常播放不易讀完整三行。未改 App、未產生 DMG、未提交或上傳。
+- [x] 製作三張片尾署名實際排版比較圖：A 左對齊短線、B 雙欄、C 置中，位於 `app-store/video/credit-review/`。沿用 Glass 背景、品牌及完整署名，1920 × 1080，已逐張目視檢查及通過型別／lint；尚未套入影片，待使用者選擇。
+- [x] 製作兩行小字片尾預覽 `app-store/video/credit-review/two-line.png`：保留曲名、作者、來源、授權網址及節錄／淡入淡出說明，取消分隔線和曲名加粗；僅靜態預覽，未修改影片。
+- [x] 製作 Music by 片尾排版 `app-store/video/credit-review/music-by.png`：底部兩行，作者稍加粗、授權資訊縮小。本人及另一 agent 已檢查無裁切、對齊與主次清楚，ESLint／TypeScript 通過；僅靜態預覽，未套入影片，未改 App 或產生 DMG。
+- [x] 另存 `app-store/video/preview-v27-shoo.mp4`、`preview-v27-woo.mp4`：採 Claude 單行片尾署名，21 px、距底 34 px。兩版皆 29.9 秒、1920×1080、30 fps，完整解碼及 lint／型別／組合檢查通過；音訊解碼雜湊與各自 v26 相同，舊檔雜湊不變。shoo 片尾前 852 格與 v26 比對最低 PSNR 57.51 dB，只有重新編碼細微差異；本人與另一 agent 檢查實際 MP4 片尾與最後一格，無裁切或三行殘留。同步成品、來源、授權與交接文件；未重新連續觀看或聆聽全片，未改 App、未產生 DMG、未提交或上傳。
+- [x] 將 App Store 清理方案寫入 `app-store/app_store_cleanup_responsed_by_codex.md`，列明正式成品改名、刪除範圍、重製依賴與驗證方式，交 Claude review；尚未執行清理。
+- [x] 核對 Claude 的 App Store 清理 review 並修正原方案：取消正式母帶保留、改用 Remotion CLI 做暫存驗證，補明正式版取代條件與四張圖的檢查範圍；副標維持待確認，未執行清理或修改渲染程式。
+- [x] 依核准方案整理 App Store 成品：Glass 四張圖直接放 `app-store/image/`，shoo 影片改為 `app-store/video/preview.mp4`；刪除舊成品、比較稿、八個母帶與已結束的搬遷討論，素材、模板、授權與製作程式保留。圖片預設入口／檢查對準正式四張，太空灰與舊版可另存；同步索引與交接。五個正式檔案雜湊不變、16 張重製逐 byte 相同；影片前後完整重製與編碼／解碼成功，音訊相同、896／897 格相同，另一格僅微小色值差異。防覆蓋、影片 lint／型別／組合清單及現行連結檢查通過，另一 agent 複查無必改。副標未改，未修改 App、未產生 DMG、未 commit 或上傳。

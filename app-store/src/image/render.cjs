@@ -6,12 +6,16 @@ const {PNG} = require('pngjs');
 
 const root = path.resolve(__dirname, '../..');
 const write = process.argv.includes('--write');
-const recording = process.argv.includes('--recording');
+const legacy = process.argv.includes('--legacy');
 const dictionaryDust = process.argv.includes('--dictionary-dust');
 const spaceGray = process.argv.includes('--space-gray');
 
 /** @returns {string | undefined} */
 function createOutputDirectory() {
+  if (legacy && (spaceGray || dictionaryDust || process.argv.includes('--recording'))) {
+    throw Error('--legacy renders both old themes; do not combine it with current-layout options.');
+  }
+  if ((legacy || spaceGray) && !write) throw Error('Alternate layouts require --write --out <new-directory>.');
   const index = process.argv.indexOf('--out');
   const value = index === -1 ? undefined : process.argv[index + 1];
   if (!write && index !== -1) throw Error('--out requires --write.');
@@ -28,7 +32,7 @@ function createOutputDirectory() {
 function outputPath(output, directory) {
   if (!directory) return path.join(root, output);
   // A full legacy set contains two themes with matching filenames.
-  const relative = recording || dictionaryDust ? path.basename(output) : path.relative('image', output);
+  const relative = legacy ? path.relative('image', output) : path.basename(output);
   return path.join(directory, relative);
 }
 
@@ -36,17 +40,17 @@ function outputPath(output, directory) {
 function listPages() {
   if (dictionaryDust) return [{
     source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust',
-    output: 'image/glass-review/03-dictionary.png',
+    output: 'image/03-dictionary.png',
   }];
-  if (recording) {
+  if (!legacy) {
     return [
       ...[['selection', '01-selection'], ['screenshot', '02-screenshot']].map(([selector, name]) => ({
         source: 'src/image/glass/recording.html', selector: `#${selector}`,
-        output: `image/glass-review/${name}.png`,
+        output: `image/${name}.png`,
         kind: selector === 'screenshot' ? 'recording-menu' : undefined,
       })),
-      {source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust', output: 'image/glass-review/03-dictionary.png'},
-      {source: 'src/image/glass/04-settings.html', output: 'image/glass-review/04-settings.png'},
+      {source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust', output: 'image/03-dictionary.png'},
+      {source: 'src/image/glass/04-settings.html', output: 'image/04-settings.png'},
     ];
   }
   const pages = [];
@@ -182,7 +186,6 @@ async function main() {
     for (const originalJob of listPages()) {
       const job = spaceGray ? {...originalJob,
         source: originalJob.source.replace('glass/04-settings.html', 'space-gray/04-settings.html'),
-        output: originalJob.output.replace('image/glass-review/', 'image/space-gray-review/'),
       } : originalJob;
       let output = await renderLayout(page, job.source, job.selector, job.kind === 'recording-menu');
       if (job.kind) output = await renderBeams(page, output, job.kind);

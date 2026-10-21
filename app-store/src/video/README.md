@@ -1,6 +1,8 @@
 # 預覽影片製作
 
-已確認成品是 [v24-claude-shoo](../../video/boundless-translator-glass-v24-claude-shoo.mp4)，29.9 秒。目前來源輸出 [v25-claude-shoo](../../video/boundless-translator-glass-v25-claude-shoo.mp4)：只修正背景飄移時右側露出的白條，待確認。`PreviewWoo` 僅字卡音效不同。來源維護一份，成品每版另存。
+正式成品是 [preview.mp4](../../video/preview.mp4)，29.9 秒，使用 shoo 字卡音效與底部單行音樂署名。署名含曲名、作者、來源、授權網址與節錄／淡入淡出說明。`PreviewWoo` 保留另一款字卡音效，仍可另存重製。
+
+新版先另存；使用者明確要求取代後才更新正式檔。來源維護一份，提交依使用者指示。
 
 ## 執行
 
@@ -15,8 +17,8 @@ npm run render -- my-preview.mp4
 ```
 
 - `prepare-media.sh` 將 `../../assets/recording/` 轉成 `public/media/` 的 30 fps 代理檔；檔案已更新則跳過。
-- `npm run render -- my-preview.mp4 woo` 使用另一款音效；加 `--encode-only` 只重新編碼同名母帶。
-- 成品寫到 `../../video/`，檔案已存在即拒絕覆蓋。母帶放 `out/<成品名稱>-master.mov`。
+- `npm run render -- my-preview.mp4 woo` 使用另一款音效；加 `--encode-only` 只重新編碼同名母帶，限母帶存在且輸出 MP4 尚不存在時使用。
+- 成品寫到 `../../video/`，檔案已存在即拒絕覆蓋。母帶放 `out/<成品名稱>-master.mov`，屬於可重製暫存，不納入 Git；清除後須先完整渲染。
 - `prepare-sfx.sh`、`prepare-card-sfx.sh` 從 `sfx-source/` 重製音效。操作音效在 `public/sfx/ui/`，字卡音效在 `public/sfx/kenney/`，配樂在 `public/audio/`。
 - 單格檢查：`npx remotion still PreviewShoo /tmp/preview.png --frame=140`。
 

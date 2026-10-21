@@ -44,15 +44,22 @@ export const BrandCard: React.FC<{
             position: "absolute",
             left: 0,
             right: 0,
-            bottom: 28,
+            bottom: 34,
             textAlign: "center",
             fontFamily: font,
-            fontSize: 18,
+            fontSize: 21,
+            fontWeight: 400,
+            lineHeight: 1.2,
             color: colors.sub,
-            opacity: interpolate(frame, [10, 22], [0, 0.85], clamp),
+            opacity: 0.85,
+            whiteSpace: "nowrap",
           }}
         >
-          Music: “Easy Lemon” by Kevin MacLeod (incompetech.com), licensed under CC BY 4.0
+          Music: “Easy Lemon” by Kevin MacLeod (incompetech.com)
+          <span style={{ opacity: 0.45, margin: "0 0.55em" }}>·</span>
+          Excerpt with fades
+          <span style={{ opacity: 0.45, margin: "0 0.55em" }}>·</span>
+          CC BY 4.0 creativecommons.org/licenses/by/4.0
         </div>
       ) : null}
     </SceneFade>

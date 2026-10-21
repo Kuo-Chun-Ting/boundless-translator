@@ -1,6 +1,6 @@
 # 新錄影擷取畫面
 
-[六張來源截圖](index.html)用於[新版 Glass 功能介紹圖](../../../image/glass-review/index.html)。
+[六張來源截圖](index.html)用於[Glass 功能介紹圖](../../../image/index.html)。
 
 來源在 `../../recording/`，原片不修改。五張錄影 PNG 保留錄影原尺寸 3024 × 1964；`menu-dictionary.png` 是使用者補拍的 1612 × 1408 截圖。
 

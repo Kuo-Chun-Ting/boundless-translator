@@ -11,4 +11,4 @@
 | 查製作需求與交接 | [HANDOFF.md](HANDOFF.md) |
 | 準備送審 | [submission-guide.md](submission-guide.md) |
 
-所有版本成品留在 `image/`、`video/`，由使用者決定清理；程式只維護一份，由 Git 記錄歷史。原始素材、成品與程式都納入 Git，套件與可重製的影片暫存檔排除。提交依使用者指示。
+正式成品是 `image/` 四張 PNG 與 `video/preview.mp4`。新版先另存供 review，使用者明確要求後才取代正式檔。程式只維護一份，由 Git 記錄歷史。原始素材、成品與程式都納入 Git，套件與可重製的影片暫存檔排除。提交依使用者指示。
