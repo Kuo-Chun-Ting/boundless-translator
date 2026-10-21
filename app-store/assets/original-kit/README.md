@@ -2,7 +2,7 @@
 
 | 素材 | 入口 | 狀態 |
 | --- | --- | --- |
-| Preview PDF | [PDF](boundless-selected-text-demo.pdf) · [實拍](../screenshots/recording/selected.png) | 新版選字翻譯使用 |
+| Preview PDF | [PDF](boundless-selected-text-demo.pdf) · [實拍](../screenshots/selected.png) | 新版選字翻譯使用 |
 | あかり食堂菜單 | [網頁](screenshot-menu.html) · [預覽](screenshot-menu-preview.png) · [菜單圖片](menu.png) | Claude 原創 SVG 插畫菜單；英文提示放在影片金色字卡，網頁不加標題 |
 
 素材目錄：`/Users/lillard/side-project/boundless-translator/app-store/assets/original-kit/`。

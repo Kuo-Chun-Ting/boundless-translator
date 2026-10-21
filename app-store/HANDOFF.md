@@ -80,7 +80,7 @@
 - 截圖翻譯那張用菜單網頁，不用「Can't select」純文字圖。新版不放 VS Code 和 General。
 - 選字圖保留原文反白和譯文。
 - 截圖圖同時顯示背景原圖、較小的截圖視窗和翻譯字卡，讓人能對照內容。
-- 字典圖保留原始外框和標題，釋義用金色光塵模糊，提示為「See definitions in your Mac's built-in dictionary.」。選字情境用錄影截圖；菜單情境用使用者補拍的 [menu-dictionary.png](assets/screenshots/recording/menu-dictionary.png)，查詢「カレー」。
+- 字典圖保留原始外框和標題，釋義用金色光塵模糊，提示為「See definitions in your Mac's built-in dictionary.」。選字情境用錄影截圖；菜單情境用使用者補拍的 [menu-dictionary.png](assets/screenshots/menu-dictionary.png)，查詢「カレー」。
 - 沿用 Glass 風格，構圖和動畫由製作者決定。
 - 截圖翻譯那張的副標要改成「選不到字就用截圖翻譯」的意思，文案還沒定。Claude 提議的版本：Can't select the text? Use a shortcut to capture and translate it.
 

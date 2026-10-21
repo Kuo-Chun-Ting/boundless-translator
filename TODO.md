@@ -464,3 +464,9 @@
 - [x] 再次檢查 App Store 遺留草稿與比較素材，更新 `app-store/app_store_cleanup_responsed_by_codex.md` 交 Claude review；區分可清除項目、需同步調整的舊製作入口與未核准縮減的能力，列明保留範圍及驗證要求。僅更新文件，未執行第二輪清理。
 
 - [x] 依使用者與 Claude 第二輪結論清理 App Store：移除舊構圖、太空灰、woo 的模板／入口／專用素材及未採用字典草稿、試聽音效；現行索引與交接同步，只維護 Glass 四張圖與 shoo 影片。字典模板只保留 dust，產圖時保留原取圖座標以維持像素一致。四張另存圖逐 byte 相同，五個正式成品雜湊不變；影片完整重製音軌相同，897 格中 896 格相同，另一格 PSNR 97.87 dB。Lint／型別、單一 composition、音效重製、另存與防覆蓋、166 個現行本機連結檢查通過，另一 agent 複查無必改。結論已納入 HANDOFF，刪除兩份已結束的清理討論；副標未改，未修改 App、未產生 DMG、未 commit 或上傳。
+
+- [x] 將截圖目錄扁平化計畫寫入 `app-store/screenshot_directory_responsed_by_codex.md` 交 Claude review，列明六張 PNG 與說明／預覽頁搬移、八份引用更新及重製驗證；僅新增計畫，尚未搬檔。
+
+- [x] 核對 Claude 的截圖目錄計畫 review：無必改，保留預覽頁補齊 Settings，接受完成後刪除討論檔並將結果記入 TODO；已更新原回應文件，尚未搬檔。
+
+- [x] 將 `app-store/assets/screenshots/recording/` 六張 PNG、README 與預覽頁搬到 `assets/screenshots/`，移除空目錄；更新八份引用與搬移後相對連結，README／預覽補上 Settings。12 個來源與成品檔案雜湊不變，四張功能圖重製零像素差異，169 個現行本機連結有效且無舊路徑殘留；另一 agent 複查無問題。已刪除完成的計畫與 review 文件。未改影片程式、未重製影片、未跑 App 測試或產生 DMG，未 commit。

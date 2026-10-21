@@ -25,7 +25,7 @@
 
 字典頁沿用左右兩個情境，原生介面使用相同縮放比例、主視窗頂端對齊；保留真實卡片位置與外框，釋義依交接文件遮蔽。完成後逐張核對文字、邊緣與效果，避免框線或光束遮住結果。
 
-執行 `node app-store/src/image/render.cjs` 可逐像素比對現有成圖。另存新版的指令見下方。來源時間點見[擷取紀錄](../../assets/screenshots/recording/README.md)。
+執行 `node app-store/src/image/render.cjs` 可逐像素比對現有成圖。另存新版的指令見下方。來源時間點見[擷取紀錄](../../assets/screenshots/README.md)。
 
 ## 目前採用版本
 
