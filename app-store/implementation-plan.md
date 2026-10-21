@@ -4,6 +4,8 @@
 
 2026-10-18 進度核對：Apple Developer 的 Agreements 已記錄新版協議於當日接受；App Store Connect Business 仍顯示新版協議提醒，是否已解除提交阻擋尚待確認。Business 的 Digital Services Act 已顯示 In Review，更新日期為當日，涵蓋 27 個歐盟地區；尚未確認驗證通過。其餘項目維持上次查核紀錄。
 
+2026-10-18 網站與商品頁查核：第 05 項網站發布、第 06 項三語商品文字已完成。商品頁目前尚未上傳截圖、未選 Build；審核備註仍有舊快捷鍵說明。這次未重新確認交易者身分及 App Information 狀態。
+
 照順序處理即可。原因、入口與步驟見[上架操作指南](submission-guide.md)。
 
 ## 接下來要做
@@ -12,13 +14,13 @@
 - [ ] 02 完成交易者身分申報；若以交易者身分在歐盟上架，再完成資料驗證。2026-10-18 已提交，狀態 In Review，等待 Apple 驗證結果。[步驟](submission-guide.md#step-02)
 - [ ] 03 設定主要分類、年齡分級與內容權利聲明。[步驟](submission-guide.md#step-03)
 - [x] 04 設定 App 下載價格與上架地區。2026-10-18 已設定 United States 基準、免費下載及全部 175 個國家／地區；Availability 顯示 Available on App Release。[步驟](submission-guide.md#step-04)
-- [ ] 05 發布已更新的支援網站。Pages 已確認使用 `main` 的 `/docs`；本機更新三語支援／隱私內容與共用版型，尚待推送、部署及公開頁面驗證。[步驟](submission-guide.md#step-05)
-- [ ] 06 更新英文商品描述與關鍵字。[步驟](submission-guide.md#step-06)
-- [ ] 07 選一套主題，上傳六張功能介紹圖。[步驟](submission-guide.md#step-07)
+- [x] 05 發布已更新的支援網站。2026-10-18 已確認 `a67b227` 的 Pages 部署成功；正式首頁、三語 Support／Privacy、CSS 與站內連結／錨點均通過檢查，並實際確認三語畫面與語言切換。[步驟](submission-guide.md#step-05)
+- [x] 06 更新英文、繁中、簡中商品描述。2026-10-18 已依核准文案儲存三語 Description，對應支援網址已確認；英文關鍵字移除舊 Live Text，簡中填入對應關鍵字。重新載入後逐語讀回與核准稿一致，尚未送審。[步驟](submission-guide.md#step-06)
+- [ ] 07 完成並確認新版四張功能介紹圖後上傳。[步驟](submission-guide.md#step-07)
 - [ ] 08 補上訂閱群組顯示名稱與訂閱審核截圖。[步驟](submission-guide.md#step-08)
 - [ ] 09 完成最終 Verify 與 TestFlight 功能、訂閱驗收。[步驟](submission-guide.md#step-09)
 - [ ] 10 在版本 1.0 選擇驗收過的 Build。[步驟](submission-guide.md#step-10)
-- [ ] 11 更新給 Apple 的審核操作說明。[步驟](submission-guide.md#step-11)
+- [x] 11 更新給 Apple 的審核操作說明。2026-10-18 已填入使用者核准的英文 Notes 並儲存；重新載入後核對全文一致。[步驟](submission-guide.md#step-11)
 - [ ] 12 將 App、年訂閱和訂閱群組一起送審。[步驟](submission-guide.md#step-12)
 - [ ] 13 Apple 通過後，手動發布。[步驟](submission-guide.md#step-13)
 

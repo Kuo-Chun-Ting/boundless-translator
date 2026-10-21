@@ -1,0 +1,10 @@
+{
+  "name": "boundless-translator-feature-images",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node render.cjs && node render.cjs --recording && node render.cjs --recording --space-gray",
+    "render": "node render.cjs"
+  },
+  "dependencies": {"playwright": "1.62.1", "pngjs": "7.0.0"}
+}

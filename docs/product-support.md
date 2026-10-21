@@ -56,5 +56,5 @@ TRex 同時更換介面並加入其他處理，不能據此認定只換新版就
 - 翻譯：Apple [LanguageAvailability](https://developer.apple.com/documentation/translation/languageavailability)提供當下支援的語言，也能查詢指定來源與目標的支援、安裝狀態。
 - OCR：Apple [VNRecognizeTextRequest](https://developer.apple.com/documentation/vision/vnrecognizetextrequest)提供辨識語言清單。App 使用 accurate 模式、自動偵測語言與語言校正。
 - 實測紀錄見 [語言支援資料](language-support.md)，不作為所有 Mac 的固定支援清單。
-- 本文已同步至專案 README 與三語 Support 來源，移除「介面語言與 macOS 相同」及固定的印地文截圖辨識限制，補上首次語言設定、視窗內語言僅對目前視窗生效與辨識等待說明。本次尚未發布網站；公開頁面仍需部署後確認。
+- 本文已同步至專案 README 與三語 Support 來源，移除「介面語言與 macOS 相同」及固定的印地文截圖辨識限制，補上首次語言設定、視窗內語言僅對目前視窗生效與辨識等待說明。2026-10-18 已確認 `a67b227` 部署成功，公開三語頁面與本機確認內容一致。
 - 2026-10-17 於 App Store Connect 核對 Build 49：最低 macOS 15.0、僅 arm64，內含 48 個語系。App 內操作說明的「介面語言與 macOS 相同」仍屬舊文案，本次未修改 App 資源。

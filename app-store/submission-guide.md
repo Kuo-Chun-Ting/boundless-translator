@@ -87,7 +87,7 @@
 4. 在 Actions 確認網站部署成功，再開啟公開網站，逐一點英文、繁中、簡中的 Support 和 Privacy Policy。
 5. 確認新版說明已出現，頁首只顯示同語言的支援與隱私政策；切換語言後仍停在相同類型的頁面。OCR 測試文章和內部排版文件不應出現在公開網站。
 
-**完成標準：** 公開網頁已是確認後的內容，三語連結可開啟。網站已上線；本次修改須提交、推送到 `main`，並確認部署與公開頁面後，才能勾選完成。[GitHub Pages 發布說明](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+**完成標準：** 公開網頁已是確認後的內容，三語連結可開啟。2026-10-18 已確認 `a67b227` [部署成功](https://github.com/Kuo-Chun-Ting/boundless-translator/actions/runs/39138307541)，新版首頁、三語支援／隱私頁與導覽均已驗證。[GitHub Pages 發布說明](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
 <a id="step-06"></a>
 ## 06 更新商品頁文字
@@ -107,26 +107,11 @@
 **完成標準：** 商品文字符合實際流程；決定要提供的語言頁都有內容。Subtitle、Promotional Text、Marketing URL 和 App Preview 目前可先不補。[商品頁欄位說明](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) · [商品頁語言步驟](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information)
 
 <a id="step-07"></a>
-## 07 上傳六張功能介紹圖
+## 07 準備並上傳功能介紹圖
 
-**為什麼：** 圖已存在專案裡，但商店頁目前沒有圖片。把圖做完和把圖上傳到商品頁，是兩件事。
+舊版 VS Code、General 與字典成圖已清除，不能再按舊六張清單上傳。新版依 [製作需求](../app-store/HANDOFF.md)準備四張：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
 
-**去哪裡：** [版本 1.0](https://appstoreconnect.apple.com/apps/6810727652/distribution) → App Previews and Screenshots → Mac。
-
-1. 從 [Glass](../docs/feature-showcase/output/glass/README.md) 或 [Space Gray](../docs/feature-showcase/output/space-gray/README.md) 選一套主題。
-2. 使用上傳區的 Upload，選擇該目錄的六張 PNG。
-3. 排成下列順序；等待處理完成，確認沒有錯誤再儲存。
-
-| 順序 | 檔名／內容 |
-| --- | --- |
-| 1 | `01-selection-1-vscode.png` |
-| 2 | `01-selection-2-preview.png` |
-| 3 | `02-screenshot-1-cant-select.png` |
-| 4 | `02-screenshot-2-general.png` |
-| 5 | `03-dictionary.png` |
-| 6 | `04-settings.png` |
-
-**完成標準：** 商品頁顯示正確的六張圖，沒有漏圖或順序錯誤。兩套是樣式選擇，不是要一起放十二張。現有圖片已是 2560 × 1600 且無透明度通道，不需重截。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
+目前素材見 [review 頁](../app-store/assets/index.html)。新版成圖見 [功能圖清單](image/README.md)；確認上架版本後，再到版本頁的 App Previews and Screenshots → Mac 上傳並依上述順序排列。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
 
 <a id="step-08"></a>
 ## 08 補齊訂閱審核資料

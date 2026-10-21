@@ -7,7 +7,6 @@ exclude:
   - Gemfile.lock
   - reviews/
   - superpowers/
-  - feature-showcase/
   - ocr-samples/
   - language-support.md
   - product-support.md

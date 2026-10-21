@@ -1,5 +1,19 @@
 # TODO
 
+- [x] 2026-10-21 提交前核對本次變更：僅 App Store 素材、圖片／影片製作工具、文件與網站排除設定，未改 App 正式程式碼或建置設定。影片 ESLint／TypeScript、16 張功能圖重製比對通過；暫存範圍已核對，diff 僅有授權原檔空白與兩份製作來源檔尾空行提示，保留原樣。v25 白條修正版仍待使用者確認。未跑 App 測試、未 push、未產生 DMG。
+
+- [x] 整理影片與功能素材：保留 Preview PDF、菜單、字典參考稿，Codex v9／Claude v8 影片及必要來源、原始錄影與授權紀錄。清除 158 個過時檔案，約 615 MiB；兩個 Remotion 專案的 ESLint／TypeScript 檢查通過。
+- [x] 將使用者確認的 Preview／菜單共用流程合併至 `app-store/video-brief-claude.md`。
+- [ ] 菜單網頁加入英文標題，取得 Preview 與菜單的新操作錄影，再決定字典呈現；完成單支 30 秒影片與四張功能介紹圖。目前未修改既有成品，未上傳或產生 DMG。
+
+- [x] 2026-10-18 依使用者核准精簡文案更新並 Save 英／繁中／簡中 App Store Description，標題統一為支援範圍及對應翻譯，保留本機語言 Support／Privacy 與標準 EULA 連結；新增簡中商品頁與對應關鍵字、支援網址，英文關鍵字移除舊 Live Text。英文與簡中經獨立 agent 核對；重新載入後三語逐一讀回與核准稿完全一致，Save 均為無待儲存狀態，回到繁中並截圖。上架第 06 項完成；未 Add for Review 或送審，未改 App、未跑 App 測試、未產生 DMG。
+
+- [x] 2026-10-18 依使用者要求以 concise-writing、humanizer-zh-tw、no-ai-slop 修訂繁中商品頁，獨立 agent 對照實作與官方資料 review 後，補齊標準 EULA／隱私連結，區分截圖與完整翻譯視窗的朗讀範圍，集中系統／辨識／語言限制及訂閱條件。修訂稿經第二輪 review 無剩餘實質問題，已填入繁中 Description 並讀回確認，Keywords 與 Support URL 保留。尚未按 Save 或送審；未改 App、未跑 App 測試、未產生 DMG。
+
+- [x] 2026-10-18 在 App Store Connect 版本 1.0 新增 Chinese (Traditional) 商品頁草稿，填入繁中 Description、30 字元 Keywords 及繁中 Support URL，已讀回確認並留在畫面供 review。尚未按 Save，未改英文資料、未送審；第 06 項仍待使用者確認及儲存。未修改 App、未跑 App 測試、未產生 DMG。
+
+- [x] 2026-10-18 確認遠端 main 與 GitHub Pages 部署為 `a67b227`（run 39138307541，success）；正式首頁、三語 Support／Privacy 與 CSS 共八個網址 HTTP 200，逐頁內容／結構／導覽比對已提交版本，站內連結與錨點通過。實際檢視三語 Support／Privacy 桌面畫面，語言切換保持頁面種類；繁中標題 48／36px、無水平溢出。更新上架第 05 項完成；下一步按指南為第 06 項商品頁文字。App Store Connect 分頁目前為登入頁，未重新查核後台狀態。未改 App、未跑 App 測試、未產生 DMG。
+
 - [x] 2026-10-18 提交前確認本次 21 檔僅涉及網站、預覽工具、測試與上架文件，未修改 App 原始碼或建置設定。網站七頁建置、本機連結／錨點、預覽腳本四項測試及 diff 檢查通過。未跑 App 測試、未推送部署、未產生 DMG。
 
 - [x] 2026-10-18 依使用者指定，三語圖片辨識等待說明改為 macOS 可能需要編譯辨識模型，且數個模型可能在不同次使用時才需要編譯；移除精細模式原因與不相符引用，保留等待提示操作。Jekyll 建置、三語內容／結構、無編號與 diff 檢查通過，已檢視繁中畫面。本次未追蹤實際編譯事件、未跑 App 測試、未部署、未產生 DMG。
@@ -56,7 +70,8 @@
 
 - [x] 唯讀核對 App Store Connect 的版本 1.0、Build 49、App Information、Privacy、價格與地區、訂閱及 Business；將實際缺漏、已完成項目及待驗收內容整理至 `app-store/implementation-plan.md`。未填寫、儲存、上傳、接受合約或送審。
 - [x] 同步 README、英文／繁中／簡中 Support 與系統語言支援說明：補上首次語言設定、視窗內語言僅對目前視窗生效、M 系列晶片需求與辨識等待；移除固定印地文限制及「介面語言與 macOS 相同」的外部宣稱。網站導覽限定三語 Support，排除內部素材與 OCR 測資；尚未發布網站。
-- [ ] 確認本次對外文件後發布網站，檢查三語 Support／Privacy 及導覽；依 `app-store/implementation-plan.md` 完成新版開發者協議、商品頁、訂閱審核資料與送審設定。
+- [x] 發布本次對外文件並檢查三語 Support／Privacy 及導覽；2026-10-18 已確認 `a67b227` 正式部署成功。
+- [ ] 依 `app-store/implementation-plan.md` 完成其餘商品頁、訂閱審核資料與送審設定。
 
 - [x] 新增 `Scripts/reset_all_dmg.sh` 與 `Scripts/reset_all_app_store.sh`，依核准順序串接對應版本的 App data、權限、Lookup 重設；沿用既有腳本，不加額外錯誤處理。入口順序測試已先失敗再通過，ResetEntryPoints／ResetAppData／ResetPermissions／ResetLookupDictionary 四組 Shell 測試及 zsh 語法檢查通過，獨立 review 無待修正問題。測試使用替身，未重設實際資料或權限；未改 App 程式碼、未產生 DMG、未 commit。
 
@@ -147,18 +162,18 @@
   - Unit 237 項、Component 190 項（各兩種模式）、2 個 Lookup GUI 案例與 Xcode 專案檢查通過。兩個 GUI 案例各自重設字典後驗證首次提示，並確認關閉字典後恢復操作；實測截圖存於 `Build/LookupReview/`。其他 Apple 提示未做實際操作驗證；未重建 Build App、未產生 DMG。
 - [x] 修正截圖翻譯中，hover 單字或選取文字後，滑鼠向上移至字卡時觸發下層文字事件，導致字卡消失的問題。 改由字卡面板接收自身事件，移除截圖多餘的滑鼠事件註冊與跨視窗判斷。
 
-- [x] 功能介紹素材集中至 `docs/feature-showcase/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
+- [x] 功能介紹素材集中至 `app-store/`：還原暫存內容，移入示範 PDF、來源截圖與背景參考圖，更新目錄說明及引用。
 - [x] 使用者確認 Settings、選字翻譯與字典功能介紹排版，最新成圖已整合至正式 output。
 - [x] 審查 Glass／Space Gray 共十二張正式成圖的文案、畫面與上傳格式：皆為 2560 × 1600；截圖翻譯圖的 Alpha 通道及「Hover a word」用語問題已修正。
 - [x] 產出六張 `-Update` 比較圖及對應 HTML：兩種主題的 Settings 從原始截圖等比例縮小 10%，四張截圖翻譯改為「Hover over a word」；Update PNG 均無 Alpha 通道、重製零像素差異。十二張原圖已恢復並逐位元組確認與修改前相同。
 - [x] 將使用者確認的六張 Update 圖及對應 HTML 升為正式版，移除比較檔與專用入口；簡化兩種主題的成圖檔名，選字與截圖翻譯均保留編號及情境名稱：截圖使用 `02-screenshot-1-cant-select.png`、`02-screenshot-2-general.png`，同步產圖程式、文件與預覽引用。十二張正式圖重製零像素差異、無 Alpha 通道，檔案引用檢查通過。
-- [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 `dictionary_selected_text.jpg` 與 `dictionary_screenshot.jpg`；保留書本 icon、完整查詢文字及字典視窗，選字翻譯視窗左緣對齊小標題。可編輯來源在 `docs/feature-showcase/layouts/`。
+- [x] 字典功能介紹採石墨灰情境標籤與柔和底色，使用 `dictionary_selected_text.jpg` 與 `dictionary_screenshot.jpg`；保留書本 icon、完整查詢文字及字典視窗，選字翻譯視窗左緣對齊小標題。可編輯來源在 `app-store/src/image/`。
 - [x] 截圖功能介紹採暖金框、圖外 Take a screenshot 灰色小標題、中央精靈與石墨灰情境標籤；Can’t select it 第一頁、General 第二頁。已確定使用完整光束。
 - [x] 截圖功能介紹確定使用完整光束；刪除 Glass／太空灰共四張短光束成圖與專用產圖邏輯，同步預覽索引及文件。
 - [x] 選字翻譯採 VS Code 第一頁、Preview 第二頁的同尺寸自然構圖，不放精靈，暖黃短斜直箭頭由左上指向右下。保留 Mac 選單列、App 工具列及完整翻譯視窗。
-- [x] 準備 VS Code 截圖用 README：`docs/feature-showcase/assets/demos/vscode/README.md`，沿用 PDF 的兩句文案。
+- [x] 準備 VS Code 截圖用 README：`app-store/assets/demos/vscode/README.md`，沿用 PDF 的兩句文案。
 - [x] 清理功能介紹歷次試稿與根目錄重複截圖；只保留最新成圖、必要原始素材、可編輯排版與共用產圖腳本。目前直接以石墨灰 HTML 排版產圖。
-- [x] 更新選字翻譯示範 PDF：`docs/feature-showcase/assets/demos/boundless-selected-text-demo.pdf`，採用確認的兩句文案、12 pt 同字級，維持 960 × 540 pt 頁面、縮短上方留白及句距；已替換舊版並檢查排版與文字。
+- [x] 更新選字翻譯示範 PDF：`app-store/assets/demos/boundless-selected-text-demo.pdf`，採用確認的兩句文案、12 pt 同字級，維持 960 × 540 pt 頁面、縮短上方留白及句距；已替換舊版並檢查排版與文字。
 
 - [x] 完成截圖翻譯收尾：更新 GUI 舊文案、三語 Support、README、示範文件與規格；同步 StoreKit 驗證例外。移除 hint 多餘的快捷鍵參數與顯示條件，保留截圖選字後按快捷鍵翻譯；Help 字典圖示改用共用來源。
   - 文件經另一個 agent 審閱。Unit 237 項、Component 188 項（各兩種模式）與 Hint GUI 4 項皆通過。未重建 Build App、未產生 DMG、未發布 Support。
@@ -304,10 +319,8 @@
 - [x] 功能介紹產圖改為直接讀取 HTML、原始截圖及共用光束元件，移除舊底圖、重複成圖與階段性產圖程式；14 張重製逐像素一致，16 張交付成圖原檔均未更改。
 - [x] Settings 已換入確認後的新截圖與正式排版，HTML 重製結果與正式 PNG 逐像素一致。
 
-- [x] 功能介紹目錄統一為 `docs/feature-showcase/`，分成 `assets/`、`layouts/`、`output/`；成圖放在 `output/glass/` 與 `output/space-gray/`，移除 updated 命名，同步排版與產圖路徑。
+- [x] 功能介紹目錄統一為 `app-store/`，分成 `assets/`、`layouts/`、`output/`；成圖放在 `output/glass/` 與 `output/space-gray/`，移除 updated 命名，同步排版與產圖路徑。
 - [x] 選定 A「窄光束」，套用 VS Code／Preview 的 Glass 與太空灰共四張選字翻譯成圖；逐像素比對確認僅箭頭附近改變，其餘十二張成圖未變。
-
-
 
 - [x] 將八張截圖翻譯最新版（完整／尾端光束、Glass／太空灰）及四份 HTML 整合回正式位置，同步共用光束座標；移除 screenshot-subtitles 暫存目錄與專用產圖程式；正式來源重製八張均逐像素一致。
 
@@ -316,3 +329,125 @@
 - [x] 在 Can't select 原始圖片素材下方加入「We’ll make the text selectable.」，供重新截圖使用；註明換入新截圖時需移除排版中的重複補述。
 
 - [x] 將使用者確認的八張功能介紹圖升為正式版；六張新截圖取代 assets 舊素材，最新排版整合回八份正式 HTML 與共用光束元件。保留兩種主題各六張成圖，刪除比較頁、Update 專用程式、重複素材與根目錄六張截圖。十二張正式圖重製逐像素一致。
+- [x] 2026-10-18 三語 App Store Description 開頭同步改為「在任何 App 或網頁」及對應翻譯，移除閱讀情境；已儲存並重新載入逐語核對，其餘描述不變。
+- [x] 2026-10-18 將使用者核准的英文審核備註填入 App Store Connect Notes 並儲存；重新載入後全文一致、Save 無待儲存變更，未送審。
+
+- [x] 製作 LINE 聊天示意圖第一版，後續已由多語完成版取代並移除。
+
+- [x] 移除三張通訊軟體成圖檔名的版本號，更新 README 連結，確認改名前後圖片內容一致。
+
+- [x] 開場截圖翻譯收斂為網頁文字圖片，再接現有 System Settings General 素材，已同步 Claude 需求文件。
+- [x] 已補充並確認 `japan-web-screenshot.mov` 作為日本網站圖片翻譯素材，取代先前待確認的 JPG 菜單候選。
+
+- [x] 檢查新增的 `japan-web-selected.mov`（8.7 秒）與 `japan-web-screenshot.mov`（15.2 秒）：逐秒抽幀並放大核對結果，確認有網頁選字翻譯、圖片整段翻譯、單字懸停及字典畫面。適合接成同網站示範；需裁切放大操作區，選字段的「に」字典示範建議省略，改保留截圖段「カレー」的字典。
+
+- [x] 檢查 `nba-selected.mov`（7.2 秒）與 `nba-screenshot.mov`（14.5 秒），逐秒抽幀及放大核對關鍵畫面。選字段含完整譯文與 season 字典，適合運動情境；截圖段可示範懸停與整句翻譯，但截取網頁側欄，無法從畫面凸顯必須截圖的原因，作為圖片文字案例仍以日本網站素材較清楚。
+
+- [x] 完成 LINE 日翻繁中、WhatsApp 英翻西班牙文、WeChat 韓翻簡中三張聊天示意圖，加入東京鐵塔、大笨鐘與景福宮情境。文字由 AppKit 使用正式程式的系統字型設定排版；已逐張檢查斷行、選字反白、譯文與視窗遮擋，24 個文字區域均無高度溢出。依使用者要求僅保留三張完成版，移除舊版、無文字底圖與依賴底圖的重製檔案，更新素材索引；未修改 App 程式、未產生 DMG。
+
+- [x] 開場兩張截圖翻譯改用使用者提供的 General 與最後一張日本網站定稿（Japanese → Chinese (Taiwan)，字卡「咖哩」）。原檔存入 `assets/screenshots/video-opening/`，同步素材包、索引、來源清單、重製程式及需求文件；移除先前合成流程。確認素材包與提供原圖逐位元相同，僅用於開場快速導覽，主示範錄影不變。
+
+- [x] 重新核對 NBA 原片第一格與開頭連續畫面，確認第一格未反白、隨後有拖曳選取過程。更正需求文件、素材 README、預覽索引及來源清單的錯誤描述，同步重製程式；原片與素材包副本 SHA-256 相同，無須重建 NBA 選字。
+
+- [x] 2026-10-19 依使用者回饋與 Mac App Store 預覽規格（每支 15–30 秒、1920 × 1080、每語言最多 3 支、自動靜音播放）製作 Claude 版 v3 三支預覽：總覽 17.6 秒、選字翻譯接字典 19.8 秒、截圖翻譯接字典 26.0 秒。旁白固定在錄影下方、只在定格時換句；動作提示與回饋統一改用 Glass 介紹圖的暖金色並貼在操作位置旁；鏡頭只在無提示時移動。鍵盤與滑鼠聲改用 CC0 實錄，截圖聲待使用者重錄原生系統聲後加入。三支 H.264 High L4.0、約 10.9 Mbps、AAC 256 kbps，完整解碼、每 0.5 秒抽格、音效同步與 lint 通過；僅用 CLI，未連續觀看或聆聽。未上傳。
+
+- [x] 2026-10-19 依使用者回饋製作 Claude 版 v4：旁白改為深藍底白字、出現在即將操作的位置旁，並與金色動作提示、鏡頭移動錯開（停格 → 旁白 → 金色提示 → 操作）。交付 29.4 秒 30 秒內合輯（快速總覽 → 選字接字典 → 截圖接字典 → 品牌，只加速游標移動，翻譯等待維持原速）與三支分段版（17.6／21.0／29.0 秒），皆符合 Mac App Store 預覽規格。四支完整解碼、每 0.5 秒抽格、48 張關鍵畫面、音效同步誤差 1 格內、lint 通過；僅用 CLI，未連續觀看或聆聽。截圖聲仍待使用者重錄原生聲音；v1–v3 保留，未上傳。
+
+- [x] 2026-10-19 依使用者回饋製作 Claude 版 v5：旁白改為近黑半透明深灰底白字，避免與文字選取的藍色反白混淆；30 秒合輯開場改為三個畫面（三款通訊軟體並排 → VS Code 選字 → System Settings 截圖），不再重複 NBA 與日本網站定稿。合輯 29.9 秒、三支分段版 17.6／21.0／29.0 秒，皆符合 Mac App Store 預覽規格；完整解碼、合輯每 0.5 秒抽格、關鍵畫面、音效同步 1 格內、lint 通過；僅用 CLI，未連續觀看或聆聽。截圖聲仍待使用者重錄；v1–v4 保留，未上傳。
+
+- [x] 2026-10-19 依使用者回饋製作 Claude 版 v6 30 秒合輯（29.1 秒）：旁白改為漫畫對話框（深灰底白字白描邊，尖尾指向即將變化的位置）；開場三款通訊軟體改為左下到右上交錯、放大且依序進場；剪掉 NBA 選字後游標移開與日本網站取消選取的片段，加速游標移動，翻譯與字典開啟維持原速。符合 Mac App Store 預覽規格；完整解碼、每 0.5 秒抽格、20 張關鍵畫面、音效同步 1 格內、lint 通過；僅用 CLI，未連續觀看或聆聽。截圖聲仍待使用者重錄；v1–v5 保留，未上傳。
+
+- [x] 2026-10-19 依使用者回饋製作 Claude 版 v7 30 秒合輯（29.2 秒）：示範段旁白與動作提示統一為金色步驟卡（用意＋動作／鍵帽，尖角指向即將變化處）；開場三個靜態畫面改用 Glass 深藍標題，不用旁白；逐格檢查並修正 4 處卡片遮住原文或結果的位置；截圖聲先用 CC0 相機快門聲暫代，待使用者重錄原生聲。完整解碼、每 1/3 秒抽格、37 張關鍵畫面、lint 通過；僅用 CLI，未連續觀看或聆聽。v1–v6 保留，未上傳。
+
+- [ ] 第十版：確認或替換有授權疑慮的素材，精簡不必要提示，依字數調整必要提示的閱讀時間，完成全片輸出及複查。
+
+- [x] 2026-10-19 依使用者回饋製作 Claude 版 v8 30 秒合輯（28.9 秒）：字卡停格由 1.07 秒縮為約 0.7 秒、開場靜態畫面縮短；NBA 拖曳放慢、選取 season 與日本網站框選、選片語改回原速；NBA 譯文與日本網站片語譯文出現後各加停留；⌘⇧1 卡片移開作者列。完整解碼、每 1/3 秒抽格、23 張關鍵畫面、音效同步、lint 通過；僅用 CLI，未連續觀看或聆聽。v1–v7 保留，未上傳。
+
+- [x] 2026-10-20 清除 69 張已淘汰或有授權疑慮的圖片與副本，移除相依舊排版、更新素材索引及上架清單；保留素材集中於 app-store/assets/index.html。原始錄影與兩支舊影片僅作內部參考，字典呈現仍待決定。
+
+- [x] 複查素材清理範圍：原樣恢復 6 份功能介紹 HTML 模板、兩張字典成圖及兩張來源截圖；補上模板總覽，區分可沿用排版與待替換畫面。獨立遮蔽卡片的未追蹤 HTML 尚未恢復，PNG 草稿保留。
+
+- [x] 依 Claude 第五節最終結論同步影片需求與素材索引：採あかり食堂插畫菜單，英文提示只放影片金色字卡，General 不恢復；補記原創資料夾清理更正。未重剪影片或重產功能圖。
+
+- [x] 將示範 PDF 移至 app-store/assets/original-kit/，與菜單網頁集中；更新現行入口，移除 demos 的過時檔案與空目錄。PDF 內容未變。
+
+- [x] 將 Codex／Claude 最新製作結論集中到 video-brief-claude.md，授權依據保留於現有 rights-review.md；刪除五份討論與重複入口文件，更新引用。
+
+- [x] 從兩支新錄影選定六張原尺寸截圖，整理逐張 review 頁與來源時間點；先供素材確認，字典未遮蔽，未繼續修改功能介紹成圖。
+
+- [x] 依使用者要求移除選字翻譯與菜單原圖的游標，以同段錄影局部補回；確認尺寸不變、游標區域以外像素完全相同，其餘四張保留游標，更新素材預覽說明。
+
+- [x] 檢查 2026-10-20 15:57／15:59 重錄的兩支影片：完整解碼成功、尺寸均為 3024 × 1964。選字片 4.2 秒可同時看到完整譯文與句尾旁游標，但來源語言誤設 Japanese，需改為 English 重錄；菜單片包含框選、整段翻譯、單字懸停與字典，可用。此輪只檢查，未替換截圖或製作成圖。
+
+- [x] 複查 2026-10-20 16:11 重錄的選字影片（11.48 秒）：來源已改為 English；4.3 秒完整譯文與句子旁游標同時可見，7.8 秒 shortcut 字典卡完整。3024 × 1964、完整解碼成功，可用於擷取功能圖及剪輯。此輪未替換既有素材截圖。
+
+- [x] 六張 review 素材已替換為最新重錄版本，核對畫面及 3024 × 1964 原尺寸；保留選字後句旁游標，僅移除菜單原圖游標。同步時間點與預覽說明，功能介紹成圖尚未重製。
+
+- [x] 依最新重錄素材重製 Glass 功能介紹圖：選字、菜單截圖、字典，Settings 沿用；輸出至 output/glass-review/，各 2560 × 1600。逐張檢查並經另一 agent 複查，修正來源視窗殘影與單字細節裁切；字典保留真實外框、標題及操作列，遮蔽釋義。待使用者 review，影片尚未重製，未產生 DMG。
+
+- [x] 依確認方向將新版 Glass 功能圖改回原模板構圖：選字頁恢復同一組 Preview 與金色箭頭；菜單頁恢復左側來源、右側上下結果、精靈、金色框選與光束；字典兩組畫面同倍率並保留原始卡片位置，遮蔽釋義。四張 2560 × 1600 成圖已逐張目視檢查、重製比對皆為 0 像素差異，引用檔案存在；待使用者 review。未製作影片，未修改 App 或產生 DMG。
+
+- [x] 依使用者要求，字典功能介紹圖先恢復新錄影的原始釋義，移除遮蔽與替代說明，排版不變；已目視確認輸出，其他三張 PNG 雜湊相同，同步素材索引與需求文件。未修改 App 或產生 DMG。
+
+- [x] 字典功能介紹圖改用使用者補拍的 menu-dictionary.jpg，保留「野菜」翻譯與原始字典卡；左右畫面統一倍率，已目視檢查比例與裁切。同步素材索引及需求文件，其他三張成圖雜湊不變，git diff --check 通過。
+
+- [x] 字典介紹圖另存 03-dictionary-blurred.png：僅模糊釋義、保留原生標題與操作列，加入一致的暖金英文提示。已目視檢查 2560 × 1600 輸出，確認原有四張 PNG 雜湊不變；同步預覽頁與重製說明。
+
+- [x] 字典功能圖換成使用者確認的「カレー／咖哩」截圖，重製原始版與模糊版；同步裁切、模糊範圍及素材索引。提示改為金色文字與柔和透明光暈，移除按鈕式底框。兩張 2560 × 1600 成圖已目視檢查，其餘三張成圖雜湊不變。
+
+- [x] 另製三款字典提示供比較：金色側線、霧白玻璃與書本圖示、深色玻璃與金字。均為 2560 × 1600，已逐張目視檢查文字與遮擋；原有成圖雜湊不變，已補上預覽與重製入口。
+
+- [x] 新版功能介紹圖同步製作太空灰版：選字、截圖、原始字典、設定，以及字典模糊版與三種提示方案，共八張 2560 × 1600。已逐張目視檢查，對應八張 Glass 原圖雜湊不變；補上兩種主題的互連預覽與重製指令。待使用者 review。
+
+- [x] 字典提示採用 Claude 的 dust 樣式與 Codex 英文文案，已同步模板、Glass／太空灰成圖及預覽。兩張 2560 × 1600 已目視確認。
+
+- [x] 刪除本輪 13 張未採用的字典比較成圖；Glass／太空灰各保留四張功能圖，字典均採 dust。同步預覽、需求與產圖入口，原始素材及模板保留。八張保留成圖雜湊不變，重製比對均為 0 像素差異，預覽連結通過。
+
+- [x] 正式字典成圖改回 03-dictionary.png，更新引用與產圖入口；另製截圖介紹的 1:1、1:2 面積比例比較，各有 Glass 與太空灰版。四張 2560 × 1600 成圖已目視檢查，預覽連結有效，待使用者選擇。
+
+- [x] 截圖比較圖依使用者最新指示保留 Glass 完整視窗及重複內容，調整原圖、精靈與結果位置；允許精靈覆蓋價格，光束對準翻譯字卡。Glass／太空灰四張已目視檢查，正式版待選定。
+
+- [x] 截圖功能圖選定 1:1：Glass／太空灰均改為正式 02-screenshot.png，刪除比例比較檔，更新預覽頁及重製入口。
+
+- [x] 以最新兩支錄影完成 Codex Glass 影片（26.347 秒）：Preview 選字接字典、Safari 截圖接整段翻譯／單字／字典；沿用金色提示、配樂與操作音效，釋義採光塵模糊。完成全片抽格、關鍵幀與另一 agent 複查、TypeScript／ESLint／完整解碼及音量檢查；未即時連續播放或聆聽。成品 `app-store/video/boundless-translator-glass.mp4`，未上傳、未產生 DMG。
+
+- [x] 另製三款影片對話框供 review：白底墨線、石墨灰、淡紫雲朵；保留金色邊緣光暈，附實際菜單畫面與一般文字／快捷鍵細節。三張 PNG 已目視檢查，TypeScript 與新版 ESLint 通過，尚未套入影片。輸出位於 `app-store/video/codex-cue-review/`。
+
+- [x] A 款白底墨線對話框另製金黃光暈版 `output/video/codex-cue-review/paper-glow.png`，加強外框及尖尾發光；已目視檢查菜單背景與快捷鍵細節，TypeScript／ESLint 通過。待使用者 review，未套入影片。
+
+- [x] 對照前兩張 Glass 功能圖，將 A 款提示調整為細灰輪廓、尖尾局部金光與短光束；輸出 `output/video/codex-cue-review/paper-soft.png`。已目視檢查、TypeScript／ESLint 通過，待 review，未套入影片。
+
+- [x] 依最新確認另製白底、深色字、細金框與小尖角預覽 `output/video/codex-cue-review/gold-outline.png`，移除所有光暈、光點及光束。已目視檢查與 TypeScript 檢查，尚未套入影片。
+
+- [x] 沿用 Claude v15 另製 Codex v16（28.9 秒）：合併為六個動作提示、對齊快捷鍵填色與聲音、保留菜單查字典前的 hover。原版未覆蓋；完成全片抽格與另一 agent 複查、型別／lint、完整解碼及輸出音軌對位。未即時連續播放或聆聽，待使用者 review。成品 `app-store/video/boundless-translator-glass-codex-v16.mp4`；未修改 App、未產生 DMG。
+
+- [x] 另存 Codex v17（29.5 秒）：僅在開頭選完句子後補回 0.6 秒停頓，再按快捷鍵並顯示翻譯視窗。已核對輸出關鍵格與按鍵聲同步、完整解碼、型別／lint；另一 agent 確認來源僅此時序差異，v16 雜湊不變。成品 `app-store/video/boundless-translator-glass-codex-v17.mp4`；未修改 App、未產生 DMG。
+
+- [x] 另存 Codex v18（29.5 秒）：補上「野菜」「香ばしく」hover 金框，切換動作前移除上一個框，截圖起點圓圈從十字游標出現時開始。已檢查輸出關鍵格、型別／lint與完整解碼，另一 agent 複查來源；音軌與 v17 完全相同，原 v17 雜湊不變。成品 `app-store/video/boundless-translator-glass-codex-v18.mp4`；未修改 App、未產生 DMG。
+
+- [x] 另存 Codex v19（29.5 秒）：僅調整開頭 Preview 鏡頭，露出完整標題與工具列，並將 Capture to translate 改為 Screenshot to translate。操作時間軸不變；關鍵畫面、型別／lint、完整解碼通過，另一 agent 複查來源與開頭構圖。音軌與 v18 完全相同、原 v18 雜湊不變。成品 `app-store/video/boundless-translator-glass-codex-v19.mp4`；未修改 App、未產生 DMG。
+
+- [x] 另存 Codex v20（29.5 秒）：保持 v19 倍率，將 Preview 畫面下移以完整露出頂端選單、檔名與工具列；提示改為 Take a screenshot to translate。已檢查開頭與轉場關鍵格，另一 agent 複查來源及成品抽格；型別／lint、完整解碼通過，音軌與 v19 完全相同，原 v19 雜湊不變。未即時連續播放或聆聽。成品 `app-store/video/boundless-translator-glass-codex-v20.mp4`；未修改 App、未產生 DMG。
+
+- [x] 另存 Codex v21（29.5 秒）：按原始錄影第 66 列白色交界裁掉整段藍色 macOS 選單，完整保留 Preview 白色標題與工具列；保留 Take a screenshot to translate。已放大檢查輸出上沿及轉場，另一 agent 目視複查通過；型別／lint、完整解碼通過，音軌與 v20 完全相同，原 v20 雜湊不變。成品 `app-store/video/boundless-translator-glass-codex-v21.mp4`；未修改 App、未產生 DMG。
+
+- [x] 提供三款拖曳音效試聽（輕柔／清脆／低沉），各 2 秒、按下與放開分離，保存於 `app-store/video/drag-sfx-review/`。已檢查 WAV 格式、非靜音及無削波，尚未套入影片。
+
+- [x] 另存 Codex v22（29.5 秒）：清除 Preview 原錄影左右上角的邊線殘留，只調整開頭裁切，金框、提示、時序與音效不變。已核對原錄影與渲染圓角，另一 agent 複查靜態圖及來源；完整 MP4 抽格放大檢查、型別／lint及完整解碼通過。音軌與 v21 相同，原 v21 雜湊不變。成品 `app-store/video/boundless-translator-glass-codex-v22.mp4`；未修改 App、未產生 DMG。
+
+- [x] 以 Codex v22 為底另存 v23-claude：字典彈窗從放大第一格就遮住釋義、Take a screenshot to translate 依字數停留、hover 金框從翻譯卡出現才開始、點書本前收掉提示與圓圈。完成逐格檢查、音效對位、型別／lint 與完整解碼；未即時連續播放或聆聽。
+
+- [x] 加入截圖翻譯字卡音效（Kenney CC0，授權記錄於 `app-store/src/video/licenses/README.md`），輸出最終版 `app-store/video/boundless-translator-glass-v24-claude-shoo.mp4`（咻）與比較版 `-woo.mp4`，各 29.9 秒；音軌逐格比對只在四張字卡處新增聲音。刪除過期影片、母帶與試聽素材，`Root.tsx`、輸出腳本與文件只留 v24。未修改 App、未產生 DMG。
+
+- [x] 刪除不再使用的舊影片原始碼與 Codex 舊專案；影片目錄只留 v24 場景、共用元件與重製腳本，型別檢查與 Remotion 清單通過。
+
+- [x] 給 Codex 的四份文件（影片需求、影片交接、接手 review 請求、截圖翻譯功能圖 review）合併為 `app-store/HANDOFF.md`，刪除舊檔並更新引用；過時內容（Capture to translate、合成截圖聲、與需求文件的衝突清單）不帶入。
+
+- [x] 將影片與功能圖集中到 `app-store/`：程式放 `src/image/`、`src/video/`，成品放 `image/`、`video/`，素材放 `assets/`；同步文件與路徑、合併影片共用元件，影片輸出拒絕覆蓋舊檔。搬前搬後 16 張功能圖及 7 格影片像素一致，81 個非文字檔案雜湊一致，lint／型別與 29.9 秒組合檢查通過，另一 agent 複查無必修問題。副標仍待確認，未改成品、未 commit／上傳，未修改 App 或產生 DMG。
+- [x] 依 Codex 架構 review 修正影片 README：字卡音效設定在 `Root.tsx`、格數指 30 fps 代理檔；移除 `package.json` 指向已刪腳本的 `make-sfx`。review 結論併入交接文件「目錄重整」。
+
+- [x] 移除交接文件中的截圖翻譯功能圖 review：使用者未同意其內容，不作為修改依據。
+
+- [x] 依 Claude 搬遷 review 補上功能圖另存：`--write --out` 必須指定新目錄，拒絕覆蓋；同步文件、移除版本註解，操作音效目錄改為 `sfx/ui/`。16 張圖比對零差異，12 張暫存另存與防覆蓋測試通過，影片 lint／型別與組合檢查通過，成品及音效內容未變。回覆見 `app-store/app_store_move_responsed_by_codex.md`；未修改 App、未 commit／上傳或產生 DMG。
+
+- [x] 修正影片背景右側逐漸出現的白條：背景 SVG 往左飄 48 px 時露出底色，改為 `overflow="visible"` 並延長頂端白線。輸出 `app-store/video/boundless-translator-glass-v25-claude-shoo.mp4`（29.9 秒），音軌與 v24 相同，左側 1800 px 每格 PSNR ≥ 53.8 dB（僅壓縮差異），右緣已填滿；lint、完整解碼與規格檢查通過。未即時播放，待使用者確認是否取代最終版。

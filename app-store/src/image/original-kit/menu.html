@@ -1,0 +1,61 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><title>Original restaurant menu</title>
+<!-- Source of assets/original-kit/menu.png. render.cjs screenshots .art so the
+     Japanese text becomes pixels, not selectable HTML text. -->
+<style>
+*{box-sizing:border-box}body{margin:0}
+.art{width:1600px;height:900px;display:grid;grid-template-columns:860px 1fr;background:#f4ecdf;color:#2b2620;font-family:"Hiragino Mincho ProN",serif;overflow:hidden}
+.scene{position:relative;background:#2f3a33}.scene svg{position:absolute;inset:0;width:100%;height:100%}
+.scene .tag{position:absolute;left:56px;top:52px;color:#f4ecdf;font-size:22px;letter-spacing:6px}
+.scene .lead{position:absolute;left:56px;bottom:56px;color:#f4ecdf;font-size:54px;line-height:1.35;letter-spacing:4px}
+.card{margin:70px 70px 70px 60px;background:#fffaf1;border-top:6px solid #b8552c;padding:50px 56px;box-shadow:0 18px 40px rgba(60,40,20,.14)}
+.label{color:#b8552c;font-size:22px;letter-spacing:6px;font-family:"Hiragino Sans",sans-serif}
+h1{margin:20px 0 22px;font-size:64px;letter-spacing:4px;font-weight:600}
+.desc{font-size:30px;line-height:1.75;margin:0 0 30px}.rule{height:1px;background:#e2d6c3;margin:0 0 26px}
+.item{display:flex;justify-content:space-between;font-size:30px;line-height:2;font-family:"Hiragino Sans",sans-serif}
+.note{margin-top:18px;font-size:22px;color:#8a7f72;font-family:"Hiragino Sans",sans-serif;line-height:1.6}
+</style>
+<main class="art">
+  <div class="scene">
+    <!-- Original flat illustration of a curry plate, drawn for this demo. -->
+    <svg viewBox="0 0 860 900" aria-hidden="true">
+      <defs><radialGradient id="glow" cx="50%" cy="48%" r="60%"><stop offset="0" stop-color="#46564a"/><stop offset="1" stop-color="#2a332d"/></radialGradient></defs>
+      <rect width="860" height="900" fill="url(#glow)"/>
+      <g transform="translate(440 430) scale(0.86) translate(-440 -500)">
+        <ellipse cx="440" cy="500" rx="330" ry="250" fill="#e9e1d2"/>
+        <ellipse cx="440" cy="492" rx="292" ry="214" fill="#f6f0e4"/>
+        <path d="M190 500 C 190 380, 330 320, 440 330 C 470 420, 470 560, 420 660 C 300 650, 190 600, 190 500 Z" fill="#fbf8f1"/>
+        <g fill="#fff" opacity=".9">
+          <ellipse cx="260" cy="440" rx="9" ry="5"/><ellipse cx="300" cy="400" rx="9" ry="5"/><ellipse cx="350" cy="380" rx="9" ry="5"/>
+          <ellipse cx="240" cy="520" rx="9" ry="5"/><ellipse cx="320" cy="560" rx="9" ry="5"/><ellipse cx="380" cy="600" rx="9" ry="5"/>
+          <ellipse cx="290" cy="480" rx="9" ry="5"/><ellipse cx="400" cy="470" rx="9" ry="5"/><ellipse cx="370" cy="520" rx="9" ry="5"/>
+        </g>
+        <path d="M440 330 C 560 320, 690 380, 700 480 C 710 590, 590 660, 420 660 C 470 560, 470 420, 440 330 Z" fill="#a8622b"/>
+        <path d="M470 360 C 560 360, 650 410, 660 480 C 600 450, 520 440, 470 360 Z" fill="#b97434" opacity=".7"/>
+        <path d="M520 420 C 580 380, 640 400, 650 450 L 600 470 C 590 440, 560 430, 520 420 Z" fill="#e2a23b"/>
+        <path d="M528 424 C 584 392, 632 408, 642 446" fill="none" stroke="#3f6b3a" stroke-width="6" stroke-linecap="round"/>
+        <ellipse cx="560" cy="560" rx="48" ry="26" transform="rotate(-20 560 560)" fill="#4a2e4f"/>
+        <ellipse cx="560" cy="560" rx="34" ry="16" transform="rotate(-20 560 560)" fill="#d9c79d"/>
+        <rect x="490" y="490" width="56" height="34" rx="8" transform="rotate(14 518 507)" fill="#e0742e"/>
+        <rect x="610" y="520" width="50" height="30" rx="8" transform="rotate(-18 635 535)" fill="#e0742e"/>
+        <path d="M470 600 C 500 570, 540 580, 548 612 C 520 630, 490 628, 470 600 Z" fill="#6e8f3c"/>
+        <circle cx="430" cy="380" r="5" fill="#4f7a3b"/><circle cx="452" cy="396" r="4" fill="#4f7a3b"/><circle cx="420" cy="404" r="4" fill="#4f7a3b"/>
+        <rect x="640" y="660" width="150" height="16" rx="8" transform="rotate(-38 715 668)" fill="#8a5a33"/>
+        <path d="M380 190 C 360 160, 400 140, 380 110" fill="none" stroke="#f4ecdf" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+        <path d="M440 200 C 420 170, 460 150, 440 120" fill="none" stroke="#f4ecdf" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+      </g>
+    </svg>
+    <div class="tag">あかり食堂 ／ 今日のごはん</div>
+    <div class="lead">ゆっくり煮込んだ、<br>やさしいひと皿。</div>
+  </div>
+  <div class="card">
+    <div class="label">本日のおすすめ</div>
+    <h1>焼き野菜カレー</h1>
+    <p class="desc">香ばしく焼いた野菜と、<br>じっくり煮込んだカレー。<br>サラダとスープ付きです。</p>
+    <div class="rule"></div>
+    <div class="item"><span>ほうじ茶</span><span>¥450</span></div>
+    <div class="item"><span>自家製ジンジャーエール</span><span>¥520</span></div>
+    <div class="item"><span>今日のケーキ</span><span>¥600</span></div>
+    <div class="note">辛さは控えめです。<br>アレルギーのある方はお知らせください。</div>
+  </div>
+</main>
+</html>

@@ -1,2 +1,0 @@
-- Translate without switching apps.
-- Select a sentence and press a shortcut to translate it.
