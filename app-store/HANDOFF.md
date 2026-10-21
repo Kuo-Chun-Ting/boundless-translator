@@ -4,7 +4,6 @@
 
 ## 待辦
 
-- 截圖翻譯功能圖副標之後再處理，目前保留原文。
 - 不上傳或 push，commit 依使用者指示。
 
 ## 目標與素材
@@ -82,7 +81,7 @@
 - 截圖圖同時顯示背景原圖、較小的截圖視窗和翻譯字卡，讓人能對照內容。
 - 字典圖保留原始外框和標題，釋義用金色光塵模糊，提示為「See definitions in your Mac's built-in dictionary.」。選字情境用錄影截圖；菜單情境用使用者補拍的 [menu-dictionary.png](assets/screenshots/menu-dictionary.png)，查詢「カレー」。
 - 沿用 Glass 風格，構圖和動畫由製作者決定。
-- 截圖翻譯那張的副標要改成「選不到字就用截圖翻譯」的意思，文案還沒定。Claude 提議的版本：Can't select the text? Use a shortcut to capture and translate it.
+- 截圖翻譯副標：If you can’t select text, take a screenshot to translate it.
 
 ## 工作方式與交付
 
@@ -102,12 +101,11 @@
 ## 目前狀態
 
 - 正式影片：[preview.mp4](video/preview.mp4)，29.9 秒，保留背景白條修正，使用 shoo 字卡音效與底部單行署名。署名為 21 px、距底 34 px、灰藍色、不加粗；授權說明見 `src/video/licenses/README.md`。
-- 正式圖片：[Glass 四張圖](image/index.html)。截圖頁維持 1:1 構圖，副標之後再處理。只維護這四張圖的模板與所需素材。
+- 正式圖片：[Glass 四張圖](image/index.html)。截圖頁維持 1:1 構圖，已採用上方確認的截圖翻譯副標。
 - 來源在 `src/video/src/scenes/`。要改哪個檔案、共用元件在哪裡，見 [影片來源 README](src/video/README.md)。
 - 截圖翻譯的四張字卡（hover 野菜、カレー、香ばしく，以及選整段的譯文）在翻譯出現那一格播字卡音效。「咻」提前 3 格播，讓卡牌落下的聲音落在字卡上。
 - 待使用者決定：
   - 結尾標語「Translate in any app or website.」要不要保留。「any app」是否成立還沒驗證。
-  - 截圖翻譯功能介紹圖的副標文案。
 
 ## 目錄與維護
 

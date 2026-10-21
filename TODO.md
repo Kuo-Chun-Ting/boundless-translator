@@ -470,3 +470,9 @@
 - [x] 核對 Claude 的截圖目錄計畫 review：無必改，保留預覽頁補齊 Settings，接受完成後刪除討論檔並將結果記入 TODO；已更新原回應文件，尚未搬檔。
 
 - [x] 將 `app-store/assets/screenshots/recording/` 六張 PNG、README 與預覽頁搬到 `assets/screenshots/`，移除空目錄；更新八份引用與搬移後相對連結，README／預覽補上 Settings。12 個來源與成品檔案雜湊不變，四張功能圖重製零像素差異，169 個現行本機連結有效且無舊路徑殘留；另一 agent 複查無問題。已刪除完成的計畫與 review 文件。未改影片程式、未重製影片、未跑 App 測試或產生 DMG，未 commit。
+
+- [x] 依使用者定稿將截圖功能介紹副標改為「If you can’t select text, take a screenshot to translate it.」，同步模板、正式成圖與交接文件。已查看新圖，文字完整單行；像素差異僅在副標區域，其餘三張功能圖無差異。未改影片或 App，未產生 DMG。
+
+- [x] 依使用者要求將新副標成圖另存為 `app-store/image/02-screenshot-new.png`，從 Git 完整還原 `02-screenshot.png` 供比較；已驗證原版與 HEAD 相同、新版與本次渲染相同，並同步文件的待 review 狀態。
+
+- [x] 使用者核准新副標成圖後取代正式 `02-screenshot.png`，移除比較檔並同步交接狀態；四張功能圖 `npm run check` 全部零像素差異。未改 App 或影片，未產生 DMG。
