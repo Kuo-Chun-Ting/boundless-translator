@@ -2,7 +2,7 @@
 
 我們現在已經有能讓朋友測試的 App。接下來要把「要交付的程式、商店介紹、訂閱商品」準備好，交給 Apple 檢查；Apple 通過後，再由你按下發布。
 
-本文於 2026-10-18 整理，依據前一天的後台檢查及 Apple 官方操作文件；沒有重新確認今天的後台狀態，也沒有代填或送出資料。勾選進度請回到[上架待辦](implementation-plan.md)。
+本文於 2026-10-18 整理；2026-10-21 依已記錄的商品文字、審核備註進度及正式素材清單修正。這次整理沒有重新查詢後台或送出資料。勾選進度請回到[上架待辦](implementation-plan.md)。
 
 ## 先分清楚這幾個地方
 
@@ -92,7 +92,7 @@
 <a id="step-06"></a>
 ## 06 更新商品頁文字
 
-**為什麼：** 商品描述是給下載前的使用者看的。現在英文頁仍描述舊版「沒選字就用同一快捷鍵截圖」的流程，跟現有 App 不符。
+**為什麼：** 商品描述是給下載前的使用者看的。2026-10-18 已儲存英文、繁中、簡中的核准文案，並移除舊快捷鍵流程。以下保留日後更新時的核對步驟。
 
 **去哪裡：** [版本 1.0 商品頁](https://appstoreconnect.apple.com/apps/6810727652/distribution) → Product Page Information。
 
@@ -102,16 +102,16 @@
 4. 介面語言、可翻譯語言、截圖能辨識的語言是不同清單。不要把 App 的 48 個介面語系說成 48 種翻譯語言；保留年訂閱與試用資格說明。
 5. 確認 Support URL、Copyright 等已有內容仍正確，儲存。
 
-**可選的中文商品頁：** 若依原計畫提供繁中、簡中商品頁，從語言選單新增這兩種語言，填入各自的名稱、商品描述、關鍵字、支援網址與需要的截圖，再儲存。不必為 App 內每個語系都建立商店頁。新增語言時，也確認 App Information 裡的名稱資料。
+**語言：** 英文、繁中、簡中的商品描述已儲存。後續修改時同步檢查這三種語言，不必為 App 內每個語系都建立商店頁。
 
-**完成標準：** 商品文字符合實際流程；決定要提供的語言頁都有內容。Subtitle、Promotional Text、Marketing URL 和 App Preview 目前可先不補。[商品頁欄位說明](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) · [商品頁語言步驟](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information)
+**完成標準：** 商品文字符合實際流程；決定要提供的語言頁都有內容。Subtitle、Promotional Text 與 Marketing URL 維持原狀；已確認的影片見 [影片清單](video/README.md)。[商品頁欄位說明](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) · [商品頁語言步驟](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information)
 
 <a id="step-07"></a>
 ## 07 準備並上傳功能介紹圖
 
-舊版 VS Code、General 與字典成圖已清除，不能再按舊六張清單上傳。新版依 [製作需求](../app-store/HANDOFF.md)準備四張：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
+依 [製作需求](HANDOFF.md)上傳已確認的四張 Glass 圖片：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
 
-目前素材見 [review 頁](../app-store/assets/index.html)。新版成圖見 [功能圖清單](image/README.md)；確認上架版本後，再到版本頁的 App Previews and Screenshots → Mac 上傳並依上述順序排列。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
+正式成圖見 [功能圖清單](image/README.md)，影片見 [影片清單](video/README.md)。到版本頁的 App Previews and Screenshots → Mac 上傳並依上述順序排列；本次未確認後台上傳狀態。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
 
 <a id="step-08"></a>
 ## 08 補齊訂閱審核資料
@@ -128,7 +128,7 @@
 4. 開啟[年訂閱商品](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscriptions/6810730512)，找到下方 Review Information → Screenshot，選 Choose File 上傳並儲存。
 5. 確認審核圖片已出現，群組也有顯示名稱。不要上傳到上方的 Image (Optional)，那是另一種宣傳圖片欄位。
 
-**完成標準：** 群組名稱和訂閱審核截圖都已填妥。商品頁六張圖、訂閱審核截圖用途不同，不能只完成其中一組。這兩項補完後仍要在第 12 項一起加入送審。[訂閱欄位說明](https://developer.apple.com/help/app-store-connect/reference/in-app-purchases-and-subscriptions/auto-renewable-subscription-information)
+**完成標準：** 群組名稱和訂閱審核截圖都已填妥。商品頁四張圖、訂閱審核截圖用途不同，不能只完成其中一組。這兩項補完後仍要在第 12 項一起加入送審。[訂閱欄位說明](https://developer.apple.com/help/app-store-connect/reference/in-app-purchases-and-subscriptions/auto-renewable-subscription-information)
 
 <a id="step-09"></a>
 ## 09 完成最終驗收
@@ -162,7 +162,7 @@
 <a id="step-11"></a>
 ## 11 更新給 Apple 的審核操作說明
 
-**為什麼：** Apple 審核人員需要能實際操作主要功能。現在備註還寫舊快捷鍵 Command-Shift-T，可能讓他按錯或以為功能失效。
+**為什麼：** Apple 審核人員需要能實際操作主要功能。2026-10-18 已儲存並讀回使用者核准的英文 Notes。以下保留日後更新時的核對步驟。
 
 **去哪裡：** [版本 1.0](https://appstoreconnect.apple.com/apps/6810727652/distribution) → App Review Information → Notes。
 

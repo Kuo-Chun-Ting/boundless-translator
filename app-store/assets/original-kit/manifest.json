@@ -4,7 +4,7 @@
     "menuRasterChecked": true,
     "safariOperationRecorded": true,
     "previewOperationRecorded": true,
-    "dictionaryDisplayApproach": "Keep the native frame and title; blur definitions with gold dust and explain integration with the Mac dictionary. dictionary-card.png remains a reference draft."
+    "dictionaryDisplayApproach": "Keep the native frame and title; blur definitions with gold dust and explain integration with the Mac dictionary."
   },
   "assets": [
     {
@@ -18,25 +18,9 @@
       "phrase": "焼き野菜カレー",
       "dictionaryWord": "カレー",
       "captionPlacement": "Action cues appear in the video; the menu webpage remains unchanged."
-    },
-    {
-      "file": "dictionary-card.png",
-      "type": "Actual dictionary capture cropped with blurred definitions and separate explanatory overlay",
-      "languageSource": "Traditional Chinese - English (actual source header)",
-      "usage": "Reference only; final presentation follows HANDOFF.md.",
-      "rightsStatus": "Unconfirmed; blurring is not an authorization",
-      "sourceStatus": "Raw capture restored for layout reference. Standalone card HTML was untracked and remains unavailable; PNG draft retained.",
-      "source": "../screenshots/dictionary/dictionary_selected_text.jpg"
     }
   ],
   "images": [
-    {
-      "file": "images/curry-photo.png",
-      "source": "OpenAI image generation in this task",
-      "description": "Vegetable curry and rice on ivory ceramic, olive table, linen and wooden spoon; no brand or lettering",
-      "originalFile": "/Users/lillard/.codex/generated_images/01a15188-6e23-7dd1-926d-d6bccd28ce59/exec-38cfac8a-28ad-4807-8aa8-76654e89f979.png",
-      "usage": "Unused in the current menu; retained as a source record only."
-    },
     {
       "file": "../../../Sources/BoundlessTranslator/Resources/BrandSprite.png",
       "source": "project brand asset"

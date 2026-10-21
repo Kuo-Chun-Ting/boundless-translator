@@ -81,7 +81,7 @@
 - 選字圖保留原文反白和譯文。
 - 截圖圖同時顯示背景原圖、較小的截圖視窗和翻譯字卡，讓人能對照內容。
 - 字典圖保留原始外框和標題，釋義用金色光塵模糊，提示為「See definitions in your Mac's built-in dictionary.」。選字情境用錄影截圖；菜單情境用使用者補拍的 [menu-dictionary.png](assets/screenshots/recording/menu-dictionary.png)，查詢「カレー」。
-- 沿用 Glass 風格，構圖和動畫由製作者決定。Space Gray 版由 `src/image/render.cjs` 從同一份來源產生。
+- 沿用 Glass 風格，構圖和動畫由製作者決定。
 - 截圖翻譯那張的副標要改成「選不到字就用截圖翻譯」的意思，文案還沒定。Claude 提議的版本：Can't select the text? Use a shortcut to capture and translate it.
 
 ## 工作方式與交付
@@ -102,7 +102,7 @@
 ## 目前狀態
 
 - 正式影片：[preview.mp4](video/preview.mp4)，29.9 秒，保留背景白條修正，使用 shoo 字卡音效與底部單行署名。署名為 21 px、距底 34 px、灰藍色、不加粗；授權說明見 `src/video/licenses/README.md`。
-- 正式圖片：[Glass 四張圖](image/index.html)。截圖頁維持 1:1 構圖，副標之後再處理。太空灰與舊版成圖已清除，模板與來源仍保留。
+- 正式圖片：[Glass 四張圖](image/index.html)。截圖頁維持 1:1 構圖，副標之後再處理。只維護這四張圖的模板與所需素材。
 - 來源在 `src/video/src/scenes/`。要改哪個檔案、共用元件在哪裡，見 [影片來源 README](src/video/README.md)。
 - 截圖翻譯的四張字卡（hover 野菜、カレー、香ばしく，以及選整段的譯文）在翻譯出現那一格播字卡音效。「咻」提前 3 格播，讓卡牌落下的聲音落在字卡上。
 - 待使用者決定：
@@ -122,14 +122,14 @@
 
 ### 素材保留原則
 
-- 模板可以沿用，不能因舊畫面被替換而刪除模板。保留 Preview／自有 PDF、原創菜單、Settings、字典來源與舊構圖參考。
-- 舊聊天、VS Code、NBA、日本咖啡店網站與 General 不在目前製作範圍；不因搬目錄恢復舊素材，也不順便刪除仍保留的檔案。
-- 原創菜單來源是 `src/image/original-kit/menu.html`；先前刪除的原創草稿不能因此認定侵權。獨立字典卡 PNG 草稿保留，但其未追蹤 HTML 和舊 `prepare-review-kit.py` 沒有可還原版本，現行製作不依賴它們。
+- 保留正式 Glass 四張圖與 shoo 影片的製作來源：兩支錄影、使用中的截圖、Preview PDF、原創菜單、Settings、品牌元件、配樂音效及授權紀錄。
+- 舊構圖、太空灰、woo 及未採用草稿已依使用者決定移除，不恢復其製作入口或專用素材；歷史由 Git 保留。
+- 原創菜單來源是 `src/image/original-kit/menu.html`；字典圖使用 `src/image/glass/dictionary-blur-options.html` 中唯一保留的 dust 版面。
 - 素材瀏覽頁在 `assets/index.html`。既有權利查核與授權紀錄保留於 `src/video/licenses/`。
 
 ### 驗證
 
 - 只改製作子專案時，不跑 Swift App 測試、不產生 DMG。
 - 影片跑 `npm run lint`、`npx remotion compositions src/index.ts`；目錄整理前後用同一環境渲染相同格數 PNG 比對，另核對時序與聲音。已有 MP4 不重製，用雜湊確認未變。
-- 功能圖跑 `npm run check`，只比對正式 Glass 四張；太空灰與舊模板用 `--write --out <新目錄>` 驗證另存能力；比對時不加 `--write`。
+- 功能圖跑 `npm run check` 比對正式 Glass 四張，用 `--write --out <新目錄>` 驗證另存；比對時不加 `--write`。
 - 每次改動畫面或聲音，仍按上方「工作方式與交付」檢查及請另一個 agent review。

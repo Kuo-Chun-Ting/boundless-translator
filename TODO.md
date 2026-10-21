@@ -461,3 +461,6 @@
 - [x] 將 App Store 清理方案寫入 `app-store/app_store_cleanup_responsed_by_codex.md`，列明正式成品改名、刪除範圍、重製依賴與驗證方式，交 Claude review；尚未執行清理。
 - [x] 核對 Claude 的 App Store 清理 review 並修正原方案：取消正式母帶保留、改用 Remotion CLI 做暫存驗證，補明正式版取代條件與四張圖的檢查範圍；副標維持待確認，未執行清理或修改渲染程式。
 - [x] 依核准方案整理 App Store 成品：Glass 四張圖直接放 `app-store/image/`，shoo 影片改為 `app-store/video/preview.mp4`；刪除舊成品、比較稿、八個母帶與已結束的搬遷討論，素材、模板、授權與製作程式保留。圖片預設入口／檢查對準正式四張，太空灰與舊版可另存；同步索引與交接。五個正式檔案雜湊不變、16 張重製逐 byte 相同；影片前後完整重製與編碼／解碼成功，音訊相同、896／897 格相同，另一格僅微小色值差異。防覆蓋、影片 lint／型別／組合清單及現行連結檢查通過，另一 agent 複查無必改。副標未改，未修改 App、未產生 DMG、未 commit 或上傳。
+- [x] 再次檢查 App Store 遺留草稿與比較素材，更新 `app-store/app_store_cleanup_responsed_by_codex.md` 交 Claude review；區分可清除項目、需同步調整的舊製作入口與未核准縮減的能力，列明保留範圍及驗證要求。僅更新文件，未執行第二輪清理。
+
+- [x] 依使用者與 Claude 第二輪結論清理 App Store：移除舊構圖、太空灰、woo 的模板／入口／專用素材及未採用字典草稿、試聽音效；現行索引與交接同步，只維護 Glass 四張圖與 shoo 影片。字典模板只保留 dust，產圖時保留原取圖座標以維持像素一致。四張另存圖逐 byte 相同，五個正式成品雜湊不變；影片完整重製音軌相同，897 格中 896 格相同，另一格 PSNR 97.87 dB。Lint／型別、單一 composition、音效重製、另存與防覆蓋、166 個現行本機連結檢查通過，另一 agent 複查無必改。結論已納入 HANDOFF，刪除兩份已結束的清理討論；副標未改，未修改 App、未產生 DMG、未 commit 或上傳。

@@ -6,16 +6,15 @@ const {PNG} = require('pngjs');
 
 const root = path.resolve(__dirname, '../..');
 const write = process.argv.includes('--write');
-const legacy = process.argv.includes('--legacy');
 const dictionaryDust = process.argv.includes('--dictionary-dust');
-const spaceGray = process.argv.includes('--space-gray');
 
 /** @returns {string | undefined} */
 function createOutputDirectory() {
-  if (legacy && (spaceGray || dictionaryDust || process.argv.includes('--recording'))) {
-    throw Error('--legacy renders both old themes; do not combine it with current-layout options.');
+  for (const arg of process.argv.slice(2)) {
+    if (arg.startsWith('--') && !['--write', '--out', '--dictionary-dust', '--recording'].includes(arg)) {
+      throw Error(`Unknown option: ${arg}`);
+    }
   }
-  if ((legacy || spaceGray) && !write) throw Error('Alternate layouts require --write --out <new-directory>.');
   const index = process.argv.indexOf('--out');
   const value = index === -1 ? undefined : process.argv[index + 1];
   if (!write && index !== -1) throw Error('--out requires --write.');
@@ -31,9 +30,7 @@ function createOutputDirectory() {
 /** @param {string} output @param {string | undefined} directory @returns {string} */
 function outputPath(output, directory) {
   if (!directory) return path.join(root, output);
-  // A full legacy set contains two themes with matching filenames.
-  const relative = legacy ? path.relative('image', output) : path.basename(output);
-  return path.join(directory, relative);
+  return path.join(directory, path.basename(output));
 }
 
 /** @returns {Array<{source: string, output: string, kind?: string}>} */
@@ -42,64 +39,25 @@ function listPages() {
     source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust',
     output: 'image/03-dictionary.png',
   }];
-  if (!legacy) {
-    return [
-      ...[['selection', '01-selection'], ['screenshot', '02-screenshot']].map(([selector, name]) => ({
-        source: 'src/image/glass/recording.html', selector: `#${selector}`,
-        output: `image/${name}.png`,
-        kind: selector === 'screenshot' ? 'recording-menu' : undefined,
-      })),
-      {source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust', output: 'image/03-dictionary.png'},
-      {source: 'src/image/glass/04-settings.html', output: 'image/04-settings.png'},
-    ];
-  }
-  const pages = [];
-  for (const theme of ['glass', 'space-gray']) {
-    const folder = `image/${theme}`;
-    for (const [source, output] of [
-      ['01-selected-text-02-preview-aligned', '01-selection-2-preview'],
-      ['04-settings', '04-settings'],
-    ]) {
-      pages.push({source: `src/image/${theme}/${source}.html`, output: `${folder}/${output}.png`});
-    }
-    pages.push({
-      source: `src/image/${theme}/dictionary.html`,
-      output: `${folder}/03-dictionary.png`,
-    });
-    for (const [kind, name] of [['lettering', '1-cant-select']]) {
-      pages.push({kind, source: `src/image/${theme}/screenshot-${kind}.html`,
-        output: `${folder}/02-screenshot-${name}.png`});
-    }
-  }
-  return pages;
+  return [
+    ...[['selection', '01-selection'], ['screenshot', '02-screenshot']].map(([selector, name]) => ({
+      source: 'src/image/glass/recording.html', selector: `#${selector}`,
+      output: `image/${name}.png`,
+      kind: selector === 'screenshot' ? 'recording-menu' : undefined,
+    })),
+    {source: 'src/image/glass/dictionary-blur-options.html', selector: '#option-2-dust', output: 'image/03-dictionary.png'},
+    {source: 'src/image/glass/04-settings.html', output: 'image/04-settings.png'},
+  ];
 }
 
 /** @param {import('playwright').Page} page @param {string} source @returns {Promise<Buffer>} */
 async function renderLayout(page, source, selector = '.slide', selectedScreenshot) {
   await page.goto(pathToFileURL(path.join(root, source)).href);
-  if (spaceGray && (source.endsWith('/recording.html') || source.endsWith('/dictionary-blur-options.html'))) {
-    const themeSource = fs.readFileSync(path.join(__dirname, 'space-gray/dictionary.html'), 'utf8');
-    await page.evaluate(themeHTML => {
-      const theme = new DOMParser().parseFromString(themeHTML, 'text/html');
-      for (const id of ['blue', 'ice', 'glass-fill', 'glass-edge', 'pane-shadow', 'glass']) {
-        document.getElementById(id).replaceWith(document.importNode(theme.getElementById(id), true));
-      }
-      const css = theme.querySelector('style').textContent;
-      const style = document.createElement('style');
-      style.textContent = ['body', '.slide', 'p'].map(selector => {
-        const escaped = selector.replace('.', '\\.');
-        return css.match(new RegExp(`${escaped} \\{[^}]+\\}`))[0];
-      }).join('\n') + `
-        .action,.context-tag {color:#d8d5d3;}
-        .window-cutout,.source-window {filter:drop-shadow(0 12px 18px #00000045);}
-        .capture {box-shadow:0 18px 45px #00000045;}
-      `;
-      document.head.appendChild(style);
-      for (const stop of document.querySelectorAll('.caption-wash stop')) {
-        stop.setAttribute('stop-color', '#d8d5d3');
-        stop.setAttribute('stop-opacity', Number(stop.getAttribute('stop-opacity')) * .75);
-      }
-    }, themeSource);
+  if (selector === '#option-2-dust') {
+    // Keep the approved image's document Y origin at 1.6x rasterization.
+    // Moving it from 1032 to 0 changes subpixel rounding, even after scrolling.
+    // This padding stays outside the captured slide; no old layout is retained.
+    await page.evaluate(() => { document.body.style.paddingTop = '1032px'; });
   }
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -183,10 +141,7 @@ async function main() {
   try {
     const page = await browser.newPage({viewport: {width: 1600, height: 1000}, deviceScaleFactor: 1.6});
     let failures = 0;
-    for (const originalJob of listPages()) {
-      const job = spaceGray ? {...originalJob,
-        source: originalJob.source.replace('glass/04-settings.html', 'space-gray/04-settings.html'),
-      } : originalJob;
+    for (const job of listPages()) {
       let output = await renderLayout(page, job.source, job.selector, job.kind === 'recording-menu');
       if (job.kind) output = await renderBeams(page, output, job.kind);
       const destination = outputPath(job.output, directory);

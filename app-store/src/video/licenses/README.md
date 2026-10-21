@@ -55,13 +55,12 @@ Music: “Easy Lemon” by Kevin MacLeod (incompetech.com) · Excerpt with fades
 
 ## 截圖翻譯字卡音效（Kenney，CC0）
 
-截圖翻譯的四張字卡出現翻譯時各響一次。原始檔在 `../sfx-source/kenney/`，授權檔是同目錄的 `interface-sounds-License.txt`、`casino-audio-License.txt`。`public/sfx/kenney/` 的 wav 由 `../prepare-card-sfx.sh` 轉成 48 kHz 雙聲道，並把峰值調到約 −13 dB。
+截圖翻譯的四張字卡出現翻譯時各響一次。原始檔在 `../sfx-source/kenney/`，授權檔是同目錄的 `casino-audio-License.txt`。`public/sfx/kenney/` 的 wav 由 `../prepare-card-sfx.sh` 轉成 48 kHz 雙聲道，並把峰值調到約 −13 dB。
 
 | 用途 | 原始檔 | 來源 | 授權 | SHA-256 |
 | --- | --- | --- | --- | --- |
-| 字卡「woo」（保留替代音效） | `maximize_008.ogg` → `public/sfx/kenney/card-woo.wav` | Kenney，Interface Sounds 1.0，<https://kenney.nl/assets/interface-sounds> | CC0 1.0 | `57c074e600e193a303ce781c04c0ccc191c6030f9f106594fd94a65e55435c17` |
 | 字卡「咻」（正式採用） | `card-slide-4.ogg` → `public/sfx/kenney/card-shoo.wav` | Kenney，Casino Audio 1.1，<https://kenney.nl/assets/casino-audio> | CC0 1.0 | `b9c82bcdbe6b7d00a06e2546bd2683a9ab082ca5fd090a42882f33eddd925b7f` |
 
-下載日：2026-10-21。授權檔原文：“You may use these assets in personal and commercial projects.”（Casino Audio）、“This content is free to use in personal, educational and commercial projects.”（Interface Sounds），署名非必要。
+下載日：2026-10-21。授權檔原文：“You may use these assets in personal and commercial projects.”（Casino Audio），署名非必要。
 
 另見 [預覽影片素材權利查核](rights-review.md)（App Store 2.3.9、字典詞條權利）。
