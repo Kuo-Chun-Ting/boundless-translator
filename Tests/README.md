@@ -80,3 +80,5 @@ Other entries run their entire level without selectors. Unknown/empty test selec
 ## Layout
 
 `Unit/` and `Component/` contain fast tests. `GUI/` contains local UI fixtures and cases; `E2E/` contains product tests. `StoreKit/`, `LanguageSupport/` and `Scripts/` hold their respective checks. Public Shell entries live directly under `Scripts/`; shared test helpers live in `Scripts/Shared/`. Only `Tests/Scripts/` contains Shell tests. `Infrastructure/` contains Swift test support and Xcode configuration. `Fixtures/` contains shared data; feature-specific fixtures remain beside their tests.
+
+For manual subscription testing, run `Scripts/build_app_store_app.sh`, then manually open `Build/AppStore/Boundless Translator.app` with the Sandbox account configured in App Store Settings. This does not run automated tests or upload a build. Follow the [purchase and reset instructions](../app-store/storekit-testing.md).

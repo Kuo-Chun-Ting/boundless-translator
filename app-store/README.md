@@ -3,6 +3,7 @@
 | 要做的事 | 位置 |
 | --- | --- |
 | 查看功能介紹圖與上架版本 | [image/README.md](image/README.md) |
+| 上傳訂閱審核截圖 | [image/subscription.jpg](image/subscription.jpg) |
 | 查看影片與上架版本 | [video/README.md](video/README.md) |
 | 放新錄影 | [assets/recording/](assets/recording/) |
 | 瀏覽原始素材 | [assets/index.html](assets/index.html) |

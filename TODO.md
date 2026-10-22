@@ -71,7 +71,7 @@
 - [x] 唯讀核對 App Store Connect 的版本 1.0、Build 49、App Information、Privacy、價格與地區、訂閱及 Business；將實際缺漏、已完成項目及待驗收內容整理至 `app-store/implementation-plan.md`。未填寫、儲存、上傳、接受合約或送審。
 - [x] 同步 README、英文／繁中／簡中 Support 與系統語言支援說明：補上首次語言設定、視窗內語言僅對目前視窗生效、M 系列晶片需求與辨識等待；移除固定印地文限制及「介面語言與 macOS 相同」的外部宣稱。網站導覽限定三語 Support，排除內部素材與 OCR 測資；尚未發布網站。
 - [x] 發布本次對外文件並檢查三語 Support／Privacy 及導覽；2026-10-18 已確認 `a67b227` 正式部署成功。
-- [ ] 依 `app-store/implementation-plan.md` 完成其餘商品頁、訂閱審核資料與送審設定。
+- [ ] 依 `app-store/implementation-plan.md` 處理新版付費合約、確認中文隱私網址調整、補齊候選 Build 驗收紀錄及送審；素材、影片播放／封面、群組名稱、訂閱審核截圖、Build 選擇及帳號狀態查核已完成。
 
 - [x] 新增 `Scripts/reset_all_dmg.sh` 與 `Scripts/reset_all_app_store.sh`，依核准順序串接對應版本的 App data、權限、Lookup 重設；沿用既有腳本，不加額外錯誤處理。入口順序測試已先失敗再通過，ResetEntryPoints／ResetAppData／ResetPermissions／ResetLookupDictionary 四組 Shell 測試及 zsh 語法檢查通過，獨立 review 無待修正問題。測試使用替身，未重設實際資料或權限；未改 App 程式碼、未產生 DMG、未 commit。
 
@@ -476,3 +476,38 @@
 - [x] 依使用者要求將新副標成圖另存為 `app-store/image/02-screenshot-new.png`，從 Git 完整還原 `02-screenshot.png` 供比較；已驗證原版與 HEAD 相同、新版與本次渲染相同，並同步文件的待 review 狀態。
 
 - [x] 使用者核准新副標成圖後取代正式 `02-screenshot.png`，移除比較檔並同步交接狀態；四張功能圖 `npm run check` 全部零像素差異。未改 App 或影片，未產生 DMG。
+
+- [x] 2026-10-22 唯讀查核 App Store Connect：版本 1.0 為 Prepare for Submission，三語商品描述／關鍵字／支援網址與英文審核備註已填，三語皆無圖片或預覽影片且未選 Build；分類 Productivity、4+ 年齡分級、內容權利聲明、已發布 Data Not Collected、免費下載與 175 地區已有設定。訂閱群組無顯示名稱，年訂閱缺審核截圖；App 保持手動發布。Business 導覽遭自動審核阻擋，合約及交易者驗證結果未能確認；未修改後台或送審，未執行最終 App 驗收。
+- [x] 2026-10-22 補查可選 Build 與訂閱價格：Add Build 清單最新為 1.0 (49)，上傳時間為 10 月 17 日 11:29；未選取或儲存。年訂閱台灣價格為 NT$199，目前 175 地區設有 introductory offer，台灣列顯示首月免費。訂閱群組仍無顯示名稱，訂閱審核截圖仍空白。未修改後台、未送審、未執行 App 驗收或產生 DMG。
+
+- [x] 2026-10-22 將已查核的上架缺項整理至 `app-store/implementation-plan.md`：包含目的、後台直達連結、操作步驟、完成條件及負責範圍；明確區分三語商品頁與素材在地化，沿用已定稿英文素材。同步修正操作指南的過時狀態；未修改後台、未執行 App 測試或產生 DMG。
+- [x] 將本機 Sandbox 訂閱測試計畫寫入 `app-store/sandbox_testing_responsed_by_codex.md` 供 Claude review：釐清帳號與自動測試差異、現有設定、最小腳本方案、共用資料限制及實際購買驗證。僅完成計畫與文件核對；尚未建置、重設帳號、執行購買或修改功能程式。
+- [x] 將停用 StoreKit 自動測試的去留納入同一份 Claude review 計畫：重跑 `Scripts/run_storekit_tests.sh --force`，五案皆在模擬購買回傳 `unknown` 失敗（exit 65），與先前交易成功但權益為空不同。列出最小案例診斷、修復後恢復執行或無法可靠測試時完整移除的條件及依賴範圍；尚未修復或刪除測試，未執行 Sandbox 購買或產生 DMG。
+
+- [x] 重新 review StoreKit 自動測試並更新同一份 Claude review 計畫：確認應沿用 Apple 本機模擬工具、不依賴真實購買服務；列出交易完成缺少前置斷言、到期／退款主動刷新未驗證通知、失敗報告被刪除等問題，補上分層驗證與診斷順序，取消一次失敗即可移除的判準。僅更新計畫，尚未修改測試／App、未重跑測試或產生 DMG。
+
+- [x] 核對 Claude 的本機訂閱測試計畫 review 並回應：先完成 Sandbox 訂閱畫面與重測、再修自動測試；沿用 Automatic 簽章後檢查產物，入口採 `run_sandbox_app_store.sh`；以訂閱畫面驗收、不授予本機版翻譯所需權限，描述檔與權限互相影響保留待實測。使用者表示新帳號已設定完成；本輪僅修改計畫，尚未建置或購買，未產生 DMG。
+
+- [x] 依使用者最新決定更新本機訂閱測試計畫：保留 DMG 建置與發布流程，新增入口規劃改為 `build_app_store_app.sh`，只建置並顯示路徑供手動開啟；沿用 App Store 專案設定，不呼叫正式封存、驗證及上傳腳本。已同步腳本驗證範圍與 Claude 回覆；本輪僅改文件，尚未實作或建置，未產生 DMG。
+
+- [x] 核對 Claude 訂閱測試回覆與使用者最後確認事項，更新同一份計畫：補明 DMG／App Store 的 Bundle ID、正式版與 TestFlight 共用識別碼、各 Reset 的資料與路徑範圍，以及新 builder 不自動開啟或重設。請 Claude 核對最新決定；僅改文件並檢查一致性，未執行 Reset、建置、購買或測試，未產生 DMG。
+
+- [x] 核對並回覆 Claude 第二輪本機訂閱測試 review：無必改項目；採用 `Build/AppStore/Boundless Translator.app`，先暫存建置、成功後替換，失敗保留上一版並明確回報失敗。同步計畫與測試範圍，保留既有發布產物；文件檢查通過，尚未實作、建置、購買或產生 DMG。
+
+- [x] 新增 `Scripts/build_app_store_app.sh` 及三項 Shell 測試；實際產生 `Build/AppStore/Boundless Translator.app`，確認 Apple Development 簽章、Bundle ID、商品 ID、Sandbox／網路權限與 strict 簽章驗證通過。既有建置、發布、Reset 腳本未修改；不自動開啟 App，未產生 DMG、未上傳。
+- [x] 依使用者要求還原本次 StoreKit 自動測試、runner 及其 Shell 測試改動，撤回文件中的新增行為描述；保留本機 App Store builder、訂閱截圖與手動購買流程。三個還原檔案與 HEAD 完全一致，訂閱群組腳本測試及 builder 腳本測試通過；未改正式 App、未產生 DMG。
+- [x] 使用者手動開啟本機 App，確認未訂閱方案、價格與購買按鈕；審核截圖現保留於 `app-store/assets/screenshots/subscription.jpg`。
+- [x] 逐張檢視使用者提供的 subscription1–5 截圖，確認 Sandbox 測試帳號、Apple 購買成功及 App 顯示 Active；更新測試文件與素材清單。
+- [ ] 本機 Sandbox 重啟後保留訂閱、恢復購買及清除後重測尚未完成。
+- [ ] 修復 StoreKit 本機自動測試（後續處理，不阻擋本次上架準備）：本次嘗試已還原，原五案與預設停用維持不變，Verify 沿用既有例外。使用 Apple 本機模擬工具，不依賴真實訂閱 API 或 Sandbox 帳號；釐清模擬購買、權益與通知失敗原因，再驗證購買解鎖、載入／恢復、指定交易完成、取消續訂仍有效、到期／退款移除權益。通知案例不可用手動刷新代替。若工具仍無法可靠測試，先提出證據與去留方案供 review，不直接刪除整層或放寬斷言。先前七案三過四敗僅為已撤回嘗試的紀錄；見 `app-store/storekit-testing.md`。
+
+- [x] 回覆 Claude 第三輪本機訂閱 review：含測試帳號信箱的兩張截圖保留本機並以 `.gitignore` 排除，確認尚未被追蹤；builder 第二、第三項腳本測試各自準備舊產物，三案通過。重複截圖暫留，StoreKit 自動測試維持已還原；未改正式程式、未產生 DMG、未 commit。
+
+- [x] 依使用者要求只保留訂閱審核素材 `app-store/assets/screenshots/subscription.jpg`，刪除 subscription2–5 測試截圖及其專用 ignore 規則，同步素材清單與上架文件；保留圖片雜湊不變，未上傳或 commit。
+
+- [x] 訂閱審核圖另存為 `app-store/image/subscription.jpg`（1440 × 900 JPEG），原圖保留；已檢查尺寸、格式、完整畫面與文件連結，尚未確認後台上傳成功。
+
+- [x] 2026-10-22 關閉年訂閱的多人購買；App Store Connect 顯示 Multiseat Purchases 為 Not Allowed，購買通路僅保留 App Store。
+- [x] 2026-10-22 將英文訂閱 Display Name 改為 Annual Plan 並儲存；查核商品頁、App 資訊、隱私、分級、價格地區、訂閱及送審狀態，更新上架待辦與操作指南。中文隱私網址仍指向英文頁，已列待確認；Business 最新狀態尚未查明。未送審、未改 App 或產生 DMG。
+- [x] 2026-10-22 補完唯讀查核：後台影片正常播放到 29 秒片尾，封面為第 5 秒的選字畫面；Business 的銀行、三份稅務文件及 DSA 均為 Active，付費合約有新版待接受。核對 Build 49 相關自動測試通過紀錄，手動重啟／恢復購買及候選版完整驗收仍缺紀錄。未修改後台、未執行測試或產生 DMG。
+- [ ] 支援並測試多人購買（後續處理，不阻擋本次上架）：補上 App 內購買名額數量的選擇與購買流程；驗證群組邀請及企業／學校分配名額後能解鎖、重啟／恢復後仍有效，名額收回或訂閱到期後停止授權，並確認付款人與成員的訂閱資訊顯示正確。沿用 Apple 的邀請與名額管理，完成測試後再開啟後台選項。參考 [Apple 說明](https://developer.apple.com/videos/play/wwdc2026/391/)。

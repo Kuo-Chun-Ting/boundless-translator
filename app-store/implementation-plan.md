@@ -1,38 +1,158 @@
 # 上架待辦
 
-後台狀態依 2026-10-17 的唯讀檢查；以下清單於 2026-10-18 整理，未重新查詢後台。版本為 **1.0**，Build **49** 已供朋友測試，尚未指定為正式送審版本。
+後台查核日期：2026-10-22。版本 1.0 已選擇 Build 1.0（49）並儲存，仍為 Prepare for Submission。App Review 尚無送審項目。
 
-2026-10-18 進度核對：Apple Developer 的 Agreements 已記錄新版協議於當日接受；App Store Connect Business 仍顯示新版協議提醒，是否已解除提交阻擋尚待確認。Business 的 Digital Services Act 已顯示 In Review，更新日期為當日，涵蓋 27 個歐盟地區；尚未確認驗證通過。其餘項目維持上次查核紀錄。
+本文件集中記錄剩餘工作、目的、入口與完成條件。已完成的項目不重做；歷來欄位操作說明見 [submission-guide.md](submission-guide.md)。
 
-2026-10-18 網站與商品頁查核：第 05 項網站發布、第 06 項三語商品文字、第 11 項英文審核備註已完成並儲存。當時商品頁尚未上傳截圖、未選 Build。這次未重新確認交易者身分及 App Information 狀態。
+## 素材與語言
 
-照順序處理即可。原因、入口與步驟見[上架操作指南](submission-guide.md)。
+三語商品頁不代表必須製作三套圖片。這次先沿用已定稿的英文圖片與影片；繁中、簡中圖片屬於另外的在地化工作，不列為本次上架必做項目。上傳後確認三個語言頁都有素材可顯示；若頁面未沿用主要語言素材，再指定或上傳相同檔案。
 
-## 接下來要做
+- 圖片依序為 [選字翻譯](image/01-selection.png)、[截圖翻譯](image/02-screenshot.png)、[字典](image/03-dictionary.png)、[設定](image/04-settings.png)。
+- 影片為 [preview.mp4](video/preview.mp4)。
+- 商品圖片給下載前的使用者看；訂閱審核截圖給 Apple 看實際購買畫面，兩者不同。
 
-- [x] 01 接受新版開發者協議。Apple Developer 記錄 Accepted October 18, 2026；Connect 提醒尚待確認消除。[步驟](submission-guide.md#step-01)
-- [ ] 02 完成交易者身分申報；若以交易者身分在歐盟上架，再完成資料驗證。2026-10-18 已提交，狀態 In Review，等待 Apple 驗證結果。[步驟](submission-guide.md#step-02)
-- [ ] 03 設定主要分類、年齡分級與內容權利聲明。[步驟](submission-guide.md#step-03)
-- [x] 04 設定 App 下載價格與上架地區。2026-10-18 已設定 United States 基準、免費下載及全部 175 個國家／地區；Availability 顯示 Available on App Release。[步驟](submission-guide.md#step-04)
-- [x] 05 發布已更新的支援網站。2026-10-18 已確認 `a67b227` 的 Pages 部署成功；正式首頁、三語 Support／Privacy、CSS 與站內連結／錨點均通過檢查，並實際確認三語畫面與語言切換。[步驟](submission-guide.md#step-05)
-- [x] 06 更新英文、繁中、簡中商品描述。2026-10-18 已依核准文案儲存三語 Description，對應支援網址已確認；英文關鍵字移除舊 Live Text，簡中填入對應關鍵字。重新載入後逐語讀回與核准稿一致，尚未送審。[步驟](submission-guide.md#step-06)
-- [ ] 07 上傳已確認的四張 Glass 功能介紹圖與 `video/preview.mp4`。[步驟](submission-guide.md#step-07)
-- [ ] 08 補上訂閱群組顯示名稱與訂閱審核截圖。[步驟](submission-guide.md#step-08)
-- [ ] 09 完成最終 Verify 與 TestFlight 功能、訂閱驗收。[步驟](submission-guide.md#step-09)
-- [ ] 10 在版本 1.0 選擇驗收過的 Build。[步驟](submission-guide.md#step-10)
-- [x] 11 更新給 Apple 的審核操作說明。2026-10-18 已填入使用者核准的英文 Notes 並儲存；重新載入後核對全文一致。[步驟](submission-guide.md#step-11)
-- [ ] 12 將 App、年訂閱和訂閱群組一起送審。[步驟](submission-guide.md#step-12)
-- [ ] 13 Apple 通過後，手動發布。[步驟](submission-guide.md#step-13)
+[Apple 商品頁在地化說明](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information)
 
-英文、繁中、簡中商品頁文字已完成。副標題、宣傳文字與 Marketing URL 維持原狀；正式圖片和影片見 [素材入口](README.md)。
+## 待辦順序
 
-## 已有的資料
+由 agent 負責資料整理、上傳、檢查與測試；只有帳號驗證、接受合約、系統交易確認或最後送審／發布決定需要使用者介入時，才請使用者處理。這份文件本身不代表已授權送審或發布。
 
-- [x] Build 49 已上傳並在 TestFlight 測試；最低 macOS 15、僅支援 Apple 晶片。
-- [x] App Privacy、隱私權政策網址、英文 Support URL、Copyright 與審核聯絡資料已填。
-- [x] 年訂閱已有三語名稱與說明，台灣年費 NT$199、首月免費，已設定銷售地區。
-- [x] 付費合約、銀行及稅表為 Active；App 與訂閱的 Tax Category 已有設定。
-- [x] 正式功能介紹圖已完成；README、三語 Support 與網站導覽已在本機更新。
-- [x] 已選手動發布，Apple 通過後不會立即自動上線。
+### 1. 上傳商品圖片與影片
 
-App 內另有一句舊的語言支援說明待決定是否修改，見[第 09 項](submission-guide.md#step-09)。本清單不將其他長期待辦全部列為上架條件。
+目的：讓使用者在 App Store 看到功能及操作方式。英文已上傳四張圖片與一支影片；繁中、簡中顯示 Using Existing Assets，沿用英文素材。
+
+入口：[版本 1.0 商品頁](https://appstoreconnect.apple.com/apps/6810727652/distribution/macos/version/inflight)。
+
+- [x] 英文頁已上傳四張圖片，依選字翻譯、截圖翻譯、字典、設定排序。
+- [x] 已上傳 `video/preview.mp4`，後台列出一支影片。
+- [x] 後台影片已從開頭播放到 29 秒片尾，未遇播放錯誤；本次未驗證音訊。
+- [x] 已檢視現有封面：預設第 5 秒的選字操作畫面，非空白或載入失敗畫面；沒有修改封面。
+- [x] 繁中、簡中均沿用同一組英文圖片與影片。
+- [x] 三語素材清單與順序已確認；英文影片播放與封面已檢視，中文沿用相同素材。
+
+完成條件：三語商品頁都有預定的四張圖片與一支可播放影片，沒有處理失敗或未儲存的修改。
+
+### 2. 訂閱群組顯示名稱（已完成）
+
+目的：讓使用者在管理訂閱時辨認這個 App。現有內部參考名稱不等於對外顯示名稱。
+
+入口：[訂閱群組](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscription-groups/22374799)。
+
+- [x] 英文群組顯示名稱為 `Boundless Translator`，App 名稱也沿用品牌名稱。
+- [x] 依使用者決定維持一份英文群組名稱，不另加中文翻譯。
+
+年訂閱商品本身仍有三語顯示名稱與描述：英文 `Annual Plan`（本次已儲存）、繁中「年繳方案」、簡中「年度订阅」。內部 Reference Name 保持 `Boundless Translator Annual`。
+
+### 3. 驗收準備送審的 App
+
+目的：確認真正交給 Apple 的程式及訂閱流程能使用。後台有 Build 不等於已完成驗收。
+
+入口：[TestFlight](https://appstoreconnect.apple.com/teams/5bb83b1e-176f-4d8c-a7c2-37242cbca6fb/apps/6810727652/testflight)，以及專案根目錄的終端機。
+
+- [ ] 核對既有測試紀錄及送審程式版本，只補尚未覆蓋的檢查。目前候選為 Build 49。
+- [ ] 若最後程式版本尚無完整驗證，執行 `Scripts/verify.sh`。這會包含發布驗證；依專案規則，除 StoreKit 既有例外外，其餘項目需通過。
+- [ ] 從 Mac 的 TestFlight 安裝候選 Build，驗證首次語言設定、必要權限、選字翻譯、截圖內單字與句子翻譯、字典、朗讀及快捷鍵。
+- [ ] 測試訂閱畫面載入價格、試用／購買後解鎖、重新啟動後保留狀態、恢復購買及訂閱失效行為。
+- [ ] 記錄 Build 編號、測試結果與未測範圍；本機 StoreKit 跳過不能當作實際訂閱驗收通過。詳見 [storekit-testing.md](storekit-testing.md)。
+
+本次已核對既有紀錄：Build 49 對應改動已有 Unit 246、Component 207、GUI 15、E2E 4 項通過紀錄；不能列為完全未測。紀錄引用的三份 `/private/tmp/` log 已不存在，尚未找到能確認最後候選版本完整 Verify 通過的紀錄。手動訂閱已有本機 Sandbox 購買成功、顯示 Active 與後來回到未訂閱的紀錄；重啟後保留狀態、恢復購買，以及候選 TestFlight Build 的完整驗收仍缺紀錄。本次僅查核，未重跑測試。
+
+完成條件：送審 Build 的功能與訂閱驗收有紀錄，沒有阻擋上架的問題。若要修改 App 程式或內建文案，先修正並上傳新 Build；只改商品圖片或描述不需要重建 App。既有語言支援文案待決定事項見[驗收說明](submission-guide.md#step-09)，不在本次自行擴大修改。
+
+### 4. 訂閱審核截圖（已完成）
+
+目的：讓 Apple 看見 App 內實際購買年訂閱的畫面。Review Information → Screenshot 已有圖片，頁面沒有待儲存變更。
+
+入口：[年訂閱設定](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscriptions/6810730512)。
+
+- [x] 已取得未訂閱畫面的真實截圖，輸出為 `image/subscription.jpg`。
+- [x] 後台 Review Information → Screenshot 已上傳並儲存。
+
+本機 Sandbox 首次購買已成功；候選 Build 的完整驗收仍另列第 3 項，不能因截圖上傳完成就勾選通過。
+
+完成條件：Apple 的訂閱審核欄位有實際購買畫面。上方 Image (Optional) 是訂閱宣傳圖片，不是這次要補的欄位。
+
+### 5. 指定送審 Build（已選擇）
+
+目的：告訴 Apple 版本 1.0 要審核哪一份程式。
+
+入口：[版本 1.0 商品頁](https://appstoreconnect.apple.com/apps/6810727652/distribution/macos/version/inflight)。
+
+- [x] 版本頁已選擇 1.0（49）並儲存。
+- [x] Build Metadata 顯示 Validated、macOS 15.0、arm64，App Uses Non-Exempt Encryption 為 No。
+- [ ] 送審前完成第 3 項驗收；若換版，再更新此處選擇。
+
+完成條件：版本頁已指定驗收過的 Build。
+
+### 6. 將 App、年訂閱與訂閱群組一起送審
+
+目的：讓 Apple 同時審核首次上架的 App 與訂閱。
+
+入口：[版本頁](https://appstoreconnect.apple.com/apps/6810727652/distribution/macos/version/inflight)、[年訂閱](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscriptions/6810730512)、[訂閱群組](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscription-groups/22374799)、[App Review](https://appstoreconnect.apple.com/apps/6810727652/distribution/reviewsubmissions)。
+
+- [ ] 確認前述資料、驗收與下方帳號狀態檢查完成，仍設定手動發布。
+- [ ] 在版本頁按 Add for Review，加入送審草稿。
+- [ ] 將年訂閱與訂閱群組加入同一份草稿。
+- [ ] 在 App Review 核對版本、Build、訂閱及群組，補齊後台實際提示的缺項。
+- [ ] 將完整送審內容交給使用者確認，獲准後按 Submit for Review。
+- [ ] 確認狀態已進入等待審核或審核中；若 Apple 提問或要求補件，依實際內容處理。
+
+完成條件：正式申請已送出。Add for Review 只是加入草稿，Submit for Review 才是送審。
+
+[App 送審說明](https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app) · [首次訂閱送審說明](https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase)
+
+### 7. 通過後手動發布
+
+目的：由使用者決定正式公開的時間。目前已選 Manually release this version。
+
+入口：[版本 1.0 商品頁](https://appstoreconnect.apple.com/apps/6810727652/distribution/macos/version/inflight)。
+
+- [ ] 等狀態變成 Pending Developer Release。
+- [ ] 核對版本、Build 與發布地區，取得使用者發布指示。
+- [ ] 按 Release This Version，完成發布確認。
+- [ ] 上線後檢查三語商品頁、圖片、影片、下載與訂閱。
+
+完成條件：預定地區可查看商品頁、下載 App 並使用訂閱。
+
+## 帳號狀態與待接受合約
+
+2026-10-22 已讀取使用者手動開啟的 Business 頁，最新結果如下。
+
+入口：[Business](https://appstoreconnect.apple.com/business)。
+
+- [x] Free Apps Agreement 為 Active。
+- [x] 銀行帳戶與三份稅務文件均為 Active，不需重填。
+- [x] Digital Services Act 為 Active，適用 27 個國家／地區，最後更新 2026-10-18。
+- [ ] 使用者開啟 Paid Apps Agreement 的 View and Agree to Terms，閱讀並決定接受新版條款。目前為 Active (New Agreement Available)，現有合約仍有效，不能據此斷言已阻擋送審；新版條款尚未接受。
+
+本次沒有點選同意或修改任何帳號資料。
+
+## 已確認完成，不重做
+
+2026-10-22 後台查核：
+
+- [x] 主要分類 Productivity、年齡分級 4+ 與內容權利聲明已有設定；此處只記錄已填，不代替權利判斷。
+- [x] App Privacy 已發布 Data Not Collected，隱私網址已有設定。
+- [x] App 免費下載，175 個國家／地區已設定可用。
+- [x] 英文、繁中、簡中的描述、關鍵字與支援網址已填。
+- [x] 英文審核備註、聯絡資料已填，未要求 App 帳號登入。
+- [x] 年訂閱有三語名稱與描述，台灣年費 NT$199、首月免費已設定。
+- [x] Build 49 出現在可送審清單。
+- [x] 已設定手動發布。
+
+## 其他頁面查核結果
+
+| 頁面 | 現況與判斷 |
+| --- | --- |
+| App Information | 三語 App 名稱均為 Boundless Translator；副標空白，維持使用者先前決定。Productivity 與 4+ 已設定；年齡問卷已逐步核對。 |
+| App Privacy | Data Not Collected 已發布。繁中、簡中的 Privacy Policy URL 都指向 `/en/privacy/`；建議改成既有 `/zh-tw/privacy/`、`/zh-cn/privacy/`，待使用者同意後修改。 |
+| Pricing and Availability | App 本體在 175 個地區皆為免費，175 個地區可用；Public 發行，稅務分類 App Store software。學校大量購買五折選項已勾選，但適用 App 本體價格，不是年訂閱名額；免費 App 目前沒有折扣金額差異。 |
+| Subscriptions | 一個年訂閱群組；多人購買 Not Allowed、Family Sharing 關閉。Billing Grace Period 未啟用，Streamlined Purchasing 啟用；本次未調整。 |
+| In-App Purchases | 沒有額外的單次內購商品；年訂閱已在 Subscriptions，不需重建。 |
+| App Accessibility | 尚未填寫支援標示。應在實際驗證各項輔助使用功能後再聲明，不列為本次必填。 |
+| App Review | 尚無送審項目；未按 Add for Review 或 Submit for Review。 |
+
+三語描述、訂閱說明與審核備註未見需要重寫的空泛宣傳文案。本次後台唯一修改為英文訂閱 Display Name；沒有改 App、執行測試或產生 DMG。
+
+其他已完成紀錄：四張圖片與影片已定稿；支援網站三語發布已於 2026-10-18 驗證。副標題、宣傳文字與 Marketing URL 維持原狀，不新增為本次必填工作。

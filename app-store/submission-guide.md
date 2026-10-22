@@ -2,7 +2,7 @@
 
 我們現在已經有能讓朋友測試的 App。接下來要把「要交付的程式、商店介紹、訂閱商品」準備好，交給 Apple 檢查；Apple 通過後，再由你按下發布。
 
-本文於 2026-10-18 整理；2026-10-21 依已記錄的商品文字、審核備註進度及正式素材清單修正。這次整理沒有重新查詢後台或送出資料。勾選進度請回到[上架待辦](implementation-plan.md)。
+本文保留各欄位的操作說明；2026-10-22 的後台狀態、剩餘工作順序與勾選進度，以[上架待辦](implementation-plan.md)為準。已完成的項目不用依本指南重做。
 
 ## 先分清楚這幾個地方
 
@@ -21,7 +21,7 @@
 <a id="step-01"></a>
 ## 01 接受新版開發者協議
 
-**為什麼：** Apple 更新了開發者協議，後台明確提示未接受前不能提交新的 App。已經有效的付費合約、銀行和稅表，不會自動完成這份新版協議。
+**為什麼：** 新版開發者協議與付費合約、銀行及稅表分開處理。2026-10-18 已有接受紀錄；目前只需查明 Connect 是否仍有阻擋提示，不要重複接受。以下步驟適用於確有新協議待接受時。
 
 **去哪裡：** [Apple Developer 帳號](https://developer.apple.com/account/)；可先從 [Business](https://appstoreconnect.apple.com/business) 查看提示。
 
@@ -44,7 +44,7 @@
 3. 若要求交易者資料，填入準備公開的聯絡方式，依提示完成電子郵件、電話及文件驗證。
 4. 若要在歐盟上架，確認這個 App 的交易者設定也符合你的申報。
 
-**完成標準：** 身分申報完成；適用的聯絡資料驗證已完成。上次後台仍顯示需要處理。
+**完成標準：** 身分申報完成；適用的聯絡資料驗證已完成。2026-10-18 已提交並顯示 In Review；最新結果尚未查明，不要重新申報。
 
 <a id="step-03"></a>
 ## 03 設定 App 基本資料
@@ -58,7 +58,7 @@
 3. **Content Rights：** 點 Set Up Content Rights Information，閱讀問題，依 App 使用或存取第三方內容的實際情況完成聲明。這不是申請著作權。
 4. 儲存後重新確認這三處都有結果。
 
-**完成標準：** 主要分類已有值、年齡分級已產生、內容權利聲明已完成。上次三項都尚未設定。[分類與權利欄位說明](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information/) · [年齡分級步驟](https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating)
+**完成標準：** 主要分類已有值、年齡分級已產生、內容權利聲明已完成。2026-10-22 已確認三項都有設定，不必重填。[分類與權利欄位說明](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information/) · [年齡分級步驟](https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating)
 
 <a id="step-04"></a>
 ## 04 設定下載價格與上架地區
@@ -111,20 +111,20 @@
 
 依 [製作需求](HANDOFF.md)上傳已確認的四張 Glass 圖片：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
 
-正式成圖見 [功能圖清單](image/README.md)，影片見 [影片清單](video/README.md)。到版本頁的 App Previews and Screenshots → Mac 上傳並依上述順序排列；本次未確認後台上傳狀態。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
+正式成圖見 [功能圖清單](image/README.md)，影片見 [影片清單](video/README.md)。2026-10-22 已確認英文頁上傳四張圖片與一支影片，繁中、簡中沿用英文素材。播放與封面檢查見[上架待辦](implementation-plan.md)。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
 
 <a id="step-08"></a>
 ## 08 補齊訂閱審核資料
 
-**為什麼：** App 和訂閱是分開建立、一起供 Apple 檢查的項目。目前年費、試用和商品名稱已有設定，缺的是群組顯示名稱，以及讓 Apple 看見購買畫面的審核截圖。
+**為什麼：** App 和訂閱是分開建立、一起供 Apple 檢查的項目。年費、試用、商品與群組名稱、訂閱審核截圖均已填妥；以下保留日後更新步驟，不必重做。
 
 **先分清楚名稱：**「年訂閱商品」是使用者購買的一年方案；「訂閱群組」是 Apple 將相關方案放在一起管理的分類。即使只有一個年方案，也會有群組。群組的內部參考名稱已存在，不代表使用者看得到的顯示名稱已填。
 
 **去哪裡與步驟：**
 
 1. 開啟[訂閱群組](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscription-groups/22374799)。
-2. 在 Display Name and Description 點 Create／Add，選擇語言，填入群組顯示名稱並確認。先完成主要英文；若要提供三語名稱，再補繁中、簡中。這不是重建年訂閱商品。[群組名稱說明](https://developer.apple.com/help/app-store-connect/manage-subscriptions/offer-auto-renewable-subscriptions)
-3. 開啟 TestFlight 的 Boundless Translator，在 App 的「訂閱」視窗顯示年費與試用資訊，截下實際畫面；這一步不需要按購買。
+2. 在 Display Name and Description 檢查群組顯示名稱。目前依使用者決定只保留英文 `Boundless Translator`，不另加中文品牌名稱。年訂閱商品的三語名稱另行維護，英文已改為 `Annual Plan`。[群組名稱說明](https://developer.apple.com/help/app-store-connect/manage-subscriptions/offer-auto-renewable-subscriptions)
+3. 在 App 的「訂閱」視窗顯示未訂閱方案、年費與適用試用資訊，截下實際畫面；不需要按購買。若 TestFlight 已訂閱，依[本機訂閱測試](storekit-testing.md)建置並手動開啟 App，使用 Sandbox 帳號；先確認畫面、商品設定及程式來源符合送審候選版。本機 Sandbox 首次購買已驗證成功，正式候選版本仍須另行驗收。
 4. 開啟[年訂閱商品](https://appstoreconnect.apple.com/apps/6810727652/distribution/subscriptions/6810730512)，找到下方 Review Information → Screenshot，選 Choose File 上傳並儲存。
 5. 確認審核圖片已出現，群組也有顯示名稱。不要上傳到上方的 Image (Optional)，那是另一種宣傳圖片欄位。
 
