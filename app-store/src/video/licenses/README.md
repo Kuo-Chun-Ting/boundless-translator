@@ -62,5 +62,3 @@ Music: “Easy Lemon” by Kevin MacLeod (incompetech.com) · Excerpt with fades
 | 字卡「咻」（正式採用） | `card-slide-4.ogg` → `public/sfx/kenney/card-shoo.wav` | Kenney，Casino Audio 1.1，<https://kenney.nl/assets/casino-audio> | CC0 1.0 | `b9c82bcdbe6b7d00a06e2546bd2683a9ab082ca5fd090a42882f33eddd925b7f` |
 
 下載日：2026-10-21。授權檔原文：“You may use these assets in personal and commercial projects.”（Casino Audio），署名非必要。
-
-另見 [預覽影片素材權利查核](rights-review.md)（App Store 2.3.9、字典詞條權利）。

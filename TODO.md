@@ -1,5 +1,13 @@
 # TODO
 
+- [ ] 版本 1.0（49）已送審，採手動發布；等 Apple 審核結果，有補件要求再處理。通過後經使用者指示發布，再確認商品頁、下載與訂閱。
+
+- [x] 清除舊影片內部 review、臨時上架計畫與已淘汰素材的權利查核稿；移除引用，剩餘上架工作集中在 TODO。保留製作程式、產生指令與目前音樂／音效授權，未改寫 Git 歷史、未部署。
+
+- [x] 刪除已完成的製作交接文件，清除 Markdown 與素材預覽 HTML 的引用；保留圖片／影片產生指令及音樂、音效授權紀錄。已檢查引用與指令、授權內容未變；未重製成品、未部署。
+
+- [x] 清除六份 Claude／Codex 討論文件（音量、Sandbox 測試、Support 語言），訂閱測試文件改連既有修復 TODO。檢查 Git 歷史：四份目錄整理互審稿與三份日期型設計稿先前均已刪除；保留仍供製作、上架與權利查核使用的文件。未改寫 Git 歷史、未部署。
+
 - [x] 2026-10-22 依 Claude 與 Codex 共識，三語 Support「支援語言」改成三項功能清單；補啟用與切換位置、條件式下載說明及首次設定連結。已檢查三語結構、連結與其餘章節不變；未部署、未改 App、未產生 DMG。
 
 - [x] 2026-10-22 依核准稿更新英／繁中／簡中 Support 的語言支援說明，放在常見問題後；整合 Apple Intelligence 條件，補上官方翻譯與系統語言連結。已檢查三語內容、章節順序及連結一致性；尚未部署，未改 App 或產生 DMG。
@@ -76,11 +84,11 @@
 
 - [x] 將上架待辦縮成十三項勾選清單，另寫 `app-store/submission-guide.md`，逐項解釋原因、入口連結、步驟與完成標準；保留 2026-10-17 後台查核日期，不當作今天的新狀態。依 Apple 官方文件更正 DSA：即使不在歐盟上架也須申報交易者身分，適用時另完成聯絡資料驗證。文件對照、引用與格式檢查通過；未修改後台、未執行發布或 App 測試。
 
-- [x] 唯讀核對 App Store Connect 的版本 1.0、Build 49、App Information、Privacy、價格與地區、訂閱及 Business；將實際缺漏、已完成項目及待驗收內容整理至 `app-store/implementation-plan.md`。未填寫、儲存、上傳、接受合約或送審。
+- [x] 唯讀核對 App Store Connect 的版本 1.0、Build 49、App Information、Privacy、價格與地區、訂閱及 Business；將實際缺漏、已完成項目及待驗收內容整理至 當時的上架查核清單。未填寫、儲存、上傳、接受合約或送審。
 - [x] 同步 README、英文／繁中／簡中 Support 與系統語言支援說明：補上首次語言設定、視窗內語言僅對目前視窗生效、M 系列晶片需求與辨識等待；移除固定印地文限制及「介面語言與 macOS 相同」的外部宣稱。網站導覽限定三語 Support，排除內部素材與 OCR 測資；尚未發布網站。
 - [x] 發布本次對外文件並檢查三語 Support／Privacy 及導覽；2026-10-18 已確認 `a67b227` 正式部署成功。
 - [x] 補上 Build 49 手動驗收紀錄：agent 確認價格與重啟保留 Active；其餘列出的翻譯、字典、朗讀、設定保存及訂閱案例由使用者回報皆通過。詳見 `app-store/storekit-testing.md`。
-- [ ] 依 `app-store/implementation-plan.md` 完成剩餘驗證及送審；首次安裝／權限流程本輪未測。2026-10-22 使用者執行 Verify：Unit、Component、GUI、E2E、Languages、Release 通過，Scripts 失敗（exit 127），StoreKit 依既有例外略過。Scripts 已改用 `grep -Fq`，在不含 Codex 工具的環境單獨重跑全部通過；未重跑整套 Verify。素材、影片播放／封面、群組名稱、訂閱審核截圖、Build 選擇、中文隱私網址及帳號合約設定已完成。未獲使用者指示前不送審。
+- [x] 已完成送審前驗收並提交版本 1.0（49），使用者確認首次啟動流程無問題。先前驗證紀錄：2026-10-22 使用者執行 Verify：Unit、Component、GUI、E2E、Languages、Release 通過，Scripts 失敗（exit 127），StoreKit 依既有例外略過。Scripts 已改用 `grep -Fq`，在不含 Codex 工具的環境單獨重跑全部通過；未重跑整套 Verify。素材、影片播放／封面、群組名稱、訂閱審核截圖、Build 選擇、中文隱私網址及帳號合約設定已完成。使用者後續已完成送審，查核時為 Waiting for Review；採手動發布。
 - [x] 2026-10-22 僅跑 Scripts 查明環境差異：Codex 環境全部通過；不含 Codex 工具的標準 PATH 在 `Tests/Scripts/PreviewWebsiteTests.sh:80` 找不到 `rg`，單案與完整 Scripts 都回傳 127。已依使用者指示改用內建 `grep -Fq`，相同標準 PATH 下完整 Scripts 通過（exit 0）。未修改 App、未跑其他測試層級、未產生發布 DMG。
 - [x] 2026-10-22 使用者接受新版付費合約後，重新查核 Paid Apps Agreement 已為 Active，新版條款提醒與接受按鈕已消失；同步更新上架待辦。
 - [x] 2026-10-22 將 App Privacy 的繁中、簡中隱私政策網址分別改為 `/zh-tw/privacy/`、`/zh-cn/privacy/` 並儲存，已逐一讀回確認。英文與資料收集聲明未修改；未送審。
@@ -383,7 +391,7 @@
 
 - [x] 將示範 PDF 移至 app-store/assets/original-kit/，與菜單網頁集中；更新現行入口，移除 demos 的過時檔案與空目錄。PDF 內容未變。
 
-- [x] 將 Codex／Claude 最新製作結論集中到 video-brief-claude.md，授權依據保留於現有 rights-review.md；刪除五份討論與重複入口文件，更新引用。
+- [x] 將 Codex／Claude 最新製作結論集中到 video-brief-claude.md，授權依據保留於當時的權利查核紀錄；刪除五份討論與重複入口文件，更新引用。
 
 - [x] 從兩支新錄影選定六張原尺寸截圖，整理逐張 review 頁與來源時間點；先供素材確認，字典未遮蔽，未繼續修改功能介紹成圖。
 
@@ -453,7 +461,7 @@
 
 - [x] 刪除不再使用的舊影片原始碼與 Codex 舊專案；影片目錄只留 v24 場景、共用元件與重製腳本，型別檢查與 Remotion 清單通過。
 
-- [x] 給 Codex 的四份文件（影片需求、影片交接、接手 review 請求、截圖翻譯功能圖 review）合併為 `app-store/HANDOFF.md`，刪除舊檔並更新引用；過時內容（Capture to translate、合成截圖聲、與需求文件的衝突清單）不帶入。
+- [x] 給 Codex 的四份文件（影片需求、影片交接、接手 review 請求、截圖翻譯功能圖 review）合併為 當時的製作交接文件，刪除舊檔並更新引用；過時內容（Capture to translate、合成截圖聲、與需求文件的衝突清單）不帶入。
 
 - [x] 將影片與功能圖集中到 `app-store/`：程式放 `src/image/`、`src/video/`，成品放 `image/`、`video/`，素材放 `assets/`；同步文件與路徑、合併影片共用元件，影片輸出拒絕覆蓋舊檔。搬前搬後 16 張功能圖及 7 格影片像素一致，81 個非文字檔案雜湊一致，lint／型別與 29.9 秒組合檢查通過，另一 agent 複查無必修問題。副標仍待確認，未改成品、未 commit／上傳，未修改 App 或產生 DMG。
 - [x] 依 Codex 架構 review 修正影片 README：字卡音效設定在 `Root.tsx`、格數指 30 fps 代理檔；移除 `package.json` 指向已刪腳本的 `make-sfx`。review 結論併入交接文件「目錄重整」。
@@ -492,7 +500,7 @@
 - [x] 2026-10-22 唯讀查核 App Store Connect：版本 1.0 為 Prepare for Submission，三語商品描述／關鍵字／支援網址與英文審核備註已填，三語皆無圖片或預覽影片且未選 Build；分類 Productivity、4+ 年齡分級、內容權利聲明、已發布 Data Not Collected、免費下載與 175 地區已有設定。訂閱群組無顯示名稱，年訂閱缺審核截圖；App 保持手動發布。Business 導覽遭自動審核阻擋，合約及交易者驗證結果未能確認；未修改後台或送審，未執行最終 App 驗收。
 - [x] 2026-10-22 補查可選 Build 與訂閱價格：Add Build 清單最新為 1.0 (49)，上傳時間為 10 月 17 日 11:29；未選取或儲存。年訂閱台灣價格為 NT$199，目前 175 地區設有 introductory offer，台灣列顯示首月免費。訂閱群組仍無顯示名稱，訂閱審核截圖仍空白。未修改後台、未送審、未執行 App 驗收或產生 DMG。
 
-- [x] 2026-10-22 將已查核的上架缺項整理至 `app-store/implementation-plan.md`：包含目的、後台直達連結、操作步驟、完成條件及負責範圍；明確區分三語商品頁與素材在地化，沿用已定稿英文素材。同步修正操作指南的過時狀態；未修改後台、未執行 App 測試或產生 DMG。
+- [x] 2026-10-22 將已查核的上架缺項整理至 當時的上架查核清單：包含目的、後台直達連結、操作步驟、完成條件及負責範圍；明確區分三語商品頁與素材在地化，沿用已定稿英文素材。同步修正操作指南的過時狀態；未修改後台、未執行 App 測試或產生 DMG。
 - [x] 將本機 Sandbox 訂閱測試計畫寫入 `app-store/sandbox_testing_responsed_by_codex.md` 供 Claude review：釐清帳號與自動測試差異、現有設定、最小腳本方案、共用資料限制及實際購買驗證。僅完成計畫與文件核對；尚未建置、重設帳號、執行購買或修改功能程式。
 - [x] 將停用 StoreKit 自動測試的去留納入同一份 Claude review 計畫：重跑 `Scripts/run_storekit_tests.sh --force`，五案皆在模擬購買回傳 `unknown` 失敗（exit 65），與先前交易成功但權益為空不同。列出最小案例診斷、修復後恢復執行或無法可靠測試時完整移除的條件及依賴範圍；尚未修復或刪除測試，未執行 Sandbox 購買或產生 DMG。
 

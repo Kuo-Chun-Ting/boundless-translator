@@ -2,7 +2,7 @@
 
 我們現在已經有能讓朋友測試的 App。接下來要把「要交付的程式、商店介紹、訂閱商品」準備好，交給 Apple 檢查；Apple 通過後，再由你按下發布。
 
-本文保留各欄位的操作說明；2026-10-22 的後台狀態、剩餘工作順序與勾選進度，以[上架待辦](implementation-plan.md)為準。已完成的項目不用依本指南重做。
+本文保留各欄位的操作說明；剩餘工作與進度統一記於 [TODO](../TODO.md)。已完成的項目不用依本指南重做。
 
 ## 先分清楚這幾個地方
 
@@ -109,9 +109,9 @@
 <a id="step-07"></a>
 ## 07 準備並上傳功能介紹圖
 
-依 [製作需求](HANDOFF.md)上傳已確認的四張 Glass 圖片：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
+上傳已確認的四張 Glass 圖片：Preview 選字翻譯、原創菜單截圖翻譯、字典、Settings。
 
-正式成圖見 [功能圖清單](image/README.md)，影片見 [影片清單](video/README.md)。2026-10-22 已確認英文頁上傳四張圖片與一支影片，繁中、簡中沿用英文素材。播放與封面檢查見[上架待辦](implementation-plan.md)。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
+正式成圖見 [功能圖清單](image/README.md)，影片見 [影片清單](video/README.md)。2026-10-22 已確認英文頁上傳四張圖片與一支影片，繁中、簡中沿用英文素材。[Apple 圖片規格](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications)
 
 <a id="step-08"></a>
 ## 08 補齊訂閱審核資料

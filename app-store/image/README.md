@@ -11,7 +11,7 @@
 
 新版先另存供 review；使用者明確要求取代後，才更新 `image/` 的正式檔案。提交依使用者指示，只有已提交版本能從 Git 找回。
 
-[製作方式](../src/image/README.md) · [需求](../HANDOFF.md)
+[製作方式](../src/image/README.md)
 
 ## 訂閱審核
 

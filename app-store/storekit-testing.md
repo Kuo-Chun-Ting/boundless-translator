@@ -43,4 +43,4 @@ Apple 的本機 StoreKit 測試使用 `.storekit` 模擬商品與交易，不需
 - 依使用者決定，本次自動測試與 runner 改動已還原，保留原有五項測試；預設略過、回傳 78，僅 `Scripts/run_storekit_tests.sh --force` 強制執行。原 runner 會清理暫存結果，尚未具備失敗保留報告功能。
 - 修復列為後續 TODO，不作為這次上架準備的前置條件。Verify 沿用既有 StoreKit 例外，其餘項目仍須通過；正式候選版本仍須 TestFlight 驗收。
 - 最近診斷：原五案在 `SKTestSession.buyProduct` 回傳 `unknown`。曾試用 `Product.purchase(confirmIn:)` 建立本機交易，七案中三案通過、四案失敗；該改版已撤回，不能視為目前測試結果或修復完成。
-- 後續須釐清本機模擬交易、權益與通知的問題，補足指定交易完成、取消續訂、到期與退款的有效斷言；不用主動刷新冒充通知通過，也不為讓測試通過而改正式訂閱判斷。證據與待 review 項目見[討論文件](sandbox_testing_responsed_by_codex.md)。
+- 後續須釐清本機模擬交易、權益與通知的問題，補足指定交易完成、取消續訂、到期與退款的有效斷言；不用主動刷新冒充通知通過，也不為讓測試通過而改正式訂閱判斷。後續修復範圍見 [TODO](../TODO.md) 的「修復 StoreKit 本機自動測試」項目。

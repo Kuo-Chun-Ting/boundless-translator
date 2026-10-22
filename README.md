@@ -173,7 +173,7 @@ Quit the other edition, then install `Boundless Translator DMG Test.app` into Ap
 
 The App Store edition uses the same Xcode App target, Swift sources and Sandbox settings, with subscription access enabled. It adds **Subscription…** to the menu and Preferences, using Apple's purchase and restore interface. Direct distribution produces the subscription-free `Boundless Translator DMG Test` (`com.lillard.BoundlessTranslator.dmgtest`). TestFlight and App Store keep `Boundless Translator` (`com.lillard.BoundlessTranslator`). Each edition has separate settings and permission records.
 
-Follow the [App Store checklist](app-store/implementation-plan.md). For the reasons, links and steps behind each task, see the [submission guide](app-store/submission-guide.md).
+Follow the [submission guide](app-store/submission-guide.md). Track remaining work in [TODO.md](TODO.md).
 
 Sign in once under **Xcode → Settings → Apple Accounts** with the Apple Account that belongs to the App Store Connect team. Xcode stores that session in the macOS Keychain and uses it to manage signing certificates and provisioning profiles; do not put an Apple Account password in this repository or a shell script.
 
@@ -187,4 +187,4 @@ The `AppStoreRelease` build configuration contains the developer team, subscript
 
 The first Store edition targets Apple silicon (`arm64`). Its bundle ID is `com.lillard.BoundlessTranslator`; the App Store Connect record and signing team must match it. Uploading a build does not submit it for review or publish it.
 
-Treat the Xcode Archive, generated App Store package and processed TestFlight build as one release chain. Test the exact uploaded build before submission. Track the remaining App Store Connect and TestFlight work in the [App Store implementation plan](app-store/implementation-plan.md).
+Treat the Xcode Archive, generated App Store package and processed TestFlight build as one release chain. Test the exact uploaded build before submission. Track the remaining App Store Connect and TestFlight work in [TODO.md](TODO.md).

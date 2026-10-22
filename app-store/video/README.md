@@ -8,4 +8,4 @@
 
 音量峰值（混音前）：⌘／數字鍵約 −9.5 dBFS、⇧ 約 −10.1 dBFS、點書本 −12 dBFS、截圖快門 −14 dBFS、四次「咻」聲 −15 dBFS。配樂維持原設定。原始碼與正式影片一致。
 
-[製作方式](../src/video/README.md) · [需求](../HANDOFF.md) · [音訊授權](../src/video/licenses/README.md)
+[製作方式](../src/video/README.md) · [音訊授權](../src/video/licenses/README.md)

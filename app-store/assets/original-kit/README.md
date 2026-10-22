@@ -9,6 +9,6 @@
 
 可編輯來源在 `../../src/image/original-kit/`。圖片來源見 [manifest.json](manifest.json)，整組可看 [預覽頁](index.html)。
 
-聊天、籃球、TextEdit 範例、自編字典與舊字典合成圖已清除。新版依 [製作需求](../../HANDOFF.md)；兩支操作錄影在 `../recording/`。
+聊天、籃球、TextEdit 範例、自編字典與舊字典合成圖已清除。兩支操作錄影在 `../recording/`。
 
 使用已安裝 Playwright 的 Node 執行 `node app-store/src/image/original-kit/render.cjs` 可重製菜單與網頁預覽，不操作桌面瀏覽器。

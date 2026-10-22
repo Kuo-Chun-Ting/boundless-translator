@@ -40,4 +40,4 @@ npm run render -- my-preview.mp4
 
 目錄或程式整理前後，用相同環境輸出相同格數的 PNG 比對；不要把 PNG 與有損母帶作逐像素比對。檢查聲音起點與動作時間，已有 MP4 用雜湊確認未變。
 
-[製作需求](../../HANDOFF.md) · [音訊授權](licenses/README.md) · [素材權利紀錄](licenses/rights-review.md)
+[音訊授權](licenses/README.md)
