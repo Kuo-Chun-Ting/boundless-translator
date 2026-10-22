@@ -1,5 +1,9 @@
 # TODO
 
+- [x] 2026-10-22 依 Claude 與 Codex 共識，三語 Support「支援語言」改成三項功能清單；補啟用與切換位置、條件式下載說明及首次設定連結。已檢查三語結構、連結與其餘章節不變；未部署、未改 App、未產生 DMG。
+
+- [x] 2026-10-22 依核准稿更新英／繁中／簡中 Support 的語言支援說明，放在常見問題後；整合 Apple Intelligence 條件，補上官方翻譯與系統語言連結。已檢查三語內容、章節順序及連結一致性；尚未部署，未改 App 或產生 DMG。
+
 - [x] 2026-10-21 提交前核對本次變更：僅 App Store 素材、圖片／影片製作工具、文件與網站排除設定，未改 App 正式程式碼或建置設定。影片 ESLint／TypeScript、16 張功能圖重製比對通過；暫存範圍已核對，diff 僅有授權原檔空白與兩份製作來源檔尾空行提示，保留原樣。v25 白條修正版仍待使用者確認。未跑 App 測試、未 push、未產生 DMG。
 
 - [x] 整理影片與功能素材：保留 Preview PDF、菜單、字典參考稿，Codex v9／Claude v8 影片及必要來源、原始錄影與授權紀錄。清除 158 個過時檔案，約 615 MiB；兩個 Remotion 專案的 ESLint／TypeScript 檢查通過。
@@ -147,7 +151,7 @@
   - [x] 新增獨立 OCR 模型快取清除入口 `Scripts/reset_ocr_cache_dmg.sh`、`Scripts/reset_ocr_cache_app_store.sh`；共用核心 `Scripts/Shared/reset_ocr_cache.sh` 也支援 `e2e`。僅關閉對應 App 並刪除其 `com.apple.e5rt.e5bundlecache`，保留設定、權限及 Lookup；原本完整 reset 不變。ResetOCRCache、ResetEntryPoints、ResetAppData 三組 Shell 測試通過，使用替身未清除真實資料；未修改 App 程式碼、未產生 DMG。載入提示與啟動預熱尚未實作。
 - [ ] 依官方文件整理 macOS 支援清單與功能限制，同步 README、Support 與 App Store 說明；實測結果另記，不混入官方支援判斷。
   - 已核對建置設定與 API：最低 macOS 15、僅支援 M 系列晶片；已建立並部署 `macos-compatibility` skill。對外說明尚未更新。
-  - 已整理 [上線用系統與語言支援資料](docs/product-support.md)：介面列 34 組語言（含地區版本共 48 個語系），圖片辨識收進截圖翻譯說明；翻譯與辨識依使用者的 Mac 提供。附 macOS 27 回報及 Vision 新舊介面說明；換新版不列為上線前必改。對外文件同步尚未完成。
+  - 已整理 [上線用系統與語言支援資料](docs/product-support.md)：介面列 34 組語言（含地區版本共 48 個語系），圖片辨識收進截圖翻譯說明；翻譯與辨識依使用者的 Mac 提供。附 macOS 27 回報及 Vision 新舊介面說明；換新版不列為上線前必改。三語 Support 來源已於 2026-10-22 補上語言支援章節，尚未部署。
 
 - [x] E2E 分成四個獨立案例：選字翻譯、截圖翻譯、切換 App、重新開啟 Settings；兩種外部編輯器共用一次啟動，截圖流程止於快捷鍵開啟翻譯視窗。修正第二次選字前未切回編輯器 App 的測試操作；production code 未修改。
   - 四個 E2E 全數通過，案例共約 64 秒；E2E／GUI 入口腳本測試、Xcode 專案檢查及另一個 agent 審閱通過。同步測試工作流：production code 跑 Unit、Component，只改測試則跑修改的層級。未跑完整 Verify、未產生 DMG。
@@ -240,7 +244,7 @@
 - [ ] 【待討論】統一翻譯與截圖視窗的操作：目前翻譯視窗點擊外部會消失，截圖視窗則會保留。評估兩者是否都採用「未釘選時點外部隱藏、釘選後保留」，讓操作更一致、方便；並討論是否共用視窗 layout／框架及圖釘控制。先確認使用體驗，再決定實作。
 
 - [ ] 【目前】釐清各功能的語言支援範圍：選字翻譯與截圖辨識依使用者 Mac 當下的 API 能力，App 介面依內含語系；區分翻譯來源、目標與 OCR 限制，不要求三者一致，也不維護逐版 macOS 語言表。核對 App Store 與功能介紹的宣稱，產出支援表及付費前查詢支援範圍的呈現建議。本階段先釐清範圍，不實作新的介紹或購買介面。
-  - 呈現方式已記於 [語言支援說明](docs/language-support.md#user-facing-language-lists-planned)；對外文件與 App Store 宣稱尚待同步。
+  - 呈現方式已記於 [語言支援說明](docs/language-support.md#user-facing-language-lists-planned)；三語 Support 來源已於 2026-10-22 更新，尚未部署；此項其餘宣稱核對維持待辦。
 
 - [x] 完成這次語言支援實測：macOS 26.5.2 啟用 Apple Intelligence 並補齊傳統語言包後，44 個翻譯方向、22 種 OCR 固定圖片及測資完整性檢查全部通過。完整範圍、模型條件與驗證界線記於 [語言支援資源表](docs/language-support.md)。
 

@@ -10,9 +10,6 @@ permalink: /en/support/
 
 - Requires Apple silicon (M1 or later) and macOS 15 or later. Intel Macs are not supported.
 - Translation in the Mac App Store edition requires an annual subscription. Check the purchase screen for pricing and trial eligibility.
-- Danish, Norwegian Bokmål and Swedish require Apple Intelligence, Apple’s built-in AI feature.
-  - Turn it on in System Settings → Apple Intelligence & Siri, follow any language prompts, and let the downloads finish.
-  - If you cannot enable it, see [Apple’s setup instructions and requirements](https://support.apple.com/121115). Available languages may vary with macOS and system settings.
 
 ## Initial setup
 
@@ -48,6 +45,19 @@ These are the default shortcuts. Change them in Preferences, or click “?” fo
   - [Apple’s translation feature](https://developer.apple.com/documentation/translation/translationsession/configuration/source) identifies the language from the original text. If it is unclear, it asks you to choose a language.
   - If the prompt keeps appearing, change Translate From from Auto Detect to the language of the original text.
 - Language settings in Preferences and the translation window: Preferences saves the default languages for new windows. Changing languages in a translation window affects only that window and does not change the defaults.
+
+## Supported languages
+
+Boundless Translator uses macOS for translation and text recognition. Available languages vary by macOS version.
+
+- **Selected-text translation:** Supports the languages macOS can translate. See [Apple’s translation language list](https://www.apple.com/macos/feature-availability/#translate-system-wide-translation).
+  - If macOS asks you to download language resources, follow [Initial setup](#initial-setup).
+  - Some languages require Apple Intelligence. Turn it on in System Settings → Apple Intelligence & Siri and wait for the models to finish downloading. See [Apple’s requirements](https://support.apple.com/121115).
+- **Screenshot translation:** The language of the text in the image must support both text recognition and translation in macOS. Target languages are the same as for selected-text translation.
+  - If you choose a language in Translate From instead of Auto Detect and it does not support text recognition, the screenshot window shows a notice.
+- **App interface:** Currently supports all [macOS system languages](https://www.apple.com/macos/feature-availability/#system-language). It follows macOS by default. To change it, open Preferences → App Language.
+
+After installing the app, check Translate From and Translate To in Preferences for the languages you can select on your Mac.
 
 ## Subscription management
 

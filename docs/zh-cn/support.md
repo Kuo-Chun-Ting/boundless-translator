@@ -10,9 +10,6 @@ permalink: /zh-cn/support/
 
 - 需要 Apple 芯片（M1 或更新）及 macOS 15 或更高版本，不支持 Intel Mac。
 - Mac App Store 版本的翻译功能需要年订阅，价格与试用资格以购买画面为准。
-- 丹麦语、挪威语（Bokmål）和瑞典语需要 Apple 智能（Apple Intelligence），也就是 Apple 内置的 AI 功能。
-  - 到“系统设置”→“Apple 智能与 Siri”启用，按提示调整语言并完成下载。
-  - 无法启用时，参考 [Apple 的设置与使用条件](https://support.apple.com/zh-cn/121115)。可用语言可能随 macOS 版本和系统设置而异。
 
 ## 首次设置
 
@@ -48,6 +45,19 @@ permalink: /zh-cn/support/
   - [Apple 翻译功能](https://developer.apple.com/documentation/translation/translationsession/configuration/source)会根据原文判断语言；无法确定时，会请你手动选择。
   - 如果反复出现提示，将“翻译来源”从“自动检测”改成原文的语言。
 - “设置”与翻译窗口的语言设置：设置会保存新窗口使用的默认语言；在翻译窗口内切换语言，只影响当前窗口，不会更改默认值。
+
+## 支持的语言
+
+Boundless Translator 使用 macOS 内置的翻译与文字识别功能，可用的语言会随 macOS 版本而不同。
+
+- **选字翻译**：支持 macOS 可以翻译的语言，见 [Apple 翻译语言列表](https://www.apple.com/macos/feature-availability/#translate-system-wide-translation)。
+  - 如果 macOS 提示下载语言资料，请按照[首次设置](#首次设置)完成下载。
+  - 有些语言需要 Apple 智能（Apple Intelligence）。到“系统设置”→“Apple 智能与 Siri”启用，并等待模型下载完成。使用条件见 [Apple 说明](https://support.apple.com/zh-cn/121115)。
+- **截图翻译**：图片里的原文必须是 macOS 能识别、也能翻译的语言，翻译目标跟选字翻译一样。
+  - “翻译来源”指定的语言（不是自动检测）不支持文字识别时，截图窗口会显示提示。
+- **App 界面**：目前支持所有 macOS 系统语言，见 [Apple 系统语言列表](https://www.apple.com/macos/feature-availability/#system-language)。默认跟随 macOS，可在“设置”→“界面语言”切换。
+
+安装 App 后，“设置”的“翻译来源”与“翻译目标”菜单会列出这台 Mac 目前能选的语言。
 
 ## 订阅管理
 

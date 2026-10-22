@@ -57,4 +57,6 @@ TRex 同時更換介面並加入其他處理，不能據此認定只換新版就
 - OCR：Apple [VNRecognizeTextRequest](https://developer.apple.com/documentation/vision/vnrecognizetextrequest)提供辨識語言清單。App 使用 accurate 模式、自動偵測語言與語言校正。
 - 實測紀錄見 [語言支援資料](language-support.md)，不作為所有 Mac 的固定支援清單。
 - 本文已同步至專案 README 與三語 Support 來源，移除「介面語言與 macOS 相同」及固定的印地文截圖辨識限制，補上首次語言設定、視窗內語言僅對目前視窗生效與辨識等待說明。2026-10-18 已確認 `a67b227` 部署成功，公開三語頁面與本機確認內容一致。
-- 2026-10-17 於 App Store Connect 核對 Build 49：最低 macOS 15.0、僅 arm64，內含 48 個語系。App 內操作說明的「介面語言與 macOS 相同」仍屬舊文案，本次未修改 App 資源。
+- 2026-10-17 於 App Store Connect 核對 Build 49：最低 macOS 15.0、僅 arm64，內含 48 個語系。2026-10-22 比對 App 內含語系與 Apple 系統語言清單，48 個語系一致；App 內「介面語言與 macOS 相同」的說明無須修改。
+
+- 2026-10-22 三語 Support 來源新增「支援語言」，放在常見問題後：按選字翻譯、截圖翻譯與 App 介面列出支援範圍；附首次設定連結、Apple Intelligence 啟用路徑與介面語言切換位置。Apple Intelligence 條件集中於此，不將舊環境實測的三種語言寫成通用限制。文字辨識未找到適用的一般使用者官方清單，不以原況文字清單替代。尚未部署。
