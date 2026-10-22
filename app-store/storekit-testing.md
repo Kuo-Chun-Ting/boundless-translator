@@ -23,6 +23,19 @@ Scripts/build_app_store_app.sh
 
 本機 App、TestFlight 和正式版都使用 `com.lillard.BoundlessTranslator`，可能共用資料與權限；分開放置不等於隔離。既有 App Store Reset 依此識別碼處理，也可能影響正式版。權限 Reset 預設停止 `/Applications/Boundless Translator.app`，不會自動改找本機產物。這個測試流程不需要執行 Reset；它也不能清除 Apple 的購買紀錄。最後仍以 TestFlight 驗收送審版本。
 
+## TestFlight Build 49 驗收
+
+2026-10-22，agent 核對 `/Applications/Boundless Translator.app` 為 1.0（49），確認年費 NT$199，結束並重新開啟後仍顯示 Active。
+
+使用者接手操作後回報驗收清單「都測完了沒問題」：
+
+- 恢復購買。
+- 選字翻譯、截圖內單字與句子翻譯，以及兩種翻譯的字典與朗讀。
+- 修改翻譯語言後重啟，設定保留且翻譯使用該語言。
+- 訂閱失效後顯示訂閱畫面、限制翻譯；再次訂閱後恢復 Active 與翻譯功能。
+
+以上使用者回報項目未由 agent 逐項重測。首次安裝的語言設定與權限流程本輪未驗證；未重設權限、未送審。這份紀錄不取代前述本機 Sandbox 的待測項目。
+
 ## 本機自動測試
 
 Apple 的本機 StoreKit 測試使用 `.storekit` 模擬商品與交易，不需要 Sandbox 帳號，也不依賴 Apple 的真實購買服務。Unit／Component 則提供測試狀態，驗證 App 的訂閱判斷。

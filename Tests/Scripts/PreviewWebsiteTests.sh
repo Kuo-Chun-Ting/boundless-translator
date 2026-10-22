@@ -77,7 +77,7 @@ function test_preview_when_ruby_is_too_old_then_explains_setup {
     if MOCK_RUBY_STATUS=1 zsh "${FIXTURE_ROOT}/Scripts/preview_website.sh" > "${TEMP_ROOT}/error.log" 2>&1; then
         return 1
     fi
-    rg -q 'brew install ruby@3.3' "${TEMP_ROOT}/error.log"
+    grep -Fq 'brew install ruby@3.3' "${TEMP_ROOT}/error.log"
     [[ ! -s "${CALL_LOG}" ]]
 }
 

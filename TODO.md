@@ -71,7 +71,11 @@
 - [x] 唯讀核對 App Store Connect 的版本 1.0、Build 49、App Information、Privacy、價格與地區、訂閱及 Business；將實際缺漏、已完成項目及待驗收內容整理至 `app-store/implementation-plan.md`。未填寫、儲存、上傳、接受合約或送審。
 - [x] 同步 README、英文／繁中／簡中 Support 與系統語言支援說明：補上首次語言設定、視窗內語言僅對目前視窗生效、M 系列晶片需求與辨識等待；移除固定印地文限制及「介面語言與 macOS 相同」的外部宣稱。網站導覽限定三語 Support，排除內部素材與 OCR 測資；尚未發布網站。
 - [x] 發布本次對外文件並檢查三語 Support／Privacy 及導覽；2026-10-18 已確認 `a67b227` 正式部署成功。
-- [ ] 依 `app-store/implementation-plan.md` 處理新版付費合約、確認中文隱私網址調整、補齊候選 Build 驗收紀錄及送審；素材、影片播放／封面、群組名稱、訂閱審核截圖、Build 選擇及帳號狀態查核已完成。
+- [x] 補上 Build 49 手動驗收紀錄：agent 確認價格與重啟保留 Active；其餘列出的翻譯、字典、朗讀、設定保存及訂閱案例由使用者回報皆通過。詳見 `app-store/storekit-testing.md`。
+- [ ] 依 `app-store/implementation-plan.md` 完成剩餘驗證及送審；首次安裝／權限流程本輪未測。2026-10-22 使用者執行 Verify：Unit、Component、GUI、E2E、Languages、Release 通過，Scripts 失敗（exit 127），StoreKit 依既有例外略過。Scripts 已改用 `grep -Fq`，在不含 Codex 工具的環境單獨重跑全部通過；未重跑整套 Verify。素材、影片播放／封面、群組名稱、訂閱審核截圖、Build 選擇、中文隱私網址及帳號合約設定已完成。未獲使用者指示前不送審。
+- [x] 2026-10-22 僅跑 Scripts 查明環境差異：Codex 環境全部通過；不含 Codex 工具的標準 PATH 在 `Tests/Scripts/PreviewWebsiteTests.sh:80` 找不到 `rg`，單案與完整 Scripts 都回傳 127。已依使用者指示改用內建 `grep -Fq`，相同標準 PATH 下完整 Scripts 通過（exit 0）。未修改 App、未跑其他測試層級、未產生發布 DMG。
+- [x] 2026-10-22 使用者接受新版付費合約後，重新查核 Paid Apps Agreement 已為 Active，新版條款提醒與接受按鈕已消失；同步更新上架待辦。
+- [x] 2026-10-22 將 App Privacy 的繁中、簡中隱私政策網址分別改為 `/zh-tw/privacy/`、`/zh-cn/privacy/` 並儲存，已逐一讀回確認。英文與資料收集聲明未修改；未送審。
 
 - [x] 新增 `Scripts/reset_all_dmg.sh` 與 `Scripts/reset_all_app_store.sh`，依核准順序串接對應版本的 App data、權限、Lookup 重設；沿用既有腳本，不加額外錯誤處理。入口順序測試已先失敗再通過，ResetEntryPoints／ResetAppData／ResetPermissions／ResetLookupDictionary 四組 Shell 測試及 zsh 語法檢查通過，獨立 review 無待修正問題。測試使用替身，未重設實際資料或權限；未改 App 程式碼、未產生 DMG、未 commit。
 
