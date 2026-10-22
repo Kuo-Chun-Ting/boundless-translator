@@ -153,26 +153,26 @@ export const SelectedTextDemo: React.FC = () => {
         name="Key ⌘"
         from={PRESS}
         src={staticFile("sfx/ui/key-1.wav")}
-        volume={0.75}
+        volume={0.375}
       />
       <Audio
         name="Key ⇧"
         from={PRESS + KEY_STAGGER}
         src={staticFile("sfx/ui/key-2.wav")}
-        volume={0.7}
+        volume={0.35}
       />
       <Audio
         name="Key 1"
         from={PRESS + KEY_STAGGER * 2}
         src={staticFile("sfx/ui/key-3.wav")}
-        volume={0.75}
+        volume={0.375}
       />
       {/* click.wav starts at sample 0; its 76 ms silence is between press and release. */}
       <Audio
         name="Click book"
         from={CLICK}
         src={staticFile("sfx/ui/click.wav")}
-        volume={0.85}
+        volume={0.282}
       />
     </SceneFade>
   );
