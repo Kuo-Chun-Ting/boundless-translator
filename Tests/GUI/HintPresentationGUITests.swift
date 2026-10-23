@@ -43,7 +43,7 @@ final class HintPresentationGUITests: XCTestCase {
         )
 
         // Act
-        edge.press(forDuration: 0.1, thenDragTo: edge.withOffset(CGVector(dx: 180, dy: 0)))
+        edge.click(forDuration: 0.1, thenDragTo: edge.withOffset(CGVector(dx: 180, dy: 0)))
 
         // Assert
         XCTAssertTrue(source.exists, "Resizing the native window border must not dismiss its content.")
@@ -59,7 +59,7 @@ final class HintPresentationGUITests: XCTestCase {
         let top = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
             .withOffset(CGVector(dx: 0, dy: -2))
         let originalHeight = window.frame.height
-        top.press(forDuration: 0.1, thenDragTo: top.withOffset(CGVector(dx: 0, dy: -100)))
+        top.click(forDuration: 0.1, thenDragTo: top.withOffset(CGVector(dx: 0, dy: -100)))
         XCTAssertGreaterThan(window.frame.height, originalHeight + 50)
         hint.buttons["Close"].click()
         XCTAssertTrue(hint.waitForNonExistence(timeout: 5))

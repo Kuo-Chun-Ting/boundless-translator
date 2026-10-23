@@ -72,7 +72,7 @@ final class ImageTextSelectionGUITests: ImageTextGUITestCase {
         app.menuItems["Detect Automatically"].click()
         let edge = screenshot.coordinate(withNormalizedOffset: .zero).withOffset(
             CGVector(dx: screenshot.frame.width + 2, dy: screenshot.frame.height / 2))
-        edge.press(forDuration: 0.1, thenDragTo: edge.withOffset(
+        edge.click(forDuration: 0.1, thenDragTo: edge.withOffset(
             CGVector(dx: 400 - screenshot.frame.width, dy: 0)))
         XCTAssertTrue(waitFor { screenshot.frame.width <= 422 })
         let targetMenu = screenshot.popUpButtons["targetLanguageMenu"]

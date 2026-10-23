@@ -1,5 +1,8 @@
 # TODO
 
+- [x] 定位並修正 Xcode 27.1 下 GUI 縮放測試失敗：原 `press(forDuration:thenDragTo:)` 無法讓視窗改變大小；更換邊界落點仍失敗。同座標改用滑鼠 API `click(forDuration:thenDragTo:)` 後，寬高、內容及提示卡斷言全數通過。已統一兩份 GUI 測試共三處呼叫，完整 GUI 15 案通過（本機提示 4 案、截圖互動 11 案），結果在 `Build/GUI/Results.PgRJTQ/`。未改正式程式、未重跑其他驗證層、未產生 DMG；StoreKit 維持既有停用。
+  - 對照紀錄：`/private/tmp/boundless-gui-resize-rerun.log`、`boundless-gui-resize-inner-edge.log`、`boundless-gui-resize-mouse-api.log`、`boundless-gui-resize-both-mouse.log`。單案通過報告：`Build/GUI/Results.3GXuiR/Local.xcresult`。Apple `XCUICoordinate.h` 將 press 與 click 分別列於 TouchEvents、MouseEvents；另有[相同環境的開發者實測](https://dev.to/yuu1ch13/what-were-my-ai-written-ui-tests-actually-proving-green-xcuitests-over-a-broken-macos-terminal-3i76)。不據此宣稱已查明 XCTest 內部缺陷。
+
 - [ ] 版本 1.0（49）已送審，採手動發布；等 Apple 審核結果，有補件要求再處理。通過後經使用者指示發布，再確認商品頁、下載與訂閱。
 
 - [x] 清除舊影片內部 review、臨時上架計畫與已淘汰素材的權利查核稿；移除引用，剩餘上架工作集中在 TODO。保留製作程式、產生指令與目前音樂／音效授權，未改寫 Git 歷史、未部署。
