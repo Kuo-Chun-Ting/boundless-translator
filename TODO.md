@@ -1,5 +1,7 @@
 # TODO
 
+- [x] 補上三個訂閱畫面 Component 情境：未訂閱的方案與購買／恢復操作、已訂閱資訊與管理連結、同一視窗內雙向切換訂閱狀態。使用 Stub／Mock，不依賴 Apple 購買服務；SubscriptionView 只增加商品內容注入接點，正式入口仍使用原本商品畫面。既有多語系排版改共用正式 View，移除測試重複組裝的狀態分支。完整 Unit 246 項、Component 210 項通過；未新增 GUI／E2E／StoreKit 案例，未產生 DMG。
+
 - [x] 定位並修正 Xcode 27.1 下 GUI 縮放測試失敗：原 `press(forDuration:thenDragTo:)` 無法讓視窗改變大小；更換邊界落點仍失敗。同座標改用滑鼠 API `click(forDuration:thenDragTo:)` 後，寬高、內容及提示卡斷言全數通過。已統一兩份 GUI 測試共三處呼叫，完整 GUI 15 案通過（本機提示 4 案、截圖互動 11 案），結果在 `Build/GUI/Results.PgRJTQ/`。未改正式程式、未重跑其他驗證層、未產生 DMG；StoreKit 維持既有停用。
   - 對照紀錄：`/private/tmp/boundless-gui-resize-rerun.log`、`boundless-gui-resize-inner-edge.log`、`boundless-gui-resize-mouse-api.log`、`boundless-gui-resize-both-mouse.log`。單案通過報告：`Build/GUI/Results.3GXuiR/Local.xcresult`。Apple `XCUICoordinate.h` 將 press 與 click 分別列於 TouchEvents、MouseEvents；另有[相同環境的開發者實測](https://dev.to/yuu1ch13/what-were-my-ai-written-ui-tests-actually-proving-green-xcuitests-over-a-broken-macos-terminal-3i76)。不據此宣稱已查明 XCTest 內部缺陷。
 

@@ -1,11 +1,12 @@
 import SwiftUI
 
-struct SubscriptionView: View {
+struct SubscriptionView<ProductContent: View>: View {
     @ObservedObject var access: SubscriptionAccessController
     @ObservedObject var store: SubscriptionStoreController
     @ObservedObject var interfaceLanguageSettings: InterfaceLanguageSettings
     let configuration: SubscriptionConfiguration?
     var onContentSizeChange: (CGSize) -> Void = { _ in }
+    @ViewBuilder var productContent: (String) -> ProductContent
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { _ in
@@ -19,12 +20,7 @@ struct SubscriptionView: View {
                 } else if !access.hasLoaded && access.isRefreshing {
                     loading.padding(30)
                 } else if let configuration {
-                    SubscriptionProductView(
-                        productID: configuration.productID,
-                        store: store,
-                        localization: localization,
-                        locale: interfaceLanguageSettings.locale
-                    )
+                    productContent(configuration.productID)
                 } else {
                     messageText("subscription.configurationMissing").padding(30)
                 }
@@ -68,6 +64,27 @@ struct SubscriptionView: View {
 
     private var localization: AppLocalization {
         AppLocalization(languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier)
+    }
+}
+
+extension SubscriptionView where ProductContent == SubscriptionProductView {
+    init(
+        access: SubscriptionAccessController,
+        store: SubscriptionStoreController,
+        interfaceLanguageSettings: InterfaceLanguageSettings,
+        configuration: SubscriptionConfiguration?,
+        onContentSizeChange: @escaping (CGSize) -> Void = { _ in }
+    ) {
+        self.init(
+            access: access, store: store, interfaceLanguageSettings: interfaceLanguageSettings,
+            configuration: configuration, onContentSizeChange: onContentSizeChange
+        ) { productID in
+            SubscriptionProductView(
+                productID: productID, store: store,
+                localization: AppLocalization(languageIdentifier: interfaceLanguageSettings.resolvedLanguageIdentifier),
+                locale: interfaceLanguageSettings.locale
+            )
+        }
     }
 }
 

@@ -18,6 +18,8 @@ Production code changes require Unit and Component before delivery. Test-only ch
 
 Subscription tests construct subscribed and unsubscribed states directly. App Store archiving checks the resolved `SUBSCRIPTION_REQUIRED` setting before building; Unit and Component do not repeat under that compile condition.
 
+Subscription Component tests cover the unsubscribed screen and purchase/restore actions, the subscribed screen and management link, and switching between both states in the same window. They use the production `SubscriptionView` with stub offer/entitlement data and mock actions; no Apple purchase service or browser is opened. The localized layout tests share this fixture, including the free-trial offer.
+
 ## Coverage boundaries
 
 | Level | Responsibility |
